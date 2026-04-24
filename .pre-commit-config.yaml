@@ -1,0 +1,36 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-case-conflict
+        exclude: ^tools/
+      - id: check-executables-have-shebangs
+        exclude: ^tools/
+      - id: check-illegal-windows-names
+        exclude: ^tools/
+      - id: check-json
+        exclude: ^tools/
+      - id: check-merge-conflict
+        exclude: ^tools/
+      - id: check-yaml
+        exclude: ^tools/
+        args:
+          - --allow-multiple-documents
+      - id: debug-statements
+        exclude: ^tools/
+      - id: destroyed-symlinks
+        exclude: ^tools/
+      - id: mixed-line-ending
+        exclude: ^tools/
+      - id: requirements-txt-fixer
+        exclude: ^tools/
+      - id: trailing-whitespace
+        exclude: ^tools/
+        args:
+          - --markdown-linebreak-ext=md
+
+  - repo: https://github.com/pre-commit/mirrors-clang-format
+    rev: v19.1.5
+    hooks:
+      - id: clang-format
+        exclude: ^tools/

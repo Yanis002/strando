@@ -2,11 +2,16 @@
 .vscode
 __pycache__
 .venv
-tools/armips
 extract/eu
 extract/jp
 extract/us
 build/
+libs/libgz.a
 
 # workspace files
 *.nds
+*.ppf
+
+# melonDS files
+*.sav
+*.ml*

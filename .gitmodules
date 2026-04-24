@@ -1,0 +1,6 @@
+[submodule "tools/armips"]
+	path = tools/armips
+	url = https://github.com/Kingcom/armips
+[submodule "resources/decomp"]
+	path = resources/decomp
+	url = https://github.com/zeldaret/st.git
