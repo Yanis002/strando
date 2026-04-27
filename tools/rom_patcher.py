@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 # SPDX-FileCopyrightText: © 2026 stgz team
 # SPDX-License-Identifier: GPL-3.0-only
+# Modified for ST Rando purposes
 
 import argparse
+import ast
 import re
 import subprocess
 import struct
@@ -26,6 +28,7 @@ parser.add_argument("--map", type=Path, required=True)
 parser.add_argument("--hooks_elf", required=True)
 parser.add_argument("--hooks_bin", type=Path, required=True)
 parser.add_argument("--hooks_game_bin", type=Path, required=True)
+parser.add_argument("--patch_ovl", type=ast.literal_eval, action="append", help="Format: '{id: addr}'")
 args = parser.parse_args()
 
 @dataclass
@@ -75,7 +78,7 @@ class SetupASM:
             ".erroronwarning on",
             "\n",
             Symbol.new("GZ_InitHook", elf_path=args.hooks_elf).to_asm(),
-            Symbol.new("_ZN22CustomMapObjectUnkWDST11TryItemGiveEv", elf_path=args.elf).to_asm(),
+            Symbol.new("_ZN22CustomMapObjectUnkWDST11TryItemGiveEv").to_asm(),
             "\n",
             ".open ITCM_BIN, ITCM_MOD_BIN, 0x01FF8000",
             INDENT + "; load the hooks into ITCM",
@@ -137,17 +140,29 @@ def check_code_size(obj_list: list[str], max_size: int, kind: str):
             break
 
 
-def patch_arm9(extracted_dir: Path, base_addr: int, offset: int):
+def patch_constant(module_path: Path, original_addr: int, new_addr: int, suffix: str = "patched"):
     # open and read file
-    assert extracted_dir.exists()
-    arm9_file = extracted_dir / "arm9" / "arm9.bin"
-    arm9 = arm9_file.read_bytes()
+    assert module_path.exists(), f"{module_path}"
+    module = module_path.read_bytes()
 
     # update overlay hi
-    arm9 = arm9.replace(struct.pack("<I", base_addr), struct.pack("<I", base_addr + offset))
+    module = module.replace(struct.pack("<I", original_addr), struct.pack("<I", new_addr))
 
     # write and close file
-    arm9_file.with_name("arm9_patched.bin").write_bytes(arm9)
+    module_path.with_name(f"{module_path.stem}_{suffix}.bin").write_bytes(module)
+
+
+def patch_arm9(extracted_dir: Path, base_addr: int, offset: int):
+    patch_constant(extracted_dir / "arm9" / "arm9.bin", base_addr, base_addr + offset)
+
+
+def patch_overlay(extracted_dir: Path, ovl_id: int, at_addr: int):
+    match ovl_id:
+        case 70 | 71:
+            new_addr = Symbol.new("_ZN23CustomFreestandingActor11TryItemGiveEv").addr
+            patch_constant(extracted_dir / "arm9_overlays" / f"ov{ovl_id:03}.bin", at_addr, new_addr, suffix="mod")
+        case _:
+            raise ValueError(f"Unexpected overlay id ({ovl_id}).")
 
 
 def get_extra_overlay(file_id: int):
@@ -218,7 +233,7 @@ def update_yaml(extracted_dir: Path):
     with open(overlays_yaml, "r", encoding="utf-8") as file:
         yaml_file = yaml.safe_load(file)
 
-    update_overlays = [18, 94]
+    update_overlays = [18, 70, 71, 94]
     for ovl_id in update_overlays:
         for overlay in yaml_file["overlays"]:
             if overlay.get("id") == ovl_id and "_mod" not in overlay["file_name"]:
@@ -261,6 +276,15 @@ def main():
 
     # patch the arm9 binary
     patch_arm9(extracted_path, int(args.address, base=16), main_max_size)
+
+    # patch overlay binaries
+    patch_map = {}
+    for elem in args.patch_ovl:
+        patch_map.update(elem)
+
+    for ovl_id, at_addr in patch_map.items():
+        assert isinstance(ovl_id, int) and isinstance(at_addr, int)
+        patch_overlay(extracted_path, ovl_id, at_addr)
 
     # generate setup.asm
     setup_asm = SetupASM.new(extracted_path.stem, args.obj_list, args.hooks_obj_list, args.hooks_build_dir)

@@ -47,6 +47,7 @@ STGZ_EMULATOR ?=
 
 # game region, only eur is supported atm
 REGION := eur
+VERSION := $(shell echo $(REGION) | tr '[:lower:]' '[:upper:]')
 
 COMPARE ?= 1
 OUT_HASH ?= 0
@@ -114,6 +115,9 @@ HOOKS_GAME_ADDR := 0x02013394
 OVL094_ADDR := 0x021658A0
 HOOK_SONGS_ADDR := 0x02171F34
 HOOK_SONGS_FLAG_ADDR := 0x02172078 # prevents WDST actor from setting the song flag
+
+# freestandings
+PATCH_OVL_ARG := "{70: 0x02142140, 71: 0x0215FF3C}"
 else
 $(error "Region not supported: $(REGION)")
 endif
@@ -128,7 +132,7 @@ CC := arm-none-eabi-gcc $(CFLAGS_BASE)
 CXX := arm-none-eabi-g++ $(CFLAGS_BASE)
 WARNINGS := -Wall -Wno-multichar -Wno-unknown-pragmas -Wno-strict-aliasing -Wno-unused-variable
 INCLUDES := -I include -I $(STGZ_DECOMP_DIR)/include -I $(STGZ_DECOMP_DIR)/libs/c/include -I $(STGZ_DECOMP_DIR)/libs/cpp/include -I $(STGZ_DECOMP_DIR)/libs/nitro/include -I $(STGZ_DECOMP_DIR)/libs/nns/include -I $(STGZ_DECOMP_DIR)/libs/runtime/include
-CPP_DEFINES := -DGZ_OVL_ID=114 -DPACKAGE_VERSION='$(PACKAGE_VERSION)' -DPACKAGE_NAME='$(PACKAGE_NAME)' -DPACKAGE_COMMIT_AUTHOR='$(PACKAGE_COMMIT_AUTHOR)' -DPACKAGE_AUTHOR='$(PACKAGE_AUTHOR)'
+CPP_DEFINES := -DGZ_OVL_ID=114 -DPACKAGE_VERSION='$(PACKAGE_VERSION)' -DPACKAGE_NAME='$(PACKAGE_NAME)' -DPACKAGE_COMMIT_AUTHOR='$(PACKAGE_COMMIT_AUTHOR)' -DPACKAGE_AUTHOR='$(PACKAGE_AUTHOR)' -DVERSION=$(VERSION)
 CFLAGS := -Os -fno-short-enums -fomit-frame-pointer -ffast-math -fno-builtin -fshort-wchar -MMD -MP $(WARNINGS) $(INCLUDES) $(CPP_DEFINES)
 CPP_FLAGS := $(CFLAGS) -fno-rtti -fno-exceptions -fno-threadsafe-statics -std=c++2c
 
@@ -194,7 +198,7 @@ all: $(OUT_ROM) infos
 
 build: hooks
 	$(call print_no_args,Patching the game...)
-	$(V)$(ROM_PATCHER) -e $(EXTRACTED_DIR) -o $(OBJ) -m $(OVLGZ_SIZE) -j $(HOOKS_OBJ) -n $(HOOKS_SIZE) -a $(OVLGZ_ADDR) -d $(HOOKS_BUILD_DIR) --elf $(ELF) --map $(MAP) --hooks_bin $(HOOKS_BIN) --hooks_elf $(HOOKS_ELF) --hooks_game_bin $(HOOKS_GAME_BIN)
+	$(V)$(ROM_PATCHER) -e $(EXTRACTED_DIR) -o $(OBJ) -m $(OVLGZ_SIZE) -j $(HOOKS_OBJ) -n $(HOOKS_SIZE) -a $(OVLGZ_ADDR) -d $(HOOKS_BUILD_DIR) --elf $(ELF) --map $(MAP) --hooks_bin $(HOOKS_BIN) --hooks_elf $(HOOKS_ELF) --hooks_game_bin $(HOOKS_GAME_BIN) --patch_ovl $(PATCH_OVL_ARG)
 	$(call print_no_args,Applying hooks and adding new code...)
 	$(V)$(ARMIPS) $(HOOKS_BUILD_DIR)/setup.asm $(ARMIPS_ARGS)
 	$(call print_no_args,Success!)

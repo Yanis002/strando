@@ -5,7 +5,7 @@
 // patch for func_ov094_02172290 (songs item give)
 class CustomMapObjectUnkWDST : public MapObjectUnkWDST {
 public:
-    CustomMapObjectUnkWDST() {};
+    CustomMapObjectUnkWDST() {}
 
     void TryItemGive(void);
 };
