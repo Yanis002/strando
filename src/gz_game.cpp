@@ -30,59 +30,11 @@ struct SomeSaveFileStruct {
     ~SomeSaveFileStruct();
 };
 
-void CustomGame::ExecutePause() {
-    GZState* pState = gGZ.GetState();
-
-    data_02049b18.func_02013840(data_0204a110.mUnk_004, data_0204a110.func_02019300(data_0204a110.mUnk_DF8));
-
-    if (this->mFrameCounter + data_0204a110.mUnk_004 - (s32)REG_FRAME_COUNTER > 1) {
-        func_0201328c();
-    }
-
-    while (this->mFrameCounter + data_0204a110.mUnk_004 - (s32)REG_FRAME_COUNTER > 1) {
-        func_020132c8();
-    }
-
-    {
-        int enabled = OS_DisableInterrupts_Irq();
-        this->mUnk_1C.func_02013e18((void*)func_020132dc, 0);
-        OS_RestoreInterrupts(enabled);
-    }
-
-    func_020132c8();
-
-    if (pState->doRNGUpdatesDuringPause && !pState->isRNGPaused) {
-        gRandom.UpdateRandomValue();
-    }
-}
-
 void CustomGame::Run() {
     do {
         GZState* pState = gGZ.GetState();
 
         gGZ.Update();
-
-        // stgz: pause and frame advance block
-        {
-            u32 curFrameCount = REG_FRAME_COUNTER;
-
-            // if we have game frames to draw and it's not pausing enable the pause then decrease the queue value
-            if (pState->requestedFrames > 0) {
-                if (!pState->isPaused) {
-                    pState->isPaused = true;
-                }
-
-                pState->requestedFrames--;
-            } else {
-                // if it's paused and there is no frames left to execute then do the pause
-                if (pState->isPaused) {
-                    REG_FRAME_COUNTER = curFrameCount; // freeze frame count
-                    gGZ.OnGameModeUpdate();
-                    this->ExecutePause(); // execute the necessary code to avoid crashes
-                    continue;
-                }
-            }
-        }
 
         // initialization of the next game mode
         if (this->createCallback != NULL) {
@@ -126,11 +78,7 @@ void CustomGame::Run() {
 
             data_02049bd4.func_02014d98();
             data_0204a110.func_02019300(data_0204a110.mUnk_DF8);
-
-            // stgz: stop updating the seed each frame
-            if (!pState->isRNGPaused) {
-                gRandom.UpdateRandomValue();
-            }
+            gRandom.UpdateRandomValue();
 
             unk32 uVar4 = data_0204a110.func_02019300(data_0204a110.mUnk_DF8);
             data_02049b74.func_02013a44(data_0204a110.mUnk_004);

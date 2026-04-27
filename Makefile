@@ -109,6 +109,11 @@ MAIN_ADDR := 0x02000BC8
 OVERLAY_0_SLOT_ADDR := 0x02043E50 # in reality this is the address of gOverlayManager
 HOOKS_ADDR := 0x01FFFE20
 HOOKS_GAME_ADDR := 0x02013394
+
+# songs
+OVL094_ADDR := 0x021658A0
+HOOK_SONGS_ADDR := 0x02171F34
+HOOK_SONGS_FLAG_ADDR := 0x02172078 # prevents WDST actor from setting the song flag
 else
 $(error "Region not supported: $(REGION)")
 endif
@@ -145,7 +150,7 @@ HOOKS_GAME_BIN := $(HOOKS_GAME_ELF:.elf=.bin)
 HOOKS_GAME_MAP := $(HOOKS_GAME_ELF:.elf=.map)
 
 # create output directories
-$(shell $(MKDIR) -p $(BUILD_DIR)/src/data)
+$(shell $(MKDIR) -p $(BUILD_DIR)/src/overlays)
 $(shell $(MKDIR) -p $(BUILD_DIR)/src/thumb)
 $(shell $(MKDIR) -p $(HOOKS_BUILD_DIR)/src)
 
@@ -167,16 +172,21 @@ EXTRACTED_REL := ../../../$(EXTRACTED_DIR)
 ARMIPS_ARGS ?= \
 				-strequ OVL018_BIN "$(EXTRACTED_REL)/arm9_overlays/ov018.bin" \
 				-strequ OVL018_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov018_mod.bin" \
+				-strequ OVL094_BIN "$(EXTRACTED_REL)/arm9_overlays/ov094.bin" \
+				-strequ OVL094_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov094_mod.bin" \
 				-strequ ARM9_BIN "$(EXTRACTED_REL)/arm9/arm9_patched.bin" \
 				-strequ ARM9_MOD_BIN "$(EXTRACTED_REL)/arm9/arm9_mod.bin" \
 				-strequ ITCM_BIN "$(EXTRACTED_REL)/arm9/itcm.bin" \
 				-strequ ITCM_MOD_BIN "$(EXTRACTED_REL)/arm9/itcm_mod.bin" \
 				-equ OVL018_ADDR $(OVL018_ADDR) \
+				-equ OVL094_ADDR $(OVL094_ADDR) \
 				-equ HOOKS_SIZE $(HOOKS_SIZE) \
 				-equ HOOKS_ADDR $(HOOKS_ADDR) \
 				-equ HOOKS_GAME_ADDR $(HOOKS_GAME_ADDR) \
 				-equ HOOK_UPDATE $(HOOK_UPDATE) \
-				-equ HOOK_INIT $(HOOK_INIT)
+				-equ HOOK_INIT $(HOOK_INIT) \
+				-equ HOOK_SONGS $(HOOK_SONGS_ADDR) \
+				-equ HOOK_SONGS_FLAG $(HOOK_SONGS_FLAG_ADDR)
 
 ### project targets ###
 

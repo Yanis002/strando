@@ -75,6 +75,7 @@ class SetupASM:
             ".erroronwarning on",
             "\n",
             Symbol.new("GZ_InitHook", elf_path=args.hooks_elf).to_asm(),
+            Symbol.new("_ZN22CustomMapObjectUnkWDST11TryItemGiveEv", elf_path=args.elf).to_asm(),
             "\n",
             ".open ITCM_BIN, ITCM_MOD_BIN, 0x01FF8000",
             INDENT + "; load the hooks into ITCM",
@@ -97,6 +98,20 @@ class SetupASM:
             INDENT * 2 + ".arm",
             INDENT * 2 + ".area 0x04",
             INDENT * 3 + "bl GZ_InitHook",
+            INDENT * 2 + ".endarea",
+            ".close",
+            "\n",
+            ".open OVL094_BIN, OVL094_MOD_BIN, OVL094_ADDR",
+            INDENT + "; apply songs hook",
+            INDENT + ".org HOOK_SONGS",
+            INDENT * 2 + ".arm",
+            INDENT * 2 + ".area 0x04",
+            INDENT * 3 + "bl _ZN22CustomMapObjectUnkWDST11TryItemGiveEv",
+            INDENT * 2 + ".endarea",
+            INDENT + ".org HOOK_SONGS_FLAG",
+            INDENT * 2 + ".arm",
+            INDENT * 2 + ".area 0x04",
+            INDENT * 3 + "nop",
             INDENT * 2 + ".endarea",
             ".close",
             "\n",
@@ -203,10 +218,12 @@ def update_yaml(extracted_dir: Path):
     with open(overlays_yaml, "r", encoding="utf-8") as file:
         yaml_file = yaml.safe_load(file)
 
-    for overlay in yaml_file["overlays"]:
-        if overlay.get("id") == 18 and "_mod" not in overlay["file_name"]:
-            overlay["file_name"] = f"{overlay['file_name'].removesuffix('.bin')}_mod.bin"
-            break
+    update_overlays = [18, 94]
+    for ovl_id in update_overlays:
+        for overlay in yaml_file["overlays"]:
+            if overlay.get("id") == ovl_id and "_mod" not in overlay["file_name"]:
+                overlay["file_name"] = f"{overlay['file_name'].removesuffix('.bin')}_mod.bin"
+                break
 
     is_extra_overlay_present = args.map.stem in yaml_file["overlays"][-1]["file_name"]
     file_id = len(yaml_file["overlays"]) - 1 if is_extra_overlay_present else len(yaml_file["overlays"])

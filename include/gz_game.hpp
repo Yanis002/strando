@@ -6,5 +6,4 @@
 class CustomGame : public Game {
   public:
     void Run();
-    void ExecutePause();
 };
