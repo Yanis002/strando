@@ -10,6 +10,9 @@ public:
     void TryItemGive(void);
 };
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wvolatile"
+
 // KEYN and SKZU happens to share the exact same function in vanilla so let's use the same for both
 void CustomFreestandingActor::TryItemGive(void) {
     if (this->mUnk_50 < this->mUnk_52) {
@@ -24,3 +27,5 @@ void CustomFreestandingActor::TryItemGive(void) {
         }
     }
 }
+
+#pragma GCC diagnostic pop

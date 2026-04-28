@@ -28,7 +28,7 @@ parser.add_argument("--map", type=Path, required=True)
 parser.add_argument("--hooks_elf", required=True)
 parser.add_argument("--hooks_bin", type=Path, required=True)
 parser.add_argument("--hooks_game_bin", type=Path, required=True)
-parser.add_argument("--patch_ovl", type=ast.literal_eval, action="append", help="Format: '{id: addr}'")
+parser.add_argument("--patch_ovl", type=ast.literal_eval, help="Format: '{id: addr}'")
 args = parser.parse_args()
 
 @dataclass
@@ -79,6 +79,7 @@ class SetupASM:
             "\n",
             Symbol.new("GZ_InitHook", elf_path=args.hooks_elf).to_asm(),
             Symbol.new("_ZN22CustomMapObjectUnkWDST11TryItemGiveEv").to_asm(),
+            Symbol.new("_ZN16CustomShopKeeper16GetShopItemPriceEv").to_asm(),
             "\n",
             ".open ITCM_BIN, ITCM_MOD_BIN, 0x01FF8000",
             INDENT + "; load the hooks into ITCM",
@@ -101,6 +102,45 @@ class SetupASM:
             INDENT * 2 + ".arm",
             INDENT * 2 + ".area 0x04",
             INDENT * 3 + "bl GZ_InitHook",
+            INDENT * 2 + ".endarea",
+            ".close",
+            "\n",
+            ".open OVL036_BIN, OVL036_MOD_BIN, OVL036_ADDR",
+            INDENT + "; apply price 1 hook",
+            INDENT + ".org HOOK_PRICE_1",
+            INDENT * 2 + ".arm",
+            INDENT * 2 + ".area 0x04",
+            INDENT * 3 + "bl _ZN16CustomShopKeeper16GetShopItemPriceEv",
+            INDENT * 2 + ".endarea",
+            INDENT + "; apply price 2 hook",
+            INDENT + ".org HOOK_PRICE_2",
+            INDENT * 2 + ".arm",
+            INDENT * 2 + ".area 0x04",
+            INDENT * 3 + "bl _ZN16CustomShopKeeper16GetShopItemPriceEv",
+            INDENT * 2 + ".endarea",
+            INDENT + "; apply price 3 hook",
+            INDENT + ".org HOOK_PRICE_3",
+            INDENT * 2 + ".arm",
+            INDENT * 2 + ".area 0x04",
+            INDENT * 3 + "bl _ZN16CustomShopKeeper16GetShopItemPriceEv",
+            INDENT * 2 + ".endarea",
+            INDENT + "; apply price 4 hook",
+            INDENT + ".org HOOK_PRICE_4",
+            INDENT * 2 + ".arm",
+            INDENT * 2 + ".area 0x04",
+            INDENT * 3 + "bl _ZN16CustomShopKeeper16GetShopItemPriceEv",
+            INDENT * 2 + ".endarea",
+            INDENT + "; apply price 5 hook",
+            INDENT + ".org HOOK_PRICE_5",
+            INDENT * 2 + ".arm",
+            INDENT * 2 + ".area 0x04",
+            INDENT * 3 + "bl _ZN16CustomShopKeeper16GetShopItemPriceEv",
+            INDENT * 2 + ".endarea",
+            INDENT + "; apply price 6 hook",
+            INDENT + ".org HOOK_PRICE_6",
+            INDENT * 2 + ".arm",
+            INDENT * 2 + ".area 0x04",
+            INDENT * 3 + "bl _ZN16CustomShopKeeper16GetShopItemPriceEv",
             INDENT * 2 + ".endarea",
             ".close",
             "\n",
@@ -140,29 +180,41 @@ def check_code_size(obj_list: list[str], max_size: int, kind: str):
             break
 
 
-def patch_constant(module_path: Path, original_addr: int, new_addr: int, suffix: str = "patched"):
+def patch_constants(module_path: Path, original_addrs: list[int], new_addr: int, suffix: str = "patched"):
     # open and read file
-    assert module_path.exists(), f"{module_path}"
+    assert module_path.exists(), f"{module_path}" and isinstance(new_addr, int)
     module = module_path.read_bytes()
 
-    # update overlay hi
-    module = module.replace(struct.pack("<I", original_addr), struct.pack("<I", new_addr))
+    # update constant
+    for original_addr in original_addrs:
+        assert isinstance(original_addr, int)
+        module = module.replace(struct.pack("<I", original_addr), struct.pack("<I", new_addr))
 
     # write and close file
     module_path.with_name(f"{module_path.stem}_{suffix}.bin").write_bytes(module)
 
 
 def patch_arm9(extracted_dir: Path, base_addr: int, offset: int):
-    patch_constant(extracted_dir / "arm9" / "arm9.bin", base_addr, base_addr + offset)
+    # update overlay hi
+    patch_constants(extracted_dir / "arm9" / "arm9.bin", [base_addr], base_addr + offset)
 
 
-def patch_overlay(extracted_dir: Path, ovl_id: int, at_addr: int):
+def patch_overlay(extracted_dir: Path, ovl_id: int, at_addrs: list[int]):
+    assert isinstance(ovl_id, int)
+
+    new_addr = None
+    suffix = "mod"
     match ovl_id:
+        case 36:
+            new_addr = Symbol.new("_ZN16CustomShopKeeper13GetShopItemIdEi").addr
+            suffix = "patched"
         case 70 | 71:
             new_addr = Symbol.new("_ZN23CustomFreestandingActor11TryItemGiveEv").addr
-            patch_constant(extracted_dir / "arm9_overlays" / f"ov{ovl_id:03}.bin", at_addr, new_addr, suffix="mod")
         case _:
             raise ValueError(f"Unexpected overlay id ({ovl_id}).")
+
+    assert new_addr is not None
+    patch_constants(extracted_dir / "arm9_overlays" / f"ov{ovl_id:03}.bin", at_addrs, new_addr, suffix=suffix)
 
 
 def get_extra_overlay(file_id: int):
@@ -233,7 +285,7 @@ def update_yaml(extracted_dir: Path):
     with open(overlays_yaml, "r", encoding="utf-8") as file:
         yaml_file = yaml.safe_load(file)
 
-    update_overlays = [18, 70, 71, 94]
+    update_overlays = [18, 36, 70, 71, 94]
     for ovl_id in update_overlays:
         for overlay in yaml_file["overlays"]:
             if overlay.get("id") == ovl_id and "_mod" not in overlay["file_name"]:
@@ -278,13 +330,8 @@ def main():
     patch_arm9(extracted_path, int(args.address, base=16), main_max_size)
 
     # patch overlay binaries
-    patch_map = {}
-    for elem in args.patch_ovl:
-        patch_map.update(elem)
-
-    for ovl_id, at_addr in patch_map.items():
-        assert isinstance(ovl_id, int) and isinstance(at_addr, int)
-        patch_overlay(extracted_path, ovl_id, at_addr)
+    for ovl_id, at_addrs in args.patch_ovl.items():
+        patch_overlay(extracted_path, ovl_id, at_addrs)
 
     # generate setup.asm
     setup_asm = SetupASM.new(extracted_path.stem, args.obj_list, args.hooks_obj_list, args.hooks_build_dir)
