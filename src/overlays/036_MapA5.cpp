@@ -2,6 +2,8 @@
 #include <Item/Item.hpp>
 #include <Item/ItemManager.hpp>
 
+extern ItemId GetProgressiveItemId(ItemId requestedItemId);
+
 typedef unk32 ShopItemPosition;
 enum ShopItemPosition_ {
     ShopItemPosition_TopLeft,
@@ -40,7 +42,25 @@ ItemId CustomShopKeeper::GetShopItemId(ShopItemPosition itemPos) {
         case ShopItemPosition_BottomLeft:
         case ShopItemPosition_BottomRight:
             item = actorParams[itemPos];
-            return item > ItemId_Nothing ? item : ItemId_SoldOutSign;
+
+            // items with no model
+            switch (item) {
+                case ItemId_Nothing:
+                case ItemId_9:
+                case ItemId_31:
+                case ItemId_32:
+                case ItemId_33:
+                case ItemId_34:
+                case ItemId_RandCommonTreasure:
+                case ItemId_RandUncommonTreasure:
+                case ItemId_RandRareTreasure:
+                case ItemId_RandLegendaryTreasure:
+                    return ItemId_SoldOutSign;
+                default:
+                    break;
+            }
+
+            return GetProgressiveItemId(item);
         default:
             break;
     }

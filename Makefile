@@ -125,8 +125,8 @@ OVL094_ADDR := 0x021658A0
 HOOK_SONGS_ADDR := 0x02171F34
 HOOK_SONGS_FLAG_ADDR := 0x02172078 # prevents WDST actor from setting the song flag
 
-# constants patch: shops (36) and freestandings (70, 71)
-PATCH_OVL_ARG := "{36: [0x0211B148, 0x0211B420, 0x0211B6F8, 0x0211B9E8, 0x0211BCB0, 0x0211C02C], 70: [0x02142140], 71: [0x0215FF3C]}"
+# constants patch: item give (31), shops (36) and freestandings (70, 71)
+PATCH_OVL_ARG := "{31: [0x020D9840], 36: [0x0211B148, 0x0211B420, 0x0211B6F8, 0x0211B9E8, 0x0211BCB0, 0x0211C02C], 70: [0x02142140], 71: [0x0215FF3C]}"
 else
 $(error "Region not supported: $(REGION)")
 endif

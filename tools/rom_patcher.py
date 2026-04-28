@@ -205,6 +205,8 @@ def patch_overlay(extracted_dir: Path, ovl_id: int, at_addrs: list[int]):
     new_addr = None
     suffix = "mod"
     match ovl_id:
+        case 31:
+            new_addr = Symbol.new("CustomTryItemGive").addr
         case 36:
             new_addr = Symbol.new("_ZN16CustomShopKeeper13GetShopItemIdEi").addr
             suffix = "patched"
@@ -248,7 +250,7 @@ def get_extra_overlay(file_id: int):
     return out
 
 
-def update_yaml(extracted_dir: Path):
+def update_yaml(extracted_dir: Path, extra_overlays: list[int]):
     # update arm9.bin and itcm.bin filenames
     config_yaml = extracted_dir / "config.yaml"
 
@@ -285,7 +287,7 @@ def update_yaml(extracted_dir: Path):
     with open(overlays_yaml, "r", encoding="utf-8") as file:
         yaml_file = yaml.safe_load(file)
 
-    update_overlays = [18, 36, 70, 71, 94]
+    update_overlays = [18, 94, *extra_overlays]
     for ovl_id in update_overlays:
         for overlay in yaml_file["overlays"]:
             if overlay.get("id") == ovl_id and "_mod" not in overlay["file_name"]:
@@ -338,7 +340,7 @@ def main():
     setup_asm.write()
 
     # update yaml files
-    update_yaml(extracted_path)
+    update_yaml(extracted_path, list(args.patch_ovl.keys()))
 
 
 if __name__ == "__main__":

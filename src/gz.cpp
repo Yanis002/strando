@@ -17,6 +17,7 @@ void GZ::Init() {}
 void GZ::Update() { this->UpdateInputs(); }
 
 static u32 sAdventureFlagsToSet[] = {
+    AdventureFlag_ObtainedSpiritTrain,
     AdventureFlag_CompletedSwordTutorial,
     AdventureFlag_PlayedHyruleGuardGetLostText,
     AdventureFlag_HyruleGuardMovesAfterCole,
