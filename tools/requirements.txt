@@ -1,3 +1,4 @@
 pre-commit
 pyyaml
 requests
+ndspy @ git+https://github.com/RoadrunnerWMC/ndspy.git@629c18e3b555dd33da71c741912fc4b814ef7492

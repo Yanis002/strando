@@ -288,6 +288,11 @@ endif
 
 setup: extract
 
+test_no_logic: build
+	$(call print_no_args,Randomizing items...)
+	$(V)$(PYTHON) rando/test/test_no_logic.py
+	$(V)$(MAKE) $(OUT_ROM)
+
 venv:
 # Create the virtual environment if it doesn't exist.
 # Delete the virtual environment directory if creation fails.
@@ -297,7 +302,7 @@ venv:
 	$(V)$(PYTHON) -m pip install -U -r tools/requirements.txt
 	$(call print_no_args,Success!)
 
-.PHONY: all build clean distclean extract hooks init infos libs patch overlay run setup venv
+.PHONY: all build clean distclean extract hooks init infos libs patch overlay run setup test_no_logic venv
 
 ### misc project recipes ###
 
