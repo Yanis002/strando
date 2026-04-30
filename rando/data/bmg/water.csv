@@ -1,0 +1,24 @@
+file offset;item id;item name
+0x114C8;0x005C;ItemId_RandCommonTreasure
+0x114D0;0x005D;ItemId_RandUncommonTreasure
+0x114D8;0x005E;ItemId_RandRareTreasure
+0x114E0;0x005F;ItemId_RandLegendaryTreasure
+0x114E8;0x0028;ItemId_HeartContainer
+0x114F0;0x0029;ItemId_QuiverMedium
+0x118F0;0x0067;ItemId_PanFluteSong_103
+0x11DB0;0x002C;ItemId_ForceGem_44
+0x114C8;0x005C;ItemId_RandCommonTreasure
+0x114D0;0x005D;ItemId_RandUncommonTreasure
+0x114D8;0x005E;ItemId_RandRareTreasure
+0x114E0;0x005F;ItemId_RandLegendaryTreasure
+0x114E8;0x0028;ItemId_HeartContainer
+0x114F0;0x0029;ItemId_QuiverMedium
+0x118F0;0x0067;ItemId_PanFluteSong_103
+0x11DB0;0x002C;ItemId_ForceGem_44
+0x126D0;0x005D;ItemId_RandUncommonTreasure
+0x126D8;0x005E;ItemId_RandRareTreasure
+0x12908;0x0013;ItemId_ForceGem_19
+0x12A20;0x0012;ItemId_ForceGem_18
+0x12D80;0x002D;ItemId_ForceGem_45
+0x13048;0x001B;ItemId_27
+0x13068;0x0072;ItemId_CarbenLetter

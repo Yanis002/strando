@@ -1,5 +1,32 @@
 from enum import IntEnum
 
+shop_actor_ids = [
+    "GORY", # Goron Village Shop Keeper
+    "YUKY", # Snow Sanctuary Shop Keeper
+    "WAWY", # Papuzia Shop Keeper
+    "TERY", # Beedle
+    "FOMY", # Mayscore Shop Keeper
+    "CAMY", # Castle Town Shop Keeper
+]
+
+actor_ids = [
+    "SZKU", # Tears of Light
+    "KEYN", # Freestanding Small Keys
+] + shop_actor_ids
+
+mapobj_ids = [
+    "TRES",
+    "TRED",
+    "TREW",
+    "TREN",
+    "TRWS",
+    "TRLN",
+    "TRLS",
+    "TRLD",
+    "TRLW",
+    "GELG",
+]
+
 
 class ItemId(IntEnum):
     # special handling

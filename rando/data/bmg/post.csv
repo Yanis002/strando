@@ -1,0 +1,10 @@
+file offset;item id;item name
+0x4020;0x005F;ItemId_RandLegendaryTreasure
+0x4028;0x005E;ItemId_RandRareTreasure
+0x4030;0x005D;ItemId_RandUncommonTreasure
+0x40B8;0x006F;ItemId_DiamondCard
+0x40C0;0x006E;ItemId_PlatinumCard
+0x40C8;0x006D;ItemId_GoldCard
+0x40D0;0x006C;ItemId_SilverCard
+0x41F8;0x0027;ItemId_PostmasterLetter
+0x4288;0x006B;ItemId_BeedleCard

@@ -1,0 +1,11 @@
+file offset;item id;item name
+0x13268;0x000E;ItemId_RedRupee
+0x13920;0x0034;ItemId_ForceGem_52
+0x139C8;0x005D;ItemId_RandUncommonTreasure
+0x139E0;0x005D;ItemId_RandUncommonTreasure
+0x13CD8;0x0036;ItemId_ForceGem_54
+0x13EC0;0x001A;ItemId_26
+0x140C0;0x001A;ItemId_26
+0x141D0;0x000F;ItemId_BigGreenRupee
+0x142C0;0x0037;ItemId_ForceGem_55
+0x143D8;0x005E;ItemId_RandRareTreasure

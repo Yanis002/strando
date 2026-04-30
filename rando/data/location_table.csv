@@ -1,0 +1,303 @@
+name,scene,room,id,tile x,tile y
+Outset Clear Rocks,f_first,0,NCCB,528,448
+Outset Bee Tree,f_first,0,,,
+Outset Stamp Station,f_first,0,SPTB,22,15
+Outset Beach Tree Buried Chest,f_first,0,TRWS,40,29
+Outset Niko's House Tree Buried Chest,f_first,0,TRWS,19,28
+Outset Pick Up Joe,f_first,0,,,
+Outset Deliver Cuccos,f_first,0,village.bmg @ 0x16588,,
+Outset Niko Stamp Book,f_first,10,NICO,503,337
+Outset Niko 10 Stamps Reward,f_first,10,NICO,503,337
+Outset Niko 15 Stamps Reward,f_first,10,NICO,503,337
+Outset Niko 20 Stamps Reward,f_first,10,NICO,503,337
+Outset Ferrus Force Gem,f_first,11,village.bmg @ 0x16710,,
+Castle Town Stamp Station,f_htown,0,SPTB,8,6
+Castle Town Left Wall Chest,f_htown,0,TRES,21,36
+Castle Town Right Wall Chest,f_htown,0,TRES,41,36
+Castle Town Minigame Roof,f_htown,0,TRES,48,27
+Castle Town Ramp House Chest,f_htown,0,TRES,14,28
+Castle Town Empty House Roof Chest,f_htown,0,TRES,22,13
+Castle Town Buy Cuccos,f_htown,0,CAMB,256,240
+Castle Town Pick Up Alfonzo,f_htown,0,,,
+Castle Town Deliver Fish,f_htown,14,castle_town.bmg @ 0x8D40,,
+Castle Town Goron Force Gem,f_htown,0,castle_town.bmg @ 0x9480,,
+Castle Town Goron Reward,f_htown,0,castle_town.bmg @ 0x9598,,
+Castle Town Pick Up Teacher,f_htown,0,,,
+Castle Town Shop Keeper,f_htown,10,CAMY,504,336
+Castle Town Take 'em All On Level 1,f_htown,11,JOLN,504,349
+Castle Town Take 'em All On Level 2,f_htown,11,JOLN,504,349
+Castle Town Take 'em All On Level 3,f_htown,11,JOLN,504,349
+Castle Town Pick Up Mona,f_htown,12,CAWB,512,352
+Castle Town Take 'em All On Level 3 Capbone Chest,tekiya09,1,TRLW,31,22
+Hyrule Castle Exterior NW Chest,f_hyral,0,TRES,10,6
+Hyrule Castle 1F Back Chest,f_hyral,1,TRES,39,11
+Hyrule Castle 2F Indoors Chest,f_hyral,2,TRES,17,33
+Hyrule Castle 3F Spirit Flute,f_hyral,5,Special Cutscene Handling: PanFlute,,
+Hyrule Castle 1F Sword Minigame 60 Points,f_hyral,7,,,
+Tunnel to ToS 1F Block Chest,d_tutorial,0,TRES,37,14
+Tunnel to ToS 2F Chest,d_tutorial,1,TRES,40,25
+ToS 1F N Tear of Light,d_main,0,SZKU,504,120
+ToS 1F W Tear of Light,d_main,0,SZKU,280,328
+ToS 1F E Tear of Light,d_main,0,SZKU,744,328
+ToS 1F Chest,d_main,0,TRLW,31,6
+ToS 2F Raised Chest,d_main,1,TRLS,32,14
+ToS 2F Whirlwind Chest,d_main,1,TRLS,39,9
+ToS 3F Forest Rail Glyph,d_main,2,GELG,31,23
+ToS 4F Central Chest,d_main,3,TRLS,32,24
+ToS 4F Lava Tear of Light,d_main,3,SZKU,336,400
+ToS 4F W Tear of Light,d_main,3,SZKU,144,400
+ToS 4F E Tear of Light,d_main,3,SZKU,512,208
+ToS 4F NE Chest,d_main,3,TRLS,41,10
+ToS 5F Island Chest,d_main,4,TRLS,24,34
+ToS 5F Spinnit Key,d_main,4,MKUR,224,432
+ToS 6F Enemy Chest Top Left,d_main,5,TRES,41,21
+ToS 6F Enemy Chest Top Right,d_main,5,TRES,49,21
+ToS 6F Enemy Chest Bottom Right,d_main,5,TRES,48,24
+ToS 6F Enemy Bottom Left,d_main,5,TRLS,43,23
+ToS 6F Key,d_main,5,KEYN,752,560
+ToS 7F Snow Rail Glyph,d_main,6,GELG,31,23
+ToS 9F NE Tear of Light,d_main,8,SZKU,696,296
+ToS 9F NW Tear of Light,d_main,8,SZKU,224,288
+ToS 9F NW Secret Chest,d_main,8,TRLS,12,8
+ToS 10F NW Chest,d_main,9,TRLS,11,12
+ToS 11F Chest,d_main,10,TRLW,27,17
+ToS 12F Ocean Rail Glyph,d_main,11,GELG,31,23
+ToS 13F SE Tear of Light,d_main,12,SZKU,736,496
+ToS 13F Central Tear of Light,d_main,12,SZKU,360,296
+ToS 13F SW Raised Chest,d_main,12,TREW,27,34
+ToS 13F N Chest,d_main,12,TREW,38,15
+ToS 13F SE Raised Chest,d_main,12,TRLS,41,31
+ToS 13F E Swing Chest,d_main,12,TRLS,54,17
+ToS 14F Tear of Light,d_main,13,SZKU,680,136
+ToS 14F SE Chest,d_main,13,TRLS,46,28
+ToS 15F NE Chest,d_main,14,TRES,51,8
+ToS 17F Fire Rail Glyph,d_main,15,GELG,31,23
+ToS 18F N Chest,d_main,17,TREW,35,8
+ToS 18F SE Tear of Light,d_main,17,SZKU,840,632
+ToS 18F Center Chest,d_main,17,TRES,30,29
+ToS 18F SW Chest,d_main,17,TRLS,26,39
+ToS 19F S Tear of Light,d_main,18,SZKU,496,560
+ToS 19F Center W Chest,d_main,18,TRLW,31,23
+ToS 19F Center E Chest,d_main,18,TRLW,36,24
+ToS 20F SW Tear of Light,d_main,19,SZKU,232,360
+ToS 8F N Bombable Wall Chest,d_main,21,TRLS,31,20
+ToS 9F NE Bombable Wall Tear of Light,d_main,22,SZKU,504,376
+ToS 30F W Chest,d_main,30,TRLS,6,25
+ToS 30F SE Wrecker Chest,d_main,30,TRLS,50,25
+ToS 29F SE Small Chest,d_main,31,TREW,52,29
+ToS 29F SE Large Chest,d_main,31,TRLW,54,29
+ToS 28F W Raised Chest,d_main,32,TRLW,9,35
+ToS 28F E Raised Chest,d_main,32,TRLW,24,31
+ToS 24F Final Chest,d_main,35,TRLS,31,23
+ToS 2F Bomb Wall Chest,d_main,40,TRLS,31,22
+ToS 5F Bomb Wall Chest,d_main,41,TRLS,31,22
+ToS 8F S Bombable Wall Chest,d_main,42,TRLS,31,21
+ToS 16F Bombable Wall Chest,d_main,43,TRLS,31,21
+ToS 21F Bomb Wall Chest,d_main,46,TRLS,31,22
+ToS 23F Defeat Staven,b_deago,0,,,
+ToS Summit Stamp Station,d_main_s,0,SPTB,34,35
+Mayscore Stamp Station,f_forest3,0,SPTB,17,18
+Mayscore Whip Chest,f_forest3,0,TRES,18,11
+Mayscore Whip Race 1:15-1:30,f_forest3,0,FOMD,752,176
+Mayscore Whip Race 1:05-1:15,f_forest3,0,FOMD,752,176
+Mayscore Whip Race Sub 1:05,f_forest3,0,FOMD,752,176
+Mayscore Pick Up Wood,f_forest3,0,FOMB,304,528
+Woodland Sanctuary Stamp Station,f_forest2,0,SPTB,35,13
+Woodland Sanctuary Song Statue,f_forest2,0,WDST,25,25
+Woodland Sanctuary Chest,f_forest2,0,TRES,35,34
+Woodland Sanctuary Song of Restoration,f_forest2,1,forest.bmg @ 0xBF98,,
+Wooded Temple 1F Stamp Station,d_forest,0,SPTB,38,9
+Wooded Temple 1F Enemy Chest,d_forest,0,TRED,38,31
+Wooded Temple 1F Key,d_forest,0,KEYN,352,208
+Wooded Temple 1F Switch Chest,d_forest,0,TREW,40,14
+Wooded Temple 2F Large Chest,d_forest,1,TRLD,49,8
+Wooded Temple 2F Small Chest,d_forest,1,TRES,43,21
+Wooded Temple 3F Chestnut Chest,d_forest,2,TREW,20,8
+Wooded Temple 3F SE Chest,d_forest,2,TREW,43,23
+Wooded Temple Song Statue,d_forest,10,WDST,25,11
+Wooded Temple Boss Heart Container,b_forest,0,TRLW,31,27
+Wooded Temple Dungeon Reward,b_forest,0,,,
+Rabbit Haven Net Gift,f_rabbit,0,village.bmg @ 0x17350,,
+Rabbit Haven Island Chest,f_rabbit,0,TRES,36,20
+Rabbit Haven Rescue 5 Rabbits,f_rabbit,0,village.bmg @ 0x174F0,,
+Rabbit Haven Rescue 1 of Each Rabbit,f_rabbit,0,village.bmg @ 0x174F8,,
+Rabbit Haven Rescue 10 Grass Rabbits,f_rabbit,0,village.bmg @ 0x17510,,
+Rabbit Haven Rescue 10 Snow Rabbits,f_rabbit,0,village.bmg @ 0x17528,,
+Rabbit Haven Rescue 10 Ocean Rabbits,f_rabbit,0,village.bmg @ 0x17540,,
+Rabbit Haven Rescue 10 Mountain Rabbits,f_rabbit,0,village.bmg @ 0x17558,,
+Rabbit Haven Rescue 10 Sand Rabbits,f_rabbit,0,village.bmg @ 0x17578,,
+Rabbit Haven Rescue all 50 Rabbit,f_rabbit,0,village.bmg @ 0x17580,,
+Rabbit Haven Mona's Force Gem,f_rabbit,0,village.bmg @ 0x17840,,
+Trading Post Song Statue,f_bridge2,0,WDST,17,12
+Trading Post Repair Bridge,f_bridge2,0,,,
+Trading Post Pick Up Kenzo,f_bridge2,0,,,
+Trading Post Stamp Station,f_bridge2,1,SPTB,22,9
+Trading Post Buried Chest,f_bridge2,2,TRWS,23,16
+Trading Post Buy Shield,f_bridge2,10,village.bmg @ 0x16B98,,
+Trading Post Deliver Dark Ore,f_bridge2,10,village.bmg @ 0x17170,,
+Anouki Village Stamp Station,f_snow,0,SPTB,52,11
+Anouki Village Song Statue,f_snow,0,WDST,31,10
+Anouki Village Song Statue Chest,f_snow,0,TRWS,32,10
+Anouki Village Lake Chest,f_snow,0,TRES,9,9
+Anouki Village Pick Up Noko,f_snow,0,,,
+Anouki Village Repair Fence,f_snow,0,snow.bmg @ 0x13920,,
+Anouki Village Fence Progress Gift,f_snow,0,,,
+Anouki Village Goron Force Gem,f_snow,0,snow.bmg @ 0x13CD8,,
+Anouki Village Pair Villagers,f_snow,1,snow.bmg @ 0x13268,,
+Anouki Village Pick Up Kofu,f_snow,1,,,
+Anouki Village Bomb Cave Chest,f_snow,7,TRES,36,16
+Snowfall Sanctuary Stamp Station,f_snow2,0,SPTB,12,20
+Snowfall Sanctuary Song of Restoration,f_snow2,2,"snow.bmg @ 0x13EC0, 0x140C0",,
+Snowfall Sanctuary Steem Gift With Snow Source,f_snow2,2,snow.bmg @ 0x141D0,,
+Snowfall Sanctuary Deliver Vessel,f_snow2,2,snow.bmg @ 0x142C0,,
+Snowfall Sanctuary Shop Keeper,f_snow2,3,YUKY,504,336
+Blizzard Temple 1F NE Chest,d_snow26,0,TREW,51,7
+Blizzard Temple 1F NW Chest,d_snow26,0,TRES,21,7
+Blizzard Temple 1F Torch Chest,d_snow26,0,TREW,31,7
+Blizzard Temple B1 SE Chest,d_snow26,1,TRES,29,38
+Blizzard Temple B1 E Enemy Chest,d_snow26,1,TRED,51,18
+Blizzard Temple B1 NE Enemy Chest,d_snow26,1,TRLD,36,8
+Blizzard Temple B1 SW Chest,d_snow26,1,TRES,43,34
+Blizzard Temple B1 Stamp Station,d_snow26,1,SPTB,29,7
+Blizzard Temple B1 NW Enemy Chest,d_snow26,1,TRED,11,10
+Blizzard Temple Boss Heart Container,b_snow,0,TRLW,31,27
+Blizzard Temple Dungeon Reward,b_snow,0,,,
+Icy Spring Whip Chest,f_tetsuo,0,TRES,45,11
+Icy Spring Stamp Station,f_tetsuo,0,SPTB,32,8
+Icy Spring Buy Mega Ice,f_tetsuo,0,YUKI,554,352
+Icy Spring Noko's Force Gem,f_tetsuo,0,"snow.bmg @ 0xE458, 0xE4A0",,
+Snowdrift Station Puzzle Reward,f_kakushi1,1,TRLS,31,11
+Slippery Station Amateur Reward,f_kakushi1,6,TRES,33,9
+Slippery Station Pro Reward,f_kakushi1,6,TRES,55,10
+Slippery Station Champion Reward,f_kakushi1,6,TRES,53,37
+Bridge Worker's Home Buried Chest,f_bridge,0,TRWS,48,14
+Bridge Worker's Home Pick Up Kenzo,f_bridge,1,,,
+Island Sanctuary S Island Chest,f_water2,0,TRES,33,9
+Island Sanctuary Carben's Force Gem,f_water2,0,water.bmg @ 0x12D80,,
+Island Sanctuary Stamp Station,f_water2,2,SPTB,30,21
+Island Sanctuary Cucco Chest,f_water2,2,TRES,51,30
+Island Sanctuary NW Chest,f_water2,2,TRES,6,10
+Island Sanctuary Song of Restoration,f_water2,4,water.bmg @ 0x13048,,
+Papuzia Village Song Statue,f_water,0,WDST,36,36
+Papuzia Village NE Chest,f_water,0,TRES,38,14
+Papuzia Village Buy Fish,f_water,0,WAWC,240,528
+Papuzia Village Pick Up Carben,f_water,0,,,
+Papuzia Village Wadatsumi's Force Gem,f_water,0,water.bmg @ 0x12A20,,
+Papuzia Village Deliver Ice,f_water,0,water.bmg @ 0x12908,,
+Papuzia Shop Postcards,f_water,2,WAWY,504,352
+Papuzia Shop Bombs,f_water,2,WAWY,504,352
+Papuzia Shop Arrows,f_water,2,WAWY,504,352
+Papuzia Village Orca's Force Gem,f_water,3,water.bmg @ 0x11DB0,,
+Papuzia Village Buy Vessel,f_water,4,VCFT,504,360
+Papuzia Village Stamp Station,f_water3,0,SPTB,10,35
+Papuzia Village SW Chest,f_water3,0,TRES,18,23
+Papuzia Village S Center Chest,f_water3,0,TRES,38,6
+Lost at Sea Buried Chest,f_water3,10,TRWS,35,30
+Marine Temple 1F Vines Chest,d_water27,0,TRES,46,22
+Marine Temple 1F Lever Chest,d_water27,0,TREW,35,9
+Marine Temple 2F Log Chest,d_water27,1,TRES,22,37
+Marine Temple 3F Whip Chest,d_water27,2,TRLD,32,23
+Marine Temple 3F Puzzle Chest,d_water27,2,TREW,20,34
+Marine Temple 3F NE Chest,d_water27,2,TRES,47,11
+Marine Temple 6F E Chest,d_water27,5,TRES,52,17
+Marine Temple 6F W Chest,d_water27,5,TREW,15,17
+Marine Temple 2F Stamp Station,d_water27,7,SPTB,30,14
+Marine Temple Song Statue,d_water27,10,WDST,25,11
+Marine Temple Ferrus Force Gem,d_water27,10,dungeon.bmg @ 0x65C8,,
+Marine Temple Heart Container,b_water,0,TRLW,31,30
+Marine Temple Dungeon Reward,b_water,0,,,
+Pirate Hideout Stamp Station,f_ajito,0,SPTB,23,22
+Pirate Hideout Minigame 3000-4000,f_ajito,0,water.bmg @ 0x114F0,,
+Pirate Hideout Minigame 4000-5000,f_ajito,0,water.bmg @ 0x114E8,,
+Pirate Hideout Minigame 5000+,f_ajito,0,water.bmg @ 0x114E0,,
+Pirate Hideout Pick Up Wadatsumi,f_ajito,0,WAMA,,
+Pirate Hideout Secret Cave Left Treasure,f_ajito,1,TRES,29,18
+Pirate Hideout Secret Cave Mid Treasure,f_ajito,1,TRES,32,18
+Pirate Hideout Secret Cave Right Treasure,f_ajito,1,TRES,36,21
+Lost at Sea Plain Phantom Chest,f_kakushi4,2,TREN,15,21
+Lost at Sea Torch Phantom Chest,f_kakushi4,3,TREN,48,19
+Lost at Sea Warp Phantom Chest,f_kakushi4,4,TREN,45,16
+Lost at Sea Wrecker Phantom SW Chest,f_kakushi4,5,TREN,7,37
+Lost at Sea Wrecker Phantom NE Chest,f_kakushi4,5,TREN,55,10
+Lost at Sea Final Challenge SE Chest,f_kakushi4,6,TREN,44,30
+Lost at Sea Final Challenge NE Chest,f_kakushi4,6,TREN,44,15
+Lost at Sea Final Challenge SW Chest,f_kakushi4,6,TREN,18,30
+Lost at Sea Final Challenge NW Chest,f_kakushi4,6,TREN,18,15
+Lost at Sea Final Chest,f_kakushi4,7,TRLN,31,23
+Goron Village West Steel Chest,f_flame,3,TRES,46,25
+Goron Village West Stamp Station,f_flame,3,SPTB,9,5
+Goron Village West NE Chest,f_flame,3,TRES,57,7
+Goron Village West Center Chest,f_flame,3,TRES,35,30
+Goron Village West Buy Steel,f_flame,3,GORM,800,496
+Goron Village Get Wagon,f_flame5,0,,,
+Goron Village Chest Above Elder's House,f_flame5,0,TRES,17,14
+Goron Village Deliver Ice Force Gem,f_flame5,0,flame.bmg @ 0xA4B0,,
+Goron Village Pick Up Snow Goron,f_flame5,0,,,
+Goron Village Pick Up City Goron,f_flame5,0,,,
+Goron Village Kofu Force Gem,f_flame5,0,flame.bmg @ 0xA360,,
+Tunnel to Valley Sanctuary Chest,f_flame5,1,TRES,25,16
+Goron Shop Bomb Refill,f_flame5,6,GORY,504,320
+Goron Shop Shield,f_flame5,6,GORY,504,320
+Goron Shop Quiver,f_flame5,6,GORY,504,320
+Goron Shop Postcards,f_flame5,6,GORY,504,320
+Valley Sanctuary NW Chest,f_flame2,0,TRES,8,8
+Valley Sanctuary Stamp Station,f_flame2,0,SPTB,29,11
+Valley Sanctuary Song of Restoration,f_flame2,3,flame_fld.bmg @ 0x76B0,,
+Mountain Temple 1F Right Maze Chest,d_flame,0,TRES,46,39
+Mountain Temple 1F NE Chest,d_flame,0,TRES,48,10
+Mountain Temple B1 Heatoise Chest,d_flame,2,TREW,31,32
+Mountain Temple B1 Stamp Station,d_flame,2,SPTB,15,13
+Mountain Temple B2 NE Chest,d_flame,3,TRES,54,8
+Mountain Temple B2 SE Chest,d_flame,3,TRES,45,37
+Mountain Temple B2 NW Chest,d_flame,3,TRES,9,8
+Mountain Temple B3 N Chest,d_flame,4,TRES,36,3
+Mountain Temple 2F Left Chest,d_flame,1,TRES,18,13
+Mountain Temple 2F Center Chest,d_flame,1,TRES,30,28
+Mountain Temple 2F NW Chest,d_flame,1,TRES,18,7
+Mountain Temple 2F Heatoise Chest,d_flame,1,TRLW,31,7
+Mountain Temple 2F Stalfos,d_flame,1,"Dummy location, not needed",,
+Mountain Temple Song Statue,d_flame,10,WDST,26,11
+Goron Target Range Big Chest,f_flame3,1,TRLN,32,15
+Goron Target Range Small Chest,f_flame3,1,TREN,34,15
+Disorientation Station Maze Chest,f_kakushi2,9,TRWS,35,22
+Ends of the Earth Master Small Chest,f_kakushi3,1,TRES,31,24
+Ends of the Earth Master Big Chest,f_kakushi3,4,TRLS,31,8
+Ends of the Earth Tempered Small Chest,f_kakushi3,5,TRES,31,24
+Ends of the Earth Tempered Big Chest,f_kakushi3,8,TRLS,31,8
+Ends of the Earth Golden Small Chest,f_kakushi3,9,TRES,31,24
+Ends of the Earth Golden Big Chest,f_kakushi3,12,TRLS,31,8
+Dune Sanctuary Deliver Cuccos,f_sand,0,desert.bmg @ 0x4378,,
+Dune Sanctuary Song of Restoration,f_sand,2,desert.bmg @ 0x42F8,,
+Dark Ore Mine Buried Chest,f_flame4,1,TRWS,46,16
+Dark Ore Mine Buy Ore,f_flame4,1,GORM,505,399
+Desert Temple 1F Entrance Chest,d_sand,0,TRES,32,23
+Desert Temple 1F NW Gerune Chest,d_sand,0,TREW,22,6
+Desert Temple 1F N Trap Chest,d_sand,0,TREN,35,6
+Desert Temple 1F N Arena Chest,d_sand,0,TREW,35,9
+Desert Temple 1F N Ergtorok Chest,d_sand,0,TREW,28,6
+Desert Temple 1F N Buried Key,d_sand,0,KEYN,464,192
+Desert Temple 1F N Arena Stalfos Skull,d_sand,0,Dummy loc,,
+Desert Temple 2F Left Chest,d_sand,1,TRES,31,20
+Desert Temple 2F Right Chest,d_sand,1,TRES,43,20
+Desert Temple 3F Chest,d_sand,2,TRLS,19,14
+Desert Temple B1 Stamp Station,d_sand,3,SPTB,25,7
+Desert Temple B1 Near Boss Door Chest,d_sand,3,TRES,42,20
+Desert Temple B1 SW Stalfos Chest,d_sand,3,TREW,9,37
+Desert Temple B1 NW Buried Rupee,d_sand,3,RUPE,112,96
+Desert Temple Bow of Light Chest,d_sand,5,TRLS,30,16
+Desert Temple Boss Heart Container,b_sand,1,TRLW,31,22
+Desert Temple Dungeon Reward,b_sand,1,,,
+Forest Realm Ferrus Gift,f_trnnpc,2,TMNA,848,640
+Beedle Shop Bomb Bag,f_trnnpc,3,TERY,504,352
+Beedle Shop Bomb Refill,f_trnnpc,3,TERY,504,352
+Beedle Joe's Force Gem,f_trnnpc,3,intrain.bmg @ 0xF1E8,,
+Mayscore Buy Lumber,f_forest1,0,FOMB,304,528
+Mayscore Deliver Steel,f_forest1,0,forest.bmg @ 0xB5B8,,
+Mayscore Pick Up Yamahiko,f_forest1,0,FOMC,448,448
+Mayscore Pick Up Mash,f_forest1,0,FOMB,304,528
+Mayscore Pick Up Morris,f_forest1,3,FOMA,528,352
+Mayscore Pick Up Dovok,f_forest1,4,FOMR,512,352
+Mayscore Shop Shield,f_forest1,5,FOMY,504,320
+Mayscore Shop Postcards,f_forest1,5,FOMY,504,320
+Anjean Desert Force Gem,f_passenger,0,intrain.bmg @ 0xE460,,
+Anjean Lokomo Sword,f_passenger,0,Special Cutscene Handling: LokomoSword,,

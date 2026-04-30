@@ -5,31 +5,7 @@ import struct
 from ndspy import lz10 as LZSS
 from ndspy import narc
 from pathlib import Path
-
-
-actor_ids = [
-    "GORY", # Goron Village Shop Keeper
-    "YUKY", # Snow Sanctuary Shop Keeper
-    "WAWY", # Papuzia Shop Keeper
-    "TERY", # Beedle
-    "FOMY", # Mayscore Shop Keeper
-    "CAMY", # Castle Town Shop Keeper
-    "SZKU", # Tears of Light
-    "KEYN", # Freestanding Small Keys
-]
-
-mapobj_ids = [
-    "TRES",
-    "TRED",
-    "TREW",
-    "TREN",
-    "TRWS",
-    "TRLN",
-    "TRLS",
-    "TRLD",
-    "TRLW",
-    "GELG",
-]
+from rando.constants import actor_ids, mapobj_ids
 
 
 def get_zmb(lzss_path: Path):

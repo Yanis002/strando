@@ -1,0 +1,1801 @@
+Anjean Desert Force Gem:
+  bmg: intrain.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0xE460'
+  room_index: 0
+  scene: f_passenger
+
+Anjean Lokomo Sword:
+  is_cs: true
+  room_index: 0
+  scene: f_passenger
+  vanilla_item_flag: LokomoSword
+
+Anouki Village Bomb Cave Chest:
+  id_hash: TRES_0x24_0x10
+  is_mapobj: true
+  room_index: 7
+  scene: f_snow
+
+Anouki Village Goron Force Gem:
+  bmg: snow.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x13CD8'
+  room_index: 0
+  scene: f_snow
+
+Anouki Village Lake Chest:
+  id_hash: TRES_0x09_0x09
+  is_mapobj: true
+  room_index: 0
+  scene: f_snow
+
+Anouki Village Pair Villagers:
+  bmg: snow.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x13268'
+  room_index: 1
+  scene: f_snow
+
+Anouki Village Repair Fence:
+  bmg: snow.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x13920'
+  room_index: 0
+  scene: f_snow
+
+Anouki Village Song Statue:
+  id_hash: WDST_0x1F_0x0A
+  is_mapobj: true
+  room_index: 0
+  scene: f_snow
+
+Anouki Village Song Statue Chest:
+  id_hash: TRWS_0x20_0x0A
+  is_mapobj: true
+  room_index: 0
+  scene: f_snow
+
+Anouki Village Stamp Station:
+  id_hash: SPTB_0x34_0x0B
+  is_mapobj: true
+  room_index: 0
+  scene: f_snow
+
+Beedle Joe's Force Gem:
+  bmg: intrain.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0xF1E8'
+  room_index: 3
+  scene: f_trnnpc
+
+Beedle Shop Bomb Bag:
+  id_hash: TERY_0x01F8_0x0160
+  is_actor: true
+  room_index: 3
+  scene: f_trnnpc
+
+Beedle Shop Bomb Refill:
+  id_hash: TERY_0x01F8_0x0160
+  is_actor: true
+  room_index: 3
+  scene: f_trnnpc
+
+Blizzard Temple 1F NE Chest:
+  id_hash: TREW_0x33_0x07
+  is_mapobj: true
+  room_index: 0
+  scene: d_snow26
+
+Blizzard Temple 1F NW Chest:
+  id_hash: TRES_0x15_0x07
+  is_mapobj: true
+  room_index: 0
+  scene: d_snow26
+
+Blizzard Temple 1F Torch Chest:
+  id_hash: TREW_0x1F_0x07
+  is_mapobj: true
+  room_index: 0
+  scene: d_snow26
+
+Blizzard Temple B1 E Enemy Chest:
+  id_hash: TRED_0x33_0x12
+  is_mapobj: true
+  room_index: 1
+  scene: d_snow26
+
+Blizzard Temple B1 NE Enemy Chest:
+  id_hash: TRLD_0x24_0x08
+  is_mapobj: true
+  room_index: 1
+  scene: d_snow26
+
+Blizzard Temple B1 NW Enemy Chest:
+  id_hash: TRED_0x0B_0x0A
+  is_mapobj: true
+  room_index: 1
+  scene: d_snow26
+
+Blizzard Temple B1 SE Chest:
+  id_hash: TRES_0x1D_0x26
+  is_mapobj: true
+  room_index: 1
+  scene: d_snow26
+
+Blizzard Temple B1 SW Chest:
+  id_hash: TRES_0x2B_0x22
+  is_mapobj: true
+  room_index: 1
+  scene: d_snow26
+
+Blizzard Temple B1 Stamp Station:
+  id_hash: SPTB_0x1D_0x07
+  is_mapobj: true
+  room_index: 1
+  scene: d_snow26
+
+Blizzard Temple Boss Heart Container:
+  id_hash: TRLW_0x1F_0x1B
+  is_mapobj: true
+  room_index: 0
+  scene: b_snow
+
+Bridge Worker's Home Buried Chest:
+  id_hash: TRWS_0x30_0x0E
+  is_mapobj: true
+  room_index: 0
+  scene: f_bridge
+
+Castle Town Buy Cuccos:
+  id_hash: CAMB_0x0100_0x00F0
+  is_actor: true
+  room_index: 0
+  scene: f_htown
+
+Castle Town Deliver Fish:
+  bmg: castle_town.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x8D40'
+  room_index: 14
+  scene: f_htown
+
+Castle Town Empty House Roof Chest:
+  id_hash: TRES_0x16_0x0D
+  is_mapobj: true
+  room_index: 0
+  scene: f_htown
+
+Castle Town Goron Force Gem:
+  bmg: castle_town.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x9480'
+  room_index: 0
+  scene: f_htown
+
+Castle Town Goron Reward:
+  bmg: castle_town.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x9598'
+  room_index: 0
+  scene: f_htown
+
+Castle Town Left Wall Chest:
+  id_hash: TRES_0x15_0x24
+  is_mapobj: true
+  room_index: 0
+  scene: f_htown
+
+Castle Town Minigame Roof:
+  id_hash: TRES_0x30_0x1B
+  is_mapobj: true
+  room_index: 0
+  scene: f_htown
+
+Castle Town Pick Up Mona:
+  id_hash: CAWB_0x0200_0x0160
+  is_actor: true
+  room_index: 12
+  scene: f_htown
+
+Castle Town Ramp House Chest:
+  id_hash: TRES_0x0E_0x1C
+  is_mapobj: true
+  room_index: 0
+  scene: f_htown
+
+Castle Town Right Wall Chest:
+  id_hash: TRES_0x29_0x24
+  is_mapobj: true
+  room_index: 0
+  scene: f_htown
+
+Castle Town Shop Keeper:
+  id_hash: CAMY_0x01F8_0x0150
+  is_actor: true
+  room_index: 10
+  scene: f_htown
+
+Castle Town Stamp Station:
+  id_hash: SPTB_0x08_0x06
+  is_mapobj: true
+  room_index: 0
+  scene: f_htown
+
+Castle Town Take 'em All On Level 1:
+  id_hash: JOLN_0x01F8_0x015D
+  is_actor: true
+  room_index: 11
+  scene: f_htown
+
+Castle Town Take 'em All On Level 2:
+  id_hash: JOLN_0x01F8_0x015D
+  is_actor: true
+  room_index: 11
+  scene: f_htown
+
+Castle Town Take 'em All On Level 3:
+  id_hash: JOLN_0x01F8_0x015D
+  is_actor: true
+  room_index: 11
+  scene: f_htown
+
+Castle Town Take 'em All On Level 3 Capbone Chest:
+  id_hash: TRLW_0x1F_0x16
+  is_mapobj: true
+  room_index: 1
+  scene: tekiya09
+
+Dark Ore Mine Buried Chest:
+  id_hash: TRWS_0x2E_0x10
+  is_mapobj: true
+  room_index: 1
+  scene: f_flame4
+
+Dark Ore Mine Buy Ore:
+  id_hash: GORM_0x01F9_0x018F
+  is_actor: true
+  room_index: 1
+  scene: f_flame4
+
+Desert Temple 1F Entrance Chest:
+  id_hash: TRES_0x20_0x17
+  is_mapobj: true
+  room_index: 0
+  scene: d_sand
+
+Desert Temple 1F N Arena Chest:
+  id_hash: TREW_0x23_0x09
+  is_mapobj: true
+  room_index: 0
+  scene: d_sand
+
+Desert Temple 1F N Buried Key:
+  id_hash: KEYN_0x01D0_0x00C0
+  is_actor: true
+  room_index: 0
+  scene: d_sand
+
+Desert Temple 1F N Ergtorok Chest:
+  id_hash: TREW_0x1C_0x06
+  is_mapobj: true
+  room_index: 0
+  scene: d_sand
+
+Desert Temple 1F N Trap Chest:
+  id_hash: TREN_0x23_0x06
+  is_mapobj: true
+  room_index: 0
+  scene: d_sand
+
+Desert Temple 1F NW Gerune Chest:
+  id_hash: TREW_0x16_0x06
+  is_mapobj: true
+  room_index: 0
+  scene: d_sand
+
+Desert Temple 2F Left Chest:
+  id_hash: TRES_0x1F_0x14
+  is_mapobj: true
+  room_index: 1
+  scene: d_sand
+
+Desert Temple 2F Right Chest:
+  id_hash: TRES_0x2B_0x14
+  is_mapobj: true
+  room_index: 1
+  scene: d_sand
+
+Desert Temple 3F Chest:
+  id_hash: TRLS_0x13_0x0E
+  is_mapobj: true
+  room_index: 2
+  scene: d_sand
+
+Desert Temple B1 NW Buried Rupee:
+  id_hash: RUPE_0x0070_0x0060
+  is_actor: true
+  room_index: 3
+  scene: d_sand
+
+Desert Temple B1 Near Boss Door Chest:
+  id_hash: TRES_0x2A_0x14
+  is_mapobj: true
+  room_index: 3
+  scene: d_sand
+
+Desert Temple B1 SW Stalfos Chest:
+  id_hash: TREW_0x09_0x25
+  is_mapobj: true
+  room_index: 3
+  scene: d_sand
+
+Desert Temple B1 Stamp Station:
+  id_hash: SPTB_0x19_0x07
+  is_mapobj: true
+  room_index: 3
+  scene: d_sand
+
+Desert Temple Boss Heart Container:
+  id_hash: TRLW_0x1F_0x16
+  is_mapobj: true
+  room_index: 1
+  scene: b_sand
+
+Desert Temple Bow of Light Chest:
+  id_hash: TRLS_0x1E_0x10
+  is_mapobj: true
+  room_index: 5
+  scene: d_sand
+
+Disorientation Station Maze Chest:
+  id_hash: TRWS_0x23_0x16
+  is_mapobj: true
+  room_index: 9
+  scene: f_kakushi2
+
+Dune Sanctuary Deliver Cuccos:
+  bmg: desert.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x4378'
+  room_index: 0
+  scene: f_sand
+
+Dune Sanctuary Song of Restoration:
+  bmg: desert.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x42F8'
+  room_index: 2
+  scene: f_sand
+
+Ends of the Earth Golden Big Chest:
+  id_hash: TRLS_0x1F_0x08
+  is_mapobj: true
+  room_index: 12
+  scene: f_kakushi3
+
+Ends of the Earth Golden Small Chest:
+  id_hash: TRES_0x1F_0x18
+  is_mapobj: true
+  room_index: 9
+  scene: f_kakushi3
+
+Ends of the Earth Master Big Chest:
+  id_hash: TRLS_0x1F_0x08
+  is_mapobj: true
+  room_index: 4
+  scene: f_kakushi3
+
+Ends of the Earth Master Small Chest:
+  id_hash: TRES_0x1F_0x18
+  is_mapobj: true
+  room_index: 1
+  scene: f_kakushi3
+
+Ends of the Earth Tempered Big Chest:
+  id_hash: TRLS_0x1F_0x08
+  is_mapobj: true
+  room_index: 8
+  scene: f_kakushi3
+
+Ends of the Earth Tempered Small Chest:
+  id_hash: TRES_0x1F_0x18
+  is_mapobj: true
+  room_index: 5
+  scene: f_kakushi3
+
+Forest Realm Ferrus Gift:
+  id_hash: TMNA_0x0350_0x0280
+  is_actor: true
+  room_index: 2
+  scene: f_trnnpc
+
+Goron Shop Bomb Refill:
+  id_hash: GORY_0x01F8_0x0140
+  is_actor: true
+  room_index: 6
+  scene: f_flame5
+
+Goron Shop Postcards:
+  id_hash: GORY_0x01F8_0x0140
+  is_actor: true
+  room_index: 6
+  scene: f_flame5
+
+Goron Shop Quiver:
+  id_hash: GORY_0x01F8_0x0140
+  is_actor: true
+  room_index: 6
+  scene: f_flame5
+
+Goron Shop Shield:
+  id_hash: GORY_0x01F8_0x0140
+  is_actor: true
+  room_index: 6
+  scene: f_flame5
+
+Goron Target Range Big Chest:
+  id_hash: TRLN_0x20_0x0F
+  is_mapobj: true
+  room_index: 1
+  scene: f_flame3
+
+Goron Target Range Small Chest:
+  id_hash: TREN_0x22_0x0F
+  is_mapobj: true
+  room_index: 1
+  scene: f_flame3
+
+Goron Village Chest Above Elder's House:
+  id_hash: TRES_0x11_0x0E
+  is_mapobj: true
+  room_index: 0
+  scene: f_flame5
+
+Goron Village Deliver Ice Force Gem:
+  bmg: flame.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0xA4B0'
+  room_index: 0
+  scene: f_flame5
+
+Goron Village Kofu Force Gem:
+  bmg: flame.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0xA360'
+  room_index: 0
+  scene: f_flame5
+
+Goron Village West Buy Steel:
+  id_hash: GORM_0x0320_0x01F0
+  is_actor: true
+  room_index: 3
+  scene: f_flame
+
+Goron Village West Center Chest:
+  id_hash: TRES_0x23_0x1E
+  is_mapobj: true
+  room_index: 3
+  scene: f_flame
+
+Goron Village West NE Chest:
+  id_hash: TRES_0x39_0x07
+  is_mapobj: true
+  room_index: 3
+  scene: f_flame
+
+Goron Village West Stamp Station:
+  id_hash: SPTB_0x09_0x05
+  is_mapobj: true
+  room_index: 3
+  scene: f_flame
+
+Goron Village West Steel Chest:
+  id_hash: TRES_0x2E_0x19
+  is_mapobj: true
+  room_index: 3
+  scene: f_flame
+
+Hyrule Castle 1F Back Chest:
+  id_hash: TRES_0x27_0x0B
+  is_mapobj: true
+  room_index: 1
+  scene: f_hyral
+
+Hyrule Castle 2F Indoors Chest:
+  id_hash: TRES_0x11_0x21
+  is_mapobj: true
+  room_index: 2
+  scene: f_hyral
+
+Hyrule Castle 3F Spirit Flute:
+  is_cs: true
+  room_index: 5
+  scene: f_hyral
+  vanilla_item_flag: PanFlute
+
+Hyrule Castle Exterior NW Chest:
+  id_hash: TRES_0x0A_0x06
+  is_mapobj: true
+  room_index: 0
+  scene: f_hyral
+
+Icy Spring Buy Mega Ice:
+  id_hash: YUKI_0x022A_0x0160
+  is_actor: true
+  room_index: 0
+  scene: f_tetsuo
+
+Icy Spring Noko's Force Gem:
+  bmg: snow.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0xE458'
+    - '0xE4A0'
+  room_index: 0
+  scene: f_tetsuo
+
+Icy Spring Stamp Station:
+  id_hash: SPTB_0x20_0x08
+  is_mapobj: true
+  room_index: 0
+  scene: f_tetsuo
+
+Icy Spring Whip Chest:
+  id_hash: TRES_0x2D_0x0B
+  is_mapobj: true
+  room_index: 0
+  scene: f_tetsuo
+
+Island Sanctuary Carben's Force Gem:
+  bmg: water.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x12D80'
+  room_index: 0
+  scene: f_water2
+
+Island Sanctuary Cucco Chest:
+  id_hash: TRES_0x33_0x1E
+  is_mapobj: true
+  room_index: 2
+  scene: f_water2
+
+Island Sanctuary NW Chest:
+  id_hash: TRES_0x06_0x0A
+  is_mapobj: true
+  room_index: 2
+  scene: f_water2
+
+Island Sanctuary S Island Chest:
+  id_hash: TRES_0x21_0x09
+  is_mapobj: true
+  room_index: 0
+  scene: f_water2
+
+Island Sanctuary Song of Restoration:
+  bmg: water.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x13048'
+  room_index: 4
+  scene: f_water2
+
+Island Sanctuary Stamp Station:
+  id_hash: SPTB_0x1E_0x15
+  is_mapobj: true
+  room_index: 2
+  scene: f_water2
+
+Lost at Sea Buried Chest:
+  id_hash: TRWS_0x23_0x1E
+  is_mapobj: true
+  room_index: 10
+  scene: f_water3
+
+Lost at Sea Final Challenge NE Chest:
+  id_hash: TREN_0x2C_0x0F
+  is_mapobj: true
+  room_index: 6
+  scene: f_kakushi4
+
+Lost at Sea Final Challenge NW Chest:
+  id_hash: TREN_0x12_0x0F
+  is_mapobj: true
+  room_index: 6
+  scene: f_kakushi4
+
+Lost at Sea Final Challenge SE Chest:
+  id_hash: TREN_0x2C_0x1E
+  is_mapobj: true
+  room_index: 6
+  scene: f_kakushi4
+
+Lost at Sea Final Challenge SW Chest:
+  id_hash: TREN_0x12_0x1E
+  is_mapobj: true
+  room_index: 6
+  scene: f_kakushi4
+
+Lost at Sea Final Chest:
+  id_hash: TRLN_0x1F_0x17
+  is_mapobj: true
+  room_index: 7
+  scene: f_kakushi4
+
+Lost at Sea Plain Phantom Chest:
+  id_hash: TREN_0x0F_0x15
+  is_mapobj: true
+  room_index: 2
+  scene: f_kakushi4
+
+Lost at Sea Torch Phantom Chest:
+  id_hash: TREN_0x30_0x13
+  is_mapobj: true
+  room_index: 3
+  scene: f_kakushi4
+
+Lost at Sea Warp Phantom Chest:
+  id_hash: TREN_0x2D_0x10
+  is_mapobj: true
+  room_index: 4
+  scene: f_kakushi4
+
+Lost at Sea Wrecker Phantom NE Chest:
+  id_hash: TREN_0x37_0x0A
+  is_mapobj: true
+  room_index: 5
+  scene: f_kakushi4
+
+Lost at Sea Wrecker Phantom SW Chest:
+  id_hash: TREN_0x07_0x25
+  is_mapobj: true
+  room_index: 5
+  scene: f_kakushi4
+
+Marine Temple 1F Lever Chest:
+  id_hash: TREW_0x23_0x09
+  is_mapobj: true
+  room_index: 0
+  scene: d_water27
+
+Marine Temple 1F Vines Chest:
+  id_hash: TRES_0x2E_0x16
+  is_mapobj: true
+  room_index: 0
+  scene: d_water27
+
+Marine Temple 2F Log Chest:
+  id_hash: TRES_0x16_0x25
+  is_mapobj: true
+  room_index: 1
+  scene: d_water27
+
+Marine Temple 2F Stamp Station:
+  id_hash: SPTB_0x1E_0x0E
+  is_mapobj: true
+  room_index: 7
+  scene: d_water27
+
+Marine Temple 3F NE Chest:
+  id_hash: TRES_0x2F_0x0B
+  is_mapobj: true
+  room_index: 2
+  scene: d_water27
+
+Marine Temple 3F Puzzle Chest:
+  id_hash: TREW_0x14_0x22
+  is_mapobj: true
+  room_index: 2
+  scene: d_water27
+
+Marine Temple 3F Whip Chest:
+  id_hash: TRLD_0x20_0x17
+  is_mapobj: true
+  room_index: 2
+  scene: d_water27
+
+Marine Temple 6F E Chest:
+  id_hash: TRES_0x34_0x11
+  is_mapobj: true
+  room_index: 5
+  scene: d_water27
+
+Marine Temple 6F W Chest:
+  id_hash: TREW_0x0F_0x11
+  is_mapobj: true
+  room_index: 5
+  scene: d_water27
+
+Marine Temple Ferrus Force Gem:
+  bmg: dungeon.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x65C8'
+  room_index: 10
+  scene: d_water27
+
+Marine Temple Heart Container:
+  id_hash: TRLW_0x1F_0x1E
+  is_mapobj: true
+  room_index: 0
+  scene: b_water
+
+Marine Temple Song Statue:
+  id_hash: WDST_0x19_0x0B
+  is_mapobj: true
+  room_index: 10
+  scene: d_water27
+
+Mayscore Buy Lumber:
+  id_hash: FOMB_0x0130_0x0210
+  is_actor: true
+  room_index: 0
+  scene: f_forest1
+
+Mayscore Deliver Steel:
+  bmg: forest.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0xB5B8'
+  room_index: 0
+  scene: f_forest1
+
+Mayscore Pick Up Dovok:
+  id_hash: FOMR_0x0200_0x0160
+  is_actor: true
+  room_index: 4
+  scene: f_forest1
+
+Mayscore Pick Up Mash:
+  id_hash: FOMB_0x0130_0x0210
+  is_actor: true
+  room_index: 0
+  scene: f_forest1
+
+Mayscore Pick Up Morris:
+  id_hash: FOMA_0x0210_0x0160
+  is_actor: true
+  room_index: 3
+  scene: f_forest1
+
+Mayscore Pick Up Wood:
+  id_hash: FOMB_0x0130_0x0210
+  is_actor: true
+  room_index: 0
+  scene: f_forest3
+
+Mayscore Pick Up Yamahiko:
+  id_hash: FOMC_0x01C0_0x01C0
+  is_actor: true
+  room_index: 0
+  scene: f_forest1
+
+Mayscore Shop Postcards:
+  id_hash: FOMY_0x01F8_0x0140
+  is_actor: true
+  room_index: 5
+  scene: f_forest1
+
+Mayscore Shop Shield:
+  id_hash: FOMY_0x01F8_0x0140
+  is_actor: true
+  room_index: 5
+  scene: f_forest1
+
+Mayscore Stamp Station:
+  id_hash: SPTB_0x11_0x12
+  is_mapobj: true
+  room_index: 0
+  scene: f_forest3
+
+Mayscore Whip Chest:
+  id_hash: TRES_0x12_0x0B
+  is_mapobj: true
+  room_index: 0
+  scene: f_forest3
+
+Mayscore Whip Race 1:05-1:15:
+  id_hash: FOMD_0x02F0_0x00B0
+  is_actor: true
+  room_index: 0
+  scene: f_forest3
+
+Mayscore Whip Race 1:15-1:30:
+  id_hash: FOMD_0x02F0_0x00B0
+  is_actor: true
+  room_index: 0
+  scene: f_forest3
+
+Mayscore Whip Race Sub 1:05:
+  id_hash: FOMD_0x02F0_0x00B0
+  is_actor: true
+  room_index: 0
+  scene: f_forest3
+
+Mountain Temple 1F NE Chest:
+  id_hash: TRES_0x30_0x0A
+  is_mapobj: true
+  room_index: 0
+  scene: d_flame
+
+Mountain Temple 1F Right Maze Chest:
+  id_hash: TRES_0x2E_0x27
+  is_mapobj: true
+  room_index: 0
+  scene: d_flame
+
+Mountain Temple 2F Center Chest:
+  id_hash: TRES_0x1E_0x1C
+  is_mapobj: true
+  room_index: 1
+  scene: d_flame
+
+Mountain Temple 2F Heatoise Chest:
+  id_hash: TRLW_0x1F_0x07
+  is_mapobj: true
+  room_index: 1
+  scene: d_flame
+
+Mountain Temple 2F Left Chest:
+  id_hash: TRES_0x12_0x0D
+  is_mapobj: true
+  room_index: 1
+  scene: d_flame
+
+Mountain Temple 2F NW Chest:
+  id_hash: TRES_0x12_0x07
+  is_mapobj: true
+  room_index: 1
+  scene: d_flame
+
+Mountain Temple B1 Heatoise Chest:
+  id_hash: TREW_0x1F_0x20
+  is_mapobj: true
+  room_index: 2
+  scene: d_flame
+
+Mountain Temple B1 Stamp Station:
+  id_hash: SPTB_0x0F_0x0D
+  is_mapobj: true
+  room_index: 2
+  scene: d_flame
+
+Mountain Temple B2 NE Chest:
+  id_hash: TRES_0x36_0x08
+  is_mapobj: true
+  room_index: 3
+  scene: d_flame
+
+Mountain Temple B2 NW Chest:
+  id_hash: TRES_0x09_0x08
+  is_mapobj: true
+  room_index: 3
+  scene: d_flame
+
+Mountain Temple B2 SE Chest:
+  id_hash: TRES_0x2D_0x25
+  is_mapobj: true
+  room_index: 3
+  scene: d_flame
+
+Mountain Temple B3 N Chest:
+  id_hash: TRES_0x24_0x03
+  is_mapobj: true
+  room_index: 4
+  scene: d_flame
+
+Mountain Temple Song Statue:
+  id_hash: WDST_0x1A_0x0B
+  is_mapobj: true
+  room_index: 10
+  scene: d_flame
+
+Outset Beach Tree Buried Chest:
+  id_hash: TRWS_0x28_0x1D
+  is_mapobj: true
+  room_index: 0
+  scene: f_first
+
+Outset Clear Rocks:
+  id_hash: NCCB_0x0210_0x01C0
+  is_actor: true
+  room_index: 0
+  scene: f_first
+
+Outset Deliver Cuccos:
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x16588'
+  room_index: 0
+  scene: f_first
+
+Outset Ferrus Force Gem:
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x16710'
+  room_index: 11
+  scene: f_first
+
+Outset Niko 10 Stamps Reward:
+  id_hash: NICO_0x01F7_0x0151
+  is_actor: true
+  room_index: 10
+  scene: f_first
+
+Outset Niko 15 Stamps Reward:
+  id_hash: NICO_0x01F7_0x0151
+  is_actor: true
+  room_index: 10
+  scene: f_first
+
+Outset Niko 20 Stamps Reward:
+  id_hash: NICO_0x01F7_0x0151
+  is_actor: true
+  room_index: 10
+  scene: f_first
+
+Outset Niko Stamp Book:
+  id_hash: NICO_0x01F7_0x0151
+  is_actor: true
+  room_index: 10
+  scene: f_first
+
+Outset Niko's House Tree Buried Chest:
+  id_hash: TRWS_0x13_0x1C
+  is_mapobj: true
+  room_index: 0
+  scene: f_first
+
+Outset Stamp Station:
+  id_hash: SPTB_0x16_0x0F
+  is_mapobj: true
+  room_index: 0
+  scene: f_first
+
+Papuzia Shop Arrows:
+  id_hash: WAWY_0x01F8_0x0160
+  is_actor: true
+  room_index: 2
+  scene: f_water
+
+Papuzia Shop Bombs:
+  id_hash: WAWY_0x01F8_0x0160
+  is_actor: true
+  room_index: 2
+  scene: f_water
+
+Papuzia Shop Postcards:
+  id_hash: WAWY_0x01F8_0x0160
+  is_actor: true
+  room_index: 2
+  scene: f_water
+
+Papuzia Village Buy Fish:
+  id_hash: WAWC_0x00F0_0x0210
+  is_actor: true
+  room_index: 0
+  scene: f_water
+
+Papuzia Village Buy Vessel:
+  id_hash: VCFT_0x01F8_0x0168
+  is_actor: true
+  room_index: 4
+  scene: f_water
+
+Papuzia Village Deliver Ice:
+  bmg: water.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x12908'
+  room_index: 0
+  scene: f_water
+
+Papuzia Village NE Chest:
+  id_hash: TRES_0x26_0x0E
+  is_mapobj: true
+  room_index: 0
+  scene: f_water
+
+Papuzia Village Orca's Force Gem:
+  bmg: water.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x11DB0'
+  room_index: 3
+  scene: f_water
+
+Papuzia Village S Center Chest:
+  id_hash: TRES_0x26_0x06
+  is_mapobj: true
+  room_index: 0
+  scene: f_water3
+
+Papuzia Village SW Chest:
+  id_hash: TRES_0x12_0x17
+  is_mapobj: true
+  room_index: 0
+  scene: f_water3
+
+Papuzia Village Song Statue:
+  id_hash: WDST_0x24_0x24
+  is_mapobj: true
+  room_index: 0
+  scene: f_water
+
+Papuzia Village Stamp Station:
+  id_hash: SPTB_0x0A_0x23
+  is_mapobj: true
+  room_index: 0
+  scene: f_water3
+
+Papuzia Village Wadatsumi's Force Gem:
+  bmg: water.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x12A20'
+  room_index: 0
+  scene: f_water
+
+Pirate Hideout Minigame 3000-4000:
+  bmg: water.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x114F0'
+  room_index: 0
+  scene: f_ajito
+
+Pirate Hideout Minigame 4000-5000:
+  bmg: water.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x114E8'
+  room_index: 0
+  scene: f_ajito
+
+Pirate Hideout Minigame 5000+:
+  bmg: water.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x114E0'
+  room_index: 0
+  scene: f_ajito
+
+Pirate Hideout Secret Cave Left Treasure:
+  id_hash: TRES_0x1D_0x12
+  is_mapobj: true
+  room_index: 1
+  scene: f_ajito
+
+Pirate Hideout Secret Cave Mid Treasure:
+  id_hash: TRES_0x20_0x12
+  is_mapobj: true
+  room_index: 1
+  scene: f_ajito
+
+Pirate Hideout Secret Cave Right Treasure:
+  id_hash: TRES_0x24_0x15
+  is_mapobj: true
+  room_index: 1
+  scene: f_ajito
+
+Pirate Hideout Stamp Station:
+  id_hash: SPTB_0x17_0x16
+  is_mapobj: true
+  room_index: 0
+  scene: f_ajito
+
+Rabbit Haven Island Chest:
+  id_hash: TRES_0x24_0x14
+  is_mapobj: true
+  room_index: 0
+  scene: f_rabbit
+
+Rabbit Haven Mona's Force Gem:
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x17840'
+  room_index: 0
+  scene: f_rabbit
+
+Rabbit Haven Net Gift:
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x17350'
+  room_index: 0
+  scene: f_rabbit
+
+Rabbit Haven Rescue 1 of Each Rabbit:
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x174F8'
+  room_index: 0
+  scene: f_rabbit
+
+Rabbit Haven Rescue 10 Grass Rabbits:
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x17510'
+  room_index: 0
+  scene: f_rabbit
+
+Rabbit Haven Rescue 10 Mountain Rabbits:
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x17558'
+  room_index: 0
+  scene: f_rabbit
+
+Rabbit Haven Rescue 10 Ocean Rabbits:
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x17540'
+  room_index: 0
+  scene: f_rabbit
+
+Rabbit Haven Rescue 10 Sand Rabbits:
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x17578'
+  room_index: 0
+  scene: f_rabbit
+
+Rabbit Haven Rescue 10 Snow Rabbits:
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x17528'
+  room_index: 0
+  scene: f_rabbit
+
+Rabbit Haven Rescue 5 Rabbits:
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x174F0'
+  room_index: 0
+  scene: f_rabbit
+
+Rabbit Haven Rescue all 50 Rabbit:
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x17580'
+  room_index: 0
+  scene: f_rabbit
+
+Slippery Station Amateur Reward:
+  id_hash: TRES_0x21_0x09
+  is_mapobj: true
+  room_index: 6
+  scene: f_kakushi1
+
+Slippery Station Champion Reward:
+  id_hash: TRES_0x35_0x25
+  is_mapobj: true
+  room_index: 6
+  scene: f_kakushi1
+
+Slippery Station Pro Reward:
+  id_hash: TRES_0x37_0x0A
+  is_mapobj: true
+  room_index: 6
+  scene: f_kakushi1
+
+Snowdrift Station Puzzle Reward:
+  id_hash: TRLS_0x1F_0x0B
+  is_mapobj: true
+  room_index: 1
+  scene: f_kakushi1
+
+Snowfall Sanctuary Deliver Vessel:
+  bmg: snow.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x142C0'
+  room_index: 2
+  scene: f_snow2
+
+Snowfall Sanctuary Shop Keeper:
+  id_hash: YUKY_0x01F8_0x0150
+  is_actor: true
+  room_index: 3
+  scene: f_snow2
+
+Snowfall Sanctuary Song of Restoration:
+  bmg: snow.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x13EC0'
+    - '0x140C0'
+  room_index: 2
+  scene: f_snow2
+
+Snowfall Sanctuary Stamp Station:
+  id_hash: SPTB_0x0C_0x14
+  is_mapobj: true
+  room_index: 0
+  scene: f_snow2
+
+Snowfall Sanctuary Steem Gift With Snow Source:
+  bmg: snow.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x141D0'
+  room_index: 2
+  scene: f_snow2
+
+ToS 10F NW Chest:
+  id_hash: TRLS_0x0B_0x0C
+  is_mapobj: true
+  room_index: 9
+  scene: d_main
+
+ToS 11F Chest:
+  id_hash: TRLW_0x1B_0x11
+  is_mapobj: true
+  room_index: 10
+  scene: d_main
+
+ToS 12F Ocean Rail Glyph:
+  id_hash: GELG_0x1F_0x17
+  is_mapobj: true
+  room_index: 11
+  scene: d_main
+
+ToS 13F Central Tear of Light:
+  id_hash: SZKU_0x0168_0x0128
+  is_actor: true
+  room_index: 12
+  scene: d_main
+
+ToS 13F E Swing Chest:
+  id_hash: TRLS_0x36_0x11
+  is_mapobj: true
+  room_index: 12
+  scene: d_main
+
+ToS 13F N Chest:
+  id_hash: TREW_0x26_0x0F
+  is_mapobj: true
+  room_index: 12
+  scene: d_main
+
+ToS 13F SE Raised Chest:
+  id_hash: TRLS_0x29_0x1F
+  is_mapobj: true
+  room_index: 12
+  scene: d_main
+
+ToS 13F SE Tear of Light:
+  id_hash: SZKU_0x02E0_0x01F0
+  is_actor: true
+  room_index: 12
+  scene: d_main
+
+ToS 13F SW Raised Chest:
+  id_hash: TREW_0x1B_0x22
+  is_mapobj: true
+  room_index: 12
+  scene: d_main
+
+ToS 14F SE Chest:
+  id_hash: TRLS_0x2E_0x1C
+  is_mapobj: true
+  room_index: 13
+  scene: d_main
+
+ToS 14F Tear of Light:
+  id_hash: SZKU_0x02A8_0x0088
+  is_actor: true
+  room_index: 13
+  scene: d_main
+
+ToS 15F NE Chest:
+  id_hash: TRES_0x33_0x08
+  is_mapobj: true
+  room_index: 14
+  scene: d_main
+
+ToS 16F Bombable Wall Chest:
+  id_hash: TRLS_0x1F_0x15
+  is_mapobj: true
+  room_index: 43
+  scene: d_main
+
+ToS 17F Fire Rail Glyph:
+  id_hash: GELG_0x1F_0x17
+  is_mapobj: true
+  room_index: 15
+  scene: d_main
+
+ToS 18F Center Chest:
+  id_hash: TRES_0x1E_0x1D
+  is_mapobj: true
+  room_index: 17
+  scene: d_main
+
+ToS 18F N Chest:
+  id_hash: TREW_0x23_0x08
+  is_mapobj: true
+  room_index: 17
+  scene: d_main
+
+ToS 18F SE Tear of Light:
+  id_hash: SZKU_0x0348_0x0278
+  is_actor: true
+  room_index: 17
+  scene: d_main
+
+ToS 18F SW Chest:
+  id_hash: TRLS_0x1A_0x27
+  is_mapobj: true
+  room_index: 17
+  scene: d_main
+
+ToS 19F Center E Chest:
+  id_hash: TRLW_0x24_0x18
+  is_mapobj: true
+  room_index: 18
+  scene: d_main
+
+ToS 19F Center W Chest:
+  id_hash: TRLW_0x1F_0x17
+  is_mapobj: true
+  room_index: 18
+  scene: d_main
+
+ToS 19F S Tear of Light:
+  id_hash: SZKU_0x01F0_0x0230
+  is_actor: true
+  room_index: 18
+  scene: d_main
+
+ToS 1F Chest:
+  id_hash: TRLW_0x1F_0x06
+  is_mapobj: true
+  room_index: 0
+  scene: d_main
+
+ToS 1F E Tear of Light:
+  id_hash: SZKU_0x02E8_0x0148
+  is_actor: true
+  room_index: 0
+  scene: d_main
+
+ToS 1F N Tear of Light:
+  id_hash: SZKU_0x01F8_0x0078
+  is_actor: true
+  room_index: 0
+  scene: d_main
+
+ToS 1F W Tear of Light:
+  id_hash: SZKU_0x0118_0x0148
+  is_actor: true
+  room_index: 0
+  scene: d_main
+
+ToS 20F SW Tear of Light:
+  id_hash: SZKU_0x00E8_0x0168
+  is_actor: true
+  room_index: 19
+  scene: d_main
+
+ToS 21F Bomb Wall Chest:
+  id_hash: TRLS_0x1F_0x16
+  is_mapobj: true
+  room_index: 46
+  scene: d_main
+
+ToS 24F Final Chest:
+  id_hash: TRLS_0x1F_0x17
+  is_mapobj: true
+  room_index: 35
+  scene: d_main
+
+ToS 28F E Raised Chest:
+  id_hash: TRLW_0x18_0x1F
+  is_mapobj: true
+  room_index: 32
+  scene: d_main
+
+ToS 28F W Raised Chest:
+  id_hash: TRLW_0x09_0x23
+  is_mapobj: true
+  room_index: 32
+  scene: d_main
+
+ToS 29F SE Large Chest:
+  id_hash: TRLW_0x36_0x1D
+  is_mapobj: true
+  room_index: 31
+  scene: d_main
+
+ToS 29F SE Small Chest:
+  id_hash: TREW_0x34_0x1D
+  is_mapobj: true
+  room_index: 31
+  scene: d_main
+
+ToS 2F Bomb Wall Chest:
+  id_hash: TRLS_0x1F_0x16
+  is_mapobj: true
+  room_index: 40
+  scene: d_main
+
+ToS 2F Raised Chest:
+  id_hash: TRLS_0x20_0x0E
+  is_mapobj: true
+  room_index: 1
+  scene: d_main
+
+ToS 2F Whirlwind Chest:
+  id_hash: TRLS_0x27_0x09
+  is_mapobj: true
+  room_index: 1
+  scene: d_main
+
+ToS 30F SE Wrecker Chest:
+  id_hash: TRLS_0x32_0x19
+  is_mapobj: true
+  room_index: 30
+  scene: d_main
+
+ToS 30F W Chest:
+  id_hash: TRLS_0x06_0x19
+  is_mapobj: true
+  room_index: 30
+  scene: d_main
+
+ToS 3F Forest Rail Glyph:
+  id_hash: GELG_0x1F_0x17
+  is_mapobj: true
+  room_index: 2
+  scene: d_main
+
+ToS 4F Central Chest:
+  id_hash: TRLS_0x20_0x18
+  is_mapobj: true
+  room_index: 3
+  scene: d_main
+
+ToS 4F E Tear of Light:
+  id_hash: SZKU_0x0200_0x00D0
+  is_actor: true
+  room_index: 3
+  scene: d_main
+
+ToS 4F Lava Tear of Light:
+  id_hash: SZKU_0x0150_0x0190
+  is_actor: true
+  room_index: 3
+  scene: d_main
+
+ToS 4F NE Chest:
+  id_hash: TRLS_0x29_0x0A
+  is_mapobj: true
+  room_index: 3
+  scene: d_main
+
+ToS 4F W Tear of Light:
+  id_hash: SZKU_0x0090_0x0190
+  is_actor: true
+  room_index: 3
+  scene: d_main
+
+ToS 5F Bomb Wall Chest:
+  id_hash: TRLS_0x1F_0x16
+  is_mapobj: true
+  room_index: 41
+  scene: d_main
+
+ToS 5F Island Chest:
+  id_hash: TRLS_0x18_0x22
+  is_mapobj: true
+  room_index: 4
+  scene: d_main
+
+ToS 5F Spinnit Key:
+  id_hash: MKUR_0x00E0_0x01B0
+  is_actor: true
+  room_index: 4
+  scene: d_main
+
+ToS 6F Enemy Bottom Left:
+  id_hash: TRLS_0x2B_0x17
+  is_mapobj: true
+  room_index: 5
+  scene: d_main
+
+ToS 6F Enemy Chest Bottom Right:
+  id_hash: TRES_0x30_0x18
+  is_mapobj: true
+  room_index: 5
+  scene: d_main
+
+ToS 6F Enemy Chest Top Left:
+  id_hash: TRES_0x29_0x15
+  is_mapobj: true
+  room_index: 5
+  scene: d_main
+
+ToS 6F Enemy Chest Top Right:
+  id_hash: TRES_0x31_0x15
+  is_mapobj: true
+  room_index: 5
+  scene: d_main
+
+ToS 6F Key:
+  id_hash: KEYN_0x02F0_0x0230
+  is_actor: true
+  room_index: 5
+  scene: d_main
+
+ToS 7F Snow Rail Glyph:
+  id_hash: GELG_0x1F_0x17
+  is_mapobj: true
+  room_index: 6
+  scene: d_main
+
+ToS 8F N Bombable Wall Chest:
+  id_hash: TRLS_0x1F_0x14
+  is_mapobj: true
+  room_index: 21
+  scene: d_main
+
+ToS 8F S Bombable Wall Chest:
+  id_hash: TRLS_0x1F_0x15
+  is_mapobj: true
+  room_index: 42
+  scene: d_main
+
+ToS 9F NE Bombable Wall Tear of Light:
+  id_hash: SZKU_0x01F8_0x0178
+  is_actor: true
+  room_index: 22
+  scene: d_main
+
+ToS 9F NE Tear of Light:
+  id_hash: SZKU_0x02B8_0x0128
+  is_actor: true
+  room_index: 8
+  scene: d_main
+
+ToS 9F NW Secret Chest:
+  id_hash: TRLS_0x0C_0x08
+  is_mapobj: true
+  room_index: 8
+  scene: d_main
+
+ToS 9F NW Tear of Light:
+  id_hash: SZKU_0x00E0_0x0120
+  is_actor: true
+  room_index: 8
+  scene: d_main
+
+ToS Summit Stamp Station:
+  id_hash: SPTB_0x22_0x23
+  is_mapobj: true
+  room_index: 0
+  scene: d_main_s
+
+Trading Post Buried Chest:
+  id_hash: TRWS_0x17_0x10
+  is_mapobj: true
+  room_index: 2
+  scene: f_bridge2
+
+Trading Post Buy Shield:
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x16B98'
+  room_index: 10
+  scene: f_bridge2
+
+Trading Post Deliver Dark Ore:
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x17170'
+  room_index: 10
+  scene: f_bridge2
+
+Trading Post Song Statue:
+  id_hash: WDST_0x11_0x0C
+  is_mapobj: true
+  room_index: 0
+  scene: f_bridge2
+
+Trading Post Stamp Station:
+  id_hash: SPTB_0x16_0x09
+  is_mapobj: true
+  room_index: 1
+  scene: f_bridge2
+
+Tunnel to ToS 1F Block Chest:
+  id_hash: TRES_0x25_0x0E
+  is_mapobj: true
+  room_index: 0
+  scene: d_tutorial
+
+Tunnel to ToS 2F Chest:
+  id_hash: TRES_0x28_0x19
+  is_mapobj: true
+  room_index: 1
+  scene: d_tutorial
+
+Tunnel to Valley Sanctuary Chest:
+  id_hash: TRES_0x19_0x10
+  is_mapobj: true
+  room_index: 1
+  scene: f_flame5
+
+Valley Sanctuary NW Chest:
+  id_hash: TRES_0x08_0x08
+  is_mapobj: true
+  room_index: 0
+  scene: f_flame2
+
+Valley Sanctuary Song of Restoration:
+  bmg: flame_fld.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0x76B0'
+  room_index: 3
+  scene: f_flame2
+
+Valley Sanctuary Stamp Station:
+  id_hash: SPTB_0x1D_0x0B
+  is_mapobj: true
+  room_index: 0
+  scene: f_flame2
+
+Wooded Temple 1F Enemy Chest:
+  id_hash: TRED_0x26_0x1F
+  is_mapobj: true
+  room_index: 0
+  scene: d_forest
+
+Wooded Temple 1F Key:
+  id_hash: KEYN_0x0160_0x00D0
+  is_actor: true
+  room_index: 0
+  scene: d_forest
+
+Wooded Temple 1F Stamp Station:
+  id_hash: SPTB_0x26_0x09
+  is_mapobj: true
+  room_index: 0
+  scene: d_forest
+
+Wooded Temple 1F Switch Chest:
+  id_hash: TREW_0x28_0x0E
+  is_mapobj: true
+  room_index: 0
+  scene: d_forest
+
+Wooded Temple 2F Large Chest:
+  id_hash: TRLD_0x31_0x08
+  is_mapobj: true
+  room_index: 1
+  scene: d_forest
+
+Wooded Temple 2F Small Chest:
+  id_hash: TRES_0x2B_0x15
+  is_mapobj: true
+  room_index: 1
+  scene: d_forest
+
+Wooded Temple 3F Chestnut Chest:
+  id_hash: TREW_0x14_0x08
+  is_mapobj: true
+  room_index: 2
+  scene: d_forest
+
+Wooded Temple 3F SE Chest:
+  id_hash: TREW_0x2B_0x17
+  is_mapobj: true
+  room_index: 2
+  scene: d_forest
+
+Wooded Temple Boss Heart Container:
+  id_hash: TRLW_0x1F_0x1B
+  is_mapobj: true
+  room_index: 0
+  scene: b_forest
+
+Wooded Temple Song Statue:
+  id_hash: WDST_0x19_0x0B
+  is_mapobj: true
+  room_index: 10
+  scene: d_forest
+
+Woodland Sanctuary Chest:
+  id_hash: TRES_0x23_0x22
+  is_mapobj: true
+  room_index: 0
+  scene: f_forest2
+
+Woodland Sanctuary Song Statue:
+  id_hash: WDST_0x19_0x19
+  is_mapobj: true
+  room_index: 0
+  scene: f_forest2
+
+Woodland Sanctuary Song of Restoration:
+  bmg: forest.bmg
+  is_bmg: true
+  offsets:
+    English:
+    - '0xBF98'
+  room_index: 1
+  scene: f_forest2
+
+Woodland Sanctuary Stamp Station:
+  id_hash: SPTB_0x23_0x0D
+  is_mapobj: true
+  room_index: 0
+  scene: f_forest2

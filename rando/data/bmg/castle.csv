@@ -1,0 +1,17 @@
+file offset;item id;item name
+0xCE50;0x0026;ItemId_RecruitUniform
+0xCFC0;0x0002;ItemId_NormalSword
+0xD728;0x0028;ItemId_HeartContainer
+0xD730;0x005F;ItemId_RandLegendaryTreasure
+0xD748;0x0028;ItemId_HeartContainer
+0xD750;0x005E;ItemId_RandRareTreasure
+0xD768;0x0028;ItemId_HeartContainer
+0xD770;0x005E;ItemId_RandRareTreasure
+0xD790;0x005F;ItemId_RandLegendaryTreasure
+0xD798;0x005F;ItemId_RandLegendaryTreasure
+0xD7A0;0x005F;ItemId_RandLegendaryTreasure
+0xD7C0;0x005D;ItemId_RandUncommonTreasure
+0xD7E0;0x0028;ItemId_HeartContainer
+0xD7E8;0x005F;ItemId_RandLegendaryTreasure
+0xD7F0;0x005F;ItemId_RandLegendaryTreasure
+0xD7F8;0x005D;ItemId_RandUncommonTreasure
