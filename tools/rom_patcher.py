@@ -225,6 +225,8 @@ def patch_overlay(extracted_dir: Path, ovl_id: int, at_addrs: list[int]):
     new_addr = None
     suffix = "mod"
     match ovl_id:
+        case 0:
+            new_addr = Symbol.new("gGetItemMap").addr
         case 31:
             new_addr = Symbol.new("CustomTryItemGive").addr
         case 36:
