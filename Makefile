@@ -125,6 +125,12 @@ OVL094_ADDR := 0x021658A0
 HOOK_SONGS_ADDR := 0x02171F34
 HOOK_SONGS_FLAG_ADDR := 0x02172078 # prevents WDST actor from setting the song flag
 
+# cutscene
+OVL088_ADDR := 0x021658A0
+HOOK_CS_ITEM_1_ADDR := 0x02165D80
+HOOK_CS_ITEM_2_ADDR := 0x02165D98
+HOOK_CS_ITEM_3_ADDR := 0x02166EC0
+
 # constants patch: item give (31), shops (36) and freestandings (70, 71)
 PATCH_OVL_ARG := "{31: [0x020D9840], 36: [0x0211B148, 0x0211B420, 0x0211B6F8, 0x0211B9E8, 0x0211BCB0, 0x0211C02C], 70: [0x02142140], 71: [0x0215FF3C]}"
 else
@@ -187,6 +193,8 @@ ARMIPS_ARGS ?= \
 				-strequ OVL018_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov018_mod.bin" \
 				-strequ OVL036_BIN "$(EXTRACTED_REL)/arm9_overlays/ov036_patched.bin" \
 				-strequ OVL036_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov036_mod.bin" \
+				-strequ OVL088_BIN "$(EXTRACTED_REL)/arm9_overlays/ov088.bin" \
+				-strequ OVL088_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov088_mod.bin" \
 				-strequ OVL094_BIN "$(EXTRACTED_REL)/arm9_overlays/ov094.bin" \
 				-strequ OVL094_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov094_mod.bin" \
 				-strequ ARM9_BIN "$(EXTRACTED_REL)/arm9/arm9_patched.bin" \
@@ -195,6 +203,7 @@ ARMIPS_ARGS ?= \
 				-strequ ITCM_MOD_BIN "$(EXTRACTED_REL)/arm9/itcm_mod.bin" \
 				-equ OVL018_ADDR $(OVL018_ADDR) \
 				-equ OVL036_ADDR $(OVL036_ADDR) \
+				-equ OVL088_ADDR $(OVL088_ADDR) \
 				-equ OVL094_ADDR $(OVL094_ADDR) \
 				-equ HOOKS_SIZE $(HOOKS_SIZE) \
 				-equ HOOKS_ADDR $(HOOKS_ADDR) \
@@ -208,7 +217,10 @@ ARMIPS_ARGS ?= \
 				-equ HOOK_PRICE_3 $(HOOK_PRICE_3_ADDR) \
 				-equ HOOK_PRICE_4 $(HOOK_PRICE_4_ADDR) \
 				-equ HOOK_PRICE_5 $(HOOK_PRICE_5_ADDR) \
-				-equ HOOK_PRICE_6 $(HOOK_PRICE_6_ADDR)
+				-equ HOOK_PRICE_6 $(HOOK_PRICE_6_ADDR) \
+				-equ HOOK_CS_ITEM_1 $(HOOK_CS_ITEM_1_ADDR) \
+				-equ HOOK_CS_ITEM_2 $(HOOK_CS_ITEM_2_ADDR) \
+				-equ HOOK_CS_ITEM_3 $(HOOK_CS_ITEM_3_ADDR)
 
 ### project targets ###
 
