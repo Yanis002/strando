@@ -155,11 +155,30 @@ class ItemDef:
 
 class BMGOffsets:
     def __init__(self):
-        self.english: list[int] = []
-        self.french: list[int] = []
-        self.german: list[int] = []
-        self.italian: list[int] = []
-        self.spanish: list[int] = []
+        self.english: list[str] = []
+        self.french: list[str] = []
+        self.german: list[str] = []
+        self.italian: list[str] = []
+        self.spanish: list[str] = []
+
+    def set_from_english(self, bmg: str):
+        with Path("rando/data/bmg/flw1_offsets.yaml").open("r") as file:
+            flw1_offsets = yaml.safe_load(file)
+
+        flw1_offset_en = int(flw1_offsets["English"][bmg], base=16)
+
+        for lang, data in flw1_offsets.items():
+            flw1_offset = int(data[bmg], base=16)
+
+            if lang == "English":
+                continue
+
+            do_sub = flw1_offset_en > flw1_offset
+            diff = abs(flw1_offset_en - flw1_offset)
+            for offset_s in self.english:
+                offset = int(offset_s, base=16)
+                new_offset = offset - diff if do_sub else offset + diff
+                getattr(self, lang.lower()).append(f"0x{new_offset:X}")
 
 
 class LocationInfo:
@@ -201,6 +220,8 @@ class LocationInfo:
 
             for lang, offsets in data["offsets"].items():
                 getattr(new_info.bmg_offsets, lang).extend(offsets)
+
+            new_info.bmg_offsets.set_from_english(new_info.bmg)
 
         return new_info
 
