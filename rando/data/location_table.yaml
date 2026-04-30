@@ -2,16 +2,17 @@ Anjean Desert Force Gem:
   bmg: intrain.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0xE460'
   room_index: 0
   scene: f_passenger
 
 Anjean Lokomo Sword:
+  id_hash: SYRN_0x01EE_0x0176
+  is_actor: true
   is_cs: true
   room_index: 0
   scene: f_passenger
-  vanilla_item_flag: LokomoSword
 
 Anouki Village Bomb Cave Chest:
   id_hash: TRES_0x24_0x10
@@ -23,7 +24,7 @@ Anouki Village Goron Force Gem:
   bmg: snow.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x13CD8'
   room_index: 0
   scene: f_snow
@@ -38,7 +39,7 @@ Anouki Village Pair Villagers:
   bmg: snow.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x13268'
   room_index: 1
   scene: f_snow
@@ -47,7 +48,7 @@ Anouki Village Repair Fence:
   bmg: snow.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x13920'
   room_index: 0
   scene: f_snow
@@ -74,18 +75,12 @@ Beedle Joe's Force Gem:
   bmg: intrain.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0xF1E8'
   room_index: 3
   scene: f_trnnpc
 
-Beedle Shop Bomb Bag:
-  id_hash: TERY_0x01F8_0x0160
-  is_actor: true
-  room_index: 3
-  scene: f_trnnpc
-
-Beedle Shop Bomb Refill:
+Beedle Shop Keeper:
   id_hash: TERY_0x01F8_0x0160
   is_actor: true
   room_index: 3
@@ -167,7 +162,7 @@ Castle Town Deliver Fish:
   bmg: castle_town.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x8D40'
   room_index: 14
   scene: f_htown
@@ -182,7 +177,7 @@ Castle Town Goron Force Gem:
   bmg: castle_town.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x9480'
   room_index: 0
   scene: f_htown
@@ -191,7 +186,7 @@ Castle Town Goron Reward:
   bmg: castle_town.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x9598'
   room_index: 0
   scene: f_htown
@@ -374,7 +369,7 @@ Dune Sanctuary Deliver Cuccos:
   bmg: desert.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x4378'
   room_index: 0
   scene: f_sand
@@ -383,7 +378,7 @@ Dune Sanctuary Song of Restoration:
   bmg: desert.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x42F8'
   room_index: 2
   scene: f_sand
@@ -430,25 +425,7 @@ Forest Realm Ferrus Gift:
   room_index: 2
   scene: f_trnnpc
 
-Goron Shop Bomb Refill:
-  id_hash: GORY_0x01F8_0x0140
-  is_actor: true
-  room_index: 6
-  scene: f_flame5
-
-Goron Shop Postcards:
-  id_hash: GORY_0x01F8_0x0140
-  is_actor: true
-  room_index: 6
-  scene: f_flame5
-
-Goron Shop Quiver:
-  id_hash: GORY_0x01F8_0x0140
-  is_actor: true
-  room_index: 6
-  scene: f_flame5
-
-Goron Shop Shield:
+Goron Shop Keeper:
   id_hash: GORY_0x01F8_0x0140
   is_actor: true
   room_index: 6
@@ -476,7 +453,7 @@ Goron Village Deliver Ice Force Gem:
   bmg: flame.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0xA4B0'
   room_index: 0
   scene: f_flame5
@@ -485,7 +462,7 @@ Goron Village Kofu Force Gem:
   bmg: flame.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0xA360'
   room_index: 0
   scene: f_flame5
@@ -533,10 +510,11 @@ Hyrule Castle 2F Indoors Chest:
   scene: f_hyral
 
 Hyrule Castle 3F Spirit Flute:
+  id_hash: RMC3_0x0200_0x0180
+  is_actor: true
   is_cs: true
   room_index: 5
   scene: f_hyral
-  vanilla_item_flag: PanFlute
 
 Hyrule Castle Exterior NW Chest:
   id_hash: TRES_0x0A_0x06
@@ -545,17 +523,17 @@ Hyrule Castle Exterior NW Chest:
   scene: f_hyral
 
 Icy Spring Buy Mega Ice:
-  id_hash: YUKI_0x022A_0x0160
+  id_hash: YUKI_0x0220_0x0160
   is_actor: true
   room_index: 0
   scene: f_tetsuo
 
 Icy Spring Noko's Force Gem:
-  bmg: snow.bmg
+  bmg: intrain.bmg
   is_bmg: true
   offsets:
-    English:
-    - '0xE458'
+    english:
+    - '0xEA58'
     - '0xE4A0'
   room_index: 0
   scene: f_tetsuo
@@ -576,7 +554,7 @@ Island Sanctuary Carben's Force Gem:
   bmg: water.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x12D80'
   room_index: 0
   scene: f_water2
@@ -603,7 +581,7 @@ Island Sanctuary Song of Restoration:
   bmg: water.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x13048'
   room_index: 4
   scene: f_water2
@@ -738,7 +716,7 @@ Marine Temple Ferrus Force Gem:
   bmg: dungeon.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x65C8'
   room_index: 10
   scene: d_water27
@@ -765,7 +743,7 @@ Mayscore Deliver Steel:
   bmg: forest.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0xB5B8'
   room_index: 0
   scene: f_forest1
@@ -792,7 +770,7 @@ Mayscore Pick Up Wood:
   id_hash: FOMB_0x0130_0x0210
   is_actor: true
   room_index: 0
-  scene: f_forest3
+  scene: f_forest1
 
 Mayscore Pick Up Yamahiko:
   id_hash: FOMC_0x01C0_0x01C0
@@ -800,13 +778,7 @@ Mayscore Pick Up Yamahiko:
   room_index: 0
   scene: f_forest1
 
-Mayscore Shop Postcards:
-  id_hash: FOMY_0x01F8_0x0140
-  is_actor: true
-  room_index: 5
-  scene: f_forest1
-
-Mayscore Shop Shield:
+Mayscore Shop Keeper:
   id_hash: FOMY_0x01F8_0x0140
   is_actor: true
   room_index: 5
@@ -909,7 +881,7 @@ Mountain Temple B2 SE Chest:
   scene: d_flame
 
 Mountain Temple B3 N Chest:
-  id_hash: TRES_0x24_0x03
+  id_hash: TRES_0x24_0x06
   is_mapobj: true
   room_index: 4
   scene: d_flame
@@ -936,7 +908,7 @@ Outset Deliver Cuccos:
   bmg: village.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x16588'
   room_index: 0
   scene: f_first
@@ -945,7 +917,7 @@ Outset Ferrus Force Gem:
   bmg: village.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x16710'
   room_index: 11
   scene: f_first
@@ -986,19 +958,7 @@ Outset Stamp Station:
   room_index: 0
   scene: f_first
 
-Papuzia Shop Arrows:
-  id_hash: WAWY_0x01F8_0x0160
-  is_actor: true
-  room_index: 2
-  scene: f_water
-
-Papuzia Shop Bombs:
-  id_hash: WAWY_0x01F8_0x0160
-  is_actor: true
-  room_index: 2
-  scene: f_water
-
-Papuzia Shop Postcards:
+Papuzia Shop Keeper:
   id_hash: WAWY_0x01F8_0x0160
   is_actor: true
   room_index: 2
@@ -1020,7 +980,7 @@ Papuzia Village Deliver Ice:
   bmg: water.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x12908'
   room_index: 0
   scene: f_water
@@ -1035,7 +995,7 @@ Papuzia Village Orca's Force Gem:
   bmg: water.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x11DB0'
   room_index: 3
   scene: f_water
@@ -1068,7 +1028,7 @@ Papuzia Village Wadatsumi's Force Gem:
   bmg: water.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x12A20'
   room_index: 0
   scene: f_water
@@ -1077,7 +1037,7 @@ Pirate Hideout Minigame 3000-4000:
   bmg: water.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x114F0'
   room_index: 0
   scene: f_ajito
@@ -1086,7 +1046,7 @@ Pirate Hideout Minigame 4000-5000:
   bmg: water.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x114E8'
   room_index: 0
   scene: f_ajito
@@ -1095,7 +1055,7 @@ Pirate Hideout Minigame 5000+:
   bmg: water.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x114E0'
   room_index: 0
   scene: f_ajito
@@ -1134,7 +1094,7 @@ Rabbit Haven Mona's Force Gem:
   bmg: village.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x17840'
   room_index: 0
   scene: f_rabbit
@@ -1143,7 +1103,7 @@ Rabbit Haven Net Gift:
   bmg: village.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x17350'
   room_index: 0
   scene: f_rabbit
@@ -1152,7 +1112,7 @@ Rabbit Haven Rescue 1 of Each Rabbit:
   bmg: village.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x174F8'
   room_index: 0
   scene: f_rabbit
@@ -1161,7 +1121,7 @@ Rabbit Haven Rescue 10 Grass Rabbits:
   bmg: village.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x17510'
   room_index: 0
   scene: f_rabbit
@@ -1170,7 +1130,7 @@ Rabbit Haven Rescue 10 Mountain Rabbits:
   bmg: village.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x17558'
   room_index: 0
   scene: f_rabbit
@@ -1179,7 +1139,7 @@ Rabbit Haven Rescue 10 Ocean Rabbits:
   bmg: village.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x17540'
   room_index: 0
   scene: f_rabbit
@@ -1188,7 +1148,7 @@ Rabbit Haven Rescue 10 Sand Rabbits:
   bmg: village.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x17578'
   room_index: 0
   scene: f_rabbit
@@ -1197,7 +1157,7 @@ Rabbit Haven Rescue 10 Snow Rabbits:
   bmg: village.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x17528'
   room_index: 0
   scene: f_rabbit
@@ -1206,7 +1166,7 @@ Rabbit Haven Rescue 5 Rabbits:
   bmg: village.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x174F0'
   room_index: 0
   scene: f_rabbit
@@ -1215,7 +1175,7 @@ Rabbit Haven Rescue all 50 Rabbit:
   bmg: village.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x17580'
   room_index: 0
   scene: f_rabbit
@@ -1248,7 +1208,7 @@ Snowfall Sanctuary Deliver Vessel:
   bmg: snow.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x142C0'
   room_index: 2
   scene: f_snow2
@@ -1263,7 +1223,7 @@ Snowfall Sanctuary Song of Restoration:
   bmg: snow.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x13EC0'
     - '0x140C0'
   room_index: 2
@@ -1279,7 +1239,7 @@ Snowfall Sanctuary Steem Gift With Snow Source:
   bmg: snow.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x141D0'
   room_index: 2
   scene: f_snow2
@@ -1648,7 +1608,7 @@ Trading Post Buy Shield:
   bmg: village.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x16B98'
   room_index: 10
   scene: f_bridge2
@@ -1657,7 +1617,7 @@ Trading Post Deliver Dark Ore:
   bmg: village.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x17170'
   room_index: 10
   scene: f_bridge2
@@ -1702,7 +1662,7 @@ Valley Sanctuary Song of Restoration:
   bmg: flame_fld.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0x76B0'
   room_index: 3
   scene: f_flame2
@@ -1789,7 +1749,7 @@ Woodland Sanctuary Song of Restoration:
   bmg: forest.bmg
   is_bmg: true
   offsets:
-    English:
+    english:
     - '0xBF98'
   room_index: 1
   scene: f_forest2

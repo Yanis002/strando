@@ -809,51 +809,51 @@ if __name__ == "__main__":
         for i, entry in enumerate(csv_data):
             if i == 0:
                 continue
-            
-            name, scene, room, id, x, y = tuple(entry)
 
-            if ".bmg" in id:
-                split = id.split(" @ ")
+            name, scene, room, id, x, y, attr = tuple(entry)
 
-                yaml_file[name] = {
-                    "is_bmg": True,
-                    "bmg": split[0],
-                    "scene": scene,
-                    "room_index": int(room),
-                    "offsets": {
-                        "English": split[1].split(", ")
-                    },
-                }
-            elif "Cutscene" in id:
-                yaml_file[name] = {
-                    "is_cs": True,
-                    "vanilla_item_flag": id.split(": ")[-1],
-                    "scene": scene,
-                    "room_index": int(room),
-                }
-            elif len(id) > 0 and len(x) > 0 and len(y) > 0:
-                if id in actor_ids:
-                    is_actor = True
-                elif id in mapobj_ids:
-                    is_actor = False
-                else:
-                    raise ValueError(f"unexpected id: {id}")
+            match attr:
+                case "skip":
+                    continue
+                case "bmg":
+                    split = id.split(" @ ")
 
-                if is_actor:
-                    id_hash = f"{id}_0x{int(x):04X}_0x{int(y):04X}"
-                else:
-                    id_hash = f"{id}_0x{int(x):02X}_0x{int(y):02X}"
+                    yaml_file[name] = {
+                        "is_bmg": True,
+                        "bmg": split[0],
+                        "scene": scene,
+                        "room_index": int(room),
+                        "offsets": {
+                            "english": split[1].split(", ")
+                        },
+                    }
+                case _:
+                    if len(id) > 0 and len(x) > 0 and len(y) > 0:
+                        if id in actor_ids:
+                            is_actor = True
+                        elif id in mapobj_ids:
+                            is_actor = False
+                        else:
+                            raise ValueError(f"unexpected id: {id}")
 
-                yaml_file[name] = {
-                    "scene": scene,
-                    "room_index": int(room),
-                    "id_hash": id_hash,
-                }
+                        if is_actor:
+                            id_hash = f"{id}_0x{int(x):04X}_0x{int(y):04X}"
+                        else:
+                            id_hash = f"{id}_0x{int(x):02X}_0x{int(y):02X}"
 
-                if is_actor:
-                    yaml_file[name]["is_actor"] = True
-                else:
-                    yaml_file[name]["is_mapobj"] = True
+                        yaml_file[name] = {
+                            "scene": scene,
+                            "room_index": int(room),
+                            "id_hash": id_hash,
+                        }
+
+                        if attr == "cutscene":
+                            yaml_file[name]["is_cs"] = True
+
+                        if is_actor:
+                            yaml_file[name]["is_actor"] = True
+                        else:
+                            yaml_file[name]["is_mapobj"] = True
 
     with yaml_out.open("w") as file:
         yaml.dump(yaml_file, file, Dumper=MyDumper)
@@ -862,7 +862,7 @@ if __name__ == "__main__":
     for loc, data in yaml_file.items():
         scene = data["scene"]
         room_index = data["room_index"]
-        node_name = f"node_{scene}"
+        node_name = f"node_{scene}_{room_index}"
 
         if node_name not in world:
             world[node_name] = {
@@ -870,9 +870,12 @@ if __name__ == "__main__":
                 "room_index": room_index,
                 "locations": {}
             }
-        
+
         if loc not in world[node_name]["locations"]:
             world[node_name]["locations"][loc] = "True"
+
+            if "Shop Keeper" in loc:
+                world[node_name]["is_shop"] = True
 
     with yaml_test_out.open("w") as file:
         yaml.dump(world, file, Dumper=MyDumper)

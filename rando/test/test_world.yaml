@@ -1,129 +1,309 @@
-node_b_forest:
+node_b_forest_0:
   locations:
     Wooded Temple Boss Heart Container: 'True'
   room_index: 0
   scene: b_forest
 
-node_b_sand:
+node_b_sand_1:
   locations:
     Desert Temple Boss Heart Container: 'True'
   room_index: 1
   scene: b_sand
 
-node_b_snow:
+node_b_snow_0:
   locations:
     Blizzard Temple Boss Heart Container: 'True'
   room_index: 0
   scene: b_snow
 
-node_b_water:
+node_b_water_0:
   locations:
     Marine Temple Heart Container: 'True'
   room_index: 0
   scene: b_water
 
-node_d_flame:
+node_d_flame_0:
   locations:
     Mountain Temple 1F NE Chest: 'True'
     Mountain Temple 1F Right Maze Chest: 'True'
+  room_index: 0
+  scene: d_flame
+
+node_d_flame_1:
+  locations:
     Mountain Temple 2F Center Chest: 'True'
     Mountain Temple 2F Heatoise Chest: 'True'
     Mountain Temple 2F Left Chest: 'True'
     Mountain Temple 2F NW Chest: 'True'
+  room_index: 1
+  scene: d_flame
+
+node_d_flame_10:
+  locations:
+    Mountain Temple Song Statue: 'True'
+  room_index: 10
+  scene: d_flame
+
+node_d_flame_2:
+  locations:
     Mountain Temple B1 Heatoise Chest: 'True'
     Mountain Temple B1 Stamp Station: 'True'
+  room_index: 2
+  scene: d_flame
+
+node_d_flame_3:
+  locations:
     Mountain Temple B2 NE Chest: 'True'
     Mountain Temple B2 NW Chest: 'True'
     Mountain Temple B2 SE Chest: 'True'
-    Mountain Temple B3 N Chest: 'True'
-    Mountain Temple Song Statue: 'True'
-  room_index: 0
+  room_index: 3
   scene: d_flame
 
-node_d_forest:
+node_d_flame_4:
+  locations:
+    Mountain Temple B3 N Chest: 'True'
+  room_index: 4
+  scene: d_flame
+
+node_d_forest_0:
   locations:
     Wooded Temple 1F Enemy Chest: 'True'
     Wooded Temple 1F Key: 'True'
     Wooded Temple 1F Stamp Station: 'True'
     Wooded Temple 1F Switch Chest: 'True'
-    Wooded Temple 2F Large Chest: 'True'
-    Wooded Temple 2F Small Chest: 'True'
-    Wooded Temple 3F Chestnut Chest: 'True'
-    Wooded Temple 3F SE Chest: 'True'
-    Wooded Temple Song Statue: 'True'
   room_index: 0
   scene: d_forest
 
-node_d_main:
+node_d_forest_1:
   locations:
-    ToS 10F NW Chest: 'True'
+    Wooded Temple 2F Large Chest: 'True'
+    Wooded Temple 2F Small Chest: 'True'
+  room_index: 1
+  scene: d_forest
+
+node_d_forest_10:
+  locations:
+    Wooded Temple Song Statue: 'True'
+  room_index: 10
+  scene: d_forest
+
+node_d_forest_2:
+  locations:
+    Wooded Temple 3F Chestnut Chest: 'True'
+    Wooded Temple 3F SE Chest: 'True'
+  room_index: 2
+  scene: d_forest
+
+node_d_main_0:
+  locations:
+    ToS 1F Chest: 'True'
+    ToS 1F E Tear of Light: 'True'
+    ToS 1F N Tear of Light: 'True'
+    ToS 1F W Tear of Light: 'True'
+  room_index: 0
+  scene: d_main
+
+node_d_main_1:
+  locations:
+    ToS 2F Raised Chest: 'True'
+    ToS 2F Whirlwind Chest: 'True'
+  room_index: 1
+  scene: d_main
+
+node_d_main_10:
+  locations:
     ToS 11F Chest: 'True'
+  room_index: 10
+  scene: d_main
+
+node_d_main_11:
+  locations:
     ToS 12F Ocean Rail Glyph: 'True'
+  room_index: 11
+  scene: d_main
+
+node_d_main_12:
+  locations:
     ToS 13F Central Tear of Light: 'True'
     ToS 13F E Swing Chest: 'True'
     ToS 13F N Chest: 'True'
     ToS 13F SE Raised Chest: 'True'
     ToS 13F SE Tear of Light: 'True'
     ToS 13F SW Raised Chest: 'True'
+  room_index: 12
+  scene: d_main
+
+node_d_main_13:
+  locations:
     ToS 14F SE Chest: 'True'
     ToS 14F Tear of Light: 'True'
+  room_index: 13
+  scene: d_main
+
+node_d_main_14:
+  locations:
     ToS 15F NE Chest: 'True'
-    ToS 16F Bombable Wall Chest: 'True'
+  room_index: 14
+  scene: d_main
+
+node_d_main_15:
+  locations:
     ToS 17F Fire Rail Glyph: 'True'
+  room_index: 15
+  scene: d_main
+
+node_d_main_17:
+  locations:
     ToS 18F Center Chest: 'True'
     ToS 18F N Chest: 'True'
     ToS 18F SE Tear of Light: 'True'
     ToS 18F SW Chest: 'True'
+  room_index: 17
+  scene: d_main
+
+node_d_main_18:
+  locations:
     ToS 19F Center E Chest: 'True'
     ToS 19F Center W Chest: 'True'
     ToS 19F S Tear of Light: 'True'
-    ToS 1F Chest: 'True'
-    ToS 1F E Tear of Light: 'True'
-    ToS 1F N Tear of Light: 'True'
-    ToS 1F W Tear of Light: 'True'
+  room_index: 18
+  scene: d_main
+
+node_d_main_19:
+  locations:
     ToS 20F SW Tear of Light: 'True'
-    ToS 21F Bomb Wall Chest: 'True'
-    ToS 24F Final Chest: 'True'
-    ToS 28F E Raised Chest: 'True'
-    ToS 28F W Raised Chest: 'True'
-    ToS 29F SE Large Chest: 'True'
-    ToS 29F SE Small Chest: 'True'
-    ToS 2F Bomb Wall Chest: 'True'
-    ToS 2F Raised Chest: 'True'
-    ToS 2F Whirlwind Chest: 'True'
-    ToS 30F SE Wrecker Chest: 'True'
-    ToS 30F W Chest: 'True'
+  room_index: 19
+  scene: d_main
+
+node_d_main_2:
+  locations:
     ToS 3F Forest Rail Glyph: 'True'
+  room_index: 2
+  scene: d_main
+
+node_d_main_21:
+  locations:
+    ToS 8F N Bombable Wall Chest: 'True'
+  room_index: 21
+  scene: d_main
+
+node_d_main_22:
+  locations:
+    ToS 9F NE Bombable Wall Tear of Light: 'True'
+  room_index: 22
+  scene: d_main
+
+node_d_main_3:
+  locations:
     ToS 4F Central Chest: 'True'
     ToS 4F E Tear of Light: 'True'
     ToS 4F Lava Tear of Light: 'True'
     ToS 4F NE Chest: 'True'
     ToS 4F W Tear of Light: 'True'
-    ToS 5F Bomb Wall Chest: 'True'
+  room_index: 3
+  scene: d_main
+
+node_d_main_30:
+  locations:
+    ToS 30F SE Wrecker Chest: 'True'
+    ToS 30F W Chest: 'True'
+  room_index: 30
+  scene: d_main
+
+node_d_main_31:
+  locations:
+    ToS 29F SE Large Chest: 'True'
+    ToS 29F SE Small Chest: 'True'
+  room_index: 31
+  scene: d_main
+
+node_d_main_32:
+  locations:
+    ToS 28F E Raised Chest: 'True'
+    ToS 28F W Raised Chest: 'True'
+  room_index: 32
+  scene: d_main
+
+node_d_main_35:
+  locations:
+    ToS 24F Final Chest: 'True'
+  room_index: 35
+  scene: d_main
+
+node_d_main_4:
+  locations:
     ToS 5F Island Chest: 'True'
     ToS 5F Spinnit Key: 'True'
+  room_index: 4
+  scene: d_main
+
+node_d_main_40:
+  locations:
+    ToS 2F Bomb Wall Chest: 'True'
+  room_index: 40
+  scene: d_main
+
+node_d_main_41:
+  locations:
+    ToS 5F Bomb Wall Chest: 'True'
+  room_index: 41
+  scene: d_main
+
+node_d_main_42:
+  locations:
+    ToS 8F S Bombable Wall Chest: 'True'
+  room_index: 42
+  scene: d_main
+
+node_d_main_43:
+  locations:
+    ToS 16F Bombable Wall Chest: 'True'
+  room_index: 43
+  scene: d_main
+
+node_d_main_46:
+  locations:
+    ToS 21F Bomb Wall Chest: 'True'
+  room_index: 46
+  scene: d_main
+
+node_d_main_5:
+  locations:
     ToS 6F Enemy Bottom Left: 'True'
     ToS 6F Enemy Chest Bottom Right: 'True'
     ToS 6F Enemy Chest Top Left: 'True'
     ToS 6F Enemy Chest Top Right: 'True'
     ToS 6F Key: 'True'
+  room_index: 5
+  scene: d_main
+
+node_d_main_6:
+  locations:
     ToS 7F Snow Rail Glyph: 'True'
-    ToS 8F N Bombable Wall Chest: 'True'
-    ToS 8F S Bombable Wall Chest: 'True'
-    ToS 9F NE Bombable Wall Tear of Light: 'True'
+  room_index: 6
+  scene: d_main
+
+node_d_main_8:
+  locations:
     ToS 9F NE Tear of Light: 'True'
     ToS 9F NW Secret Chest: 'True'
     ToS 9F NW Tear of Light: 'True'
-  room_index: 0
+  room_index: 8
   scene: d_main
 
-node_d_main_s:
+node_d_main_9:
+  locations:
+    ToS 10F NW Chest: 'True'
+  room_index: 9
+  scene: d_main
+
+node_d_main_s_0:
   locations:
     ToS Summit Stamp Station: 'True'
   room_index: 0
   scene: d_main_s
 
-node_d_sand:
+node_d_sand_0:
   locations:
     Desert Temple 1F Entrance Chest: 'True'
     Desert Temple 1F N Arena Chest: 'True'
@@ -131,98 +311,231 @@ node_d_sand:
     Desert Temple 1F N Ergtorok Chest: 'True'
     Desert Temple 1F N Trap Chest: 'True'
     Desert Temple 1F NW Gerune Chest: 'True'
+  room_index: 0
+  scene: d_sand
+
+node_d_sand_1:
+  locations:
     Desert Temple 2F Left Chest: 'True'
     Desert Temple 2F Right Chest: 'True'
+  room_index: 1
+  scene: d_sand
+
+node_d_sand_2:
+  locations:
     Desert Temple 3F Chest: 'True'
+  room_index: 2
+  scene: d_sand
+
+node_d_sand_3:
+  locations:
     Desert Temple B1 NW Buried Rupee: 'True'
     Desert Temple B1 Near Boss Door Chest: 'True'
     Desert Temple B1 SW Stalfos Chest: 'True'
     Desert Temple B1 Stamp Station: 'True'
-    Desert Temple Bow of Light Chest: 'True'
-  room_index: 0
+  room_index: 3
   scene: d_sand
 
-node_d_snow26:
+node_d_sand_5:
+  locations:
+    Desert Temple Bow of Light Chest: 'True'
+  room_index: 5
+  scene: d_sand
+
+node_d_snow26_0:
   locations:
     Blizzard Temple 1F NE Chest: 'True'
     Blizzard Temple 1F NW Chest: 'True'
     Blizzard Temple 1F Torch Chest: 'True'
+  room_index: 0
+  scene: d_snow26
+
+node_d_snow26_1:
+  locations:
     Blizzard Temple B1 E Enemy Chest: 'True'
     Blizzard Temple B1 NE Enemy Chest: 'True'
     Blizzard Temple B1 NW Enemy Chest: 'True'
     Blizzard Temple B1 SE Chest: 'True'
     Blizzard Temple B1 SW Chest: 'True'
     Blizzard Temple B1 Stamp Station: 'True'
-  room_index: 0
+  room_index: 1
   scene: d_snow26
 
-node_d_tutorial:
+node_d_tutorial_0:
   locations:
     Tunnel to ToS 1F Block Chest: 'True'
-    Tunnel to ToS 2F Chest: 'True'
   room_index: 0
   scene: d_tutorial
 
-node_d_water27:
+node_d_tutorial_1:
+  locations:
+    Tunnel to ToS 2F Chest: 'True'
+  room_index: 1
+  scene: d_tutorial
+
+node_d_water27_0:
   locations:
     Marine Temple 1F Lever Chest: 'True'
     Marine Temple 1F Vines Chest: 'True'
-    Marine Temple 2F Log Chest: 'True'
-    Marine Temple 2F Stamp Station: 'True'
-    Marine Temple 3F NE Chest: 'True'
-    Marine Temple 3F Puzzle Chest: 'True'
-    Marine Temple 3F Whip Chest: 'True'
-    Marine Temple 6F E Chest: 'True'
-    Marine Temple 6F W Chest: 'True'
-    Marine Temple Ferrus Force Gem: 'True'
-    Marine Temple Song Statue: 'True'
   room_index: 0
   scene: d_water27
 
-node_f_ajito:
+node_d_water27_1:
+  locations:
+    Marine Temple 2F Log Chest: 'True'
+  room_index: 1
+  scene: d_water27
+
+node_d_water27_10:
+  locations:
+    Marine Temple Ferrus Force Gem: 'True'
+    Marine Temple Song Statue: 'True'
+  room_index: 10
+  scene: d_water27
+
+node_d_water27_2:
+  locations:
+    Marine Temple 3F NE Chest: 'True'
+    Marine Temple 3F Puzzle Chest: 'True'
+    Marine Temple 3F Whip Chest: 'True'
+  room_index: 2
+  scene: d_water27
+
+node_d_water27_5:
+  locations:
+    Marine Temple 6F E Chest: 'True'
+    Marine Temple 6F W Chest: 'True'
+  room_index: 5
+  scene: d_water27
+
+node_d_water27_7:
+  locations:
+    Marine Temple 2F Stamp Station: 'True'
+  room_index: 7
+  scene: d_water27
+
+node_f_ajito_0:
   locations:
     Pirate Hideout Minigame 3000-4000: 'True'
     Pirate Hideout Minigame 4000-5000: 'True'
     Pirate Hideout Minigame 5000+: 'True'
-    Pirate Hideout Secret Cave Left Treasure: 'True'
-    Pirate Hideout Secret Cave Mid Treasure: 'True'
-    Pirate Hideout Secret Cave Right Treasure: 'True'
     Pirate Hideout Stamp Station: 'True'
   room_index: 0
   scene: f_ajito
 
-node_f_bridge:
+node_f_ajito_1:
+  locations:
+    Pirate Hideout Secret Cave Left Treasure: 'True'
+    Pirate Hideout Secret Cave Mid Treasure: 'True'
+    Pirate Hideout Secret Cave Right Treasure: 'True'
+  room_index: 1
+  scene: f_ajito
+
+node_f_bridge2_0:
+  locations:
+    Trading Post Song Statue: 'True'
+  room_index: 0
+  scene: f_bridge2
+
+node_f_bridge2_1:
+  locations:
+    Trading Post Stamp Station: 'True'
+  room_index: 1
+  scene: f_bridge2
+
+node_f_bridge2_10:
+  locations:
+    Trading Post Buy Shield: 'True'
+    Trading Post Deliver Dark Ore: 'True'
+  room_index: 10
+  scene: f_bridge2
+
+node_f_bridge2_2:
+  locations:
+    Trading Post Buried Chest: 'True'
+  room_index: 2
+  scene: f_bridge2
+
+node_f_bridge_0:
   locations:
     Bridge Worker's Home Buried Chest: 'True'
   room_index: 0
   scene: f_bridge
 
-node_f_bridge2:
-  locations:
-    Trading Post Buried Chest: 'True'
-    Trading Post Buy Shield: 'True'
-    Trading Post Deliver Dark Ore: 'True'
-    Trading Post Song Statue: 'True'
-    Trading Post Stamp Station: 'True'
-  room_index: 0
-  scene: f_bridge2
-
-node_f_first:
+node_f_first_0:
   locations:
     Outset Beach Tree Buried Chest: 'True'
     Outset Clear Rocks: 'True'
     Outset Deliver Cuccos: 'True'
-    Outset Ferrus Force Gem: 'True'
-    Outset Niko 10 Stamps Reward: 'True'
-    Outset Niko 15 Stamps Reward: 'True'
-    Outset Niko 20 Stamps Reward: 'True'
-    Outset Niko Stamp Book: 'True'
     Outset Niko's House Tree Buried Chest: 'True'
     Outset Stamp Station: 'True'
   room_index: 0
   scene: f_first
 
-node_f_flame:
+node_f_first_10:
+  locations:
+    Outset Niko 10 Stamps Reward: 'True'
+    Outset Niko 15 Stamps Reward: 'True'
+    Outset Niko 20 Stamps Reward: 'True'
+    Outset Niko Stamp Book: 'True'
+  room_index: 10
+  scene: f_first
+
+node_f_first_11:
+  locations:
+    Outset Ferrus Force Gem: 'True'
+  room_index: 11
+  scene: f_first
+
+node_f_flame2_0:
+  locations:
+    Valley Sanctuary NW Chest: 'True'
+    Valley Sanctuary Stamp Station: 'True'
+  room_index: 0
+  scene: f_flame2
+
+node_f_flame2_3:
+  locations:
+    Valley Sanctuary Song of Restoration: 'True'
+  room_index: 3
+  scene: f_flame2
+
+node_f_flame3_1:
+  locations:
+    Goron Target Range Big Chest: 'True'
+    Goron Target Range Small Chest: 'True'
+  room_index: 1
+  scene: f_flame3
+
+node_f_flame4_1:
+  locations:
+    Dark Ore Mine Buried Chest: 'True'
+    Dark Ore Mine Buy Ore: 'True'
+  room_index: 1
+  scene: f_flame4
+
+node_f_flame5_0:
+  locations:
+    Goron Village Chest Above Elder's House: 'True'
+    Goron Village Deliver Ice Force Gem: 'True'
+    Goron Village Kofu Force Gem: 'True'
+  room_index: 0
+  scene: f_flame5
+
+node_f_flame5_1:
+  locations:
+    Tunnel to Valley Sanctuary Chest: 'True'
+  room_index: 1
+  scene: f_flame5
+
+node_f_flame5_6:
+  is_shop: true
+  locations:
+    Goron Shop Keeper: 'True'
+  room_index: 6
+  scene: f_flame5
+
+node_f_flame_3:
   locations:
     Goron Village West Buy Steel: 'True'
     Goron Village West Center Chest: 'True'
@@ -232,66 +545,51 @@ node_f_flame:
   room_index: 3
   scene: f_flame
 
-node_f_flame2:
-  locations:
-    Valley Sanctuary NW Chest: 'True'
-    Valley Sanctuary Song of Restoration: 'True'
-    Valley Sanctuary Stamp Station: 'True'
-  room_index: 0
-  scene: f_flame2
-
-node_f_flame3:
-  locations:
-    Goron Target Range Big Chest: 'True'
-    Goron Target Range Small Chest: 'True'
-  room_index: 1
-  scene: f_flame3
-
-node_f_flame4:
-  locations:
-    Dark Ore Mine Buried Chest: 'True'
-    Dark Ore Mine Buy Ore: 'True'
-  room_index: 1
-  scene: f_flame4
-
-node_f_flame5:
-  locations:
-    Goron Shop Bomb Refill: 'True'
-    Goron Shop Postcards: 'True'
-    Goron Shop Quiver: 'True'
-    Goron Shop Shield: 'True'
-    Goron Village Chest Above Elder's House: 'True'
-    Goron Village Deliver Ice Force Gem: 'True'
-    Goron Village Kofu Force Gem: 'True'
-    Tunnel to Valley Sanctuary Chest: 'True'
-  room_index: 0
-  scene: f_flame5
-
-node_f_forest1:
+node_f_forest1_0:
   locations:
     Mayscore Buy Lumber: 'True'
     Mayscore Deliver Steel: 'True'
-    Mayscore Pick Up Dovok: 'True'
     Mayscore Pick Up Mash: 'True'
-    Mayscore Pick Up Morris: 'True'
     Mayscore Pick Up Yamahiko: 'True'
-    Mayscore Shop Postcards: 'True'
-    Mayscore Shop Shield: 'True'
+    Mayscore Pick Up Wood: 'True'
   room_index: 0
   scene: f_forest1
 
-node_f_forest2:
+node_f_forest1_3:
+  locations:
+    Mayscore Pick Up Morris: 'True'
+  room_index: 3
+  scene: f_forest1
+
+node_f_forest1_4:
+  locations:
+    Mayscore Pick Up Dovok: 'True'
+  room_index: 4
+  scene: f_forest1
+
+node_f_forest1_5:
+  is_shop: true
+  locations:
+    Mayscore Shop Keeper: 'True'
+  room_index: 5
+  scene: f_forest1
+
+node_f_forest2_0:
   locations:
     Woodland Sanctuary Chest: 'True'
     Woodland Sanctuary Song Statue: 'True'
-    Woodland Sanctuary Song of Restoration: 'True'
     Woodland Sanctuary Stamp Station: 'True'
   room_index: 0
   scene: f_forest2
 
-node_f_forest3:
+node_f_forest2_1:
   locations:
-    Mayscore Pick Up Wood: 'True'
+    Woodland Sanctuary Song of Restoration: 'True'
+  room_index: 1
+  scene: f_forest2
+
+node_f_forest3_0:
+  locations:
     Mayscore Stamp Station: 'True'
     Mayscore Whip Chest: 'True'
     Mayscore Whip Race 1:05-1:15: 'True'
@@ -300,84 +598,175 @@ node_f_forest3:
   room_index: 0
   scene: f_forest3
 
-node_f_htown:
+node_f_htown_0:
   locations:
     Castle Town Buy Cuccos: 'True'
-    Castle Town Deliver Fish: 'True'
     Castle Town Empty House Roof Chest: 'True'
     Castle Town Goron Force Gem: 'True'
     Castle Town Goron Reward: 'True'
     Castle Town Left Wall Chest: 'True'
     Castle Town Minigame Roof: 'True'
-    Castle Town Pick Up Mona: 'True'
     Castle Town Ramp House Chest: 'True'
     Castle Town Right Wall Chest: 'True'
-    Castle Town Shop Keeper: 'True'
     Castle Town Stamp Station: 'True'
-    Castle Town Take 'em All On Level 1: 'True'
-    Castle Town Take 'em All On Level 2: 'True'
-    Castle Town Take 'em All On Level 3: 'True'
   room_index: 0
   scene: f_htown
 
-node_f_hyral:
+node_f_htown_10:
+  is_shop: true
   locations:
-    Hyrule Castle 1F Back Chest: 'True'
-    Hyrule Castle 2F Indoors Chest: 'True'
-    Hyrule Castle 3F Spirit Flute: 'True'
+    Castle Town Shop Keeper: 'True'
+  room_index: 10
+  scene: f_htown
+
+node_f_htown_11:
+  locations:
+    Castle Town Take 'em All On Level 1: 'True'
+    Castle Town Take 'em All On Level 2: 'True'
+    Castle Town Take 'em All On Level 3: 'True'
+  room_index: 11
+  scene: f_htown
+
+node_f_htown_12:
+  locations:
+    Castle Town Pick Up Mona: 'True'
+  room_index: 12
+  scene: f_htown
+
+node_f_htown_14:
+  locations:
+    Castle Town Deliver Fish: 'True'
+  room_index: 14
+  scene: f_htown
+
+node_f_hyral_0:
+  locations:
     Hyrule Castle Exterior NW Chest: 'True'
   room_index: 0
   scene: f_hyral
 
-node_f_kakushi1:
+node_f_hyral_1:
   locations:
-    Slippery Station Amateur Reward: 'True'
-    Slippery Station Champion Reward: 'True'
-    Slippery Station Pro Reward: 'True'
+    Hyrule Castle 1F Back Chest: 'True'
+  room_index: 1
+  scene: f_hyral
+
+node_f_hyral_2:
+  locations:
+    Hyrule Castle 2F Indoors Chest: 'True'
+  room_index: 2
+  scene: f_hyral
+
+node_f_hyral_5:
+  locations:
+    Hyrule Castle 3F Spirit Flute: 'True'
+  room_index: 5
+  scene: f_hyral
+
+node_f_kakushi1_1:
+  locations:
     Snowdrift Station Puzzle Reward: 'True'
   room_index: 1
   scene: f_kakushi1
 
-node_f_kakushi2:
+node_f_kakushi1_6:
+  locations:
+    Slippery Station Amateur Reward: 'True'
+    Slippery Station Champion Reward: 'True'
+    Slippery Station Pro Reward: 'True'
+  room_index: 6
+  scene: f_kakushi1
+
+node_f_kakushi2_9:
   locations:
     Disorientation Station Maze Chest: 'True'
   room_index: 9
   scene: f_kakushi2
 
-node_f_kakushi3:
+node_f_kakushi3_1:
   locations:
-    Ends of the Earth Golden Big Chest: 'True'
-    Ends of the Earth Golden Small Chest: 'True'
-    Ends of the Earth Master Big Chest: 'True'
     Ends of the Earth Master Small Chest: 'True'
-    Ends of the Earth Tempered Big Chest: 'True'
-    Ends of the Earth Tempered Small Chest: 'True'
   room_index: 1
   scene: f_kakushi3
 
-node_f_kakushi4:
+node_f_kakushi3_12:
+  locations:
+    Ends of the Earth Golden Big Chest: 'True'
+  room_index: 12
+  scene: f_kakushi3
+
+node_f_kakushi3_4:
+  locations:
+    Ends of the Earth Master Big Chest: 'True'
+  room_index: 4
+  scene: f_kakushi3
+
+node_f_kakushi3_5:
+  locations:
+    Ends of the Earth Tempered Small Chest: 'True'
+  room_index: 5
+  scene: f_kakushi3
+
+node_f_kakushi3_8:
+  locations:
+    Ends of the Earth Tempered Big Chest: 'True'
+  room_index: 8
+  scene: f_kakushi3
+
+node_f_kakushi3_9:
+  locations:
+    Ends of the Earth Golden Small Chest: 'True'
+  room_index: 9
+  scene: f_kakushi3
+
+node_f_kakushi4_2:
+  locations:
+    Lost at Sea Plain Phantom Chest: 'True'
+  room_index: 2
+  scene: f_kakushi4
+
+node_f_kakushi4_3:
+  locations:
+    Lost at Sea Torch Phantom Chest: 'True'
+  room_index: 3
+  scene: f_kakushi4
+
+node_f_kakushi4_4:
+  locations:
+    Lost at Sea Warp Phantom Chest: 'True'
+  room_index: 4
+  scene: f_kakushi4
+
+node_f_kakushi4_5:
+  locations:
+    Lost at Sea Wrecker Phantom NE Chest: 'True'
+    Lost at Sea Wrecker Phantom SW Chest: 'True'
+  room_index: 5
+  scene: f_kakushi4
+
+node_f_kakushi4_6:
   locations:
     Lost at Sea Final Challenge NE Chest: 'True'
     Lost at Sea Final Challenge NW Chest: 'True'
     Lost at Sea Final Challenge SE Chest: 'True'
     Lost at Sea Final Challenge SW Chest: 'True'
-    Lost at Sea Final Chest: 'True'
-    Lost at Sea Plain Phantom Chest: 'True'
-    Lost at Sea Torch Phantom Chest: 'True'
-    Lost at Sea Warp Phantom Chest: 'True'
-    Lost at Sea Wrecker Phantom NE Chest: 'True'
-    Lost at Sea Wrecker Phantom SW Chest: 'True'
-  room_index: 2
+  room_index: 6
   scene: f_kakushi4
 
-node_f_passenger:
+node_f_kakushi4_7:
+  locations:
+    Lost at Sea Final Chest: 'True'
+  room_index: 7
+  scene: f_kakushi4
+
+node_f_passenger_0:
   locations:
     Anjean Desert Force Gem: 'True'
     Anjean Lokomo Sword: 'True'
   room_index: 0
   scene: f_passenger
 
-node_f_rabbit:
+node_f_rabbit_0:
   locations:
     Rabbit Haven Island Chest: 'True'
     Rabbit Haven Mona's Force Gem: 'True'
@@ -393,19 +782,43 @@ node_f_rabbit:
   room_index: 0
   scene: f_rabbit
 
-node_f_sand:
+node_f_sand_0:
   locations:
     Dune Sanctuary Deliver Cuccos: 'True'
-    Dune Sanctuary Song of Restoration: 'True'
   room_index: 0
   scene: f_sand
 
-node_f_snow:
+node_f_sand_2:
   locations:
-    Anouki Village Bomb Cave Chest: 'True'
+    Dune Sanctuary Song of Restoration: 'True'
+  room_index: 2
+  scene: f_sand
+
+node_f_snow2_0:
+  locations:
+    Snowfall Sanctuary Stamp Station: 'True'
+  room_index: 0
+  scene: f_snow2
+
+node_f_snow2_2:
+  locations:
+    Snowfall Sanctuary Deliver Vessel: 'True'
+    Snowfall Sanctuary Song of Restoration: 'True'
+    Snowfall Sanctuary Steem Gift With Snow Source: 'True'
+  room_index: 2
+  scene: f_snow2
+
+node_f_snow2_3:
+  is_shop: true
+  locations:
+    Snowfall Sanctuary Shop Keeper: 'True'
+  room_index: 3
+  scene: f_snow2
+
+node_f_snow_0:
+  locations:
     Anouki Village Goron Force Gem: 'True'
     Anouki Village Lake Chest: 'True'
-    Anouki Village Pair Villagers: 'True'
     Anouki Village Repair Fence: 'True'
     Anouki Village Song Statue: 'True'
     Anouki Village Song Statue Chest: 'True'
@@ -413,17 +826,19 @@ node_f_snow:
   room_index: 0
   scene: f_snow
 
-node_f_snow2:
+node_f_snow_1:
   locations:
-    Snowfall Sanctuary Deliver Vessel: 'True'
-    Snowfall Sanctuary Shop Keeper: 'True'
-    Snowfall Sanctuary Song of Restoration: 'True'
-    Snowfall Sanctuary Stamp Station: 'True'
-    Snowfall Sanctuary Steem Gift With Snow Source: 'True'
-  room_index: 0
-  scene: f_snow2
+    Anouki Village Pair Villagers: 'True'
+  room_index: 1
+  scene: f_snow
 
-node_f_tetsuo:
+node_f_snow_7:
+  locations:
+    Anouki Village Bomb Cave Chest: 'True'
+  room_index: 7
+  scene: f_snow
+
+node_f_tetsuo_0:
   locations:
     Icy Spring Buy Mega Ice: 'True'
     Icy Spring Noko's Force Gem: 'True'
@@ -432,51 +847,85 @@ node_f_tetsuo:
   room_index: 0
   scene: f_tetsuo
 
-node_f_trnnpc:
+node_f_trnnpc_2:
   locations:
-    Beedle Joe's Force Gem: 'True'
-    Beedle Shop Bomb Bag: 'True'
-    Beedle Shop Bomb Refill: 'True'
     Forest Realm Ferrus Gift: 'True'
   room_index: 2
   scene: f_trnnpc
 
-node_f_water:
+node_f_trnnpc_3:
+  is_shop: true
   locations:
-    Papuzia Shop Arrows: 'True'
-    Papuzia Shop Bombs: 'True'
-    Papuzia Shop Postcards: 'True'
-    Papuzia Village Buy Fish: 'True'
-    Papuzia Village Buy Vessel: 'True'
-    Papuzia Village Deliver Ice: 'True'
-    Papuzia Village NE Chest: 'True'
-    Papuzia Village Orca's Force Gem: 'True'
-    Papuzia Village Song Statue: 'True'
-    Papuzia Village Wadatsumi's Force Gem: 'True'
-  room_index: 0
-  scene: f_water
+    Beedle Joe's Force Gem: 'True'
+    Beedle Shop Keeper: 'True'
+  room_index: 3
+  scene: f_trnnpc
 
-node_f_water2:
+node_f_water2_0:
   locations:
     Island Sanctuary Carben's Force Gem: 'True'
-    Island Sanctuary Cucco Chest: 'True'
-    Island Sanctuary NW Chest: 'True'
     Island Sanctuary S Island Chest: 'True'
-    Island Sanctuary Song of Restoration: 'True'
-    Island Sanctuary Stamp Station: 'True'
   room_index: 0
   scene: f_water2
 
-node_f_water3:
+node_f_water2_2:
   locations:
-    Lost at Sea Buried Chest: 'True'
+    Island Sanctuary Cucco Chest: 'True'
+    Island Sanctuary NW Chest: 'True'
+    Island Sanctuary Stamp Station: 'True'
+  room_index: 2
+  scene: f_water2
+
+node_f_water2_4:
+  locations:
+    Island Sanctuary Song of Restoration: 'True'
+  room_index: 4
+  scene: f_water2
+
+node_f_water3_0:
+  locations:
     Papuzia Village S Center Chest: 'True'
     Papuzia Village SW Chest: 'True'
     Papuzia Village Stamp Station: 'True'
   room_index: 0
   scene: f_water3
 
-node_tekiya09:
+node_f_water3_10:
+  locations:
+    Lost at Sea Buried Chest: 'True'
+  room_index: 10
+  scene: f_water3
+
+node_f_water_0:
+  locations:
+    Papuzia Village Buy Fish: 'True'
+    Papuzia Village Deliver Ice: 'True'
+    Papuzia Village NE Chest: 'True'
+    Papuzia Village Song Statue: 'True'
+    Papuzia Village Wadatsumi's Force Gem: 'True'
+  room_index: 0
+  scene: f_water
+
+node_f_water_2:
+  is_shop: true
+  locations:
+    Papuzia Shop Keeper: 'True'
+  room_index: 2
+  scene: f_water
+
+node_f_water_3:
+  locations:
+    Papuzia Village Orca's Force Gem: 'True'
+  room_index: 3
+  scene: f_water
+
+node_f_water_4:
+  locations:
+    Papuzia Village Buy Vessel: 'True'
+  room_index: 4
+  scene: f_water
+
+node_tekiya09_1:
   locations:
     Castle Town Take 'em All On Level 3 Capbone Chest: 'True'
   room_index: 1

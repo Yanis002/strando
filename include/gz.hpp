@@ -2,6 +2,7 @@
 
 #include "mem.hpp"
 
+#include <Item/Item.hpp>
 #include <Player/TouchControl.hpp>
 #include <System/OverlayManager.hpp>
 #include <Unknown/Common.hpp>
@@ -30,10 +31,13 @@ class GZ {
     Input mButtons;
     TouchControl* mpTouchControl;
     GZState mState;
+    ItemId mItemId;
 
   public:
-    GZ() : mpTouchControl(&data_02049b18.mUnk_06.mTouchControl) {}
+    GZ() : mpTouchControl(&data_02049b18.mUnk_06.mTouchControl), mItemId(ItemId_None) {}
     ~GZ() {}
+
+    void SetItemId(ItemId itemId) { this->mItemId = itemId; }
 
     Input* GetInput() { return &this->mButtons; }
 
@@ -59,6 +63,8 @@ class GZ {
     bool IsOnLand() { return gOverlayManager.mLoadedOverlays[OverlaySlot_6] == OverlayIndex_Land; }
 
     bool IsSceneInit() { return gOverlayManager.mLoadedOverlays[OverlaySlot_1] == OverlayIndex_SceneInit; }
+
+    bool IsStb() { return gOverlayManager.mLoadedOverlays[OverlaySlot_9] == OverlayIndex_Stb; }
 
     // global init
     void Init();

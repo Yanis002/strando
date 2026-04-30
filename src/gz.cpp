@@ -1,14 +1,18 @@
 #include "gz.hpp"
 
+#include <Cutscene/Cutscene.hpp>
 #include <Save/SaveManager.hpp>
 #include <System/Random.hpp>
 #include <TitleScreen/TitleScreen.hpp>
-#include <Unknown/UnkStruct_ov000_020b5214.hpp>
+#include <Unknown/UnkStruct_027e09a4.hpp>
 #include <Unknown/UnkStruct_027e09b8.hpp>
+#include <Unknown/UnkStruct_027e0d34.hpp>
+#include <Unknown/UnkStruct_ov000_020b5214.hpp>
 #include <flags.h>
 #include <nitro/button.h>
 #include <regs.h>
-#include <Cutscene/Cutscene.hpp>
+
+extern "C" bool CustomTryItemGive(UnkStruct_027e0d34_04* thisx, ItemId requestedItemId);
 
 GZ gGZ;
 
@@ -82,8 +86,8 @@ void GZ::OnGameModeInit() {
 }
 
 void GZ::OnGameModeUpdate() {
-    // faster title screen
     if (this->IsTitleScreen()) {
+        // faster title screen
         if (data_027e0994 == NULL) {
             return;
         }
@@ -97,5 +101,13 @@ void GZ::OnGameModeUpdate() {
         pTitleScreen->func_ov025_020c4e54();
         data_ov000_020b5214.func_ov000_0206db44(0x0B);
         pTitleScreen->func_ov025_020c4ea0(TitleScreenState_ToFileSelect);
+    } else if (this->IsAdventureMode()) {
+        if (!this->IsSceneInit() && !this->IsStb() && this->IsOnLand()) {
+            // give item after cutscene
+            if (data_027e09a4->mCutsceneIndex != CutsceneIndex_None && this->mItemId != ItemId_None) {
+                CustomTryItemGive(data_027e0d34->mUnk_04, this->mItemId);
+                this->mItemId = ItemId_None;
+            }
+        }
     }
 }
