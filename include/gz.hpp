@@ -17,20 +17,10 @@
 
 class GameGZ;
 
-struct GZState {
-    bool isPaused; // pauses the game
-    u32 requestedFrames; // how many frames to allow for frame advance
-    bool doRNGUpdatesDuringPause; // allow the RNG seed to be updated in `ExecutePause`
-    bool isRNGPaused; // stops the RNG seed from updating in the main loop (TODO: entirely stop RNG from updating?)
-
-    GZState() { memset(this, 0, sizeof(GZState)); }
-};
-
 class GZ {
   private:
     Input mButtons;
     TouchControl* mpTouchControl;
-    GZState mState;
     ItemId mItemId;
 
   public:
@@ -40,8 +30,6 @@ class GZ {
     void SetItemId(ItemId itemId) { this->mItemId = itemId; }
 
     Input* GetInput() { return &this->mButtons; }
-
-    GZState* GetState() { return &this->mState; }
 
     void UpdateInputs() {
         // the game has functions but it's better to do it manually to make sure

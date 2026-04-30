@@ -131,8 +131,8 @@ HOOK_CS_ITEM_1_ADDR := 0x02165D80
 HOOK_CS_ITEM_2_ADDR := 0x02165D98
 HOOK_CS_ITEM_3_ADDR := 0x02166EC0
 
-# constants patch: item give (31), shops (36) and freestandings (70, 71)
-PATCH_OVL_ARG := "{31: [0x020D9840], 36: [0x0211B148, 0x0211B420, 0x0211B6F8, 0x0211B9E8, 0x0211BCB0, 0x0211C02C], 70: [0x02142140], 71: [0x0215FF3C]}"
+# constants patch: item give (31), shops (36), freestandings (70, 71) and item text ids (110)
+PATCH_OVL_ARG := "{31: [0x020D9840], 36: [0x0211B148, 0x0211B420, 0x0211B6F8, 0x0211B9E8, 0x0211BCB0, 0x0211C02C], 70: [0x02142140], 71: [0x0215FF3C], 110: [0x02185DE8]}"
 else
 $(error "Region not supported: $(REGION)")
 endif
@@ -299,6 +299,8 @@ endif
 	$(STGZ_EMULATOR) $(OUT_ROM)
 
 setup: extract
+	$(V)$(PYTHON) rando/tools/generate_bmg.py
+	$(call print_no_args,Created rando.bmg!)
 
 test_no_logic: build
 	$(call print_no_args,Randomizing items...)

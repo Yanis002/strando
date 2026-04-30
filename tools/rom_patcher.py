@@ -232,6 +232,8 @@ def patch_overlay(extracted_dir: Path, ovl_id: int, at_addrs: list[int]):
             suffix = "patched"
         case 70 | 71:
             new_addr = Symbol.new("_ZN23CustomFreestandingActor11TryItemGiveEv").addr
+        case 110:
+            new_addr = Symbol.new("gBMGMap").addr
         case _:
             raise ValueError(f"Unexpected overlay id ({ovl_id}).")
 

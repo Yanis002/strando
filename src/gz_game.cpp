@@ -9,6 +9,7 @@
 #include <Unknown/UnkStruct_0204a110.hpp>
 #include <Unknown/UnkStruct_0204e64c.hpp>
 #include <Unknown/UnkStruct_027e0208.hpp>
+#include <Unknown/UnkStruct_ov000_02067bc4.hpp>
 #include <regs.h>
 
 extern "C" void func_020196fc();
@@ -30,11 +31,22 @@ struct SomeSaveFileStruct {
     ~SomeSaveFileStruct();
 };
 
+void LoadRandoBMG() {
+    UnkStruct_ov000_020b504c_Sub3* pTemp = data_ov000_020b504c.mUnk_000;
+
+    if (pTemp != NULL) {
+        BMGEntry* pEntry = (BMGEntry*)((u8*)pTemp->mpBMGTable + 0x1F * sizeof(BMGEntry));
+
+        if (pEntry != NULL && pEntry->mpINF1 == NULL) {
+            pTemp->func_ov000_020676f8("rando", 1);
+        }
+    }
+}
+
 void CustomGame::Run() {
     do {
-        GZState* pState = gGZ.GetState();
-
         gGZ.Update();
+        LoadRandoBMG();
 
         // initialization of the next game mode
         if (this->createCallback != NULL) {

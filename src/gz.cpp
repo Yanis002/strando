@@ -47,6 +47,8 @@ static u32 sAdventureFlagsToSet[] = {
     AdventureFlag_TalkedToZeldaMayscoreFirstTime,
     AdventureFlag_TalkedToZeldaPhantomPossessionFirstTime,
     AdventureFlag_WhipMinigameTutorial,
+    AdventureFlag_MetStavenInTOSAfterFireGlyphCS, // prevents warp to a cutscene
+    AdventureFlag_ForestTracksRestoredFromGlyphCS, // prevents warp to a cutscene
     AdventureFlag_HyruleCastleZeldaControlsTutorial,
     AdventureFlag_WatchedZeldaSpiritThroneCS,
     AdventureFlag_WatchedEnterZeldasBedroomCS,
