@@ -22,5 +22,10 @@ if __name__ == "__main__":
         msg = bmg.Message(INFO, msg_parts)
         msg_list.append(msg)
 
+    for i in range(0, 117):
+        msg_parts = [RED, item_id_to_name[i], WHITE]
+        msg = bmg.Message(INFO, msg_parts)
+        msg_list.append(msg)
+
     bmg_file = bmg.BMG.fromMessages(msg_list, id=0x1F)
     bmg_file.saveToFile(Path("extract/eur/files/English/Message/rando.bmg").resolve())

@@ -3,6 +3,10 @@
 #include <Item/ItemManager.hpp>
 
 extern ItemId GetProgressiveItemId(ItemId requestedItemId);
+extern u32 data_ov036_02122760;
+
+#define MSG(idx) ((0x1F << 16) | (idx))
+#define ItemId_Max (ItemId_EngineerUniform + 1)
 
 typedef unk32 ShopItemPosition;
 enum ShopItemPosition_ {
@@ -20,18 +24,18 @@ enum ShopItemPosition_ {
 // - ActorUnkWAWY::func_ov036_0211b9e8 - papuzia village shop
 // - ActorUnkGORY::func_ov036_0211bcb0 - goron village shop
 // - ActorUnkTERY::func_ov036_0211c02c - beedle shop
-
-class CustomShopKeeper : public Actor {
+class CustomShopItem : public Actor {
     /* 94 */ STRUCT_PAD(0x94, 0xE4);
     /* E4 */ ItemId mItemId;
 
-    CustomShopKeeper() {}
+    CustomShopItem() {}
 
     ItemId GetShopItemId(ShopItemPosition itemPos);
     u16 GetShopItemPrice(void);
+    bool SetShopItemText();
 };
 
-ItemId CustomShopKeeper::GetShopItemId(ShopItemPosition itemPos) {
+ItemId CustomShopItem::GetShopItemId(ShopItemPosition itemPos) {
     u8* actorParams = (u8*)this->mUnk_5C.mParams;
     u8 item;
 
@@ -68,7 +72,7 @@ ItemId CustomShopKeeper::GetShopItemId(ShopItemPosition itemPos) {
     return ItemId_SoldOutSign;
 }
 
-u16 CustomShopKeeper::GetShopItemPrice(void) {
+u16 CustomShopItem::GetShopItemPrice(void) {
     switch (this->mItemId) {
         case ItemId_NormalShield: {
             u16 param = this->mUnk_5C.mParams[3];
@@ -311,4 +315,9 @@ u16 CustomShopKeeper::GetShopItemPrice(void) {
     }
 
     return 500;
+}
+
+bool CustomShopItem::SetShopItemText() {
+    data_ov036_02122760 = MSG(this->mItemId + ItemId_Max);
+    return true;
 }
