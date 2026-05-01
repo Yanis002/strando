@@ -247,7 +247,7 @@ u32 gBMGMap[] = {
     MSG(ItemId_EngineerUniform), // ItemId_EngineerUniform
 };
 
-u32 gShopAdvFlagMap[] = {
+u16 gShopAdvFlagMap[] = {
     RandoAdventureFlag_BoughtNothing, // ItemId_Nothing
     RandoAdventureFlag_BoughtNormalShield, // ItemId_NormalShield
     RandoAdventureFlag_BoughtNormalSword, // ItemId_NormalSword
