@@ -1,6 +1,12 @@
-#include <Actor/Actor.hpp>
+#include "036_MapA5.hpp"
+#include "ItemIdMaps.hpp"
+
+#include <Actor/ActorUnkSHIT.hpp>
 #include <Item/Item.hpp>
 #include <Item/ItemManager.hpp>
+#include <Unknown/UnkStruct_027e09b8.hpp>
+#include <Unknown/UnkStruct_027e0ce0.hpp>
+#include <Unknown/UnkStruct_ov024_020d86b0.hpp>
 
 extern ItemId GetProgressiveItemId(ItemId requestedItemId);
 extern u32 data_ov036_02122760;
@@ -24,15 +30,15 @@ enum ShopItemPosition_ {
 // - ActorUnkWAWY::func_ov036_0211b9e8 - papuzia village shop
 // - ActorUnkGORY::func_ov036_0211bcb0 - goron village shop
 // - ActorUnkTERY::func_ov036_0211c02c - beedle shop
-class CustomShopItem : public Actor {
-    /* 94 */ STRUCT_PAD(0x94, 0xE4);
-    /* E4 */ ItemId mItemId;
-
+class CustomShopItem : public ActorUnkSHIT {
     CustomShopItem() {}
 
     ItemId GetShopItemId(ShopItemPosition itemPos);
     u16 GetShopItemPrice(void);
     bool SetShopItemText();
+    unk32 Custom_ov036_0211d0a8(void);
+    bool CanBuy(void);
+    void Buy(unk32 param1);
 };
 
 ItemId CustomShopItem::GetShopItemId(ShopItemPosition itemPos) {
@@ -320,4 +326,26 @@ u16 CustomShopItem::GetShopItemPrice(void) {
 bool CustomShopItem::SetShopItemText() {
     data_ov036_02122760 = MSG(this->mItemId + ItemId_Max);
     return true;
+}
+
+unk32 CustomShopItem::Custom_ov036_0211d0a8(void) {
+    if (this->mUnk_2D3 || this->mItemId == ItemId_SoldOutSign) {
+        return 0x12;
+    }
+
+    return 0x06;
+}
+
+ARM bool CustomShopItem::CanBuy(void) {
+    if (GET_FLAG(data_027e09b8->mAdventureFlags, gShopAdvFlagMap[this->mItemId])) {
+        return false;
+    }
+
+    return this->func_ov036_0211d2dc();
+}
+
+ARM void CustomShopItem::Buy(unk32 param1) {
+    SET_FLAG(data_027e09b8->mAdventureFlags, gShopAdvFlagMap[this->mItemId]);
+
+    this->func_ov036_0211d570(param1);
 }

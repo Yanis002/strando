@@ -82,6 +82,9 @@ class SetupASM:
             Symbol.new("_ZN14CustomShopItem16GetShopItemPriceEv").to_asm(),
             Symbol.new("GiveItemDuringCS").to_asm(),
             Symbol.new("_ZN14CustomShopItem15SetShopItemTextEv").to_asm(),
+            Symbol.new("_ZN14CustomShopItem21Custom_ov036_0211d0a8Ev").to_asm(),
+            Symbol.new("_ZN14CustomShopItem6CanBuyEv").to_asm(),
+            Symbol.new("_ZN14CustomShopItem3BuyEi").to_asm(),
             "\n",
             ".open ITCM_BIN, ITCM_MOD_BIN, 0x01FF8000",
             INDENT + "; load the hooks into ITCM",
@@ -108,42 +111,15 @@ class SetupASM:
             ".close",
             "\n",
             ".open OVL036_BIN, OVL036_MOD_BIN, OVL036_ADDR",
-            INDENT + "; apply price 1 hook",
-            INDENT + ".org HOOK_PRICE_1",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl _ZN14CustomShopItem16GetShopItemPriceEv",
-            INDENT * 2 + ".endarea",
-            INDENT + "; apply price 2 hook",
-            INDENT + ".org HOOK_PRICE_2",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl _ZN14CustomShopItem16GetShopItemPriceEv",
-            INDENT * 2 + ".endarea",
-            INDENT + "; apply price 3 hook",
-            INDENT + ".org HOOK_PRICE_3",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl _ZN14CustomShopItem16GetShopItemPriceEv",
-            INDENT * 2 + ".endarea",
-            INDENT + "; apply price 4 hook",
-            INDENT + ".org HOOK_PRICE_4",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl _ZN14CustomShopItem16GetShopItemPriceEv",
-            INDENT * 2 + ".endarea",
-            INDENT + "; apply price 5 hook",
-            INDENT + ".org HOOK_PRICE_5",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl _ZN14CustomShopItem16GetShopItemPriceEv",
-            INDENT * 2 + ".endarea",
-            INDENT + "; apply price 6 hook",
-            INDENT + ".org HOOK_PRICE_6",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl _ZN14CustomShopItem16GetShopItemPriceEv",
-            INDENT * 2 + ".endarea",
+            "\n".join(
+                INDENT + f"; apply price {i} hook\n" +
+                INDENT + f".org HOOK_PRICE_{i}\n" +
+                INDENT * 2 + ".arm\n" +
+                INDENT * 2 + ".area 0x04\n" +
+                INDENT * 3 + "bl _ZN14CustomShopItem16GetShopItemPriceEv\n" +
+                INDENT * 2 + ".endarea\n"
+                for i in range(1, 7)
+            ),
             INDENT + "; apply shop item text hook",
             INDENT + ".org HOOK_SHOP_TEXT",
             INDENT * 2 + ".arm",
@@ -156,6 +132,26 @@ class SetupASM:
             INDENT * 2 + ".area 0x04",
             INDENT * 3 + "nop",
             INDENT * 2 + ".endarea",
+            INDENT + "; apply shop 0x0D hook",
+            INDENT + ".org HOOK_SHOP_0211D0A8",
+            INDENT * 2 + ".arm",
+            INDENT * 2 + ".area 0x04",
+            INDENT * 3 + "bl _ZN14CustomShopItem21Custom_ov036_0211d0a8Ev",
+            INDENT * 2 + ".endarea",
+            INDENT + ".org HOOK_SHOP_CAN_BUY",
+            INDENT * 2 + ".arm",
+            INDENT * 2 + ".area 0x04",
+            INDENT * 3 + "bl _ZN14CustomShopItem6CanBuyEv",
+            INDENT * 2 + ".endarea",
+            "\n".join(
+                INDENT + f"; apply price {i} hook\n" +
+                INDENT + f".org HOOK_SHOP_BUY_{i}\n" +
+                INDENT * 2 + ".arm\n" +
+                INDENT * 2 + ".area 0x04\n" +
+                INDENT * 3 + "bl _ZN14CustomShopItem3BuyEi\n" +
+                INDENT * 2 + ".endarea\n"
+                for i in range(1, 3)
+            ),
             ".close",
             "\n",
             ".open OVL088_BIN, OVL088_MOD_BIN, OVL088_ADDR",
