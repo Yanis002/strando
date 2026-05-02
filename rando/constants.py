@@ -170,6 +170,61 @@ class ItemId(IntEnum):
     RecruitUniform2 = 115 # 0x73
     EngineerUniform = 116 # 0x74
 
+    ExtraItemId_TearLight_1 = 117
+    ExtraItemId_TearLight_2 = 118
+    ExtraItemId_TearLight_3 = 119
+    ExtraItemId_TearLight_4 = 120
+    ExtraItemId_TearLight_5 = 121
+    ExtraItemId_NormalKey_2 = 122
+    ExtraItemId_NormalKey_4 = 123
+    ExtraItemId_NormalKey_5 = 124
+    ExtraItemId_NormalKey_6 = 125
+    ExtraItemId_NormalKey_Tunnel = 126
+    ExtraItemId_NormalKey_Wooded = 127
+    ExtraItemId_NormalKey_Blizzard = 128
+    ExtraItemId_NormalKey_Marine = 129
+    ExtraItemId_NormalKey_Mountain = 130
+    ExtraItemId_NormalKey_Desert = 131
+
+extra_id_to_scene = {
+    ItemId.ExtraItemId_TearLight_1: "d_main",
+    ItemId.ExtraItemId_TearLight_2: "d_main",
+    ItemId.ExtraItemId_TearLight_3: "d_main",
+    ItemId.ExtraItemId_TearLight_4: "d_main",
+    ItemId.ExtraItemId_TearLight_5: "d_main",
+    ItemId.ExtraItemId_NormalKey_2: "d_main",
+    ItemId.ExtraItemId_NormalKey_4: "d_main",
+    ItemId.ExtraItemId_NormalKey_5: "d_main",
+    ItemId.ExtraItemId_NormalKey_6: "d_main",
+    ItemId.ExtraItemId_NormalKey_Tunnel: "d_tunnel",
+    ItemId.ExtraItemId_NormalKey_Wooded: "d_forest",
+    ItemId.ExtraItemId_NormalKey_Blizzard: "d_snow",
+    ItemId.ExtraItemId_NormalKey_Marine: "d_water",
+    ItemId.ExtraItemId_NormalKey_Mountain: "d_flame",
+    ItemId.ExtraItemId_NormalKey_Desert: "d_sand",
+}
+
+max_keys_map = {
+    ItemId.ExtraItemId_NormalKey_2: 2,
+    ItemId.ExtraItemId_NormalKey_4: 3,
+    ItemId.ExtraItemId_NormalKey_5: 2,
+    ItemId.ExtraItemId_NormalKey_6: 3,
+    ItemId.ExtraItemId_NormalKey_Tunnel: 1,
+    ItemId.ExtraItemId_NormalKey_Wooded: 2,
+    ItemId.ExtraItemId_NormalKey_Blizzard: 1,
+    ItemId.ExtraItemId_NormalKey_Marine: 2,
+    ItemId.ExtraItemId_NormalKey_Mountain: 3,
+    ItemId.ExtraItemId_NormalKey_Desert: 2,
+}
+
+tos_room_map = {
+    1: [0, 1, 2] + [40],
+    2: [3, 4, 5, 6] + [41],
+    3: [7, 8, 9, 10, 11] + [21, 22, 42],
+    4: [12, 13, 14, 15, 16] + [43],
+    5: [17, 18, 19, 20, 23, 24] + [46],
+    6: [29, 30, 31, 32, 33, 34, 35, 36] + [44, 45],
+}
 
 item_id_to_name = {
     0x00: "Nothing",
@@ -182,7 +237,7 @@ item_id_to_name = {
     0x07: "Whip",
     0x08: "Sand Rod",
     0x09: "Unk 9",
-    0x0A: "Normal Key",
+    0x0A: "Small Key",
     0x0B: "Boss Key",
     0x0C: "Green Rupee",
     0x0D: "Blue Rupee",
@@ -268,7 +323,7 @@ item_id_to_name = {
     0x5D: "Rand Uncommon Treasure",
     0x5E: "Rand Rare Treasure",
     0x5F: "Rand Legendary Treasure",
-    0x60: "Tear Light",
+    0x60: "Tear of Light",
     0x61: "Light Compass",
     0x62: "Scroll Spin Attack",
     0x63: "Scroll Beam",
@@ -289,6 +344,21 @@ item_id_to_name = {
     0x72: "Carben Letter",
     0x73: "Recruit Uniform 2",
     0x74: "Engineer Uniform",
+    0x75: "ToS 1 Tear of Light",
+    0x76: "ToS 2 Tear of Light",
+    0x77: "ToS 3 Tear of Light",
+    0x78: "ToS 4 Tear of Light",
+    0x79: "ToS 5 Tear of Light",
+    0x7A: "ToS 2 Small Key",
+    0x7B: "ToS 4 Small Key",
+    0x7C: "ToS 5 Small Key",
+    0x7D: "ToS 6 Small Key",
+    0x7E: "Tunnel Small Key",
+    0x7F: "Wooded Temple Small Key",
+    0x80: "Blizzard Temple Small Key",
+    0x81: "Marine Temple Small Key",
+    0x82: "Mountain Temple Small Key",
+    0x83: "Desert Temple Small Key",
 }
 
 class ItemKind(IntEnum):
@@ -1458,3 +1528,18 @@ class ConditionKind(IntEnum):
     ObtainedItem = 0
     ObtainedItemAny = 1
     AdventureFlag = 2
+
+
+class DungeonKey(IntEnum):
+    ToS_Tunnel = 0
+    ToS_Section_First = 1
+    ToS_Section_Second = 2
+    ToS_Section_Third = 3
+    ToS_Section_Fourth = 4
+    ToS_Section_Fifth = 5
+    ToS_Section_Sixth = 6
+    Temple_Wooded = 7
+    Temple_Blizzard = 8
+    Temple_Marine = 9
+    Temple_Mountain = 10
+    Temple_Desert = 11

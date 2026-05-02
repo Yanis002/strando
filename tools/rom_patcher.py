@@ -85,6 +85,7 @@ class SetupASM:
             Symbol.new("_ZN14CustomShopItem21Custom_ov036_0211d0a8Ev").to_asm(),
             Symbol.new("_ZN14CustomShopItem6CanBuyEv").to_asm(),
             Symbol.new("_ZN14CustomShopItem3BuyEi").to_asm(),
+            Symbol.new("ItemGiveImpl").to_asm(),
             "\n",
             ".open ITCM_BIN, ITCM_MOD_BIN, 0x01FF8000",
             INDENT + "; load the hooks into ITCM",
@@ -186,6 +187,14 @@ class SetupASM:
             INDENT * 3 + "nop",
             INDENT * 2 + ".endarea",
             ".close",
+            ".open OVL110_BIN, OVL110_MOD_BIN, OVL110_ADDR",
+            INDENT + "; apply item give hook",
+            INDENT + ".org HOOK_ITEM_GIVE",
+            INDENT * 2 + ".arm",
+            INDENT * 2 + ".area 0x04",
+            INDENT * 3 + "bl ItemGiveImpl",
+            INDENT * 2 + ".endarea",
+            ".close",
             "\n",
         ]
 
@@ -245,6 +254,7 @@ def patch_overlay(extracted_dir: Path, ovl_id: int, at_addrs: list[int]):
             new_addr = Symbol.new("_ZN23CustomFreestandingActor11TryItemGiveEv").addr
         case 110:
             new_addr = Symbol.new("gBMGMap").addr
+            suffix = "patched"
         case _:
             raise ValueError(f"Unexpected overlay id ({ovl_id}).")
 

@@ -137,6 +137,10 @@ HOOK_CS_ITEM_1_ADDR := 0x02165D80
 HOOK_CS_ITEM_2_ADDR := 0x02165D98
 HOOK_CS_ITEM_3_ADDR := 0x02166EC0
 
+# playerget
+OVL110_ADDR := 0x02184A40
+HOOK_ITEM_GIVE_ADDR := 0x021858F4
+
 # constants patch: get item model (0), item give (31), shops (36), freestandings (70, 71) and item text ids (110)
 PATCH_OVL_ARG := "{0: [0x020AF58C], 31: [0x020D9840], 36: [0x0211B148, 0x0211B420, 0x0211B6F8, 0x0211B9E8, 0x0211BCB0, 0x0211C02C], 70: [0x02142140], 71: [0x0215FF3C], 110: [0x02185DE8]}"
 else
@@ -203,6 +207,8 @@ ARMIPS_ARGS ?= \
 				-strequ OVL088_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov088_mod.bin" \
 				-strequ OVL094_BIN "$(EXTRACTED_REL)/arm9_overlays/ov094.bin" \
 				-strequ OVL094_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov094_mod.bin" \
+				-strequ OVL110_BIN "$(EXTRACTED_REL)/arm9_overlays/ov110_patched.bin" \
+				-strequ OVL110_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov110_mod.bin" \
 				-strequ ARM9_BIN "$(EXTRACTED_REL)/arm9/arm9_patched.bin" \
 				-strequ ARM9_MOD_BIN "$(EXTRACTED_REL)/arm9/arm9_mod.bin" \
 				-strequ ITCM_BIN "$(EXTRACTED_REL)/arm9/itcm.bin" \
@@ -211,6 +217,7 @@ ARMIPS_ARGS ?= \
 				-equ OVL036_ADDR $(OVL036_ADDR) \
 				-equ OVL088_ADDR $(OVL088_ADDR) \
 				-equ OVL094_ADDR $(OVL094_ADDR) \
+				-equ OVL110_ADDR $(OVL110_ADDR) \
 				-equ HOOKS_SIZE $(HOOKS_SIZE) \
 				-equ HOOKS_ADDR $(HOOKS_ADDR) \
 				-equ HOOKS_GAME_ADDR $(HOOKS_GAME_ADDR) \
@@ -232,7 +239,8 @@ ARMIPS_ARGS ?= \
 				-equ HOOK_SHOP_BUY_2 $(HOOK_SHOP_BUY_2_ADDR) \
 				-equ HOOK_CS_ITEM_1 $(HOOK_CS_ITEM_1_ADDR) \
 				-equ HOOK_CS_ITEM_2 $(HOOK_CS_ITEM_2_ADDR) \
-				-equ HOOK_CS_ITEM_3 $(HOOK_CS_ITEM_3_ADDR)
+				-equ HOOK_CS_ITEM_3 $(HOOK_CS_ITEM_3_ADDR) \
+				-equ HOOK_ITEM_GIVE $(HOOK_ITEM_GIVE_ADDR)
 
 ### project targets ###
 

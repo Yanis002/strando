@@ -1,5 +1,6 @@
 #include "036_MapA5.hpp"
 #include "ItemIdMaps.hpp"
+#include "gz.hpp"
 
 #include <Actor/ActorUnkSHIT.hpp>
 #include <Item/Item.hpp>
@@ -324,7 +325,7 @@ u16 CustomShopItem::GetShopItemPrice(void) {
 }
 
 bool CustomShopItem::SetShopItemText() {
-    data_ov036_02122760 = MSG(this->mItemId + ItemId_Max);
+    data_ov036_02122760 = MSG(this->mItemId + ExtraItemId_Max);
     return true;
 }
 

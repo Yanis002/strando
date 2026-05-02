@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from ndspy import lz10 as LZSS
 from ndspy import narc
 from pathlib import Path
-from rando.constants import ItemId, ItemKind, ItemWeight, item_id_to_name, shop_actor_ids
+from rando.constants import ItemId, ItemKind, ItemWeight, item_id_to_name, shop_actor_ids, max_keys_map, tos_room_map, extra_id_to_scene
 
 
 # from https://github.com/yaml/pyyaml/issues/127#issuecomment-525800484
@@ -388,7 +388,6 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.Whip, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.SandRod, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.Unk_9, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.NormalKey, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.BossKey, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.GreenRupee, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.BlueRupee, ItemKind.Default, ItemWeight.Normal),
@@ -474,7 +473,6 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.RandUncommonTreasure, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.RandRareTreasure, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.RandLegendaryTreasure, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.TearLight, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.LightCompass, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.ScrollSpinAttack, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ScrollBeam, ItemKind.Default, ItemWeight.Priority),
@@ -496,6 +494,16 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.RecruitUniform2, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.EngineerUniform, ItemKind.Default, ItemWeight.Priority),
 ]
+
+# add extra tears
+for i in range(1, 6):
+    extra_defs = [ItemDef(getattr(ItemId, f"ExtraItemId_TearLight_{i}"), ItemKind.Default, ItemWeight.Progressive)] * 3
+    item_defs.extend(extra_defs)
+
+# add extra keys
+for item_id, max_keys in max_keys_map.items():
+    extra_defs = [ItemDef(item_id, ItemKind.Default, ItemWeight.Progressive)] * max_keys
+    item_defs.extend(extra_defs)
 
 progressive_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Progressive]
 random.shuffle(progressive_item_pool)
@@ -585,6 +593,18 @@ def get_offset(data: bytes, magic: bytes):
 def assign_items(nodes: list[LocationNode]):
     random.shuffle(nodes)
 
+    tos_map = {
+        ItemId.ExtraItemId_TearLight_1: 1,
+        ItemId.ExtraItemId_TearLight_2: 2,
+        ItemId.ExtraItemId_TearLight_3: 3,
+        ItemId.ExtraItemId_TearLight_4: 4,
+        ItemId.ExtraItemId_TearLight_5: 5,
+        ItemId.ExtraItemId_NormalKey_2: 2,
+        ItemId.ExtraItemId_NormalKey_4: 4,
+        ItemId.ExtraItemId_NormalKey_5: 5,
+        ItemId.ExtraItemId_NormalKey_6: 6,
+    }
+
     # assign the items randomly
     for node in nodes:
         assert len(node.locations) > 0
@@ -593,9 +613,22 @@ def assign_items(nodes: list[LocationNode]):
         for loc_def in node.locations:
             if node.is_shop and "Shop Keeper" in loc_def.name:
                 for _ in range(5):
-                    loc_def.items.append(get_random_itemdef(node.is_shop))
+                    loc_def.items.append(get_random_itemdef(True))
             else:
-                loc_def.items.append(get_random_itemdef(node.is_shop))
+                item_def = get_random_itemdef(False)
+
+                # TODO: remove?
+                # if we try to place an extra item in the dungeon it's connected to
+                # change the item id to be the regular version instead
+                if item_def.id in extra_id_to_scene and node.scene_name == extra_id_to_scene[item_def.id]:
+                    # if ToS make sure it's the right section
+                    if node.scene_name != "d_main" or node.room_index in tos_room_map[tos_map[item_def.id]]:
+                        if item_def.id >= ItemId.ExtraItemId_TearLight_1 and item_def.id <= ItemId.ExtraItemId_TearLight_5:
+                            item_def.id = ItemId.TearLight
+                        elif item_def.id >= ItemId.ExtraItemId_NormalKey_2 and item_def.id <= ItemId.ExtraItemId_NormalKey_Desert:
+                            item_def.id = ItemId.NormalKey
+
+                loc_def.items.append(item_def)
 
         node.locations.sort(key=lambda entry: entry.name)
 

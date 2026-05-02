@@ -1,5 +1,6 @@
 #include "ItemIdMaps.hpp"
 #include "036_MapA5.hpp"
+#include "gz.hpp"
 
 #include <Item/Item.hpp>
 #include <Player/PlayerGet.hpp>
@@ -124,6 +125,22 @@ u32 gGetItemMap[] = {
     GIModel_ptmL, // ItemId_CarbenLetter
     GIModel_cloA, // ItemId_RecruitUniform2
     GIModel_cloB, // ItemId_EngineerUniform
+
+    GIModel_szku, // ExtraItemId_TearLight_1
+    GIModel_szku, // ExtraItemId_TearLight_2
+    GIModel_szku, // ExtraItemId_TearLight_3
+    GIModel_szku, // ExtraItemId_TearLight_4
+    GIModel_szku, // ExtraItemId_TearLight_5
+    GIModel_keyN, // ExtraItemId_NormalKey_2
+    GIModel_keyN, // ExtraItemId_NormalKey_4
+    GIModel_keyN, // ExtraItemId_NormalKey_5
+    GIModel_keyN, // ExtraItemId_NormalKey_6
+    GIModel_keyN, // ExtraItemId_NormalKey_Tunnel
+    GIModel_keyN, // ExtraItemId_NormalKey_Wooded
+    GIModel_keyN, // ExtraItemId_NormalKey_Blizzard
+    GIModel_keyN, // ExtraItemId_NormalKey_Marine
+    GIModel_keyN, // ExtraItemId_NormalKey_Mountain
+    GIModel_keyN, // ExtraItemId_NormalKey_Desert
 };
 
 // BMG IDs
@@ -245,8 +262,25 @@ u32 gBMGMap[] = {
     MSG(ItemId_CarbenLetter), // ItemId_CarbenLetter
     MSG(ItemId_RecruitUniform2), // ItemId_RecruitUniform2
     MSG(ItemId_EngineerUniform), // ItemId_EngineerUniform
+
+    MSG(ExtraItemId_TearLight_1), // ExtraItemId_TearLight_1
+    MSG(ExtraItemId_TearLight_2), // ExtraItemId_TearLight_2
+    MSG(ExtraItemId_TearLight_3), // ExtraItemId_TearLight_3
+    MSG(ExtraItemId_TearLight_4), // ExtraItemId_TearLight_4
+    MSG(ExtraItemId_TearLight_5), // ExtraItemId_TearLight_5
+    MSG(ExtraItemId_NormalKey_2), // ExtraItemId_NormalKey_2
+    MSG(ExtraItemId_NormalKey_4), // ExtraItemId_NormalKey_4
+    MSG(ExtraItemId_NormalKey_5), // ExtraItemId_NormalKey_5
+    MSG(ExtraItemId_NormalKey_6), // ExtraItemId_NormalKey_6
+    MSG(ExtraItemId_NormalKey_Tunnel), // ExtraItemId_NormalKey_Tunnel
+    MSG(ExtraItemId_NormalKey_Wooded), // ExtraItemId_NormalKey_Wooded
+    MSG(ExtraItemId_NormalKey_Blizzard), // ExtraItemId_NormalKey_Blizzard
+    MSG(ExtraItemId_NormalKey_Marine), // ExtraItemId_NormalKey_Marine
+    MSG(ExtraItemId_NormalKey_Mountain), // ExtraItemId_NormalKey_Mountain
+    MSG(ExtraItemId_NormalKey_Desert), // ExtraItemId_NormalKey_Desert
 };
 
+//! TODO: this should also be used by PlayerGet
 u16 gShopAdvFlagMap[] = {
     RandoAdventureFlag_BoughtNothing, // ItemId_Nothing
     RandoAdventureFlag_BoughtNormalShield, // ItemId_NormalShield
@@ -365,4 +399,20 @@ u16 gShopAdvFlagMap[] = {
     RandoAdventureFlag_BoughtCarbenLetter, // ItemId_CarbenLetter
     RandoAdventureFlag_BoughtRecruitUniform2, // ItemId_RecruitUniform2
     RandoAdventureFlag_BoughtEngineerUniform, // ItemId_EngineerUniform
+
+    RandoAdventureFlag_TearLight_1, // ExtraItemId_TearLight_1
+    RandoAdventureFlag_TearLight_2, // ExtraItemId_TearLight_2
+    RandoAdventureFlag_TearLight_3, // ExtraItemId_TearLight_3
+    RandoAdventureFlag_TearLight_4, // ExtraItemId_TearLight_4
+    RandoAdventureFlag_TearLight_5, // ExtraItemId_TearLight_5
+    RandoAdventureFlag_NormalKey_2, // ExtraItemId_NormalKey_2
+    RandoAdventureFlag_NormalKey_4, // ExtraItemId_NormalKey_4
+    RandoAdventureFlag_NormalKey_5, // ExtraItemId_NormalKey_5
+    RandoAdventureFlag_NormalKey_6, // ExtraItemId_NormalKey_6
+    RandoAdventureFlag_NormalKey_Tunnel, // ExtraItemId_NormalKey_Tunnel
+    RandoAdventureFlag_NormalKey_Wooded, // ExtraItemId_NormalKey_Wooded
+    RandoAdventureFlag_NormalKey_Blizzard, // ExtraItemId_NormalKey_Blizzard
+    RandoAdventureFlag_NormalKey_Marine, // ExtraItemId_NormalKey_Marine
+    RandoAdventureFlag_NormalKey_Mountain, // ExtraItemId_NormalKey_Mountain
+    RandoAdventureFlag_NormalKey_Desert, // ExtraItemId_NormalKey_Desert
 };
