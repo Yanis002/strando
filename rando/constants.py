@@ -360,6 +360,7 @@ item_id_to_name = {
     0x82: "Mountain Temple Small Key",
     0x83: "Desert Temple Small Key",
 }
+item_name_to_id = {v: k for k, v in item_id_to_name.items()}
 
 class ItemKind(IntEnum):
     Default = 0
@@ -1543,3 +1544,12 @@ class DungeonKey(IntEnum):
     Temple_Marine = 9
     Temple_Mountain = 10
     Temple_Desert = 11
+
+
+shop_item_positions = [
+    "Top Left",
+    "Middle",
+    "Top Right",
+    "Bottom Left",
+    "Bottom Right",
+]

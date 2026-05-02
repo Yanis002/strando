@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
+import hashlib
 import random
+import re
+import string
 import struct
 import time
 import yaml
@@ -9,7 +12,7 @@ from dataclasses import dataclass
 from ndspy import lz10 as LZSS
 from ndspy import narc
 from pathlib import Path
-from rando.constants import ItemId, ItemKind, ItemWeight, item_id_to_name, shop_actor_ids, max_keys_map, tos_room_map, extra_id_to_scene
+from rando.constants import ItemId, ItemKind, ItemWeight, item_id_to_name, item_name_to_id, shop_actor_ids, max_keys_map, shop_item_positions
 
 
 # from https://github.com/yaml/pyyaml/issues/127#issuecomment-525800484
@@ -148,6 +151,147 @@ class ItemDef:
 
     def is_random_treasure(self):
         return self.id >= ItemId.RandCommonTreasure and self.id <= ItemId.RandLegendaryTreasure
+
+
+item_defs: list[ItemDef] = [
+    ItemDef(ItemId.Nothing, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.NormalShield, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.NormalSword, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.Whirlwind, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.BombBag, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.NormalBow, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.Boomerang, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.Whip, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.SandRod, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.Unk_9, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.BossKey, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.GreenRupee, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.BlueRupee, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.RedRupee, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.BigGreenRupee, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.BigRedRupee, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.BigGoldRupee, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.ForceGem_18, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_19, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_20, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForestGlyph, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.SnowGlyph, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.OceanGlyph, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.FireGlyph, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.Unk_25, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.Unk_26, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.Unk_27, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.Unk_28, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.Unk_29, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.FinalTrack, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.Unk_31, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.Unk_32, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.Unk_33, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.Unk_34, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.ForceGem_35, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_36, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_37, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.RecruitUniform, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.PostmasterLetter, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.HeartContainer, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.QuiverMedium, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.BombBagMedium, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.ForceGem_43, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_44, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_45, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_46, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_47, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_48, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_49, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_50, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_51, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_52, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_53, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_54, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_55, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_56, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_57, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_58, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_59, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_60, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ForceGem_61, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.PanFlute, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.StampBook, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.LightBow, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.LokomoSword, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.TenPriceCard, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.RedPotion, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.PurplePotion, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.YellowPotion, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.DemonFossil, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.StalfosSkull, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.StarFragment, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.BeeLarvae, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.WoodHeart, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.DarkPearlLoop, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.WhitePearlLoop, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.RutoCrown, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.DragonScale, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.PirateNecklace, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.PalaceDish, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.GoronAmber, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.MysticJade, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.AncientCoin, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.PricelessStone, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.RegalRing, ItemKind.Default, ItemWeight.Progressive), # we consider the regal ring is a progressive item because of how you get to ocean land
+    ItemDef(ItemId.ArrowsRefill, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.BombsRefill, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.SoldOutSign, ItemKind.Default, ItemWeight.Normal), # doesn't crash but buggy graphics
+    ItemDef(ItemId.AncientShield, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.QuiverLarge, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.BombBagLarge, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.RandCommonTreasure, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.RandUncommonTreasure, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.RandRareTreasure, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.RandLegendaryTreasure, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.LightCompass, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.ScrollSpinAttack, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.ScrollBeam, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.LinebeckLetter, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.PanFluteSong_101, ItemKind.Song, ItemWeight.Progressive),
+    ItemDef(ItemId.PanFluteSong_102, ItemKind.Song, ItemWeight.Progressive),
+    ItemDef(ItemId.PanFluteSong_103, ItemKind.Song, ItemWeight.Progressive),
+    ItemDef(ItemId.PanFluteSong_104, ItemKind.Song, ItemWeight.Progressive),
+    ItemDef(ItemId.PanFluteSong_105, ItemKind.Song, ItemWeight.Progressive),
+    ItemDef(ItemId.RabbitNet, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.BeedleCard, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.SilverCard, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.GoldCard, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.PlatinumCard, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.DiamondCard, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.FreebieCard, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.QuintupleCard, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.CarbenLetter, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.RecruitUniform2, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.EngineerUniform, ItemKind.Default, ItemWeight.Priority),
+]
+
+# add extra tears
+for i in range(1, 6):
+    extra_defs = [ItemDef(getattr(ItemId, f"ExtraItemId_TearLight_{i}"), ItemKind.Default, ItemWeight.Progressive)] * 3
+    item_defs.extend(extra_defs)
+
+# add extra keys
+for item_id, max_keys in max_keys_map.items():
+    extra_defs = [ItemDef(item_id, ItemKind.Default, ItemWeight.Progressive)] * max_keys
+    item_defs.extend(extra_defs)
+
+progressive_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Progressive]
+priority_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Priority]
+normal_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Normal]
+
+
+def find_item_def(item_id: int):
+    for item_def in item_defs:
+        if item_def.id.value == item_id:
+            return item_def
+
+    return None
 
 
 class BMGOffsets:
@@ -323,18 +467,18 @@ class LocationNode:
         return {f'"{self.name}"': data}
 
 
-class SpoilerLogEntry:
+class SeedLogEntry:
     def __init__(self, node: LocationNode):
         self.node = node
 
     def get_params(self, items: list[ItemDef], is_shop: bool):
         if is_shop:
             return [
-                {"Top Left": item_id_to_name[items[0].id.value]},
-                {"Middle": item_id_to_name[items[1].id.value]},
-                {"Top Right": item_id_to_name[items[2].id.value]},
-                {"Bottom Left": item_id_to_name[items[3].id.value]},
-                {"Bottom Right": item_id_to_name[items[4].id.value]},
+                {shop_item_positions[0]: item_id_to_name[items[0].id.value]},
+                {shop_item_positions[1]: item_id_to_name[items[1].id.value]},
+                {shop_item_positions[2]: item_id_to_name[items[2].id.value]},
+                {shop_item_positions[3]: item_id_to_name[items[3].id.value]},
+                {shop_item_positions[4]: item_id_to_name[items[4].id.value]},
             ]
 
         return item_id_to_name[items[0].id.value]
@@ -349,170 +493,79 @@ class SpoilerLogEntry:
         return {self.node.name: {"locations": data}}
 
 
-class SpoilerLog:
-    def __init__(self, path: Path):
+class SeedLog:
+    def __init__(self, path: Path, seed: str):
         self.path = path
-        self.entries: list[SpoilerLogEntry] = []
+        self.seed = seed
+        self.entries: list[SeedLogEntry] = []
         self.path.parent.mkdir(exist_ok=True)
+
+    @staticmethod
+    def from_yaml(yaml_path: Path, nodes: list[LocationNode]):
+        with yaml_path.open("r") as file:
+            yaml_file: dict[str, dict] = yaml.safe_load(file)
+
+        settings = yaml_file["settings"]
+        yaml_file.pop("settings")
+
+        new_log = SeedLog(yaml_path.with_stem("spoiler_parsed"), settings["seed"])
+
+        for node in nodes:
+            for location in node.locations:
+                elem = yaml_file[node.name]["locations"][location.name]
+
+                if isinstance(elem, str):
+                    item_def = find_item_def(item_name_to_id[elem])
+                    assert item_def is not None
+                    location.items.append(item_def)
+                elif isinstance(elem, list):
+                    top_left = elem[0]
+                    middle = elem[1]
+                    top_right = elem[2]
+                    bottom_left = elem[3]
+                    bottom_right = elem[4]
+
+                    item_def = find_item_def(item_name_to_id[top_left[shop_item_positions[0]]])
+                    assert item_def is not None
+                    location.items.append(item_def)
+
+                    item_def = find_item_def(item_name_to_id[middle[shop_item_positions[1]]])
+                    assert item_def is not None
+                    location.items.append(item_def)
+
+                    item_def = find_item_def(item_name_to_id[top_right[shop_item_positions[2]]])
+                    assert item_def is not None
+                    location.items.append(item_def)
+
+                    item_def = find_item_def(item_name_to_id[bottom_left[shop_item_positions[3]]])
+                    assert item_def is not None
+                    location.items.append(item_def)
+
+                    item_def = find_item_def(item_name_to_id[bottom_right[shop_item_positions[4]]])
+                    assert item_def is not None
+                    location.items.append(item_def)
+                else:
+                    raise ValueError(f"unexpected type: {type(elem)}")
+
+            new_log.entries.append(SeedLogEntry(node))
+
+        return new_log
 
     def export(self):
         self.entries.sort(key=lambda entry: entry.node.scene_name)
         entries = [entry.export() for entry in self.entries]
 
-        yaml_file = {}
+        yaml_file = {
+            "settings": {
+                "seed": self.seed,
+            },
+        }
+
         for entry in entries:
             yaml_file.update(entry)
 
         with open(self.path, "w", encoding="utf-8") as file:
             yaml.dump(yaml_file, file, sort_keys=False, Dumper=MyDumper)
-
-
-shop_scene_list = [
-    "files/Map/f_flame5/map06.bin",
-    "files/Map/f_forest1/map05.bin",
-    "files/Map/f_htown/map10.bin",
-    "files/Map/f_snow2/map03.bin",
-    "files/Map/f_trnnpc/map03.bin",
-    "files/Map/f_water/map02.bin",
-]
-
-
-item_defs: list[ItemDef] = [
-    ItemDef(ItemId.Nothing, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.NormalShield, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.NormalSword, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Whirlwind, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.BombBag, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.NormalBow, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Boomerang, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Whip, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.SandRod, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Unk_9, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.BossKey, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.GreenRupee, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.BlueRupee, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.RedRupee, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.BigGreenRupee, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.BigRedRupee, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.BigGoldRupee, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.ForceGem_18, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_19, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_20, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForestGlyph, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.SnowGlyph, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.OceanGlyph, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.FireGlyph, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Unk_25, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.Unk_26, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.Unk_27, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.Unk_28, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.Unk_29, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.FinalTrack, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Unk_31, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.Unk_32, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.Unk_33, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.Unk_34, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.ForceGem_35, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_36, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_37, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.RecruitUniform, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.PostmasterLetter, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.HeartContainer, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.QuiverMedium, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.BombBagMedium, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.ForceGem_43, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_44, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_45, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_46, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_47, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_48, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_49, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_50, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_51, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_52, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_53, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_54, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_55, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_56, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_57, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_58, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_59, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_60, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_61, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.PanFlute, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.StampBook, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.LightBow, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.LokomoSword, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.TenPriceCard, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.RedPotion, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.PurplePotion, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.YellowPotion, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.DemonFossil, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.StalfosSkull, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.StarFragment, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.BeeLarvae, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.WoodHeart, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.DarkPearlLoop, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.WhitePearlLoop, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.RutoCrown, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.DragonScale, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.PirateNecklace, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.PalaceDish, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.GoronAmber, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.MysticJade, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.AncientCoin, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.PricelessStone, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.RegalRing, ItemKind.Default, ItemWeight.Progressive), # we consider the regal ring is a progressive item because of how you get to ocean land
-    ItemDef(ItemId.ArrowsRefill, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.BombsRefill, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.SoldOutSign, ItemKind.Default, ItemWeight.Normal), # doesn't crash but buggy graphics
-    ItemDef(ItemId.AncientShield, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.QuiverLarge, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.BombBagLarge, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.RandCommonTreasure, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.RandUncommonTreasure, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.RandRareTreasure, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.RandLegendaryTreasure, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.LightCompass, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.ScrollSpinAttack, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ScrollBeam, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.LinebeckLetter, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.PanFluteSong_101, ItemKind.Song, ItemWeight.Progressive),
-    ItemDef(ItemId.PanFluteSong_102, ItemKind.Song, ItemWeight.Progressive),
-    ItemDef(ItemId.PanFluteSong_103, ItemKind.Song, ItemWeight.Progressive),
-    ItemDef(ItemId.PanFluteSong_104, ItemKind.Song, ItemWeight.Progressive),
-    ItemDef(ItemId.PanFluteSong_105, ItemKind.Song, ItemWeight.Progressive),
-    ItemDef(ItemId.RabbitNet, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.BeedleCard, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.SilverCard, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.GoldCard, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.PlatinumCard, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.DiamondCard, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.FreebieCard, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.QuintupleCard, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.CarbenLetter, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.RecruitUniform2, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.EngineerUniform, ItemKind.Default, ItemWeight.Priority),
-]
-
-# add extra tears
-for i in range(1, 6):
-    extra_defs = [ItemDef(getattr(ItemId, f"ExtraItemId_TearLight_{i}"), ItemKind.Default, ItemWeight.Progressive)] * 3
-    item_defs.extend(extra_defs)
-
-# add extra keys
-for item_id, max_keys in max_keys_map.items():
-    extra_defs = [ItemDef(item_id, ItemKind.Default, ItemWeight.Progressive)] * max_keys
-    item_defs.extend(extra_defs)
-
-progressive_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Progressive]
-random.shuffle(progressive_item_pool)
-
-priority_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Priority]
-random.shuffle(priority_item_pool)
-
-normal_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Normal]
-random.shuffle(normal_item_pool)
 
 
 def get_zmb(lzss_path: Path):
@@ -591,39 +644,31 @@ def get_offset(data: bytes, magic: bytes):
 
 
 def assign_items(nodes: list[LocationNode]):
+    all_locations: list[LocationDef] = []
+
+    random.shuffle(progressive_item_pool)
+    random.shuffle(priority_item_pool)
+    random.shuffle(normal_item_pool)
     random.shuffle(nodes)
 
-    tos_map = {
-        ItemId.ExtraItemId_TearLight_1: 1,
-        ItemId.ExtraItemId_TearLight_2: 2,
-        ItemId.ExtraItemId_TearLight_3: 3,
-        ItemId.ExtraItemId_TearLight_4: 4,
-        ItemId.ExtraItemId_TearLight_5: 5,
-        ItemId.ExtraItemId_NormalKey_2: 2,
-        ItemId.ExtraItemId_NormalKey_4: 4,
-        ItemId.ExtraItemId_NormalKey_5: 5,
-        ItemId.ExtraItemId_NormalKey_6: 6,
-    }
-
-    # assign the items randomly
     for node in nodes:
         assert len(node.locations) > 0
-        random.shuffle(node.locations)
+        all_locations.extend(node.locations)
 
-        for loc_def in node.locations:
-            if node.is_shop and "Shop Keeper" in loc_def.name:
-                for _ in range(5):
-                    loc_def.items.append(get_random_itemdef(True))
-            else:
-                loc_def.items.append(get_random_itemdef(False))
-
-        node.locations.sort(key=lambda entry: entry.name)
+    # assign the items randomly
+    random.shuffle(all_locations)
+    for loc_def in all_locations:
+        if "Shop Keeper" in loc_def.name:
+            for _ in range(5):
+                loc_def.items.append(get_random_itemdef(True))
+        else:
+            loc_def.items.append(get_random_itemdef(False))
 
     nodes.sort(key=lambda entry: entry.name)
 
 
-def patch_rom(base_dir: Path, nodes: list[LocationNode]):
-    spoiler_log = SpoilerLog(Path("output/spoiler.yaml"))
+def patch_rom(base_dir: Path, nodes: list[LocationNode], seed: str):
+    spoiler_log = SeedLog(Path("output/spoiler.yaml"), seed)
 
     languages = [
         "English",
@@ -700,30 +745,43 @@ def patch_rom(base_dir: Path, nodes: list[LocationNode]):
             archive.setFileByName(zmb_filename, zmb_data)
             LZSS.compressToFile(archive.save(), lzss_path)
 
-        spoiler_log.entries.append(SpoilerLogEntry(node))
+        spoiler_log.entries.append(SeedLogEntry(node))
         print(f"({(i / (len(nodes) - 1)) * 100:.2f}%) Processed", node.name)
 
     spoiler_log.export()
 
 
 def main():
+    initial_time = time.time()
+
     VERSION = "eur"
 
     base_dir = Path("extract").resolve() / VERSION
     assert base_dir.exists()
 
+    # from https://github.com/OoTRandomizer/OoT-Randomizer/blob/2900fedb4a5ccd6937db85ec4f15721556656815/Settings.py#L253-L270
+    def sanitize(s):
+        return re.sub(r"[^a-zA-Z0-9_-]", "", s)
+    seed = sanitize("".join(random.choices(string.ascii_uppercase + string.digits, k=10)))
+    final_seed = seed
+    seed_num = int(hashlib.sha256(final_seed.encode("utf-8")).hexdigest(), base=16)
+
+    random.seed(seed_num)
+    print(f"Randomizing with {len(progressive_item_pool)} progressive items, {len(priority_item_pool)} priority items and {len(normal_item_pool)} remaining items...")
+
     # 1. get location node list
     nodes = LocationNode.from_yaml(Path("rando/test/test_world.yaml"), Path("rando/data/location_table.yaml"))
 
     # 2. assign the items
+    prev_time = time.time()
     assign_items(nodes)
+    print(f"Item assigned successfully in {time.time() - prev_time:.3f}s!")
 
     # 3. update the rom files
-    patch_rom(base_dir, nodes)
+    patch_rom(base_dir, nodes, seed)
+
+    print(f"Seed {seed} was generated successfully in {time.time() - initial_time:.3f}s!")
 
 
 if __name__ == "__main__":
-    print(f"Randomizing with {len(progressive_item_pool)} progressive items, {len(priority_item_pool)} priority items and {len(normal_item_pool)} remaining items...")
-    prev_time = time.time()
     main()
-    print(f"Done in {time.time() - prev_time:.3f}s!")
