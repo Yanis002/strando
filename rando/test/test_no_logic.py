@@ -615,20 +615,7 @@ def assign_items(nodes: list[LocationNode]):
                 for _ in range(5):
                     loc_def.items.append(get_random_itemdef(True))
             else:
-                item_def = get_random_itemdef(False)
-
-                # TODO: remove?
-                # if we try to place an extra item in the dungeon it's connected to
-                # change the item id to be the regular version instead
-                if item_def.id in extra_id_to_scene and node.scene_name == extra_id_to_scene[item_def.id]:
-                    # if ToS make sure it's the right section
-                    if node.scene_name != "d_main" or node.room_index in tos_room_map[tos_map[item_def.id]]:
-                        if item_def.id >= ItemId.ExtraItemId_TearLight_1 and item_def.id <= ItemId.ExtraItemId_TearLight_5:
-                            item_def.id = ItemId.TearLight
-                        elif item_def.id >= ItemId.ExtraItemId_NormalKey_2 and item_def.id <= ItemId.ExtraItemId_NormalKey_Desert:
-                            item_def.id = ItemId.NormalKey
-
-                loc_def.items.append(item_def)
+                loc_def.items.append(get_random_itemdef(False))
 
         node.locations.sort(key=lambda entry: entry.name)
 

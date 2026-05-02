@@ -7,4 +7,4 @@
 
 extern u32 gGetItemMap[];
 extern u32 gBMGMap[];
-extern u16 gShopAdvFlagMap[];
+extern u16 gAdvFlagMap[];

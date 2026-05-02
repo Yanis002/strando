@@ -141,8 +141,12 @@ HOOK_CS_ITEM_3_ADDR := 0x02166EC0
 OVL110_ADDR := 0x02184A40
 HOOK_ITEM_GIVE_ADDR := 0x021858F4
 
+# scene change related stuff
+OVL000_ADDR := 0x02051AE0
+HOOK_SWITCH_SLOT1_ADDR := 0x0206111C
+
 # constants patch: get item model (0), item give (31), shops (36), freestandings (70, 71) and item text ids (110)
-PATCH_OVL_ARG := "{0: [0x020AF58C], 31: [0x020D9840], 36: [0x0211B148, 0x0211B420, 0x0211B6F8, 0x0211B9E8, 0x0211BCB0, 0x0211C02C], 70: [0x02142140], 71: [0x0215FF3C], 110: [0x02185DE8]}"
+PATCH_OVL_ARG := "{0: [0x020AF58C, 0x02014995], 31: [0x020D9840], 36: [0x0211B148, 0x0211B420, 0x0211B6F8, 0x0211B9E8, 0x0211BCB0, 0x0211C02C], 70: [0x02142140], 71: [0x0215FF3C], 110: [0x02185DE8]}"
 else
 $(error "Region not supported: $(REGION)")
 endif
@@ -199,6 +203,8 @@ OUT_PPF := $(OUT_ROM:.nds=.ppf)
 
 EXTRACTED_REL := ../../../$(EXTRACTED_DIR)
 ARMIPS_ARGS ?= \
+				-strequ OVL000_BIN "$(EXTRACTED_REL)/arm9_overlays/ov000_patched.bin" \
+				-strequ OVL000_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov000_mod.bin" \
 				-strequ OVL018_BIN "$(EXTRACTED_REL)/arm9_overlays/ov018.bin" \
 				-strequ OVL018_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov018_mod.bin" \
 				-strequ OVL036_BIN "$(EXTRACTED_REL)/arm9_overlays/ov036_patched.bin" \
@@ -213,6 +219,7 @@ ARMIPS_ARGS ?= \
 				-strequ ARM9_MOD_BIN "$(EXTRACTED_REL)/arm9/arm9_mod.bin" \
 				-strequ ITCM_BIN "$(EXTRACTED_REL)/arm9/itcm.bin" \
 				-strequ ITCM_MOD_BIN "$(EXTRACTED_REL)/arm9/itcm_mod.bin" \
+				-equ OVL000_ADDR $(OVL000_ADDR) \
 				-equ OVL018_ADDR $(OVL018_ADDR) \
 				-equ OVL036_ADDR $(OVL036_ADDR) \
 				-equ OVL088_ADDR $(OVL088_ADDR) \
@@ -240,7 +247,8 @@ ARMIPS_ARGS ?= \
 				-equ HOOK_CS_ITEM_1 $(HOOK_CS_ITEM_1_ADDR) \
 				-equ HOOK_CS_ITEM_2 $(HOOK_CS_ITEM_2_ADDR) \
 				-equ HOOK_CS_ITEM_3 $(HOOK_CS_ITEM_3_ADDR) \
-				-equ HOOK_ITEM_GIVE $(HOOK_ITEM_GIVE_ADDR)
+				-equ HOOK_ITEM_GIVE $(HOOK_ITEM_GIVE_ADDR) \
+				-equ HOOK_SWITCH_SLOT1 $(HOOK_SWITCH_SLOT1_ADDR)
 
 ### project targets ###
 

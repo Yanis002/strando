@@ -338,7 +338,7 @@ unk32 CustomShopItem::Custom_ov036_0211d0a8(void) {
 }
 
 ARM bool CustomShopItem::CanBuy(void) {
-    if (GET_FLAG(data_027e09b8->mAdventureFlags, gShopAdvFlagMap[this->mItemId])) {
+    if (GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[this->mItemId])) {
         return false;
     }
 
@@ -346,7 +346,7 @@ ARM bool CustomShopItem::CanBuy(void) {
 }
 
 ARM void CustomShopItem::Buy(unk32 param1) {
-    SET_FLAG(data_027e09b8->mAdventureFlags, gShopAdvFlagMap[this->mItemId]);
+    SET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[this->mItemId]);
 
     this->func_ov036_0211d570(param1);
 }

@@ -86,6 +86,7 @@ class SetupASM:
             Symbol.new("_ZN14CustomShopItem6CanBuyEv").to_asm(),
             Symbol.new("_ZN14CustomShopItem3BuyEi").to_asm(),
             Symbol.new("ItemGiveImpl").to_asm(),
+            Symbol.new("Custom_02014995").to_asm(),
             "\n",
             ".open ITCM_BIN, ITCM_MOD_BIN, 0x01FF8000",
             INDENT + "; load the hooks into ITCM",
@@ -99,6 +100,15 @@ class SetupASM:
             INDENT + ".org HOOKS_GAME_ADDR",
             INDENT * 2 + ".area 0x390, 0x00",
             INDENT * 3 + f'.incbin "../../../{args.hooks_game_bin}"',
+            INDENT * 2 + ".endarea",
+            ".close",
+            "\n",
+            ".open OVL000_BIN, OVL000_MOD_BIN, OVL000_ADDR",
+            INDENT + "; apply scene change related hook",
+            INDENT + ".org HOOK_SWITCH_SLOT1",
+            INDENT * 2 + ".arm",
+            INDENT * 2 + ".area 0x04",
+            INDENT * 3 + "bl Custom_02014995",
             INDENT * 2 + ".endarea",
             ".close",
             "\n",
@@ -218,7 +228,7 @@ def check_code_size(obj_list: list[str], max_size: int, kind: str):
             break
 
 
-def patch_constants(module_path: Path, original_addrs: list[int], new_addr: int, suffix: str = "patched"):
+def patch_constants(module_path: Path, original_addrs: list[int], new_addr: int, suffix: str | None = "patched"):
     # open and read file
     assert module_path.exists(), f"{module_path}" and isinstance(new_addr, int)
     module = module_path.read_bytes()
@@ -229,7 +239,10 @@ def patch_constants(module_path: Path, original_addrs: list[int], new_addr: int,
         module = module.replace(struct.pack("<I", original_addr), struct.pack("<I", new_addr))
 
     # write and close file
-    module_path.with_name(f"{module_path.stem}_{suffix}.bin").write_bytes(module)
+    if suffix is not None:
+        module_path.with_name(f"{module_path.stem}_{suffix}.bin").write_bytes(module)
+    else:
+        module_path.with_name(f"{module_path.stem}.bin").write_bytes(module)
 
 
 def patch_arm9(extracted_dir: Path, base_addr: int, offset: int):
@@ -240,11 +253,14 @@ def patch_arm9(extracted_dir: Path, base_addr: int, offset: int):
 def patch_overlay(extracted_dir: Path, ovl_id: int, at_addrs: list[int]):
     assert isinstance(ovl_id, int)
 
+    ovl_path = extracted_dir / "arm9_overlays" / f"ov{ovl_id:03}.bin"
     new_addr = None
     suffix = "mod"
     match ovl_id:
         case 0:
-            new_addr = Symbol.new("gGetItemMap").addr
+            patch_constants(ovl_path, [at_addrs[0]], Symbol.new("gGetItemMap").addr)
+            patch_constants(ovl_path.with_name(f"ov{ovl_id:03}_patched.bin"), [at_addrs[1]], Symbol.new("Custom_02014995").addr, suffix=None)
+            return
         case 31:
             new_addr = Symbol.new("CustomTryItemGive").addr
         case 36:
@@ -259,7 +275,7 @@ def patch_overlay(extracted_dir: Path, ovl_id: int, at_addrs: list[int]):
             raise ValueError(f"Unexpected overlay id ({ovl_id}).")
 
     assert new_addr is not None
-    patch_constants(extracted_dir / "arm9_overlays" / f"ov{ovl_id:03}.bin", at_addrs, new_addr, suffix=suffix)
+    patch_constants(ovl_path, at_addrs, new_addr, suffix=suffix)
 
 
 def get_extra_overlay(file_id: int):

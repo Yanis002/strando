@@ -6,9 +6,11 @@
 #include <System/Random.hpp>
 #include <Unknown/UnkStruct_02049b74.hpp>
 #include <Unknown/UnkStruct_02049bd4.hpp>
+#include <Unknown/UnkStruct_0204a088.hpp>
 #include <Unknown/UnkStruct_0204a110.hpp>
 #include <Unknown/UnkStruct_0204e64c.hpp>
 #include <Unknown/UnkStruct_027e0208.hpp>
+#include <Unknown/UnkStruct_027e09a4.hpp>
 #include <Unknown/UnkStruct_ov000_02067bc4.hpp>
 #include <regs.h>
 
@@ -41,6 +43,17 @@ void LoadRandoBMG() {
             pTemp->func_ov000_020676f8("rando", 1);
         }
     }
+}
+
+extern "C" void Custom_02014995(OverlayManager* thisx, OverlayIndex nextOvlSlot1) {
+    if (gGZ.IsAdventureMode() && nextOvlSlot1 == OverlayIndex_SceneInit) {
+        if (gGZ.GetSceneLoadState() == SceneLoadState_Init) {
+            gGZ.OnScenePreInit();
+            gGZ.SetSceneLoadState(SceneLoadState_Post);
+        }
+    }
+
+    thisx->func_02014994(nextOvlSlot1);
 }
 
 void CustomGame::Run() {
@@ -78,6 +91,23 @@ void CustomGame::Run() {
         // update of the current game mode
         if (this->mpCurrentGameMode != NULL) {
             gGZ.OnGameModeUpdate();
+
+            if (gGZ.IsAdventureMode()) {
+                if (gGZ.GetSceneLoadState() == SceneLoadState_Wait) {
+                    if (data_027e09a4 != NULL && data_027e09a4->mpWarpUnk1 != NULL) {
+                        UnkStruct_SceneChange1* pCurrent = &data_027e09a4->mpWarpUnk1->mUnk_78;
+                        UnkStruct_SceneChange1* pNext = &data_027e09a4->mpWarpUnk1->mUnk_8C;
+
+                        if (pCurrent->mNextSceneIndex != pNext->mNextSceneIndex ||
+                            pCurrent->mRoomIndex != pNext->mRoomIndex) {
+                            gGZ.SetSceneLoadState(SceneLoadState_Init);
+                        }
+                    }
+                } else if (gGZ.GetSceneLoadState() == SceneLoadState_Post) {
+                    gGZ.OnScenePostInit();
+                    gGZ.SetSceneLoadState(SceneLoadState_Wait);
+                }
+            }
 
             if (this->mUnk_08 != NULL) {
                 this->mUnk_08();

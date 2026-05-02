@@ -1,4 +1,5 @@
 #include "036_MapA5.hpp"
+#include "ItemIdMaps.hpp"
 #include "gz.hpp"
 
 #include <Player/PlayerGet.hpp>
@@ -29,6 +30,7 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
         case ExtraItemId_TearLight_4:
         case ExtraItemId_TearLight_5:
             gGZ.IncrementTearsAmount(itemId - ExtraItemId_TearLight_1);
+            gGZ.ApplyTearsAmounts();
             break;
         case ExtraItemId_NormalKey_2:
         case ExtraItemId_NormalKey_4:
@@ -41,6 +43,7 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
         case ExtraItemId_NormalKey_Mountain:
         case ExtraItemId_NormalKey_Desert:
             gGZ.IncrementKeyAmount(itemId - ExtraItemId_NormalKey_2);
+            gGZ.ApplyKeyAmounts();
             break;
         case ItemId_NormalKey:
             thisx->func_ov000_020a87c8(1);
@@ -107,7 +110,7 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
         default:
             ItemFlag itemFlag = ItemManager::func_ov000_020a8984(itemId);
 
-            if (itemFlag != ItemFlag_None) {
+            if (itemFlag != (ItemFlag)ItemFlag_None) {
                 thisx->func_ov000_020a863c(itemFlag);
 
                 switch (itemFlag) {
@@ -123,42 +126,29 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
                         break;
                 }
 
-                if (thisx->mEquippedItem == ItemFlag_None) {
+                if (thisx->mEquippedItem == (ItemFlag)ItemFlag_None) {
                     thisx->mEquippedItem = itemFlag;
                     data_ov024_020d8698->func_ov024_020cd458(thisx->mEquippedItem, 0);
                 }
             } else {
                 itemFlag = GetItemFlag(itemId);
 
-                if (itemFlag != ItemFlag_None) {
+                if (itemFlag != (ItemFlag)ItemFlag_None) {
                     thisx->func_ov000_020a863c(itemFlag);
                 }
             }
             break;
     }
 
-    AdventureFlag advFlag = AdventureFlag_Nothing;
+    SET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId]);
 
-    if (itemId >= ExtraItemId_TearLight_1 && itemId <= ExtraItemId_NormalKey_Desert) {
-        static AdventureFlag sExtraAdvFlags[] = {
-            RandoAdventureFlag_TearLight_1,      RandoAdventureFlag_TearLight_2,
-            RandoAdventureFlag_TearLight_3,      RandoAdventureFlag_TearLight_4,
-            RandoAdventureFlag_TearLight_5,      RandoAdventureFlag_NormalKey_2,
-            RandoAdventureFlag_NormalKey_4,      RandoAdventureFlag_NormalKey_5,
-            RandoAdventureFlag_NormalKey_6,      RandoAdventureFlag_NormalKey_Tunnel,
-            RandoAdventureFlag_NormalKey_Wooded, RandoAdventureFlag_NormalKey_Blizzard,
-            RandoAdventureFlag_NormalKey_Marine, RandoAdventureFlag_NormalKey_Mountain,
-            RandoAdventureFlag_NormalKey_Desert,
-        };
+    if (itemId <= ItemId_EngineerUniform) {
+        AdventureFlag advFlag = ItemManager::func_ov110_02185db4(itemId);
 
-        advFlag = sExtraAdvFlags[itemId - ExtraItemId_TearLight_1];
-    } else {
-        advFlag = ItemManager::func_ov110_02185db4(itemId);
-    }
-
-    if (advFlag != AdventureFlag_Nothing) {
-        advFlag &= 0xFFFF;
-        SET_FLAG(data_027e09b8->mAdventureFlags, advFlag);
+        if (advFlag != AdventureFlag_Nothing) {
+            advFlag &= 0xFFFF;
+            SET_FLAG(data_027e09b8->mAdventureFlags, advFlag);
+        }
     }
 
     data_027e0ce0->mUnk_34->func_ov110_02185d3c(itemId);
@@ -166,7 +156,7 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
     func_ov024_020d6370(data_ov024_020d86b0, itemId);
 
     if (!GET_FLAG(thisx->mUnk_08, ItemFlag_LokomoSword)) {
-        u8 nAmount;
+        u8 nAmount = 0;
 
         if (itemId >= ExtraItemId_TearLight_1 && itemId <= ExtraItemId_TearLight_5) {
             nAmount = gGZ.GetTearsAmount(itemId - ExtraItemId_TearLight_1);
