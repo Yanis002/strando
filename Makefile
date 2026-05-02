@@ -319,12 +319,12 @@ endif
 	$(STGZ_EMULATOR) $(OUT_ROM)
 
 setup: extract
-	$(V)$(PYTHON) rando/tools/generate_bmg.py
+	$(V)$(PYTHON) -m rando.tools.generate_bmg
 	$(call print_no_args,Created rando.bmg!)
 
 test_no_logic: build
 	$(call print_no_args,Randomizing items...)
-	$(V)$(PYTHON) rando/test/test_no_logic.py
+	$(V)$(PYTHON) -m rando.test.test_no_logic
 	$(V)$(MAKE) $(OUT_ROM)
 
 venv:
