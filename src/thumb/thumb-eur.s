@@ -703,7 +703,7 @@ thumb_func _ZN12ActorManager13ClearInstanceEv, 0x020BB871
 thumb_func func_ov001_020bb87c, 0x020BB87D
 thumb_func func_ov001_020bb8b8, 0x020BB8B9
 thumb_func func_ov001_020bb8bc, 0x020BB8BD
-thumb_func func_ov001_020bb9f8, 0x020BB9F9
+thumb_func _ZN11ItemManager19func_ov001_020bb9f8Ev, 0x020BB9F9
 thumb_func func_ov001_020bba54, 0x020BBA55
 thumb_func func_ov001_020bba6c, 0x020BBA6D
 thumb_func func_ov001_020bbac4, 0x020BBAC5
