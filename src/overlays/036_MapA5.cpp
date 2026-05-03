@@ -7,7 +7,6 @@
 #include <Item/ItemManager.hpp>
 #include <Unknown/UnkStruct_027e09b8.hpp>
 #include <Unknown/UnkStruct_027e0ce0.hpp>
-#include <Unknown/UnkStruct_ov024_020d86b0.hpp>
 
 extern ItemId GetProgressiveItemId(ItemId requestedItemId);
 extern u32 data_ov036_02122760;

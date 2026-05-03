@@ -87,6 +87,7 @@ class SetupASM:
             Symbol.new("_ZN14CustomShopItem3BuyEi").to_asm(),
             Symbol.new("ItemGiveImpl").to_asm(),
             Symbol.new("Custom_02014995").to_asm(),
+            Symbol.new("_ZN15CustomMapObject13KillMapObjectEv").to_asm(),
             "\n",
             ".open ITCM_BIN, ITCM_MOD_BIN, 0x01FF8000",
             INDENT + "; load the hooks into ITCM",
@@ -163,6 +164,15 @@ class SetupASM:
                 INDENT * 2 + ".endarea\n"
                 for i in range(1, 3)
             ),
+            ".close",
+            "\n",
+            ".open OVL077_BIN, OVL077_MOD_BIN, OVL077_ADDR",
+            INDENT + "; apply gtrk hook",
+            INDENT + ".org HOOK_GTRK",
+            INDENT * 2 + ".arm",
+            INDENT * 2 + ".area 0x04",
+            INDENT * 3 + "bl _ZN15CustomMapObject13KillMapObjectEv",
+            INDENT * 2 + ".endarea",
             ".close",
             "\n",
             ".open OVL088_BIN, OVL088_MOD_BIN, OVL088_ADDR",
@@ -346,7 +356,7 @@ def update_yaml(extracted_dir: Path, extra_overlays: list[int]):
     with open(overlays_yaml, "r", encoding="utf-8") as file:
         yaml_file = yaml.safe_load(file)
 
-    update_overlays = [18, 94, *extra_overlays]
+    update_overlays = [18, 77, 88, 94, *extra_overlays]
     for ovl_id in update_overlays:
         for overlay in yaml_file["overlays"]:
             if overlay.get("id") == ovl_id and "_mod" not in overlay["file_name"]:

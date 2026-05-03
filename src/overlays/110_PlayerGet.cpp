@@ -2,13 +2,13 @@
 #include "ItemIdMaps.hpp"
 #include "gz.hpp"
 
+#include <MainGame/MiscAdvManager.hpp>
 #include <Player/PlayerGet.hpp>
 #include <System/OverlayManager.hpp>
 #include <Unknown/UnkStruct_020d8698.hpp>
 #include <Unknown/UnkStruct_027e09b8.hpp>
 
 extern const UnkStruct_ov110_02185dc8 data_ov110_02185dc8[8];
-extern unk32* data_ov024_020d86b0;
 extern "C" void func_ov024_020d6370(unk32*, ItemId);
 
 static inline s16 GetItemFlag(ItemId itemId) {
@@ -143,7 +143,7 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
     SET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId]);
 
     if (itemId <= ItemId_EngineerUniform) {
-        AdventureFlag advFlag = ItemManager::func_ov110_02185db4(itemId);
+        AdventureFlag advFlag = ItemManager::GetAdvFlagFromItem(itemId);
 
         if (advFlag != AdventureFlag_Nothing) {
             advFlag &= 0xFFFF;
@@ -153,7 +153,7 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
 
     data_027e0ce0->mUnk_34->func_ov110_02185d3c(itemId);
     data_ov000_020b6510->func_ov000_020aa0ac(itemId);
-    func_ov024_020d6370(data_ov024_020d86b0, itemId);
+    gpMiscAdvManager->GiveLetterOrPriceCard(itemId);
 
     if (!GET_FLAG(thisx->mUnk_08, ItemFlag_LokomoSword)) {
         u8 nAmount = 0;

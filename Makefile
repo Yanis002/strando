@@ -145,6 +145,10 @@ HOOK_ITEM_GIVE_ADDR := 0x021858F4
 OVL000_ADDR := 0x02051AE0
 HOOK_SWITCH_SLOT1_ADDR := 0x0206111C
 
+# remove d_tunnel blocker
+OVL077_ADDR := 0x02152EA0
+HOOK_GTRK_ADDR := 0x0215AE78
+
 # constants patch: get item model (0), item give (31), shops (36), freestandings (70, 71) and item text ids (110)
 PATCH_OVL_ARG := "{0: [0x020AF58C, 0x02014995], 31: [0x020D9840], 36: [0x0211B148, 0x0211B420, 0x0211B6F8, 0x0211B9E8, 0x0211BCB0, 0x0211C02C], 70: [0x02142140], 71: [0x0215FF3C], 110: [0x02185DE8]}"
 else
@@ -209,6 +213,8 @@ ARMIPS_ARGS ?= \
 				-strequ OVL018_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov018_mod.bin" \
 				-strequ OVL036_BIN "$(EXTRACTED_REL)/arm9_overlays/ov036_patched.bin" \
 				-strequ OVL036_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov036_mod.bin" \
+				-strequ OVL077_BIN "$(EXTRACTED_REL)/arm9_overlays/ov077.bin" \
+				-strequ OVL077_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov077_mod.bin" \
 				-strequ OVL088_BIN "$(EXTRACTED_REL)/arm9_overlays/ov088.bin" \
 				-strequ OVL088_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov088_mod.bin" \
 				-strequ OVL094_BIN "$(EXTRACTED_REL)/arm9_overlays/ov094.bin" \
@@ -222,6 +228,7 @@ ARMIPS_ARGS ?= \
 				-equ OVL000_ADDR $(OVL000_ADDR) \
 				-equ OVL018_ADDR $(OVL018_ADDR) \
 				-equ OVL036_ADDR $(OVL036_ADDR) \
+				-equ OVL077_ADDR $(OVL077_ADDR) \
 				-equ OVL088_ADDR $(OVL088_ADDR) \
 				-equ OVL094_ADDR $(OVL094_ADDR) \
 				-equ OVL110_ADDR $(OVL110_ADDR) \
@@ -248,7 +255,8 @@ ARMIPS_ARGS ?= \
 				-equ HOOK_CS_ITEM_2 $(HOOK_CS_ITEM_2_ADDR) \
 				-equ HOOK_CS_ITEM_3 $(HOOK_CS_ITEM_3_ADDR) \
 				-equ HOOK_ITEM_GIVE $(HOOK_ITEM_GIVE_ADDR) \
-				-equ HOOK_SWITCH_SLOT1 $(HOOK_SWITCH_SLOT1_ADDR)
+				-equ HOOK_SWITCH_SLOT1 $(HOOK_SWITCH_SLOT1_ADDR) \
+				-equ HOOK_GTRK $(HOOK_GTRK_ADDR)
 
 ### project targets ###
 
