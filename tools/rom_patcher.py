@@ -1,35 +1,19 @@
 #!/usr/bin/env python3
-# SPDX-FileCopyrightText: © 2026 stgz team
+# SPDX-FileCopyrightText: © 2026 strando team
 # SPDX-License-Identifier: GPL-3.0-only
-# Modified for ST Rando purposes
 
 import argparse
-import ast
 import re
 import subprocess
-import struct
 import yaml
 
 from dataclasses import dataclass
 from pathlib import Path
 
+CONFIG_DIR = Path("resources/decomp/config").resolve()
+EXTRACTED_DIR = Path("extract")
 INDENT = " " * 4
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-e", "--extract", type=Path, required=True)
-parser.add_argument("-o", "--obj_list", dest="obj_list", nargs="+", help="list of .o file paths", required=True)
-parser.add_argument("-m", "--main_max_size", required=True)
-parser.add_argument("-j", "--hooks_obj_list", dest="hooks_obj_list", nargs="+", help="list of .o hooks file paths", required=True)
-parser.add_argument("-n", "--hooks_max_size", required=True)
-parser.add_argument("-a", "--address", required=True)
-parser.add_argument("-d", "--hooks_build_dir", type=Path, required=True)
-parser.add_argument("--elf", required=True)
-parser.add_argument("--map", type=Path, required=True)
-parser.add_argument("--hooks_elf", required=True)
-parser.add_argument("--hooks_bin", type=Path, required=True)
-parser.add_argument("--hooks_game_bin", type=Path, required=True)
-parser.add_argument("--patch_ovl", type=ast.literal_eval, help="Format: '{id: addr}'")
-args = parser.parse_args()
 
 @dataclass
 class Symbol:
@@ -37,7 +21,7 @@ class Symbol:
     addr: int
 
     @staticmethod
-    def new(name: str, elf_path: str = args.elf):
+    def new(name: str, elf_path: str):
         nm_path = Path("tools/binutils/arm-none-eabi-nm").resolve()
         assert nm_path.exists(), "binutils is missing"
         lines = subprocess.check_output([str(nm_path), elf_path], text=True).split("\n")
@@ -56,242 +40,345 @@ class Symbol:
         return f".definelabel {self.name}, 0x{self.addr:08X}"
 
 
-class SetupASM:
-    def __init__(self, obj_list: list[str], hooks_obj_list: list[str], hooks_build_dir: Path, version: str):
-        self.obj_list = obj_list
-        self.hooks_obj_list = hooks_obj_list
-        self.hooks_build_dir = hooks_build_dir
-        self.version = version
-
-    @staticmethod
-    def new(version: str, obj_list: list[str], hooks_obj_list: list[str], hooks_build_dir: Path):
-        return SetupASM(obj_list, hooks_obj_list, hooks_build_dir, version)
+@dataclass
+class Constant:
+    at_addr: int
+    new_sym: Symbol | int
 
     def to_asm(self):
-        # not sure yet if it's a good idea to generate this entire file but whatever
+        addr = self.new_sym.addr if isinstance(self.new_sym, Symbol) else self.new_sym
+
+        return [
+            INDENT + f".org 0x{self.at_addr:08X}",
+            INDENT * 2 + ".arm",
+            INDENT * 2 + ".area 0x04",
+            INDENT * 3 + f".word 0x{addr:08X}",
+            INDENT * 2 + ".endarea",
+        ]
+
+
+@dataclass
+class Instruction:
+    at_addr: int
+    new_sym: Symbol | None  # if none it will perform a nop instead of a bl
+    is_blx: bool = False
+
+    def to_asm(self):
+        if self.new_sym is not None:
+            instr = (
+                f"blx {self.new_sym.name}" if self.is_blx else f"bl {self.new_sym.name}"
+            )
+        else:
+            instr = "nop"
+
+        return [
+            INDENT + f".org 0x{self.at_addr:08X}",
+            INDENT * 2 + ".arm",
+            INDENT * 2 + ".area 0x04",
+            INDENT * 3 + instr,
+            INDENT * 2 + ".endarea",
+        ]
+
+
+@dataclass
+class IncBin:
+    at_addr: int
+    size: int
+    path: Path
+
+    def to_asm(self):
+        return [
+            INDENT + f".org 0x{self.at_addr:08X}",
+            INDENT * 2 + ".arm",
+            INDENT * 2 + f".area 0x{self.size:02X}, 0x00",
+            INDENT * 3 + f'.incbin "../../../{self.path}"',
+            INDENT * 2 + ".endarea",
+        ]
+
+
+class Hook:
+    def __init__(
+        self,
+        module: str,
+        instrs: list[Instruction],
+        constants: list[Constant] = list(),
+        incbins: list[IncBin] = list(),
+    ):
+        self.module = module
+        self.instrs = instrs
+        self.constants = constants
+        self.incbins = incbins
+
+    def to_asm(self, version: str):
+        base_dir = CONFIG_DIR / version / "arm9"
+
+        match self.module:
+            case "itcm":
+                config_dir = base_dir / "itcm"
+                bin_path = EXTRACTED_DIR / version / "arm9" / "itcm.bin"
+            case "main":
+                config_dir = base_dir
+                bin_path = EXTRACTED_DIR / version / "arm9" / "arm9.bin"
+            case _:
+                config_dir = base_dir / "overlays" / self.module
+                bin_path = (
+                    EXTRACTED_DIR / version / "arm9_overlays" / f"{self.module}.bin"
+                )
+        assert config_dir.exists(), f"{config_dir} ({self.module})"
+        assert bin_path.exists(), f"{bin_path} ({self.module})"
+
+        if self.module == "itcm":
+            module_addr = 0x01FF8000
+        elif self.module == "main":
+            module_addr = 0x02000000
+        else:
+            symbols = (config_dir / "symbols.txt").read_text().splitlines()
+            module_addr = int(symbols[0].split("addr:")[-1].split(" ")[0], base=16)
+
+        all_list: list[str] = []
+
+        has_instrs = len(self.instrs) > 0
+        has_constants = len(self.constants) > 0
+        has_incbins = len(self.incbins) > 0
+
+        if has_instrs:
+            all_list.append(INDENT + "; instructions")
+        for instr in self.instrs:
+            all_list.extend(instr.to_asm())
+
+        if has_constants:
+            newline = ""
+            if has_instrs:
+                newline = "\n"
+
+            all_list.append(newline + INDENT + "; constants")
+        for const in self.constants:
+            all_list.extend(const.to_asm())
+
+        if has_incbins:
+            newline = ""
+            if has_instrs or has_constants:
+                newline = "\n"
+
+            all_list.append(newline + INDENT + "; incbins")
+        for incbin in self.incbins:
+            all_list.extend(incbin.to_asm())
+
+        module = "arm9" if self.module == "main" else self.module
+        return "\n".join(
+            [
+                f'.open "../../../{bin_path}", "../../../{bin_path.with_stem(f"{module}_mod")}", 0x{module_addr:08X}',
+                "\n".join(all_list),
+                ".close\n",
+            ]
+        )
+
+
+@dataclass
+class HooksConfig:
+    version: str
+    address: int
+    size: int
+    elf_path: Path
+    hook_elf_path: Path
+    hooks_bin: Path
+    hooks_game_bin: Path
+    hooks_size: int
+    hooks_addr: int
+    hooks_game_addr: int
+
+    def __post_init__(self):
+        sym_get_shop_item_price = Symbol.new(
+            "_ZN14CustomShopItem16GetShopItemPriceEv", self.elf_path
+        )
+        sym_get_shop_item_id = Symbol.new(
+            "_ZN14CustomShopItem13GetShopItemIdEi", self.elf_path
+        )
+        sym_buy_shop_item = Symbol.new("_ZN14CustomShopItem3BuyEi", self.elf_path)
+        sym_cs_item = Symbol.new("GiveItemDuringCS", self.elf_path)
+        sym_freestanding_itemgive = Symbol.new(
+            "_ZN23CustomFreestandingActor11TryItemGiveEv", self.elf_path
+        )
+
+        self.hook_list = [
+            Hook(
+                "itcm",
+                list(),
+                incbins=[IncBin(self.hooks_addr, self.hooks_size, self.hooks_bin)],
+            ),
+            Hook(
+                "main",
+                list(),
+                [
+                    Constant(0x02012454, self.address + self.size),
+                    Constant(0x02027914, self.address + self.size),
+                ],
+                [IncBin(self.hooks_game_addr, 0x390, self.hooks_game_bin)],
+            ),
+            Hook(
+                "ov000",
+                [
+                    Instruction(0x0206111C, Symbol.new("Custom_02014995", self.elf_path)),
+                ],
+                [
+                    Constant(0x020A4C0C, Symbol.new("gGetItemMap", self.elf_path)),
+                    Constant(0x02061268, Symbol.new("Custom_02014995", self.elf_path)),
+                ],
+            ),
+            Hook(
+                "ov018",
+                [
+                    Instruction(0x020C4DD0, Symbol.new("GZ_InitHook", self.hook_elf_path)),
+                ],
+            ),
+            Hook(
+                "ov031",
+                list(),
+                [
+                    Constant(0x020D9840, Symbol.new("CustomTryItemGive", self.elf_path)),
+                ],
+            ),
+            Hook(
+                "ov036",
+                [
+                    Instruction(0x0211CDF4, sym_get_shop_item_price),
+                    Instruction(0x0211CE3C, sym_get_shop_item_price),
+                    Instruction(0x0211CE64, sym_get_shop_item_price),
+                    Instruction(0x0211CE8C, sym_get_shop_item_price),
+                    Instruction(0x0211CEB4, sym_get_shop_item_price),
+                    Instruction(0x0211CEDC, sym_get_shop_item_price),
+                    Instruction(
+                        0x0211A4F0,
+                        Symbol.new("_ZN14CustomShopItem15SetShopItemTextEv", self.elf_path),
+                    ),
+                    Instruction(0x0211A518, None),
+                    Instruction(
+                        0x0211A3C0,
+                        Symbol.new(
+                            "_ZN14CustomShopItem21Custom_ov036_0211d0a8Ev", self.elf_path
+                        ),
+                    ),
+                    Instruction(
+                        0x021197DC, Symbol.new("_ZN14CustomShopItem6CanBuyEv", self.elf_path)
+                    ),
+                    Instruction(0x02119C8C, sym_buy_shop_item),
+                    Instruction(0x02119F6C, sym_buy_shop_item),
+                ],
+                [
+                    Constant(0x0212185C, sym_get_shop_item_id),
+                    Constant(0x02121A78, sym_get_shop_item_id),
+                    Constant(0x02121C94, sym_get_shop_item_id),
+                    Constant(0x02121EB0, sym_get_shop_item_id),
+                    Constant(0x021220CC, sym_get_shop_item_id),
+                    Constant(0x02122314, sym_get_shop_item_id),
+                ],
+            ),
+            Hook(
+                "ov070",
+                list(),
+                [
+                    Constant(0x0214EB64, sym_freestanding_itemgive),
+                ],
+            ),
+            Hook(
+                "ov071",
+                list(),
+                [
+                    Constant(0x02164CF0, sym_freestanding_itemgive),
+                ],
+            ),
+            Hook(
+                "ov077",
+                [
+                    Instruction(
+                        0x0215AE78,
+                        Symbol.new("_ZN15CustomMapObject13KillMapObjectEv", self.elf_path),
+                    )
+                ],
+            ),
+            Hook(
+                "ov088",
+                [
+                    Instruction(0x02165D80, sym_cs_item),
+                    Instruction(0x02165D98, sym_cs_item),
+                    Instruction(0x02166EC0, sym_cs_item),
+                ],
+            ),
+            Hook(
+                "ov094",
+                [
+                    Instruction(
+                        0x02171F34,
+                        Symbol.new("_ZN22CustomMapObjectUnkWDST11TryItemGiveEv", self.elf_path),
+                    ),
+                    Instruction(0x02172078, None),
+                ],
+            ),
+            Hook(
+                "ov110",
+                [Instruction(0x021858F4, Symbol.new("ItemGiveImpl", self.elf_path))],
+                [Constant(0x02185DB0, Symbol.new("gBMGMap", self.elf_path))],
+            ),
+        ]
+
+    def get_ovl_list(self):
+        ovl_list: list[int] = []
+
+        for hook in self.hook_list:
+            if hook.module.startswith("ov"):
+                ovl = int(hook.module.removeprefix("ov"))
+
+                if ovl not in ovl_list:
+                    ovl_list.append(ovl)
+
+        return ovl_list
+
+    def get_instr_list(self):
+        all_instrs: list[str] = []
+
+        for hook in self.hook_list:
+            for instr in hook.instrs:
+                if instr.new_sym is not None:
+                    asm = instr.new_sym.to_asm()
+
+                    if asm not in all_instrs:
+                        all_instrs.append(asm)
+
+        return all_instrs
+
+    def gen_hooks(self):
+        all_instrs = self.get_instr_list()
 
         lines = [
-            "; This file was created by `tools/rom_patcher.py`",
-            "\n",
+            "; This file was created by `tools/gen_hooks.py`\n",
             ".nds",
             ".relativeinclude on",
-            ".erroronwarning on",
-            "\n",
-            Symbol.new("GZ_InitHook", elf_path=args.hooks_elf).to_asm(),
-            Symbol.new("_ZN22CustomMapObjectUnkWDST11TryItemGiveEv").to_asm(),
-            Symbol.new("_ZN14CustomShopItem16GetShopItemPriceEv").to_asm(),
-            Symbol.new("GiveItemDuringCS").to_asm(),
-            Symbol.new("_ZN14CustomShopItem15SetShopItemTextEv").to_asm(),
-            Symbol.new("_ZN14CustomShopItem21Custom_ov036_0211d0a8Ev").to_asm(),
-            Symbol.new("_ZN14CustomShopItem6CanBuyEv").to_asm(),
-            Symbol.new("_ZN14CustomShopItem3BuyEi").to_asm(),
-            Symbol.new("ItemGiveImpl").to_asm(),
-            Symbol.new("Custom_02014995").to_asm(),
-            Symbol.new("_ZN15CustomMapObject13KillMapObjectEv").to_asm(),
-            "\n",
-            ".open ITCM_BIN, ITCM_MOD_BIN, 0x01FF8000",
-            INDENT + "; load the hooks into ITCM",
-            INDENT + ".org HOOKS_ADDR",
-            INDENT * 2 + ".area HOOKS_SIZE, 0xFF",
-            INDENT * 3 + f'.incbin "../../../{args.hooks_bin}"',
-            INDENT * 2 + ".endarea",
-            ".close",
-            "\n",
-            ".open ARM9_BIN, ARM9_MOD_BIN, 0x02000000",
-            INDENT + ".org HOOKS_GAME_ADDR",
-            INDENT * 2 + ".area 0x390, 0x00",
-            INDENT * 3 + f'.incbin "../../../{args.hooks_game_bin}"',
-            INDENT * 2 + ".endarea",
-            ".close",
-            "\n",
-            ".open OVL000_BIN, OVL000_MOD_BIN, OVL000_ADDR",
-            INDENT + "; apply scene change related hook",
-            INDENT + ".org HOOK_SWITCH_SLOT1",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl Custom_02014995",
-            INDENT * 2 + ".endarea",
-            ".close",
-            "\n",
-            ".open OVL018_BIN, OVL018_MOD_BIN, OVL018_ADDR",
-            INDENT + "; apply init hook",
-            INDENT + ".org HOOK_INIT",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl GZ_InitHook",
-            INDENT * 2 + ".endarea",
-            ".close",
-            "\n",
-            ".open OVL036_BIN, OVL036_MOD_BIN, OVL036_ADDR",
-            "\n".join(
-                INDENT + f"; apply price {i} hook\n" +
-                INDENT + f".org HOOK_PRICE_{i}\n" +
-                INDENT * 2 + ".arm\n" +
-                INDENT * 2 + ".area 0x04\n" +
-                INDENT * 3 + "bl _ZN14CustomShopItem16GetShopItemPriceEv\n" +
-                INDENT * 2 + ".endarea\n"
-                for i in range(1, 7)
-            ),
-            INDENT + "; apply shop item text hook",
-            INDENT + ".org HOOK_SHOP_TEXT",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl _ZN14CustomShopItem15SetShopItemTextEv",
-            INDENT * 2 + ".endarea",
-            INDENT + "; apply nop str",
-            INDENT + ".org HOOK_SHOP_TEXT_STR",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "nop",
-            INDENT * 2 + ".endarea",
-            INDENT + "; apply shop 0x0D hook",
-            INDENT + ".org HOOK_SHOP_0211D0A8",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl _ZN14CustomShopItem21Custom_ov036_0211d0a8Ev",
-            INDENT * 2 + ".endarea",
-            INDENT + ".org HOOK_SHOP_CAN_BUY",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl _ZN14CustomShopItem6CanBuyEv",
-            INDENT * 2 + ".endarea",
-            "\n".join(
-                INDENT + f"; apply price {i} hook\n" +
-                INDENT + f".org HOOK_SHOP_BUY_{i}\n" +
-                INDENT * 2 + ".arm\n" +
-                INDENT * 2 + ".area 0x04\n" +
-                INDENT * 3 + "bl _ZN14CustomShopItem3BuyEi\n" +
-                INDENT * 2 + ".endarea\n"
-                for i in range(1, 3)
-            ),
-            ".close",
-            "\n",
-            ".open OVL077_BIN, OVL077_MOD_BIN, OVL077_ADDR",
-            INDENT + "; apply gtrk hook",
-            INDENT + ".org HOOK_GTRK",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl _ZN15CustomMapObject13KillMapObjectEv",
-            INDENT * 2 + ".endarea",
-            ".close",
-            "\n",
-            ".open OVL088_BIN, OVL088_MOD_BIN, OVL088_ADDR",
-            INDENT + "; apply songs hook",
-            INDENT + ".org HOOK_CS_ITEM_1",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl GiveItemDuringCS",
-            INDENT * 2 + ".endarea",
-            INDENT + ".org HOOK_CS_ITEM_2",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl GiveItemDuringCS",
-            INDENT * 2 + ".endarea",
-            INDENT + ".org HOOK_CS_ITEM_3",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl GiveItemDuringCS",
-            INDENT * 2 + ".endarea",
-            ".close",
-            "\n",
-            ".open OVL094_BIN, OVL094_MOD_BIN, OVL094_ADDR",
-            INDENT + "; apply songs hook",
-            INDENT + ".org HOOK_SONGS",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl _ZN22CustomMapObjectUnkWDST11TryItemGiveEv",
-            INDENT * 2 + ".endarea",
-            INDENT + ".org HOOK_SONGS_FLAG",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "nop",
-            INDENT * 2 + ".endarea",
-            ".close",
-            ".open OVL110_BIN, OVL110_MOD_BIN, OVL110_ADDR",
-            INDENT + "; apply item give hook",
-            INDENT + ".org HOOK_ITEM_GIVE",
-            INDENT * 2 + ".arm",
-            INDENT * 2 + ".area 0x04",
-            INDENT * 3 + "bl ItemGiveImpl",
-            INDENT * 2 + ".endarea",
-            ".close",
-            "\n",
+            ".erroronwarning on\n",
+            "\n".join(all_instrs) + "\n",
+            "\n".join(hook.to_asm(self.version) for hook in self.hook_list) + "\n",
         ]
 
         return "\n".join(lines)
 
-    def write(self):
-        self.hooks_build_dir.mkdir(exist_ok=True)
-        setup_asm_file = self.hooks_build_dir / "setup.asm"
-        setup_asm_file.resolve().write_text(self.to_asm())
-        print("setup.asm is OK!")
 
+def check_code_size(bin_path: Path, max_size: int, kind: str):
+    hooks_data = bin_path.read_bytes()
+    hooks_size = len(hooks_data)
 
-def check_code_size(obj_list: list[str], max_size: int, kind: str):
-    split = subprocess.check_output(["size", "--totals", *obj_list], text=True).split("\n")
-
-    for elem in split:
-        if "TOTALS" in elem:
-            code_size = int(elem.split("\t")[-2].strip(), base=16)
-            print(f"{kind} code size is OK! (code size: 0x{code_size:X} < max: 0x{max_size:X})")
-            assert code_size < max_size, f"{kind} code size exceeds the available space! (code size: 0x{code_size:X} >= max: 0x{max_size:X})"
-            break
-
-
-def patch_constants(module_path: Path, original_addrs: list[int], new_addr: int, suffix: str | None = "patched"):
-    # open and read file
-    assert module_path.exists(), f"{module_path}" and isinstance(new_addr, int)
-    module = module_path.read_bytes()
-
-    # update constant
-    for original_addr in original_addrs:
-        assert isinstance(original_addr, int)
-        module = module.replace(struct.pack("<I", original_addr), struct.pack("<I", new_addr))
-
-    # write and close file
-    if suffix is not None:
-        module_path.with_name(f"{module_path.stem}_{suffix}.bin").write_bytes(module)
+    if len(hooks_data) < max_size:
+        print(
+            f"{kind} code size is OK! (code size: 0x{hooks_size:X} < max: 0x{max_size:X})"
+        )
     else:
-        module_path.with_name(f"{module_path.stem}.bin").write_bytes(module)
+        raise ValueError(
+            f"{kind} code size exceeds the available space! (code size: 0x{hooks_size:X} >= max: 0x{max_size:X})"
+        )
 
 
-def patch_arm9(extracted_dir: Path, base_addr: int, offset: int):
-    # update overlay hi
-    patch_constants(extracted_dir / "arm9" / "arm9.bin", [base_addr], base_addr + offset)
-
-
-def patch_overlay(extracted_dir: Path, ovl_id: int, at_addrs: list[int]):
-    assert isinstance(ovl_id, int)
-
-    ovl_path = extracted_dir / "arm9_overlays" / f"ov{ovl_id:03}.bin"
-    new_addr = None
-    suffix = "mod"
-    match ovl_id:
-        case 0:
-            patch_constants(ovl_path, [at_addrs[0]], Symbol.new("gGetItemMap").addr)
-            patch_constants(ovl_path.with_name(f"ov{ovl_id:03}_patched.bin"), [at_addrs[1]], Symbol.new("Custom_02014995").addr, suffix=None)
-            return
-        case 31:
-            new_addr = Symbol.new("CustomTryItemGive").addr
-        case 36:
-            new_addr = Symbol.new("_ZN14CustomShopItem13GetShopItemIdEi").addr
-            suffix = "patched"
-        case 70 | 71:
-            new_addr = Symbol.new("_ZN23CustomFreestandingActor11TryItemGiveEv").addr
-        case 110:
-            new_addr = Symbol.new("gBMGMap").addr
-            suffix = "patched"
-        case _:
-            raise ValueError(f"Unexpected overlay id ({ovl_id}).")
-
-    assert new_addr is not None
-    patch_constants(ovl_path, at_addrs, new_addr, suffix=suffix)
-
-
-def get_extra_overlay(file_id: int):
+def get_extra_overlay(map_path: Path, file_id: int):
     out = {"id": file_id}
 
-    map_path: Path = args.map.resolve()
+    map_path: Path = map_path.resolve()
     assert map_path.exists(), "map file not found"
     filedata = map_path.read_text()
 
@@ -319,7 +406,7 @@ def get_extra_overlay(file_id: int):
     return out
 
 
-def update_yaml(extracted_dir: Path, extra_overlays: list[int]):
+def update_yaml(extracted_dir: Path, map_path: Path, ovl_list: list[int]):
     # update arm9.bin and itcm.bin filenames
     config_yaml = extracted_dir / "config.yaml"
 
@@ -328,11 +415,11 @@ def update_yaml(extracted_dir: Path, extra_overlays: list[int]):
 
     do_write = False
 
-    if "_mod" not in  yaml_file["arm9_bin"]:
+    if "_mod" not in yaml_file["arm9_bin"]:
         yaml_file["arm9_bin"] = f"{yaml_file['arm9_bin'][:-4]}_mod.bin"
         do_write = True
 
-    if "_mod" not in  yaml_file["itcm"]["bin"]:
+    if "_mod" not in yaml_file["itcm"]["bin"]:
         yaml_file["itcm"]["bin"] = f"{yaml_file['itcm']['bin'][:-4]}_mod.bin"
         do_write = True
 
@@ -356,16 +443,21 @@ def update_yaml(extracted_dir: Path, extra_overlays: list[int]):
     with open(overlays_yaml, "r", encoding="utf-8") as file:
         yaml_file = yaml.safe_load(file)
 
-    update_overlays = [18, 77, 88, 94, *extra_overlays]
-    for ovl_id in update_overlays:
+    for ovl_id in ovl_list:
         for overlay in yaml_file["overlays"]:
             if overlay.get("id") == ovl_id and "_mod" not in overlay["file_name"]:
-                overlay["file_name"] = f"{overlay['file_name'].removesuffix('.bin')}_mod.bin"
+                overlay["file_name"] = (
+                    f"{overlay['file_name'].removesuffix('.bin')}_mod.bin"
+                )
                 break
 
-    is_extra_overlay_present = args.map.stem in yaml_file["overlays"][-1]["file_name"]
-    file_id = len(yaml_file["overlays"]) - 1 if is_extra_overlay_present else len(yaml_file["overlays"])
-    extra_overlay = get_extra_overlay(file_id)
+    is_extra_overlay_present = map_path.stem in yaml_file["overlays"][-1]["file_name"]
+    file_id = (
+        len(yaml_file["overlays"]) - 1
+        if is_extra_overlay_present
+        else len(yaml_file["overlays"])
+    )
+    extra_overlay = get_extra_overlay(map_path, file_id)
 
     if is_extra_overlay_present:
         # extra overlay is there, update it
@@ -388,28 +480,57 @@ def update_yaml(extracted_dir: Path, extra_overlays: list[int]):
 
 
 def main():
-    main_max_size = int(args.main_max_size, base=16)
-    extracted_path: Path = args.extract.resolve()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--version", type=str.lower, required=True)
+    parser.add_argument("--address", required=True)
+    parser.add_argument("--size", required=True)
+    parser.add_argument("--elf", type=Path, required=True)
+    parser.add_argument("--hooks_addr", required=True)
+    parser.add_argument("--hooks_elf", type=Path, required=True)
+    parser.add_argument("--hooks_game_addr", required=True)
+    parser.add_argument("--hooks_game_bin", type=Path, required=True)
+    parser.add_argument("--hooks_size", required=True)
+    args = parser.parse_args()
+
+    main_addr = int(args.address, base=16)
+    hooks_addr = int(args.hooks_addr, base=16)
+    hooks_game_addr = int(args.hooks_game_addr, base=16)
+    max_main_size = int(args.size, base=16)
+    max_hooks_size = int(args.hooks_size, base=16)
+
+    hooks_dir: Path = args.hooks_elf.parent.resolve()
+    assert hooks_dir.exists()
+
+    hooks_bin: Path = args.hooks_elf.with_suffix(".bin")
+    main_map: Path = args.elf.with_suffix(".map")
+
+    config = HooksConfig(
+        args.version,
+        main_addr,
+        max_main_size,
+        args.elf,
+        args.hooks_elf,
+        hooks_bin,
+        args.hooks_game_bin,
+        max_hooks_size,
+        hooks_addr,
+        hooks_game_addr,
+    )
+
+    hooks_asm = config.gen_hooks()
+
+    setup_asm_file = hooks_dir / "setup.asm"
+    setup_asm_file.resolve().write_text(hooks_asm)
+    print("setup.asm is OK!")
 
     # make sure the overlay code size is ok
-    check_code_size(args.obj_list, main_max_size, "Main")
+    check_code_size(args.elf.with_suffix(".bin"), max_main_size, "Main")
 
     # make sure the hooks code size is ok
-    check_code_size(args.hooks_obj_list, int(args.hooks_max_size, base=16), "Hooks")
-
-    # patch the arm9 binary
-    patch_arm9(extracted_path, int(args.address, base=16), main_max_size)
-
-    # patch overlay binaries
-    for ovl_id, at_addrs in args.patch_ovl.items():
-        patch_overlay(extracted_path, ovl_id, at_addrs)
-
-    # generate setup.asm
-    setup_asm = SetupASM.new(extracted_path.stem, args.obj_list, args.hooks_obj_list, args.hooks_build_dir)
-    setup_asm.write()
+    check_code_size(hooks_bin, max_hooks_size, "Hooks")
 
     # update yaml files
-    update_yaml(extracted_path, list(args.patch_ovl.keys()))
+    update_yaml(EXTRACTED_DIR.resolve() / args.version, main_map, config.get_ovl_list())
 
 
 if __name__ == "__main__":

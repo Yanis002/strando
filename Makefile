@@ -102,55 +102,11 @@ ALL_DEPS := $(sort $(DEPS) $(HOOKS_DEPS) $(HOOKS_GAME_DEPS))
 
 # region addresses
 ifeq ($(REGION),eur)
-OVL018_ADDR := 0x020C4840
 OVLGZ_ADDR := 0x0218A380
-HOOK_INIT := 0x020C4DD0
-HOOK_UPDATE := 0x02013464
-MAIN_ADDR := 0x02000BC8
-OVERLAY_0_SLOT_ADDR := 0x02043E50 # in reality this is the address of gOverlayManager
 HOOKS_ADDR := 0x01FFFE20
 HOOKS_GAME_ADDR := 0x02013394
 
-# shops
-OVL036_ADDR := 0x02118FC0
-HOOK_PRICE_1_ADDR := 0x0211CDF4
-HOOK_PRICE_2_ADDR := 0x0211CE3C
-HOOK_PRICE_3_ADDR := 0x0211CE64
-HOOK_PRICE_4_ADDR := 0x0211CE8C
-HOOK_PRICE_5_ADDR := 0x0211CEB4
-HOOK_PRICE_6_ADDR := 0x0211CEDC
-HOOK_SHOP_TEXT_ADDR := 0x0211A4F0
-HOOK_SHOP_TEXT_STR_ADDR := 0x0211A518
-HOOK_SHOP_0211D0A8_ADDR := 0x0211A3C0
-HOOK_SHOP_CAN_BUY_ADDR := 0x021197DC
-HOOK_SHOP_BUY_1_ADDR := 0x02119C8C
-HOOK_SHOP_BUY_2_ADDR := 0x02119F6C
-
-# songs
-OVL094_ADDR := 0x021658A0
-HOOK_SONGS_ADDR := 0x02171F34
-HOOK_SONGS_FLAG_ADDR := 0x02172078 # prevents WDST actor from setting the song flag
-
-# cutscene
-OVL088_ADDR := 0x021658A0
-HOOK_CS_ITEM_1_ADDR := 0x02165D80
-HOOK_CS_ITEM_2_ADDR := 0x02165D98
-HOOK_CS_ITEM_3_ADDR := 0x02166EC0
-
-# playerget
-OVL110_ADDR := 0x02184A40
-HOOK_ITEM_GIVE_ADDR := 0x021858F4
-
-# scene change related stuff
-OVL000_ADDR := 0x02051AE0
-HOOK_SWITCH_SLOT1_ADDR := 0x0206111C
-
-# remove d_tunnel blocker
-OVL077_ADDR := 0x02152EA0
-HOOK_GTRK_ADDR := 0x0215AE78
-
-# constants patch: get item model (0), item give (31), shops (36), freestandings (70, 71) and item text ids (110)
-PATCH_OVL_ARG := "{0: [0x020AF58C, 0x02014995], 31: [0x020D9840], 36: [0x0211B148, 0x0211B420, 0x0211B6F8, 0x0211B9E8, 0x0211BCB0, 0x0211C02C], 70: [0x02142140], 71: [0x0215FF3C], 110: [0x02185DE8]}"
+OVERLAY_0_SLOT_ADDR := 0x02043E50 # in reality this is the address of gOverlayManager
 else
 $(error "Region not supported: $(REGION)")
 endif
@@ -205,68 +161,15 @@ OUT_ROM := stgz-$(REGION).nds
 endif
 OUT_PPF := $(OUT_ROM:.nds=.ppf)
 
-EXTRACTED_REL := ../../../$(EXTRACTED_DIR)
-ARMIPS_ARGS ?= \
-				-strequ OVL000_BIN "$(EXTRACTED_REL)/arm9_overlays/ov000_patched.bin" \
-				-strequ OVL000_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov000_mod.bin" \
-				-strequ OVL018_BIN "$(EXTRACTED_REL)/arm9_overlays/ov018.bin" \
-				-strequ OVL018_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov018_mod.bin" \
-				-strequ OVL036_BIN "$(EXTRACTED_REL)/arm9_overlays/ov036_patched.bin" \
-				-strequ OVL036_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov036_mod.bin" \
-				-strequ OVL077_BIN "$(EXTRACTED_REL)/arm9_overlays/ov077.bin" \
-				-strequ OVL077_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov077_mod.bin" \
-				-strequ OVL088_BIN "$(EXTRACTED_REL)/arm9_overlays/ov088.bin" \
-				-strequ OVL088_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov088_mod.bin" \
-				-strequ OVL094_BIN "$(EXTRACTED_REL)/arm9_overlays/ov094.bin" \
-				-strequ OVL094_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov094_mod.bin" \
-				-strequ OVL110_BIN "$(EXTRACTED_REL)/arm9_overlays/ov110_patched.bin" \
-				-strequ OVL110_MOD_BIN "$(EXTRACTED_REL)/arm9_overlays/ov110_mod.bin" \
-				-strequ ARM9_BIN "$(EXTRACTED_REL)/arm9/arm9_patched.bin" \
-				-strequ ARM9_MOD_BIN "$(EXTRACTED_REL)/arm9/arm9_mod.bin" \
-				-strequ ITCM_BIN "$(EXTRACTED_REL)/arm9/itcm.bin" \
-				-strequ ITCM_MOD_BIN "$(EXTRACTED_REL)/arm9/itcm_mod.bin" \
-				-equ OVL000_ADDR $(OVL000_ADDR) \
-				-equ OVL018_ADDR $(OVL018_ADDR) \
-				-equ OVL036_ADDR $(OVL036_ADDR) \
-				-equ OVL077_ADDR $(OVL077_ADDR) \
-				-equ OVL088_ADDR $(OVL088_ADDR) \
-				-equ OVL094_ADDR $(OVL094_ADDR) \
-				-equ OVL110_ADDR $(OVL110_ADDR) \
-				-equ HOOKS_SIZE $(HOOKS_SIZE) \
-				-equ HOOKS_ADDR $(HOOKS_ADDR) \
-				-equ HOOKS_GAME_ADDR $(HOOKS_GAME_ADDR) \
-				-equ HOOK_UPDATE $(HOOK_UPDATE) \
-				-equ HOOK_INIT $(HOOK_INIT) \
-				-equ HOOK_SONGS $(HOOK_SONGS_ADDR) \
-				-equ HOOK_SONGS_FLAG $(HOOK_SONGS_FLAG_ADDR) \
-				-equ HOOK_PRICE_1 $(HOOK_PRICE_1_ADDR) \
-				-equ HOOK_PRICE_2 $(HOOK_PRICE_2_ADDR) \
-				-equ HOOK_PRICE_3 $(HOOK_PRICE_3_ADDR) \
-				-equ HOOK_PRICE_4 $(HOOK_PRICE_4_ADDR) \
-				-equ HOOK_PRICE_5 $(HOOK_PRICE_5_ADDR) \
-				-equ HOOK_PRICE_6 $(HOOK_PRICE_6_ADDR) \
-				-equ HOOK_SHOP_TEXT $(HOOK_SHOP_TEXT_ADDR) \
-				-equ HOOK_SHOP_TEXT_STR $(HOOK_SHOP_TEXT_STR_ADDR) \
-				-equ HOOK_SHOP_0211D0A8 $(HOOK_SHOP_0211D0A8_ADDR) \
-				-equ HOOK_SHOP_CAN_BUY $(HOOK_SHOP_CAN_BUY_ADDR) \
-				-equ HOOK_SHOP_BUY_1 $(HOOK_SHOP_BUY_1_ADDR) \
-				-equ HOOK_SHOP_BUY_2 $(HOOK_SHOP_BUY_2_ADDR) \
-				-equ HOOK_CS_ITEM_1 $(HOOK_CS_ITEM_1_ADDR) \
-				-equ HOOK_CS_ITEM_2 $(HOOK_CS_ITEM_2_ADDR) \
-				-equ HOOK_CS_ITEM_3 $(HOOK_CS_ITEM_3_ADDR) \
-				-equ HOOK_ITEM_GIVE $(HOOK_ITEM_GIVE_ADDR) \
-				-equ HOOK_SWITCH_SLOT1 $(HOOK_SWITCH_SLOT1_ADDR) \
-				-equ HOOK_GTRK $(HOOK_GTRK_ADDR)
-
 ### project targets ###
 
 all: $(OUT_ROM) infos
 
 build: hooks
 	$(call print_no_args,Patching the game...)
-	$(V)$(ROM_PATCHER) -e $(EXTRACTED_DIR) -o $(OBJ) -m $(OVLGZ_SIZE) -j $(HOOKS_OBJ) -n $(HOOKS_SIZE) -a $(OVLGZ_ADDR) -d $(HOOKS_BUILD_DIR) --elf $(ELF) --map $(MAP) --hooks_bin $(HOOKS_BIN) --hooks_elf $(HOOKS_ELF) --hooks_game_bin $(HOOKS_GAME_BIN) --patch_ovl $(PATCH_OVL_ARG)
+	$(V)$(ROM_PATCHER) --version $(REGION) --address $(OVLGZ_ADDR) --size $(OVLGZ_SIZE) --elf $(ELF) --hooks_elf $(HOOKS_ELF) --hooks_game_bin $(HOOKS_GAME_BIN) --hooks_size $(HOOKS_SIZE) --hooks_addr $(HOOKS_ADDR) --hooks_game_addr $(HOOKS_GAME_ADDR)
 	$(call print_no_args,Applying hooks and adding new code...)
-	$(V)$(ARMIPS) $(HOOKS_BUILD_DIR)/setup.asm $(ARMIPS_ARGS)
+	$(V)$(ARMIPS) $(HOOKS_BUILD_DIR)/setup.asm
 	$(call print_no_args,Success!)
 
 clean:
