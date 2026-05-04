@@ -123,20 +123,20 @@ WARNINGS := -Wall -Wno-multichar -Wno-unknown-pragmas -Wno-strict-aliasing -Wno-
 INCLUDES := -I include -I $(STGZ_DECOMP_DIR)/include -I $(STGZ_DECOMP_DIR)/libs/c/include -I $(STGZ_DECOMP_DIR)/libs/cpp/include -I $(STGZ_DECOMP_DIR)/libs/nitro/include -I $(STGZ_DECOMP_DIR)/libs/nns/include -I $(STGZ_DECOMP_DIR)/libs/runtime/include
 CPP_DEFINES := -DGZ_OVL_ID=114 -DPACKAGE_VERSION='$(PACKAGE_VERSION)' -DPACKAGE_NAME='$(PACKAGE_NAME)' -DPACKAGE_COMMIT_AUTHOR='$(PACKAGE_COMMIT_AUTHOR)' -DPACKAGE_AUTHOR='$(PACKAGE_AUTHOR)' -DVERSION=$(VERSION)
 CFLAGS := -Os -fno-short-enums -fomit-frame-pointer -ffast-math -fno-builtin -fshort-wchar -MMD -MP $(WARNINGS) $(INCLUDES) $(CPP_DEFINES)
-CPP_FLAGS := $(CFLAGS) -fno-rtti -fno-exceptions -fno-threadsafe-statics -std=c++2c
+CPP_FLAGS := $(CFLAGS) -fno-rtti -fno-exceptions -fno-threadsafe-statics -std=c++20
 
 ELF := $(BUILD_DIR)/ovgz.elf
 BIN := $(ELF:.elf=.bin)
 MAP := $(ELF:.elf=.map)
 LD := $(CC)
-LDFLAGS := -T libs/ovgz.ld -Llibs -lst-$(REGION) -Wl,-Map,$(MAP) -specs=nosys.specs -Wl,--gc-sections -Wl,--defsym=OVLGZ_ADDR=$(OVLGZ_ADDR) -Wl,--defsym=OVLGZ_SIZE=$(OVLGZ_SIZE) -Wl,--defsym=RESERVED_SIZE=$(RESERVED_SIZE)
+LDFLAGS := -T libs/ovgz.ld -Llibs -lst-$(REGION) -Wl,-Map,$(MAP) -Wl,--gc-sections -Wl,--defsym=OVLGZ_ADDR=$(OVLGZ_ADDR) -Wl,--defsym=OVLGZ_SIZE=$(OVLGZ_SIZE) -Wl,--defsym=RESERVED_SIZE=$(RESERVED_SIZE)
 OBJCOPY := tools/binutils/arm-none-eabi-objcopy
 
 HOOKS_ELF := $(HOOKS_BUILD_DIR)/hooks.elf
 HOOKS_BIN := $(HOOKS_ELF:.elf=.bin)
 HOOKS_MAP := $(HOOKS_ELF:.elf=.map)
 HOOKS_LD := $(CC)
-HOOKS_LDFLAGS := -T hooks/hooks.ld -Llibs -lst-$(REGION) -lgz -specs=nosys.specs -Wl,--gc-sections
+HOOKS_LDFLAGS := -T hooks/hooks.ld -Llibs -lst-$(REGION) -lgz -Wl,--gc-sections
 
 HOOKS_GAME_ELF := $(HOOKS_BUILD_DIR)/game.elf
 HOOKS_GAME_BIN := $(HOOKS_GAME_ELF:.elf=.bin)
