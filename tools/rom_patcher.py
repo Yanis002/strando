@@ -242,9 +242,11 @@ class HooksConfig:
 
                 if "bl" in yaml_file["instructions"]:
                     parse_bl(yaml_file["instructions"]["bl"], False)
-                elif "blx" in yaml_file["instructions"]:
+
+                if "blx" in yaml_file["instructions"]:
                     parse_bl(yaml_file["instructions"]["blx"], True)
-                elif "nop" in yaml_file["instructions"]:
+
+                if "nop" in yaml_file["instructions"]:
                     for to_addr in yaml_file["instructions"]["nop"]:
                         instrs.append(Instruction(int(to_addr, base=16), None))
 
