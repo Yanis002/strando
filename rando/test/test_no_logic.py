@@ -9,8 +9,7 @@ import time
 import yaml
 
 from dataclasses import dataclass
-from ndspy import lz10 as LZSS
-from ndspy import narc
+from ndspy import lz10 as LZSS, narc
 from pathlib import Path
 from rando.constants import ItemId, ItemKind, ItemWeight, item_id_to_name, item_name_to_id, shop_actor_ids, max_keys_map, shop_item_positions
 
@@ -178,24 +177,24 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.SnowGlyph, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.OceanGlyph, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.FireGlyph, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Unk_25, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.Unk_26, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.Unk_27, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.Unk_28, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.Unk_29, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.Unk_25, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.Unk_26, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.Unk_27, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.Unk_28, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.Unk_29, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.FinalTrack, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Unk_31, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.Unk_32, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.Unk_33, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.Unk_34, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.Unk_31, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.Unk_32, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.Unk_33, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.Unk_34, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.ForceGem_35, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_36, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_37, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.RecruitUniform, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.PostmasterLetter, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.HeartContainer, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.QuiverMedium, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.BombBagMedium, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.QuiverMedium, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.BombBagMedium, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_43, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_44, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_45, ItemKind.Default, ItemWeight.Priority),
@@ -242,9 +241,9 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.ArrowsRefill, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.BombsRefill, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.SoldOutSign, ItemKind.Default, ItemWeight.Normal), # doesn't crash but buggy graphics
-    ItemDef(ItemId.AncientShield, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.QuiverLarge, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.BombBagLarge, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.AncientShield, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.QuiverLarge, ItemKind.Default, ItemWeight.Priority),
+    ItemDef(ItemId.BombBagLarge, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.RandCommonTreasure, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.RandUncommonTreasure, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.RandRareTreasure, ItemKind.Default, ItemWeight.Normal),
@@ -607,18 +606,32 @@ def get_random_itemdef(is_shop: bool):
     prio_length = len(priority_item_pool)
     normal_length = len(normal_item_pool)
 
-    # each list is shuffled and we pick a random item as an attempt to create more randomness
+    weights = {
+        ItemWeight.Progressive: 10,
+        ItemWeight.Priority: 30,
+        ItemWeight.Normal: 60,
+    }
+
+    if is_shop:
+        # since there's 5 items in shops...
+        weights[ItemWeight.Progressive] = 2
+
+    available = [ItemWeight.Normal] # normal items are always available
     if prog_length > 0:
-        index = 0 if (prog_length - 1) <= 1 else random.randint(1, prog_length - 1)
-        item_def = progressive_item_pool.pop(index)
-        # print("picked progression item!")
-    elif prio_length > 0:
-        index = 0 if (prio_length - 1) <= 1 else random.randint(1, prio_length - 1)
-        item_def = priority_item_pool.pop(index)
-        # print("picked priority item!")
-    else:
-        item_def = normal_item_pool[random.randint(1, normal_length - 1)]
-        # print("picked normal item!")
+        available.append(ItemWeight.Progressive)
+    if prio_length > 0:
+        available.append(ItemWeight.Priority)
+
+    chosen_weight = [weights[cat] for cat in available]
+    category = random.choices(available, weights=chosen_weight, k=1)[0]
+
+    match category:
+        case ItemWeight.Progressive:
+            item_def = progressive_item_pool.pop(random.randrange(prog_length))
+        case ItemWeight.Priority:
+            item_def = priority_item_pool.pop(random.randrange(prio_length))
+        case ItemWeight.Normal:
+            item_def = random.choice(normal_item_pool)
 
     # prevent a crash with shops
     if is_shop and item_def.is_random_treasure():
@@ -632,8 +645,45 @@ def get_random_itemdef(is_shop: bool):
     return item_def
 
 
-def get_random_item(is_shop: bool = False):
-    return get_random_itemdef(is_shop).id
+def assign_items(nodes: list[LocationNode]):
+    all_locations: list[LocationDef] = []
+
+    # shuffle nodes, fetch locations and shuffle that list
+    random.shuffle(nodes)
+    for node in nodes:
+        assert len(node.locations) > 0
+        all_locations.extend(node.locations)
+    random.shuffle(all_locations)
+
+    # shuffle prog pool
+    random.shuffle(progressive_item_pool)
+    prog_pool = progressive_item_pool[:]
+
+    # shuffle prio pool
+    random.shuffle(priority_item_pool)
+    prio_pool = priority_item_pool[:]
+
+    # shuffle normal pool
+    random.shuffle(normal_item_pool)
+    misc_pool = normal_item_pool[:]
+
+    item_pool = prog_pool + prio_pool + misc_pool
+    random.shuffle(item_pool)
+
+    for loc in all_locations:
+        size = 5 if "Shop Keeper" in loc.name else 1
+
+        while len(loc.items) < size:
+            if len(item_pool) > 0:
+                picked_item = random.choice(item_pool)
+                item_pool.remove(picked_item)
+            else:
+                picked_item = random.choice(misc_pool)
+
+            loc.items.append(picked_item)
+
+    assert len(item_pool) == 0
+    nodes.sort(key=lambda entry: entry.name)
 
 
 def get_offset(data: bytes, magic: bytes):
@@ -643,33 +693,7 @@ def get_offset(data: bytes, magic: bytes):
         return None
 
 
-def assign_items(nodes: list[LocationNode]):
-    all_locations: list[LocationDef] = []
-
-    random.shuffle(progressive_item_pool)
-    random.shuffle(priority_item_pool)
-    random.shuffle(normal_item_pool)
-    random.shuffle(nodes)
-
-    for node in nodes:
-        assert len(node.locations) > 0
-        all_locations.extend(node.locations)
-
-    # assign the items randomly
-    random.shuffle(all_locations)
-    for loc_def in all_locations:
-        if "Shop Keeper" in loc_def.name:
-            for _ in range(5):
-                loc_def.items.append(get_random_itemdef(True))
-        else:
-            loc_def.items.append(get_random_itemdef(False))
-
-    nodes.sort(key=lambda entry: entry.name)
-
-
-def patch_rom(base_dir: Path, nodes: list[LocationNode], seed: str):
-    spoiler_log = SeedLog(Path("output/spoiler.yaml"), seed)
-
+def patch_rom(base_dir: Path, nodes: list[LocationNode]):
     languages = [
         "English",
         "French",
@@ -745,8 +769,14 @@ def patch_rom(base_dir: Path, nodes: list[LocationNode], seed: str):
             archive.setFileByName(zmb_filename, zmb_data)
             LZSS.compressToFile(archive.save(), lzss_path)
 
-        spoiler_log.entries.append(SeedLogEntry(node))
         print(f"({(i / (len(nodes) - 1)) * 100:.2f}%) Processed", node.name)
+
+
+def create_log(nodes: list[LocationNode], seed: str):
+    spoiler_log = SeedLog(Path("output/spoiler.yaml"), seed)
+
+    for node in nodes:
+        spoiler_log.entries.append(SeedLogEntry(node))
 
     spoiler_log.export()
 
@@ -778,7 +808,10 @@ def main():
     print(f"Item assigned successfully in {time.time() - prev_time:.3f}s!")
 
     # 3. update the rom files
-    patch_rom(base_dir, nodes, seed)
+    patch_rom(base_dir, nodes)
+
+    # 4. generate spoiler log
+    create_log(nodes, seed)
 
     print(f"Seed {seed} was generated successfully in {time.time() - initial_time:.3f}s!")
 
