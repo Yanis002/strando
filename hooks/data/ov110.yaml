@@ -1,0 +1,6 @@
+instructions:
+  bl:
+    ItemGiveImpl: ['0x021858F4']
+
+constants:
+  gBMGMap: ['0x02185DB0']

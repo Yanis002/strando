@@ -1,0 +1,11 @@
+instructions:
+  bl:
+    _ZN14CustomShopItem16GetShopItemPriceEv: ['0x0211CDF4', '0x0211CE3C', '0x0211CE64', '0x0211CE8C', '0x0211CEB4', '0x0211CEDC']
+    _ZN14CustomShopItem15SetShopItemTextEv: ['0x0211A4F0']
+    _ZN14CustomShopItem21Custom_ov036_0211d0a8Ev: ['0x0211A3C0']
+    _ZN14CustomShopItem6CanBuyEv: ['0x021197DC']
+    _ZN14CustomShopItem3BuyEi: ['0x02119C8C', '0x02119F6C']
+  nop: ['0x0211A518']
+
+constants:
+  _ZN14CustomShopItem13GetShopItemIdEi: ['0x0212185C', '0x02121A78', '0x02121C94', '0x02121EB0', '0x021220CC', '0x02122314']

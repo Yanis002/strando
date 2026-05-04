@@ -1,0 +1,4 @@
+instructions:
+  bl:
+    _ZN22CustomMapObjectUnkWDST11TryItemGiveEv: ['0x02171F34']
+  nop: ['0x02172078']

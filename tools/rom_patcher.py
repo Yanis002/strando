@@ -15,6 +15,17 @@ EXTRACTED_DIR = Path("extract")
 INDENT = " " * 4
 
 
+# from https://github.com/yaml/pyyaml/issues/127#issuecomment-525800484
+class MyDumper(yaml.SafeDumper):
+    # HACK: insert blank lines between top-level objects
+    # inspired by https://stackoverflow.com/a/44284819/3786245
+    def write_line_break(self, data=None):
+        super().write_line_break(data)
+
+        if len(self.indents) == 1:
+            super().write_line_break()
+
+
 @dataclass
 class Symbol:
     name: str
@@ -33,7 +44,9 @@ class Symbol:
                 found = True
                 break
 
-        assert line is not None and found, "symbol not found!"
+        if line is None or not found:
+            raise ValueError("symbol not found!")
+
         return Symbol(name, int(line.split(" ")[0], base=16))
 
     def to_asm(self):
@@ -188,18 +201,6 @@ class HooksConfig:
     hooks_game_addr: int
 
     def __post_init__(self):
-        sym_get_shop_item_price = Symbol.new(
-            "_ZN14CustomShopItem16GetShopItemPriceEv", self.elf_path
-        )
-        sym_get_shop_item_id = Symbol.new(
-            "_ZN14CustomShopItem13GetShopItemIdEi", self.elf_path
-        )
-        sym_buy_shop_item = Symbol.new("_ZN14CustomShopItem3BuyEi", self.elf_path)
-        sym_cs_item = Symbol.new("GiveItemDuringCS", self.elf_path)
-        sym_freestanding_itemgive = Symbol.new(
-            "_ZN23CustomFreestandingActor11TryItemGiveEv", self.elf_path
-        )
-
         self.hook_list = [
             Hook(
                 "itcm",
@@ -215,111 +216,121 @@ class HooksConfig:
                 ],
                 [IncBin(self.hooks_game_addr, 0x390, self.hooks_game_bin)],
             ),
-            Hook(
-                "ov000",
-                [
-                    Instruction(0x0206111C, Symbol.new("Custom_02014995", self.elf_path)),
-                ],
-                [
-                    Constant(0x020A4C0C, Symbol.new("gGetItemMap", self.elf_path)),
-                    Constant(0x02061268, Symbol.new("Custom_02014995", self.elf_path)),
-                ],
-            ),
-            Hook(
-                "ov018",
-                [
-                    Instruction(0x020C4DD0, Symbol.new("GZ_InitHook", self.hook_elf_path)),
-                ],
-            ),
-            Hook(
-                "ov031",
-                list(),
-                [
-                    Constant(0x020D9840, Symbol.new("CustomTryItemGive", self.elf_path)),
-                ],
-            ),
-            Hook(
-                "ov036",
-                [
-                    Instruction(0x0211CDF4, sym_get_shop_item_price),
-                    Instruction(0x0211CE3C, sym_get_shop_item_price),
-                    Instruction(0x0211CE64, sym_get_shop_item_price),
-                    Instruction(0x0211CE8C, sym_get_shop_item_price),
-                    Instruction(0x0211CEB4, sym_get_shop_item_price),
-                    Instruction(0x0211CEDC, sym_get_shop_item_price),
-                    Instruction(
-                        0x0211A4F0,
-                        Symbol.new("_ZN14CustomShopItem15SetShopItemTextEv", self.elf_path),
-                    ),
-                    Instruction(0x0211A518, None),
-                    Instruction(
-                        0x0211A3C0,
-                        Symbol.new(
-                            "_ZN14CustomShopItem21Custom_ov036_0211d0a8Ev", self.elf_path
-                        ),
-                    ),
-                    Instruction(
-                        0x021197DC, Symbol.new("_ZN14CustomShopItem6CanBuyEv", self.elf_path)
-                    ),
-                    Instruction(0x02119C8C, sym_buy_shop_item),
-                    Instruction(0x02119F6C, sym_buy_shop_item),
-                ],
-                [
-                    Constant(0x0212185C, sym_get_shop_item_id),
-                    Constant(0x02121A78, sym_get_shop_item_id),
-                    Constant(0x02121C94, sym_get_shop_item_id),
-                    Constant(0x02121EB0, sym_get_shop_item_id),
-                    Constant(0x021220CC, sym_get_shop_item_id),
-                    Constant(0x02122314, sym_get_shop_item_id),
-                ],
-            ),
-            Hook(
-                "ov070",
-                list(),
-                [
-                    Constant(0x0214EB64, sym_freestanding_itemgive),
-                ],
-            ),
-            Hook(
-                "ov071",
-                list(),
-                [
-                    Constant(0x02164CF0, sym_freestanding_itemgive),
-                ],
-            ),
-            Hook(
-                "ov077",
-                [
-                    Instruction(
-                        0x0215AE78,
-                        Symbol.new("_ZN15CustomMapObject13KillMapObjectEv", self.elf_path),
-                    )
-                ],
-            ),
-            Hook(
-                "ov088",
-                [
-                    Instruction(0x02165D80, sym_cs_item),
-                    Instruction(0x02165D98, sym_cs_item),
-                    Instruction(0x02166EC0, sym_cs_item),
-                ],
-            ),
-            Hook(
-                "ov094",
-                [
-                    Instruction(
-                        0x02171F34,
-                        Symbol.new("_ZN22CustomMapObjectUnkWDST11TryItemGiveEv", self.elf_path),
-                    ),
-                    Instruction(0x02172078, None),
-                ],
-            ),
-            Hook(
-                "ov110",
-                [Instruction(0x021858F4, Symbol.new("ItemGiveImpl", self.elf_path))],
-                [Constant(0x02185DB0, Symbol.new("gBMGMap", self.elf_path))],
-            ),
-        ]
+        ] + self.from_yaml()
+
+    def from_yaml(self):
+        data_dir = Path("hooks/data").resolve()
+        assert data_dir.exists()
+
+        hook_list: list[Hook] = []
+        for yaml_path in data_dir.rglob("*.yaml"):
+            with yaml_path.open("r") as file:
+                yaml_file: dict = yaml.safe_load(file)
+
+            def get_sym(in_sym: str):
+                try:
+                    return Symbol.new(in_sym, self.elf_path)
+                except ValueError:
+                    return Symbol.new(in_sym, self.hook_elf_path)
+
+            instrs: list[Instruction] = []
+            if "instructions" in yaml_file:
+                def parse_bl(data: dict, is_blx: bool):
+                    for target_sym, to_addrs in data.items():
+                        for to_addr in to_addrs:
+                            instrs.append(Instruction(int(to_addr, base=16), get_sym(target_sym), is_blx))
+
+                if "bl" in yaml_file["instructions"]:
+                    parse_bl(yaml_file["instructions"]["bl"], False)
+                elif "blx" in yaml_file["instructions"]:
+                    parse_bl(yaml_file["instructions"]["blx"], True)
+                elif "nop" in yaml_file["instructions"]:
+                    for to_addr in yaml_file["instructions"]["nop"]:
+                        instrs.append(Instruction(int(to_addr, base=16), None))
+
+            consts: list[Constant] = []
+            if "constants" in yaml_file:
+                for target_sym, to_addrs in yaml_file["constants"].items():
+                    for to_addr in to_addrs:
+                        sym = int(target_sym, base=16) if target_sym.startswith("0x") else get_sym(target_sym)
+                        consts.append(Constant(int(to_addr, base=16), sym))
+
+            incbins: list[IncBin] = []
+            if "incbins" in yaml_file:
+                for data in yaml_file["incbins"]:
+                    for at_addr, infos in data.items():
+                        incbins.append(IncBin(int(at_addr, base=16), int(infos["size"], base=16), Path(infos["path"])))
+
+            hook_list.append(Hook(yaml_path.stem, instrs, consts, incbins))
+
+        return hook_list
+
+    def to_yaml(self):
+        # unused function but keeping it anyway
+
+        for hook in self.hook_list:
+            yaml_file = {}
+
+            if len(hook.instrs) > 0:
+                yaml_file["instructions"] = {}
+
+            for instr in hook.instrs:
+                if instr.new_sym is not None:
+                    sym = instr.new_sym.name
+
+                    if instr.is_blx:
+                        kind = "blx"
+                    else:
+                        kind = "bl"
+                else:
+                    sym = "None"
+                    kind = "nop"
+
+                at = f"0x{instr.at_addr:08X}"
+
+                if kind == "nop":
+                    if kind not in yaml_file["instructions"]:
+                        yaml_file["instructions"][kind] = []
+
+                    yaml_file["instructions"][kind].append(at)
+                else:
+                    if kind not in yaml_file["instructions"]:
+                        yaml_file["instructions"][kind] = {}
+
+                    if sym not in yaml_file["instructions"][kind]:
+                        yaml_file["instructions"][kind][sym] = []
+
+                    yaml_file["instructions"][kind][sym].append(at)
+
+            if len(hook.constants) > 0:
+                yaml_file["constants"] = {}
+
+            for const in hook.constants:
+                if isinstance(const.new_sym, Symbol):
+                    sym = const.new_sym.name
+                else:
+                    sym = f"0x{const.new_sym:08X}"
+
+                if sym not in yaml_file["constants"]:
+                    yaml_file["constants"][sym] = []
+
+                yaml_file["constants"][sym].append(f"0x{const.at_addr:08X}")
+
+            if len(hook.incbins) > 0: 
+                yaml_file["incbins"] = []
+
+            for incbin in hook.incbins:
+                yaml_file["incbins"].append(
+                    {
+                        f"0x{incbin.at_addr:08X}": {
+                            "path": str(incbin.path),
+                            "size": f"0x{incbin.size:02X}",
+                        }
+                    }
+                )
+
+            with open(Path(f"hook_defs/{hook.module}.yaml"), "w", encoding="utf-8") as file:
+                yaml.dump(yaml_file, file, sort_keys=False, Dumper=MyDumper, default_flow_style=None, width=130)
 
     def get_ovl_list(self):
         ovl_list: list[int] = []

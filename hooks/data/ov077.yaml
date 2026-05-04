@@ -1,0 +1,3 @@
+instructions:
+  bl:
+    _ZN15CustomMapObject13KillMapObjectEv: ['0x0215AE78']

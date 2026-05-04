@@ -1,0 +1,7 @@
+instructions:
+  bl:
+    Custom_02014995: ['0x0206111C']
+
+constants:
+  gGetItemMap: ['0x020A4C0C']
+  Custom_02014995: ['0x02061268']

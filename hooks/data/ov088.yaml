@@ -1,0 +1,3 @@
+instructions:
+  bl:
+    GiveItemDuringCS: ['0x02165D80', '0x02165D98', '0x02166EC0']
