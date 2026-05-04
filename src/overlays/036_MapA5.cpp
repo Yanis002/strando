@@ -51,26 +51,7 @@ ItemId CustomShopItem::GetShopItemId(ShopItemPosition itemPos) {
         case ShopItemPosition_TopRight:
         case ShopItemPosition_BottomLeft:
         case ShopItemPosition_BottomRight:
-            item = actorParams[itemPos];
-
-            // items with no model
-            switch (item) {
-                case ItemId_Nothing:
-                case ItemId_9:
-                case ItemId_31:
-                case ItemId_32:
-                case ItemId_33:
-                case ItemId_34:
-                case ItemId_RandCommonTreasure:
-                case ItemId_RandUncommonTreasure:
-                case ItemId_RandRareTreasure:
-                case ItemId_RandLegendaryTreasure:
-                    return ItemId_SoldOutSign;
-                default:
-                    break;
-            }
-
-            return GetProgressiveItemId(item);
+            return GetProgressiveItemId(actorParams[itemPos]);
         default:
             break;
     }

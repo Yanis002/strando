@@ -260,7 +260,7 @@ item_id_to_name = {
     0x1E: "Final Track",
     0x1F: "Spirit Train",
     0x20: "Train's Cannon",
-    0x21: "Unk 33",
+    0x21: "Spirit Train's Car",
     0x22: "Train's Wagon",
     0x23: "Force Gem 35",
     0x24: "Force Gem 36",

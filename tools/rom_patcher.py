@@ -14,6 +14,39 @@ CONFIG_DIR = Path("resources/decomp/config").resolve()
 EXTRACTED_DIR = Path("extract")
 INDENT = " " * 4
 
+# dummy item based on force gems, we basically are copy pasting the thing and just changing the palette
+# TODO: make a proper implementation?
+DUMMY = f""".open "../../../extract/VERSION/files/Player/get/frcY.nsbmd", "../../../extract/VERSION/files/Player/get/dumy.nsbmd", 0x0
+.close
+
+.open "../../../extract/VERSION/files/Player/get/frcY.nsbtx", "../../../extract/VERSION/files/Player/get/dumy.nsbtx", 0x0
+    .org 0x5C
+        .area 0x04
+        .word 0x0000007F
+        .endarea
+
+    .org 0x124
+        .area 0x04
+        .word 0x58284847
+        .endarea
+
+    .org 0x128
+        .area 0x04
+        .word 0x64296029
+        .endarea
+
+    .org 0x12C
+        .area 0x04
+        .word 0x6C8C6C4A
+        .endarea
+
+    .org 0x130
+        .area 0x04
+        .word 0x6DF36D0F
+        .endarea
+.close
+"""
+
 
 # from https://github.com/yaml/pyyaml/issues/127#issuecomment-525800484
 class MyDumper(yaml.SafeDumper):
@@ -371,7 +404,7 @@ class HooksConfig:
             "\n".join(hook.to_asm(self.version) for hook in self.hook_list) + "\n",
         ]
 
-        return "\n".join(lines)
+        return "\n".join(lines) + DUMMY.replace("VERSION", self.version)
 
 
 def check_code_size(bin_path: Path, max_size: int, kind: str):

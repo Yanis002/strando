@@ -7,8 +7,10 @@
 #include <Save/AdventureFlags.hpp>
 #include <types.h>
 
+#define GIModel_dummy 'dumy'
+
 u32 gGetItemMap[] = {
-    GIModel_None, // ItemId_Nothing
+    GIModel_dummy, // ItemId_Nothing
     GIModel_shdA, // ItemId_NormalShield
     GIModel_swdA, // ItemId_NormalSword
     GIModel_trnd, // ItemId_Whirlwind
@@ -17,7 +19,7 @@ u32 gGetItemMap[] = {
     GIModel_bmrn, // ItemId_Boomerang
     GIModel_whip, // ItemId_Whip
     GIModel_srod, // ItemId_SandRod
-    GIModel_None, // ItemId_9
+    GIModel_dummy, // ItemId_9
     GIModel_keyN, // ItemId_NormalKey
     GIModel_keyB, // ItemId_BossKey
     GIModel_rupG, // ItemId_GreenRupee
@@ -39,10 +41,10 @@ u32 gGetItemMap[] = {
     GIModel_litD, // ItemId_28
     GIModel_litC, // ItemId_29
     GIModel_litA, // ItemId_FinalTrack
-    GIModel_None, // ItemId_31
-    GIModel_None, // ItemId_32
-    GIModel_None, // ItemId_33
-    GIModel_None, // ItemId_34
+    GIModel_dummy, // ItemId_31
+    GIModel_dummy, // ItemId_32
+    GIModel_dummy, // ItemId_33
+    GIModel_dummy, // ItemId_34
     GIModel_frcY, // ItemId_ForceGem_35
     GIModel_frcY, // ItemId_ForceGem_36
     GIModel_frcY, // ItemId_ForceGem_37
@@ -100,10 +102,10 @@ u32 gGetItemMap[] = {
     GIModel_shdB, // ItemId_AncientShield
     GIModel_apdL, // ItemId_QuiverLarge
     GIModel_bmbL, // ItemId_BombBagLarge
-    GIModel_None, // ItemId_RandCommonTreasure
-    GIModel_None, // ItemId_RandUncommonTreasure
-    GIModel_None, // ItemId_RandRareTreasure
-    GIModel_None, // ItemId_RandLegendaryTreasure
+    GIModel_dummy, // ItemId_RandCommonTreasure
+    GIModel_dummy, // ItemId_RandUncommonTreasure
+    GIModel_dummy, // ItemId_RandRareTreasure
+    GIModel_dummy, // ItemId_RandLegendaryTreasure
     GIModel_szku, // ItemId_TearLight
     GIModel_Lcmp, // ItemId_LightCompass
     GIModel_makA, // ItemId_ScrollSpinAttack
