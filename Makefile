@@ -198,9 +198,9 @@ endif
 ifeq ("$(wildcard $(ARMIPS_DIR))", "")
 	$(error armips not found!)
 else
-ifeq ("$(wildcard $(ARMIPS_DIR)/out)", "")
+ifeq ("$(wildcard $(ARMIPS_DIR)/out/armips)", "")
 	$(call print_no_args,Building armips...)
-	$(V)$(MKDIR) $(ARMIPS_DIR)/out && cd $(ARMIPS_DIR)/out && $(CMAKE) -DCMAKE_BUILD_TYPE=Release .. && $(CMAKE) --build .
+	$(V)$(MKDIR) -p $(ARMIPS_DIR)/out && cd $(ARMIPS_DIR)/out && $(CMAKE) -DCMAKE_BUILD_TYPE=Release .. && $(CMAKE) --build .
 endif
 endif
 	$(call print_no_args,Building PPF3 tools...)
