@@ -1,2 +1,6 @@
+instructions:
+  bl:
+    _ZN11CustomRupee21Custom_ov031_020e9068Ev: ['0x020E9A84', '0x020E9FC0']
 constants:
   CustomTryItemGive: ['0x020D9840']
+  _ZN11CustomRupee8ItemGiveEv: ['0x021135B0']

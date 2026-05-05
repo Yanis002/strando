@@ -4,7 +4,7 @@ settings:
         shop_sanity: 5
 
         # true/false (vanilla: false)
-        rupee_sanity: false
+        rupee_sanity: true
 
         # - remove (disables passenger quests)
         # - vanilla (default start location, gives item when reached destination)

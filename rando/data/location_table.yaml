@@ -1759,3 +1759,283 @@ Woodland Sanctuary Stamp Station:
   is_mapobj: true
   room_index: 0
   scene: f_forest2
+
+Desert Temple B1 Rupee NW Top Left:
+  id_hash: RUPE_0x0070_0x0060
+  is_actor: true
+  room_index: 3
+  scene: d_sand
+  settings: [rupee_sanity]
+
+Desert Temple B1 Rupee NW Bottom Left:
+  id_hash: RUPE_0x0080_0x0080
+  is_actor: true
+  room_index: 3
+  scene: d_sand
+  settings: [rupee_sanity]
+
+Desert Temple B1 Rupee NW Middle:
+  id_hash: RUPE_0x00A0_0x0060
+  is_actor: true
+  room_index: 3
+  scene: d_sand
+  settings: [rupee_sanity]
+
+Desert Temple B1 Rupee NW Bottom Right:
+  id_hash: RUPE_0x00C0_0x0080
+  is_actor: true
+  room_index: 3
+  scene: d_sand
+  settings: [rupee_sanity]
+
+Ends of the Earth Station Rupee W Left:
+  id_hash: RUPE_0x0190_0x01D0
+  is_actor: true
+  room_index: 0
+  scene: f_kakushi3
+  settings: [rupee_sanity]
+
+Ends of the Earth Station Rupee W Right:
+  id_hash: RUPE_0x01A0_0x01E0
+  is_actor: true
+  room_index: 0
+  scene: f_kakushi3
+  settings: [rupee_sanity]
+
+Ends of the Earth Station Rupee E Left:
+  id_hash: RUPE_0x0230_0x01C0
+  is_actor: true
+  room_index: 0
+  scene: f_kakushi3
+  settings: [rupee_sanity]
+
+Ends of the Earth Station Rupee E Mid:
+  id_hash: RUPE_0x0240_0x01A0
+  is_actor: true
+  room_index: 0
+  scene: f_kakushi3
+  settings: [rupee_sanity]
+
+Ends of the Earth Station Rupee E Right:
+  id_hash: RUPE_0x0250_0x01B0
+  is_actor: true
+  room_index: 0
+  scene: f_kakushi3
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee NW Left (A):
+  id_hash: RUPE_0x00B0_0x0090
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee NW Right (B):
+  id_hash: RUPE_0x00E0_0x0080
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee W Near Train (C):
+  id_hash: RUPE_0x00F0_0x01A0
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee By Left Stairs Left (D):
+  id_hash: RUPE_0x01A0_0x0100
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee N Left (E):
+  id_hash: RUPE_0x01B0_0x0070
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee By Left Stairs Right (F):
+  id_hash: RUPE_0x01E0_0x0100
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee S (G):
+  id_hash: RUPE_0x01F0_0x0230
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee N Middle (H):
+  id_hash: RUPE_0x0220_0x0080
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee By Right Stairs Bottom (I):
+  id_hash: RUPE_0x0260_0x0160
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee S By Small Island (J):
+  id_hash: RUPE_0x0260_0x01E0
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee By Right Stairs Top (K):
+  id_hash: RUPE_0x0280_0x00F0
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee N Right (L):
+  id_hash: RUPE_0x02A0_0x0080
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee NE Left (M):
+  id_hash: RUPE_0x02E0_0x0080
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee NE Middle (N):
+  id_hash: RUPE_0x0340_0x00A0
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee NE Right (O):
+  id_hash: RUPE_0x0370_0x0080
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee E Top (P):
+  id_hash: RUPE_0x0380_0x0100
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee E Middle (Q):
+  id_hash: RUPE_0x03A0_0x0160
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Dune Sanctuary Rupee E Bottom (R):
+  id_hash: RUPE_0x03A0_0x0190
+  is_actor: true
+  room_index: 0
+  scene: f_sand
+  settings: [rupee_sanity]
+
+Papuzia Village NW Island Rupee 1:
+  id_hash: RUPE_0x0070_0x0090
+  is_actor: true
+  room_index: 0
+  scene: f_water3
+  settings: [rupee_sanity]
+
+Papuzia Village NW Island Rupee 2:
+  id_hash: RUPE_0x0070_0x00C0
+  is_actor: true
+  room_index: 0
+  scene: f_water3
+  settings: [rupee_sanity]
+
+Papuzia Village NW Island Rupee 3:
+  id_hash: RUPE_0x0090_0x0080
+  is_actor: true
+  room_index: 0
+  scene: f_water3
+  settings: [rupee_sanity]
+
+Papuzia Village NW Island Rupee 4:
+  id_hash: RUPE_0x0090_0x00A0
+  is_actor: true
+  room_index: 0
+  scene: f_water3
+  settings: [rupee_sanity]
+
+Papuzia Village NW Island Rupee 5:
+  id_hash: RUPE_0x00B0_0x00B0
+  is_actor: true
+  room_index: 0
+  scene: f_water3
+  settings: [rupee_sanity]
+
+Papuzia Village NW Island Rupee 6:
+  id_hash: RUPE_0x00C0_0x0090
+  is_actor: true
+  room_index: 0
+  scene: f_water3
+  settings: [rupee_sanity]
+
+Papuzia Village NW Island Rupee 7:
+  id_hash: RUPE_0x00D0_0x0070
+  is_actor: true
+  room_index: 0
+  scene: f_water3
+  settings: [rupee_sanity]
+
+Papuzia Village NW Island Rupee 8:
+  id_hash: RUPE_0x0120_0x0070
+  is_actor: true
+  room_index: 0
+  scene: f_water3
+  settings: [rupee_sanity]
+
+Papuzia Village NW Island Rupee 9:
+  id_hash: RUPE_0x0120_0x0090
+  is_actor: true
+  room_index: 0
+  scene: f_water3
+  settings: [rupee_sanity]
+
+Papuzia Village Centre Island Rupee 1:
+  id_hash: RUPE_0x01E0_0x0130
+  is_actor: true
+  room_index: 0
+  scene: f_water3
+  settings: [rupee_sanity]
+
+Papuzia Village Centre Island Rupee 2:
+  id_hash: RUPE_0x01E0_0x01B0
+  is_actor: true
+  room_index: 0
+  scene: f_water3
+  settings: [rupee_sanity]
+
+Papuzia Village Centre Island Rupee 3:
+  id_hash: RUPE_0x0200_0x0120
+  is_actor: true
+  room_index: 0
+  scene: f_water3
+  settings: [rupee_sanity]
+
+Papuzia Village Centre Island Rupee 4:
+  id_hash: RUPE_0x0200_0x0160
+  is_actor: true
+  room_index: 0
+  scene: f_water3
+  settings: [rupee_sanity]

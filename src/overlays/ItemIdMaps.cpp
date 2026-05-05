@@ -351,8 +351,8 @@ u16 gAdvFlagMap[] = {
     RandoAdventureFlag_LokomoSword, // ItemId_LokomoSword
     RandoAdventureFlag_TenPriceCard, // ItemId_TenPriceCard
     RandoAdventureFlag_RedPotion, // ItemId_RedPotion
-    RandoAdventureFlag_PurplePotion, // ItemId_PurplePotion
-    RandoAdventureFlag_YellowPotion, // ItemId_YellowPotion
+    AdventureFlag_Nothing, // ItemId_PurplePotion
+    AdventureFlag_Nothing, // ItemId_YellowPotion
     RandoAdventureFlag_DemonFossil, // ItemId_DemonFossil
     RandoAdventureFlag_StalfosSkull, // ItemId_StalfosSkull
     RandoAdventureFlag_StarFragment, // ItemId_StarFragment
@@ -369,8 +369,8 @@ u16 gAdvFlagMap[] = {
     RandoAdventureFlag_AncientCoin, // ItemId_AncientCoin
     RandoAdventureFlag_PricelessStone, // ItemId_PricelessStone
     RandoAdventureFlag_RegalRing, // ItemId_RegalRing
-    RandoAdventureFlag_ArrowsRefill, // ItemId_ArrowsRefill
-    RandoAdventureFlag_BombsRefill, // ItemId_BombsRefill
+    AdventureFlag_Nothing, // ItemId_ArrowsRefill
+    AdventureFlag_Nothing, // ItemId_BombsRefill
     RandoAdventureFlag_SoldOutSign, // ItemId_SoldOutSign
     RandoAdventureFlag_AncientShield, // ItemId_AncientShield
     RandoAdventureFlag_QuiverLarge, // ItemId_QuiverLarge

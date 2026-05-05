@@ -1,6 +1,7 @@
 #include "036_MapA5.hpp"
 #include "ItemIdMaps.hpp"
 #include "gz.hpp"
+#include "settings.hpp"
 
 #include <Actor/ActorUnkSHIT.hpp>
 #include <Item/Item.hpp>
@@ -23,6 +24,13 @@ enum ShopItemPosition_ {
     ShopItemPosition_BottomRight,
 };
 
+extern "C" ItemId _ZN12ActorUnkCAMY19func_ov036_0211b148Ev(ActorUnkSHIT* thisx, ShopItemPosition itemPos);
+extern "C" ItemId _ZN12ActorUnkFOMY19func_ov036_0211b420Ev(ActorUnkSHIT* thisx, ShopItemPosition itemPos);
+extern "C" ItemId _ZN12ActorUnkYUKY19func_ov036_0211b6f8Ev(ActorUnkSHIT* thisx, ShopItemPosition itemPos);
+extern "C" ItemId _ZN12ActorUnkWAWY19func_ov036_0211b9e8Ev(ActorUnkSHIT* thisx, ShopItemPosition itemPos);
+extern "C" ItemId _ZN12ActorUnkGORY19func_ov036_0211bcb0Ei(ActorUnkSHIT* thisx, ShopItemPosition itemPos);
+extern "C" ItemId _ZN12ActorUnkTERY19func_ov036_0211c02cEv(ActorUnkSHIT* thisx, ShopItemPosition itemPos);
+
 // generic class since it's gonna be used for each shop keepers:
 // - ActorUnkCAMY::func_ov036_0211b148 - hyrule town shop
 // - ActorUnkFOMY::func_ov036_0211b420 - mayscore shop
@@ -33,7 +41,9 @@ enum ShopItemPosition_ {
 class CustomShopItem : public ActorUnkSHIT {
     CustomShopItem() {}
 
+    ItemId GetDefaultShopItemId(ShopItemPosition itemPos);
     ItemId GetShopItemId(ShopItemPosition itemPos);
+
     u16 GetShopItemPrice(void);
     bool SetShopItemText();
     unk32 Custom_ov036_0211d0a8(void);
@@ -41,9 +51,34 @@ class CustomShopItem : public ActorUnkSHIT {
     void Buy(unk32 param1);
 };
 
+ItemId CustomShopItem::GetDefaultShopItemId(ShopItemPosition itemPos) {
+    switch (this->mpProfile->mActorId) {
+        case ActorId_CAMY:
+            return _ZN12ActorUnkCAMY19func_ov036_0211b148Ev(this, itemPos);
+        case ActorId_FOMY:
+            return _ZN12ActorUnkFOMY19func_ov036_0211b420Ev(this, itemPos);
+        case ActorId_YUKY:
+            return _ZN12ActorUnkYUKY19func_ov036_0211b6f8Ev(this, itemPos);
+        case ActorId_WAWY:
+            return _ZN12ActorUnkWAWY19func_ov036_0211b9e8Ev(this, itemPos);
+        case ActorId_GORY:
+            return _ZN12ActorUnkGORY19func_ov036_0211bcb0Ei(this, itemPos);
+        case ActorId_Beedle:
+            return _ZN12ActorUnkTERY19func_ov036_0211c02cEv(this, itemPos);
+        default:
+            break;
+    }
+
+    return ItemId_SoldOutSign;
+}
+
 ItemId CustomShopItem::GetShopItemId(ShopItemPosition itemPos) {
     u8* actorParams = (u8*)this->mUnk_5C.mParams;
     u8 item;
+
+    if (gSettings.GetShuffleSettings()->shopsanity == 0) {
+        this->GetDefaultShopItemId(itemPos);
+    }
 
     switch (itemPos) {
         case ShopItemPosition_TopLeft:
@@ -51,6 +86,10 @@ ItemId CustomShopItem::GetShopItemId(ShopItemPosition itemPos) {
         case ShopItemPosition_TopRight:
         case ShopItemPosition_BottomLeft:
         case ShopItemPosition_BottomRight:
+            if (itemPos >= gSettings.GetShuffleSettings()->shopsanity) {
+                return this->GetDefaultShopItemId(itemPos);
+            }
+
             return GetProgressiveItemId(actorParams[itemPos]);
         default:
             break;
@@ -318,7 +357,9 @@ unk32 CustomShopItem::Custom_ov036_0211d0a8(void) {
 }
 
 ARM bool CustomShopItem::CanBuy(void) {
-    if (GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[this->mItemId])) {
+    AdventureFlag flag = gAdvFlagMap[this->mItemId];
+
+    if (flag != AdventureFlag_Nothing && GET_FLAG(data_027e09b8->mAdventureFlags, flag)) {
         return false;
     }
 
@@ -326,7 +367,11 @@ ARM bool CustomShopItem::CanBuy(void) {
 }
 
 ARM void CustomShopItem::Buy(unk32 param1) {
-    SET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[this->mItemId]);
+    AdventureFlag flag = gAdvFlagMap[this->mItemId];
+
+    if (flag != AdventureFlag_Nothing) {
+        SET_FLAG(data_027e09b8->mAdventureFlags, flag);
+    }
 
     this->func_ov036_0211d570(param1);
 }

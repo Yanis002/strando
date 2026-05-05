@@ -120,6 +120,10 @@ class Settings {
   public:
     Settings();
 
+    ShuffleSettings* GetShuffleSettings() { return &this->mShuffle; }
+    ShuffleDungeonSettings* GetShuffleDungeonSettings() { return &this->mShuffleDgn; }
+    GoalSettings* GetGoalSettings() { return &this->mGoal; }
+
     static size_t Sizeof() {
         // right now this is sizeof(Settings) but just in case we need more game-specific fields in the future
         return sizeof(u32) + sizeof(ShuffleSettings) + sizeof(ShuffleDungeonSettings) + sizeof(GoalSettings);

@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from ndspy import lz10 as LZSS, narc
 from pathlib import Path
 from rando.constants import ItemId, ItemKind, ItemWeight, item_id_to_name, item_name_to_id, shop_actor_ids, max_keys_map, shop_item_positions
+from rando.test.settings import Settings, LocationSettings
 
 
 # from https://github.com/yaml/pyyaml/issues/127#issuecomment-525800484
@@ -152,9 +153,54 @@ class ItemDef:
         return self.id >= ItemId.RandCommonTreasure and self.id <= ItemId.RandLegendaryTreasure
 
 
+shop_item_map = {
+    "GORY": [
+        ItemDef(ItemId.BombsRefill, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.YellowPotion, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.PurplePotion, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.NormalShield, ItemKind.Default, ItemWeight.Priority),
+        ItemDef(ItemId.TenPriceCard, ItemKind.Default, ItemWeight.Priority),
+    ],
+    "YUKY": [
+        ItemDef(ItemId.NormalShield, ItemKind.Default, ItemWeight.Priority),
+        ItemDef(ItemId.RedPotion, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.PurplePotion, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.TenPriceCard, ItemKind.Default, ItemWeight.Priority),
+        ItemDef(ItemId.RandRareTreasure, ItemKind.Default, ItemWeight.Normal),
+    ],
+    "WAWY": [
+        ItemDef(ItemId.BombsRefill, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.YellowPotion, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.PurplePotion, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.ArrowsRefill, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.TenPriceCard, ItemKind.Default, ItemWeight.Priority),
+    ],
+    "TERY": [
+        ItemDef(ItemId.PurplePotion, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.BombsRefill, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.RedPotion, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.RandRareTreasure, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.RandRareTreasure, ItemKind.Default, ItemWeight.Normal),
+    ],
+    "FOMY": [
+        ItemDef(ItemId.NormalShield, ItemKind.Default, ItemWeight.Priority),
+        ItemDef(ItemId.TenPriceCard, ItemKind.Default, ItemWeight.Priority),
+        ItemDef(ItemId.RedPotion, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.RandRareTreasure, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.RandRareTreasure, ItemKind.Default, ItemWeight.Normal),
+    ],
+    "CAMY": [
+        ItemDef(ItemId.NormalShield, ItemKind.Default, ItemWeight.Priority),
+        ItemDef(ItemId.TenPriceCard, ItemKind.Default, ItemWeight.Priority),
+        ItemDef(ItemId.RedPotion, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.RandRareTreasure, ItemKind.Default, ItemWeight.Normal),
+        ItemDef(ItemId.RandRareTreasure, ItemKind.Default, ItemWeight.Normal),
+    ],
+}
+
 item_defs: list[ItemDef] = [
     ItemDef(ItemId.Nothing, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.NormalShield, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.NormalShield, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.NormalSword, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.Whirlwind, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.BombBag, ItemKind.Default, ItemWeight.Progressive),
@@ -192,7 +238,6 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.ForceGem_37, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.RecruitUniform, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.PostmasterLetter, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.HeartContainer, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.QuiverMedium, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.BombBagMedium, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_43, ItemKind.Default, ItemWeight.Priority),
@@ -270,21 +315,6 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.EngineerUniform, ItemKind.Default, ItemWeight.Priority),
 ]
 
-# add extra tears
-for i in range(1, 6):
-    extra_defs = [ItemDef(getattr(ItemId, f"ExtraItemId_TearLight_{i}"), ItemKind.Default, ItemWeight.Progressive)] * 3
-    item_defs.extend(extra_defs)
-
-# add extra keys
-for item_id, max_keys in max_keys_map.items():
-    extra_defs = [ItemDef(item_id, ItemKind.Default, ItemWeight.Progressive)] * max_keys
-    item_defs.extend(extra_defs)
-
-progressive_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Progressive]
-priority_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Priority]
-normal_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Normal]
-
-
 def find_item_def(item_id: int):
     for item_def in item_defs:
         if item_def.id.value == item_id:
@@ -338,6 +368,8 @@ class LocationInfo:
         self.is_cs = False
         self.item_flag = str()
 
+        self.settings = LocationSettings()
+
     @staticmethod
     def from_data(name: str, data: dict):
         new_info = LocationInfo(name, data["scene"], data["room_index"])
@@ -363,17 +395,31 @@ class LocationInfo:
 
             new_info.bmg_offsets.set_from_english(new_info.bmg)
 
+        if "settings" in data:
+            for elem in data["settings"]:
+                match elem:
+                    case "rupee_sanity":
+                        new_info.settings.rupeesanity = True
+                    case _:
+                        print(f"WARNING: ignoring unknown setting {repr(elem)}!")
+
         return new_info
 
     @staticmethod
-    def from_yaml(yaml_path: Path):
+    def from_yaml(yaml_path: Path, settings: Settings):
         infos: list["LocationInfo"] = []
 
         with yaml_path.open("r") as file:
             yaml_file: dict[str, dict] = yaml.safe_load(file)
 
         for name, data in yaml_file.items():
-            infos.append(LocationInfo.from_data(name, data))
+            loc = LocationInfo.from_data(name, data)
+
+            # ignore location if rupeesanity is disabled
+            if loc.settings.rupeesanity and not settings.shuffle.rupeesanity:
+                continue
+
+            infos.append(loc)
 
         return infos
 
@@ -435,8 +481,8 @@ class LocationNode:
         return new_node
 
     @staticmethod
-    def from_yaml(yaml_path: Path, yaml_infos: Path):
-        info_entries = LocationInfo.from_yaml(yaml_infos)
+    def from_yaml(yaml_path: Path, yaml_infos: Path, settings: "Settings"):
+        info_entries = LocationInfo.from_yaml(yaml_infos, settings)
 
         nodes: list["LocationNode"] = []
 
@@ -567,294 +613,14 @@ class SeedLog:
             yaml.dump(yaml_file, file, sort_keys=False, Dumper=MyDumper)
 
 
-class ShuffleSettings:
-    def __init__(self):
-        self.shopsanity = -1
-        self.rupeesanity = False
-        self.passengers = str()
-        self.cargo = str()
-        self.glyphs_and_sources = str()
-        self.forest_glyph = str()
-        self.duets = False
-        self.minigames = str()
-
-        self.stamps = str()
-        self.stamp_realm_reward = False
-
-        self.rabbitsanity = False
-        self.rabbitpack = False
-
-        self.passengers_mode = ["remove", "vanilla", "abstract", "anywhere"]
-        self.passengers_mode_map = {mode: i for i, mode in enumerate(self.passengers_mode)}
-
-        self.cargo_mode = ["remove", "vanilla", "abstract", "anywhere"]
-        self.cargo_mode_map = {mode: i for i, mode in enumerate(self.cargo_mode)}
-
-        self.glyphs_and_sources_mode = ["vanilla", "anywhere", "prog_realm", "prog_world"]
-        self.glyphs_and_sources_mode_map = {mode: i for i, mode in enumerate(self.glyphs_and_sources_mode)}
-
-        self.forest_glyph_mode = ["startwith", "anywhere"]
-        self.forest_glyph_mode_map = {mode: i for i, mode in enumerate(self.forest_glyph_mode)}
-
-        self.minigames_mode = ["off", "easy", "hard", "expert", "reasonable", "all"]
-        self.minigames_mode_map = {mode: i for i, mode in enumerate(self.minigames_mode)}
-
-        self.stamps_mode = ["off", "anywhere", "shuffled"]
-        self.stamps_mode_map = {mode: i for i, mode in enumerate(self.stamps_mode)}
-
-    def validate(self):
-        if self.shopsanity < 0 or self.shopsanity > 5:
-            raise ValueError("shopsanity can't be negative or more than 5")
-
-        if not isinstance(self.rupeesanity, bool):
-            raise ValueError("rupee_sanity must be true or false")
-
-        if self.passengers not in self.passengers_mode:
-            raise ValueError("passengers is not valid")
-
-        if self.cargo not in self.cargo_mode:
-            raise ValueError("cargo is not valid")
-
-        if self.glyphs_and_sources not in self.glyphs_and_sources_mode:
-            raise ValueError("glyphs_and_sources is not valid")
-
-        if self.forest_glyph not in self.forest_glyph_mode:
-            raise ValueError("forest_glyph is not valid")
-
-        if not isinstance(self.duets, bool):
-            raise ValueError("duets must be true or false")
-
-        if self.minigames not in self.minigames_mode:
-            raise ValueError("minigames is not valid")
-
-        if self.stamps not in self.stamps_mode:
-            raise ValueError("minigames is not valid")
-
-        if not isinstance(self.stamp_realm_reward, bool):
-            raise ValueError("stamp_realm_reward must be true or false")
-
-        if not isinstance(self.rabbitsanity, bool):
-            raise ValueError("rabbit_sanity must be true or false")
-
-        if not isinstance(self.rabbitpack, bool):
-            raise ValueError("rabbit_pack must be true or false")
-
-    @staticmethod
-    def from_yaml(data: dict):
-        settings = ShuffleSettings()
-
-        if "shop_sanity" in data:
-            settings.shopsanity = data["shop_sanity"]
-
-        if "rupee_sanity" in data:
-            settings.rupeesanity = data["rupee_sanity"]
-
-        if "passengers" in data:
-            settings.passengers = data["passengers"]
-
-        if "cargo" in data:
-            settings.cargo = data["cargo"]
-
-        if "glyphs_and_sources" in data:
-            settings.glyphs_and_sources = data["glyphs_and_sources"]
-
-        if "forest_glyph" in data:
-            settings.forest_glyph = data["forest_glyph"]
-
-        if "duets" in data:
-            settings.duets = data["duets"]
-
-        if "minigames" in data:
-            settings.minigames = data["minigames"]
-
-        if "stamps" in data:
-            settings.stamps = data["stamps"]
-
-        if "stamp_realm_reward" in data:
-            settings.stamp_realm_reward = data["stamp_realm_reward"]
-
-        if "rabbit_sanity" in data:
-            settings.rabbitsanity = data["rabbit_sanity"]
-
-        if "rabbit_pack" in data:
-            settings.rabbitpack = data["rabbit_pack"]
-
-        settings.validate()
-        return settings
-
-    def to_bin(self):
-        return struct.pack(
-            "<BBBBBBBBBBBB",
-            self.shopsanity,
-            self.rupeesanity,
-            self.passengers_mode_map[self.passengers],
-            self.cargo_mode_map[self.cargo],
-            self.glyphs_and_sources_mode_map[self.glyphs_and_sources],
-            self.forest_glyph_mode_map[self.forest_glyph],
-            self.duets,
-            self.minigames_mode_map[self.minigames],
-            self.stamps_mode_map[self.stamps],
-            self.stamp_realm_reward,
-            self.rabbitsanity,
-            self.rabbitpack,
-        )
-
-
-class ShuffleDungeonSettings:
-    def __init__(self):
-        self.keysanity = str()
-        self.bksanity = str()
-        self.tear_sanity = str()
-        self.keyring = False
-        self.bkeyring = False
-        self.tear_ring = False
-        self.tos_sections = False
-        self.tos_section_reward = False
-
-        self.keysanity_mode = ["off", "dungeon", "anywhere", "removed"]
-        self.keysanity_mode_map = {mode: i for i, mode in enumerate(self.keysanity_mode)}
-
-        self.bksanity_mode = ["off", "dungeon", "anywhere", "removed"]
-        self.bksanity_mode_map = {mode: i for i, mode in enumerate(self.bksanity_mode)}
-
-        self.tear_sanity_mode = ["off", "section", "dungeon", "anywhere", "removed"]
-        self.tear_sanity_mode_map = {mode: i for i, mode in enumerate(self.tear_sanity_mode)}
-
-    def validate(self):
-        if self.keysanity not in self.keysanity_mode:
-            raise ValueError("keysanity is not valid")
-
-        if self.bksanity not in self.bksanity_mode:
-            raise ValueError("bksanity is not valid")
-
-        if self.tear_sanity not in self.tear_sanity_mode:
-            raise ValueError("keysatear_sanitynity is not valid")
-
-        if not isinstance(self.keyring, bool):
-            raise ValueError("keyring must be true or false")
-
-        if not isinstance(self.bkeyring, bool):
-            raise ValueError("bkeyring must be true or false")
-
-        if not isinstance(self.tear_ring, bool):
-            raise ValueError("tear_ring must be true or false")
-
-        if not isinstance(self.tos_sections, bool):
-            raise ValueError("tos_sections must be true or false")
-
-        if not isinstance(self.tos_section_reward, bool):
-            raise ValueError("tos_section_reward must be true or false")
-
-    @staticmethod
-    def from_yaml(data: dict):
-        settings = ShuffleDungeonSettings()
-
-        if "key_sanity" in data:
-            settings.keysanity = data["key_sanity"]
-
-        if "bosskey_sanity" in data:
-            settings.bksanity = data["bosskey_sanity"]
-
-        if "tear_sanity" in data:
-            settings.tear_sanity = data["tear_sanity"]
-
-        if "key_ring" in data:
-            settings.keyring = data["key_ring"]
-
-        if "bosskey_ring" in data:
-            settings.bkeyring = data["bosskey_ring"]
-
-        if "tear_ring" in data:
-            settings.tear_ring = data["tear_ring"]
-
-        if "tos_sections" in data:
-            settings.tos_sections = data["tos_sections"]
-
-        if "tos_section_reward" in data:
-            settings.tos_section_reward = data["tos_section_reward"]
-
-        settings.validate()
-        return settings
-
-    def to_bin(self):
-        return struct.pack(
-            "<BBBBBBBB",
-            self.keysanity_mode_map[self.keysanity],
-            self.bksanity_mode_map[self.bksanity],
-            self.tear_sanity_mode_map[self.tear_sanity],
-            self.keyring,
-            self.bkeyring,
-            self.tear_ring,
-            self.tos_sections,
-            self.tos_section_reward,
-        )
-
-
-class GoalSettings:
-    def __init__(self):
-        self.unlock_dark_realm = str()
-        self.unlock_dark_realm = str()
-        self.dungeon_amount = -1
-
-        self.unlock_dark_realm_mode = ["open", "dungeons", "compass", "restoration_songs"]
-        self.unlock_dark_realm_mode_map = {mode: i for i, mode in enumerate(self.unlock_dark_realm_mode)}
-
-    def validate(self):
-        if self.unlock_dark_realm not in self.unlock_dark_realm_mode:
-            raise ValueError("unlock_dark_realm is not valid")
-
-        if self.unlock_dark_realm == "dungeons" and (self.dungeon_amount < 1 or self.dungeon_amount > 5):
-            raise ValueError(f"dungeon_amount has an invalid value of {self.dungeon_amount}")
-
-    @staticmethod
-    def from_yaml(data: dict):
-        settings = GoalSettings()
-
-        if "unlock_dark_realm" in data:
-            settings.unlock_dark_realm = data["unlock_dark_realm"]
-
-        if "dungeon_amount" in data:
-            settings.dungeon_amount = data["dungeon_amount"]
-
-        settings.validate()
-        return settings
-
-    def to_bin(self):
-        return struct.pack(
-            "<BB",
-            self.unlock_dark_realm_mode_map[self.unlock_dark_realm],
-            self.dungeon_amount
-        )
-
-
-class Settings:
-    def __init__(self, shuffle: ShuffleSettings, shuffle_dgn: ShuffleDungeonSettings, goal: GoalSettings):
-        self.shuffle = shuffle
-        self.shuffle_dgn = shuffle_dgn
-        self.goal = goal
-
-    @staticmethod
-    def from_yaml(yaml_path: Path):
-        with yaml_path.open("r") as file:
-            yaml_file = yaml.safe_load(file)
-
-        return Settings(
-            ShuffleSettings.from_yaml(yaml_file["settings"]["shuffle"]),
-            ShuffleDungeonSettings.from_yaml(yaml_file["settings"]["shuffle_dungeon"]),
-            GoalSettings.from_yaml(yaml_file["settings"]["goal"]),
-        )
-
-    def to_bin(self):
-        return struct.pack("<4s", b"RANDO") + self.shuffle.to_bin() + self.shuffle_dgn.to_bin() + self.goal.to_bin()
-
-
 class Randomizer:
     def __init__(self, version: str, settings_path: Path, world_path: Path, loc_tbl_path: Path, seed_log_path: Path | None = None):
         self.settings = Settings.from_yaml(settings_path)
-        self.nodes = LocationNode.from_yaml(world_path, loc_tbl_path)
+        self.nodes = LocationNode.from_yaml(world_path, loc_tbl_path, self.settings)
         self.version = version
         self.extracted_dir = Path("extract").resolve() / self.version
         assert self.extracted_dir.exists()
+        self.create_item_pool()
 
         if seed_log_path is not None:
             self.seed_log = SeedLog.from_yaml(seed_log_path, self.nodes)
@@ -866,6 +632,39 @@ class Randomizer:
         self.seed_num = 0
         self.set_seed_num()
         random.seed(self.seed_num)
+
+    def create_item_pool(self):
+        ## add additionnal items
+        # 5 from dungeons, 8 from side quests
+        heart_containers = [ItemDef(ItemId.HeartContainer, ItemKind.Default, ItemWeight.Normal)] * 13
+        item_defs.extend(heart_containers)
+
+        # add extra tears
+        for i in range(1, 6):
+            extra_defs = [ItemDef(getattr(ItemId, f"ExtraItemId_TearLight_{i}"), ItemKind.Default, ItemWeight.Progressive)] * 3
+            item_defs.extend(extra_defs)
+
+        # add extra keys
+        for item_id, max_keys in max_keys_map.items():
+            extra_defs = [ItemDef(item_id, ItemKind.Default, ItemWeight.Progressive)] * max_keys
+            item_defs.extend(extra_defs)
+
+        ## apply settings
+        for shop_kind, shop_items in shop_item_map.items():
+            for i in range(self.settings.shuffle.shopsanity):
+                item_defs.append(shop_items[i])
+
+        if self.settings.shuffle.rupeesanity:
+            # rupeesanity adds 20 red rupees, 14 blue rupees and 4 big green rupees
+            red_rupees = [ItemDef(ItemId.RedRupee, ItemKind.Default, ItemWeight.Normal)] * 20
+            blue_rupees = [ItemDef(ItemId.BlueRupee, ItemKind.Default, ItemWeight.Normal)] * 14
+            big_rupees = [ItemDef(ItemId.BigGreenRupee, ItemKind.Default, ItemWeight.Normal)] * 4
+            item_defs.extend(red_rupees + blue_rupees + big_rupees)
+
+        ## create the pools
+        self.progressive_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Progressive]
+        self.priority_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Priority]
+        self.normal_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Normal]
 
     # seed methods from https://github.com/OoTRandomizer/OoT-Randomizer/blob/2900fedb4a5ccd6937db85ec4f15721556656815/Settings.py#L253-L270
     def sanitize(self, s):
@@ -921,16 +720,16 @@ class Randomizer:
         random.shuffle(all_locations)
 
         # shuffle prog pool
-        random.shuffle(progressive_item_pool)
-        prog_pool = progressive_item_pool[:]
+        random.shuffle(self.progressive_item_pool)
+        prog_pool = self.progressive_item_pool[:]
 
         # shuffle prio pool
-        random.shuffle(priority_item_pool)
-        prio_pool = priority_item_pool[:]
+        random.shuffle(self.priority_item_pool)
+        prio_pool = self.priority_item_pool[:]
 
         # shuffle normal pool
-        random.shuffle(normal_item_pool)
-        misc_pool = normal_item_pool[:]
+        random.shuffle(self.normal_item_pool)
+        misc_pool = self.normal_item_pool[:]
 
         item_pool = prog_pool + prio_pool + misc_pool
         random.shuffle(item_pool)
@@ -1018,6 +817,9 @@ class Randomizer:
                             entry.params[0] = (middle.id.value << 8) | top_left.id.value
                             entry.params[1] = (bottom_left.id.value << 8) | top_right.id.value
                             entry.params[2] = bottom_right.id.value
+                        elif self.settings.shuffle.rupeesanity and entry.id == "RUPE":
+                            # for rupees, param 0 and 1 are used so we use 3 since it seems unused
+                            entry.params[3] = location.items[0].id.value
                         else:
                             entry.params[0] = location.items[0].id.value
 
@@ -1044,7 +846,7 @@ class Randomizer:
 
     def generate_seed(self):
         initial_time = time.time()
-        print(f"Randomizing with {len(progressive_item_pool)} progressive items, {len(priority_item_pool)} priority items and {len(normal_item_pool)} remaining items...")
+        print(f"Randomizing with {len(self.progressive_item_pool)} progressive items, {len(self.priority_item_pool)} priority items and {len(self.normal_item_pool)} remaining items...")
 
         # 2. assign the items
         if self.seed_log is None:
@@ -1074,7 +876,7 @@ def main():
         Path("rando/data/location_table.yaml"),
 
         # plando mode
-        Path("output/spoiler.yaml"),
+        # Path("output/spoiler.yaml"),
     )
 
     # rando.generate_seed()

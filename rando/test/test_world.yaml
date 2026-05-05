@@ -331,6 +331,10 @@ node_d_sand_3:
   locations:
     Desert Temple B1 NW Buried Rupee: 'True'
     Desert Temple B1 Near Boss Door Chest: 'True'
+    Desert Temple B1 Rupee NW Bottom Left: 'True'
+    Desert Temple B1 Rupee NW Bottom Right: 'True'
+    Desert Temple B1 Rupee NW Middle: 'True'
+    Desert Temple B1 Rupee NW Top Left: 'True'
     Desert Temple B1 SW Stalfos Chest: 'True'
     Desert Temple B1 Stamp Station: 'True'
   room_index: 3
@@ -550,8 +554,8 @@ node_f_forest1_0:
     Mayscore Buy Lumber: 'True'
     Mayscore Deliver Steel: 'True'
     Mayscore Pick Up Mash: 'True'
-    Mayscore Pick Up Yamahiko: 'True'
     Mayscore Pick Up Wood: 'True'
+    Mayscore Pick Up Yamahiko: 'True'
   room_index: 0
   scene: f_forest1
 
@@ -683,6 +687,16 @@ node_f_kakushi2_9:
   room_index: 9
   scene: f_kakushi2
 
+node_f_kakushi3_0:
+  locations:
+    Ends of the Earth Station Rupee E Left: 'True'
+    Ends of the Earth Station Rupee E Mid: 'True'
+    Ends of the Earth Station Rupee E Right: 'True'
+    Ends of the Earth Station Rupee W Left: 'True'
+    Ends of the Earth Station Rupee W Right: 'True'
+  room_index: 0
+  scene: f_kakushi3
+
 node_f_kakushi3_1:
   locations:
     Ends of the Earth Master Small Chest: 'True'
@@ -785,6 +799,24 @@ node_f_rabbit_0:
 node_f_sand_0:
   locations:
     Dune Sanctuary Deliver Cuccos: 'True'
+    Dune Sanctuary Rupee By Left Stairs Left (D): 'True'
+    Dune Sanctuary Rupee By Left Stairs Right (F): 'True'
+    Dune Sanctuary Rupee By Right Stairs Bottom (I): 'True'
+    Dune Sanctuary Rupee By Right Stairs Top (K): 'True'
+    Dune Sanctuary Rupee E Bottom (R): 'True'
+    Dune Sanctuary Rupee E Middle (Q): 'True'
+    Dune Sanctuary Rupee E Top (P): 'True'
+    Dune Sanctuary Rupee N Left (E): 'True'
+    Dune Sanctuary Rupee N Middle (H): 'True'
+    Dune Sanctuary Rupee N Right (L): 'True'
+    Dune Sanctuary Rupee NE Left (M): 'True'
+    Dune Sanctuary Rupee NE Middle (N): 'True'
+    Dune Sanctuary Rupee NE Right (O): 'True'
+    Dune Sanctuary Rupee NW Left (A): 'True'
+    Dune Sanctuary Rupee NW Right (B): 'True'
+    Dune Sanctuary Rupee S (G): 'True'
+    Dune Sanctuary Rupee S By Small Island (J): 'True'
+    Dune Sanctuary Rupee W Near Train (C): 'True'
   room_index: 0
   scene: f_sand
 
@@ -884,6 +916,19 @@ node_f_water2_4:
 
 node_f_water3_0:
   locations:
+    Papuzia Village Centre Island Rupee 1: 'True'
+    Papuzia Village Centre Island Rupee 2: 'True'
+    Papuzia Village Centre Island Rupee 3: 'True'
+    Papuzia Village Centre Island Rupee 4: 'True'
+    Papuzia Village NW Island Rupee 1: 'True'
+    Papuzia Village NW Island Rupee 2: 'True'
+    Papuzia Village NW Island Rupee 3: 'True'
+    Papuzia Village NW Island Rupee 4: 'True'
+    Papuzia Village NW Island Rupee 5: 'True'
+    Papuzia Village NW Island Rupee 6: 'True'
+    Papuzia Village NW Island Rupee 7: 'True'
+    Papuzia Village NW Island Rupee 8: 'True'
+    Papuzia Village NW Island Rupee 9: 'True'
     Papuzia Village S Center Chest: 'True'
     Papuzia Village SW Chest: 'True'
     Papuzia Village Stamp Station: 'True'
