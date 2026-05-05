@@ -266,7 +266,7 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.FreebieCard, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.QuintupleCard, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.CarbenLetter, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.RecruitUniform2, ItemKind.Default, ItemWeight.Normal),
+    ItemDef(ItemId.RecruitUniform2, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.EngineerUniform, ItemKind.Default, ItemWeight.Priority),
 ]
 
@@ -390,7 +390,7 @@ class LocationDef:
         self.cond = cond
         self.infos = infos
 
-        # need 5 for shops
+        # need 1-5 for shops
         self.items: list[ItemDef] = []
 
 
@@ -567,253 +567,518 @@ class SeedLog:
             yaml.dump(yaml_file, file, sort_keys=False, Dumper=MyDumper)
 
 
-def get_zmb(lzss_path: Path):
-    assert lzss_path.exists()
+class ShuffleSettings:
+    def __init__(self):
+        self.shopsanity = -1
+        self.rupeesanity = False
+        self.passengers = str()
+        self.cargo = str()
+        self.glyphs_and_sources = str()
+        self.forest_glyph = str()
+        self.duets = False
+        self.minigames = str()
 
-    lzss_bytes = LZSS.decompressFromFile(lzss_path)
-    archive = narc.NARC(lzss_bytes)
+        self.stamps = str()
+        self.stamp_realm_reward = False
 
-    found_file = None
-    filename = None
-    for i, file in enumerate(archive.files):
-        if file.startswith(b"BPAM"):
-            found_file = file
-            filename = archive.filenames[i]
-            break
+        self.rabbitsanity = False
+        self.rabbitpack = False
 
-    if found_file is not None and filename is not None:
-        # print("found:", filename)
-        assert b"ACPN" in found_file or b"BOPM" in found_file
-        return lzss_bytes, archive, found_file, filename
+        self.passengers_mode = ["remove", "vanilla", "abstract", "anywhere"]
+        self.passengers_mode_map = {mode: i for i, mode in enumerate(self.passengers_mode)}
 
-    return None
+        self.cargo_mode = ["remove", "vanilla", "abstract", "anywhere"]
+        self.cargo_mode_map = {mode: i for i, mode in enumerate(self.cargo_mode)}
+
+        self.glyphs_and_sources_mode = ["vanilla", "anywhere", "prog_realm", "prog_world"]
+        self.glyphs_and_sources_mode_map = {mode: i for i, mode in enumerate(self.glyphs_and_sources_mode)}
+
+        self.forest_glyph_mode = ["startwith", "anywhere"]
+        self.forest_glyph_mode_map = {mode: i for i, mode in enumerate(self.forest_glyph_mode)}
+
+        self.minigames_mode = ["off", "easy", "hard", "expert", "reasonable", "all"]
+        self.minigames_mode_map = {mode: i for i, mode in enumerate(self.minigames_mode)}
+
+        self.stamps_mode = ["off", "anywhere", "shuffled"]
+        self.stamps_mode_map = {mode: i for i, mode in enumerate(self.stamps_mode)}
+
+    def validate(self):
+        if self.shopsanity < 0 or self.shopsanity > 5:
+            raise ValueError("shopsanity can't be negative or more than 5")
+
+        if not isinstance(self.rupeesanity, bool):
+            raise ValueError("rupee_sanity must be true or false")
+
+        if self.passengers not in self.passengers_mode:
+            raise ValueError("passengers is not valid")
+
+        if self.cargo not in self.cargo_mode:
+            raise ValueError("cargo is not valid")
+
+        if self.glyphs_and_sources not in self.glyphs_and_sources_mode:
+            raise ValueError("glyphs_and_sources is not valid")
+
+        if self.forest_glyph not in self.forest_glyph_mode:
+            raise ValueError("forest_glyph is not valid")
+
+        if not isinstance(self.duets, bool):
+            raise ValueError("duets must be true or false")
+
+        if self.minigames not in self.minigames_mode:
+            raise ValueError("minigames is not valid")
+
+        if self.stamps not in self.stamps_mode:
+            raise ValueError("minigames is not valid")
+
+        if not isinstance(self.stamp_realm_reward, bool):
+            raise ValueError("stamp_realm_reward must be true or false")
+
+        if not isinstance(self.rabbitsanity, bool):
+            raise ValueError("rabbit_sanity must be true or false")
+
+        if not isinstance(self.rabbitpack, bool):
+            raise ValueError("rabbit_pack must be true or false")
+
+    @staticmethod
+    def from_yaml(data: dict):
+        settings = ShuffleSettings()
+
+        if "shop_sanity" in data:
+            settings.shopsanity = data["shop_sanity"]
+
+        if "rupee_sanity" in data:
+            settings.rupeesanity = data["rupee_sanity"]
+
+        if "passengers" in data:
+            settings.passengers = data["passengers"]
+
+        if "cargo" in data:
+            settings.cargo = data["cargo"]
+
+        if "glyphs_and_sources" in data:
+            settings.glyphs_and_sources = data["glyphs_and_sources"]
+
+        if "forest_glyph" in data:
+            settings.forest_glyph = data["forest_glyph"]
+
+        if "duets" in data:
+            settings.duets = data["duets"]
+
+        if "minigames" in data:
+            settings.minigames = data["minigames"]
+
+        if "stamps" in data:
+            settings.stamps = data["stamps"]
+
+        if "stamp_realm_reward" in data:
+            settings.stamp_realm_reward = data["stamp_realm_reward"]
+
+        if "rabbit_sanity" in data:
+            settings.rabbitsanity = data["rabbit_sanity"]
+
+        if "rabbit_pack" in data:
+            settings.rabbitpack = data["rabbit_pack"]
+
+        settings.validate()
+        return settings
+
+    def to_bin(self):
+        return struct.pack(
+            "<BBBBBBBBBBBB",
+            self.shopsanity,
+            self.rupeesanity,
+            self.passengers_mode_map[self.passengers],
+            self.cargo_mode_map[self.cargo],
+            self.glyphs_and_sources_mode_map[self.glyphs_and_sources],
+            self.forest_glyph_mode_map[self.forest_glyph],
+            self.duets,
+            self.minigames_mode_map[self.minigames],
+            self.stamps_mode_map[self.stamps],
+            self.stamp_realm_reward,
+            self.rabbitsanity,
+            self.rabbitpack,
+        )
 
 
-def replace_data(entry: ActorEntry | MapObjectEntry, base_data: bytes):
-    old_data = entry.raw_data
-    new_data = entry.to_bytes()
-    assert len(new_data) == len(old_data), f"{len(new_data)}, {len(old_data)}"
+class ShuffleDungeonSettings:
+    def __init__(self):
+        self.keysanity = str()
+        self.bksanity = str()
+        self.tear_sanity = str()
+        self.keyring = False
+        self.bkeyring = False
+        self.tear_ring = False
+        self.tos_sections = False
+        self.tos_section_reward = False
 
-    assert old_data in base_data
-    new_zmb_data = base_data.replace(old_data, new_data)
-    assert new_data in new_zmb_data
+        self.keysanity_mode = ["off", "dungeon", "anywhere", "removed"]
+        self.keysanity_mode_map = {mode: i for i, mode in enumerate(self.keysanity_mode)}
 
-    return new_zmb_data
+        self.bksanity_mode = ["off", "dungeon", "anywhere", "removed"]
+        self.bksanity_mode_map = {mode: i for i, mode in enumerate(self.bksanity_mode)}
+
+        self.tear_sanity_mode = ["off", "section", "dungeon", "anywhere", "removed"]
+        self.tear_sanity_mode_map = {mode: i for i, mode in enumerate(self.tear_sanity_mode)}
+
+    def validate(self):
+        if self.keysanity not in self.keysanity_mode:
+            raise ValueError("keysanity is not valid")
+
+        if self.bksanity not in self.bksanity_mode:
+            raise ValueError("bksanity is not valid")
+
+        if self.tear_sanity not in self.tear_sanity_mode:
+            raise ValueError("keysatear_sanitynity is not valid")
+
+        if not isinstance(self.keyring, bool):
+            raise ValueError("keyring must be true or false")
+
+        if not isinstance(self.bkeyring, bool):
+            raise ValueError("bkeyring must be true or false")
+
+        if not isinstance(self.tear_ring, bool):
+            raise ValueError("tear_ring must be true or false")
+
+        if not isinstance(self.tos_sections, bool):
+            raise ValueError("tos_sections must be true or false")
+
+        if not isinstance(self.tos_section_reward, bool):
+            raise ValueError("tos_section_reward must be true or false")
+
+    @staticmethod
+    def from_yaml(data: dict):
+        settings = ShuffleDungeonSettings()
+
+        if "key_sanity" in data:
+            settings.keysanity = data["key_sanity"]
+
+        if "bosskey_sanity" in data:
+            settings.bksanity = data["bosskey_sanity"]
+
+        if "tear_sanity" in data:
+            settings.tear_sanity = data["tear_sanity"]
+
+        if "key_ring" in data:
+            settings.keyring = data["key_ring"]
+
+        if "bosskey_ring" in data:
+            settings.bkeyring = data["bosskey_ring"]
+
+        if "tear_ring" in data:
+            settings.tear_ring = data["tear_ring"]
+
+        if "tos_sections" in data:
+            settings.tos_sections = data["tos_sections"]
+
+        if "tos_section_reward" in data:
+            settings.tos_section_reward = data["tos_section_reward"]
+
+        settings.validate()
+        return settings
+
+    def to_bin(self):
+        return struct.pack(
+            "<BBBBBBBB",
+            self.keysanity_mode_map[self.keysanity],
+            self.bksanity_mode_map[self.bksanity],
+            self.tear_sanity_mode_map[self.tear_sanity],
+            self.keyring,
+            self.bkeyring,
+            self.tear_ring,
+            self.tos_sections,
+            self.tos_section_reward,
+        )
 
 
-def get_random_itemdef(is_shop: bool):
-    prog_length = len(progressive_item_pool)
-    prio_length = len(priority_item_pool)
-    normal_length = len(normal_item_pool)
+class GoalSettings:
+    def __init__(self):
+        self.unlock_dark_realm = str()
+        self.unlock_dark_realm = str()
+        self.dungeon_amount = -1
 
-    weights = {
-        ItemWeight.Progressive: 10,
-        ItemWeight.Priority: 30,
-        ItemWeight.Normal: 60,
-    }
+        self.unlock_dark_realm_mode = ["open", "dungeons", "compass", "restoration_songs"]
+        self.unlock_dark_realm_mode_map = {mode: i for i, mode in enumerate(self.unlock_dark_realm_mode)}
 
-    if is_shop:
-        # since there's 5 items in shops...
-        weights[ItemWeight.Progressive] = 2
+    def validate(self):
+        if self.unlock_dark_realm not in self.unlock_dark_realm_mode:
+            raise ValueError("unlock_dark_realm is not valid")
 
-    available = [ItemWeight.Normal] # normal items are always available
-    if prog_length > 0:
-        available.append(ItemWeight.Progressive)
-    if prio_length > 0:
-        available.append(ItemWeight.Priority)
+        if self.unlock_dark_realm == "dungeons" and (self.dungeon_amount < 1 or self.dungeon_amount > 5):
+            raise ValueError(f"dungeon_amount has an invalid value of {self.dungeon_amount}")
 
-    chosen_weight = [weights[cat] for cat in available]
-    category = random.choices(available, weights=chosen_weight, k=1)[0]
+    @staticmethod
+    def from_yaml(data: dict):
+        settings = GoalSettings()
 
-    match category:
-        case ItemWeight.Progressive:
-            item_def = progressive_item_pool.pop(random.randrange(prog_length))
-        case ItemWeight.Priority:
-            item_def = priority_item_pool.pop(random.randrange(prio_length))
-        case ItemWeight.Normal:
-            item_def = random.choice(normal_item_pool)
+        if "unlock_dark_realm" in data:
+            settings.unlock_dark_realm = data["unlock_dark_realm"]
 
-    # prevent a crash with shops
-    if is_shop and item_def.is_random_treasure():
-        random_id = random.randint(ItemId.DemonFossil, ItemId.PricelessStone)
+        if "dungeon_amount" in data:
+            settings.dungeon_amount = data["dungeon_amount"]
 
-        for elem in item_defs:
-            if elem.id.value == random_id:
-                item_def = elem
+        settings.validate()
+        return settings
+
+    def to_bin(self):
+        return struct.pack(
+            "<BB",
+            self.unlock_dark_realm_mode_map[self.unlock_dark_realm],
+            self.dungeon_amount
+        )
+
+
+class Settings:
+    def __init__(self, shuffle: ShuffleSettings, shuffle_dgn: ShuffleDungeonSettings, goal: GoalSettings):
+        self.shuffle = shuffle
+        self.shuffle_dgn = shuffle_dgn
+        self.goal = goal
+
+    @staticmethod
+    def from_yaml(yaml_path: Path):
+        with yaml_path.open("r") as file:
+            yaml_file = yaml.safe_load(file)
+
+        return Settings(
+            ShuffleSettings.from_yaml(yaml_file["settings"]["shuffle"]),
+            ShuffleDungeonSettings.from_yaml(yaml_file["settings"]["shuffle_dungeon"]),
+            GoalSettings.from_yaml(yaml_file["settings"]["goal"]),
+        )
+
+    def to_bin(self):
+        return struct.pack("<4s", b"RANDO") + self.shuffle.to_bin() + self.shuffle_dgn.to_bin() + self.goal.to_bin()
+
+
+class Randomizer:
+    def __init__(self, version: str, settings_path: Path, world_path: Path, loc_tbl_path: Path, seed_log_path: Path | None = None):
+        self.settings = Settings.from_yaml(settings_path)
+        self.nodes = LocationNode.from_yaml(world_path, loc_tbl_path)
+        self.version = version
+        self.extracted_dir = Path("extract").resolve() / self.version
+        assert self.extracted_dir.exists()
+
+        if seed_log_path is not None:
+            self.seed_log = SeedLog.from_yaml(seed_log_path, self.nodes)
+            self.seed = self.seed_log.seed
+        else:
+            self.seed_log = None
+            self.create_seed()
+
+        self.seed_num = 0
+        self.set_seed_num()
+        random.seed(self.seed_num)
+
+    # seed methods from https://github.com/OoTRandomizer/OoT-Randomizer/blob/2900fedb4a5ccd6937db85ec4f15721556656815/Settings.py#L253-L270
+    def sanitize(self, s):
+        return re.sub(r"[^a-zA-Z0-9_-]", "", s)
+
+    def create_seed(self):
+        self.seed = self.sanitize("".join(random.choices(string.ascii_uppercase + string.digits, k=10)))
+
+    def set_seed_num(self):
+        final_seed = self.seed
+        self.seed_num = int(hashlib.sha256(final_seed.encode("utf-8")).hexdigest(), base=16)
+
+    def get_zmb(self, lzss_path: Path):
+        assert lzss_path.exists()
+
+        lzss_bytes = LZSS.decompressFromFile(lzss_path)
+        archive = narc.NARC(lzss_bytes)
+
+        found_file = None
+        filename = None
+        for i, file in enumerate(archive.files):
+            if file.startswith(b"BPAM"):
+                found_file = file
+                filename = archive.filenames[i]
                 break
 
-    return item_def
+        if found_file is not None and filename is not None:
+            # print("found:", filename)
+            assert b"ACPN" in found_file or b"BOPM" in found_file
+            return lzss_bytes, archive, found_file, filename
 
-
-def assign_items(nodes: list[LocationNode]):
-    all_locations: list[LocationDef] = []
-
-    # shuffle nodes, fetch locations and shuffle that list
-    random.shuffle(nodes)
-    for node in nodes:
-        assert len(node.locations) > 0
-        all_locations.extend(node.locations)
-    random.shuffle(all_locations)
-
-    # shuffle prog pool
-    random.shuffle(progressive_item_pool)
-    prog_pool = progressive_item_pool[:]
-
-    # shuffle prio pool
-    random.shuffle(priority_item_pool)
-    prio_pool = priority_item_pool[:]
-
-    # shuffle normal pool
-    random.shuffle(normal_item_pool)
-    misc_pool = normal_item_pool[:]
-
-    item_pool = prog_pool + prio_pool + misc_pool
-    random.shuffle(item_pool)
-
-    for loc in all_locations:
-        size = 5 if "Shop Keeper" in loc.name else 1
-
-        while len(loc.items) < size:
-            if len(item_pool) > 0:
-                picked_item = random.choice(item_pool)
-                item_pool.remove(picked_item)
-            else:
-                picked_item = random.choice(misc_pool)
-
-            loc.items.append(picked_item)
-
-    assert len(item_pool) == 0
-    nodes.sort(key=lambda entry: entry.name)
-
-
-def get_offset(data: bytes, magic: bytes):
-    try:
-        return data.index(magic)
-    except ValueError:
         return None
 
+    def update_zmb(self, entry: ActorEntry | MapObjectEntry, base_data: bytes):
+        old_data = entry.raw_data
+        new_data = entry.to_bytes()
+        assert len(new_data) == len(old_data), f"{len(new_data)}, {len(old_data)}"
 
-def patch_rom(base_dir: Path, nodes: list[LocationNode]):
-    languages = [
-        "English",
-        "French",
-        "German",
-        "Italian",
-        "Spanish",
-    ]
+        assert old_data in base_data
+        new_zmb_data = base_data.replace(old_data, new_data)
+        assert new_data in new_zmb_data
 
-    # patch the files
-    for i, node in enumerate(nodes):
-        lzss_path = base_dir / node.lzss
-        lzss_bytes, archive, zmb_data, zmb_filename = get_zmb(lzss_path)
+        return new_zmb_data
 
-        do_save_narc = False
-        for location in node.locations:
-            assert node.scene_name == location.infos.scene
-            assert node.room_index == location.infos.room_index
+    def assign_items(self):
+        all_locations: list[LocationDef] = []
 
-            if location.infos.is_bmg:
-                for lang in languages:
-                    bmg_path = base_dir / "files" / lang / "Message" / location.infos.bmg
-                    assert bmg_path.exists()
+        # shuffle nodes, fetch locations and shuffle that list
+        random.shuffle(self.nodes)
+        for node in self.nodes:
+            assert len(node.locations) > 0
+            all_locations.extend(node.locations)
+        random.shuffle(all_locations)
 
-                    bmg_data = bmg_path.read_bytes()
-                    bmg_data_array = bytearray(bmg_data)
+        # shuffle prog pool
+        random.shuffle(progressive_item_pool)
+        prog_pool = progressive_item_pool[:]
 
-                    for raw_offset in getattr(location.infos.bmg_offsets, lang.lower()):
-                        offset = int(raw_offset, base=16)
-                        assert bmg_data[offset + 0x00] == 0x03 # FLW1 "event" instruction
-                        assert bmg_data[offset + 0x01] == 0x09 # function callback index
+        # shuffle prio pool
+        random.shuffle(priority_item_pool)
+        prio_pool = priority_item_pool[:]
 
-                        # function callback parameters
-                        bmg_data_array[offset + 0x04] = location.items[0].id.value
+        # shuffle normal pool
+        random.shuffle(normal_item_pool)
+        misc_pool = normal_item_pool[:]
 
-                    bmg_path.write_bytes(bytes(bmg_data_array))
-            else:
-                id, x, y = location.infos.id_hash.split("_")
+        item_pool = prog_pool + prio_pool + misc_pool
+        random.shuffle(item_pool)
 
-                length = 1 if location.infos.is_mapobj else 2
-                x_bytes = int(x, base=16).to_bytes(length, byteorder="little")
-                y_bytes = int(y, base=16).to_bytes(length, byteorder="little")
+        for loc in all_locations:
+            size = self.settings.shuffle.shopsanity if "Shop Keeper" in loc.name else 1
 
-                hash = id[::-1].encode() + x_bytes + y_bytes
-                offset = get_offset(zmb_data, hash)
-                assert offset is not None
+            while len(loc.items) < size:
+                if len(item_pool) > 0:
+                    picked_item = random.choice(item_pool)
+                    item_pool.remove(picked_item)
+                else:
+                    picked_item = random.choice(misc_pool)
 
-                if location.infos.is_actor:
-                    entry = ActorEntry.from_bytes(zmb_data[offset:offset + ActorEntry.entry_size])
-                    do_save_narc = True
+                loc.items.append(picked_item)
 
-                    if entry.is_shop:
-                        assert entry.is_shop == node.is_shop
-                        top_left = location.items[0]
-                        middle = location.items[1]
-                        top_right = location.items[2]
-                        bottom_left = location.items[3]
-                        bottom_right = location.items[4]
+        assert len(item_pool) == 0
+        self.nodes.sort(key=lambda entry: entry.name)
 
-                        entry.params[0] = (middle.id.value << 8) | top_left.id.value
-                        entry.params[1] = (bottom_left.id.value << 8) | top_right.id.value
-                        entry.params[2] = bottom_right.id.value
-                    else:
+    def get_offset(self, data: bytes, magic: bytes):
+        try:
+            return data.index(magic)
+        except ValueError:
+            return None
+
+    def patch_rom(self):
+        languages = [
+            "English",
+            "French",
+            "German",
+            "Italian",
+            "Spanish",
+        ]
+
+        # patch the files
+        for i, node in enumerate(self.nodes):
+            lzss_path = self.extracted_dir / node.lzss
+            lzss_bytes, archive, zmb_data, zmb_filename = self.get_zmb(lzss_path)
+
+            do_save_narc = False
+            for location in node.locations:
+                assert node.scene_name == location.infos.scene
+                assert node.room_index == location.infos.room_index
+
+                if location.infos.is_bmg:
+                    for lang in languages:
+                        bmg_path = self.extracted_dir / "files" / lang / "Message" / location.infos.bmg
+                        assert bmg_path.exists()
+
+                        bmg_data = bmg_path.read_bytes()
+                        bmg_data_array = bytearray(bmg_data)
+
+                        for raw_offset in getattr(location.infos.bmg_offsets, lang.lower()):
+                            offset = int(raw_offset, base=16)
+                            assert bmg_data[offset + 0x00] == 0x03 # FLW1 "event" instruction
+                            assert bmg_data[offset + 0x01] == 0x09 # function callback index
+
+                            # function callback parameters
+                            bmg_data_array[offset + 0x04] = location.items[0].id.value
+
+                        bmg_path.write_bytes(bytes(bmg_data_array))
+                else:
+                    id, x, y = location.infos.id_hash.split("_")
+
+                    length = 1 if location.infos.is_mapobj else 2
+                    x_bytes = int(x, base=16).to_bytes(length, byteorder="little")
+                    y_bytes = int(y, base=16).to_bytes(length, byteorder="little")
+
+                    hash = id[::-1].encode() + x_bytes + y_bytes
+                    offset = self.get_offset(zmb_data, hash)
+                    assert offset is not None
+
+                    if location.infos.is_actor:
+                        entry = ActorEntry.from_bytes(zmb_data[offset:offset + ActorEntry.entry_size])
+                        do_save_narc = True
+
+                        if entry.is_shop:
+                            assert entry.is_shop == node.is_shop
+                            top_left = location.items[0]
+                            middle = location.items[1]
+                            top_right = location.items[2]
+                            bottom_left = location.items[3]
+                            bottom_right = location.items[4]
+
+                            entry.params[0] = (middle.id.value << 8) | top_left.id.value
+                            entry.params[1] = (bottom_left.id.value << 8) | top_right.id.value
+                            entry.params[2] = bottom_right.id.value
+                        else:
+                            entry.params[0] = location.items[0].id.value
+
+                        zmb_data = self.update_zmb(entry, zmb_data)
+                    elif location.infos.is_mapobj:
+                        do_save_narc = True
+                        entry = MapObjectEntry.from_bytes(zmb_data[offset:offset + MapObjectEntry.entry_size])
                         entry.params[0] = location.items[0].id.value
+                        zmb_data = self.update_zmb(entry, zmb_data)
 
-                    zmb_data = replace_data(entry, zmb_data)
-                elif location.infos.is_mapobj:
-                    do_save_narc = True
-                    entry = MapObjectEntry.from_bytes(zmb_data[offset:offset + MapObjectEntry.entry_size])
-                    entry.params[0] = location.items[0].id.value
-                    zmb_data = replace_data(entry, zmb_data)
+            if do_save_narc:
+                archive.setFileByName(zmb_filename, zmb_data)
+                LZSS.compressToFile(archive.save(), lzss_path)
 
-        if do_save_narc:
-            archive.setFileByName(zmb_filename, zmb_data)
-            LZSS.compressToFile(archive.save(), lzss_path)
+            print(f"({(i / (len(self.nodes) - 1)) * 100:.2f}%) Processed", node.name)
 
-        print(f"({(i / (len(nodes) - 1)) * 100:.2f}%) Processed", node.name)
+    def create_log(self):
+        spoiler_log = SeedLog(Path("output/spoiler.yaml"), self.seed)
 
+        for node in self.nodes:
+            spoiler_log.entries.append(SeedLogEntry(node))
 
-def create_log(nodes: list[LocationNode], seed: str):
-    spoiler_log = SeedLog(Path("output/spoiler.yaml"), seed)
+        spoiler_log.export()
 
-    for node in nodes:
-        spoiler_log.entries.append(SeedLogEntry(node))
+    def generate_seed(self):
+        initial_time = time.time()
+        print(f"Randomizing with {len(progressive_item_pool)} progressive items, {len(priority_item_pool)} priority items and {len(normal_item_pool)} remaining items...")
 
-    spoiler_log.export()
+        # 2. assign the items
+        if self.seed_log is None:
+            prev_time = time.time()
+            self.assign_items()
+            print(f"Item assigned successfully in {time.time() - prev_time:.3f}s!")
+
+        self.patch_rom()
+
+        # 3. update the rom files
+        if self.seed_log is None:
+            # 4. generate spoiler log
+            self.create_log()
+
+        print(f"Seed {self.seed} was generated successfully in {time.time() - initial_time:.3f}s!")
+
+    def export_settings(self):
+        settings_path = Path(f"src/settings/settings.bin")
+        settings_path.write_bytes(self.settings.to_bin())
 
 
 def main():
-    initial_time = time.time()
+    rando = Randomizer(
+        "eur",
+        Path("rando/test/settings.yaml"),
+        Path("rando/test/test_world.yaml"),
+        Path("rando/data/location_table.yaml"),
 
-    VERSION = "eur"
+        # plando mode
+        Path("output/spoiler.yaml"),
+    )
 
-    base_dir = Path("extract").resolve() / VERSION
-    assert base_dir.exists()
-
-    # from https://github.com/OoTRandomizer/OoT-Randomizer/blob/2900fedb4a5ccd6937db85ec4f15721556656815/Settings.py#L253-L270
-    def sanitize(s):
-        return re.sub(r"[^a-zA-Z0-9_-]", "", s)
-    seed = sanitize("".join(random.choices(string.ascii_uppercase + string.digits, k=10)))
-    final_seed = seed
-    seed_num = int(hashlib.sha256(final_seed.encode("utf-8")).hexdigest(), base=16)
-
-    random.seed(seed_num)
-    print(f"Randomizing with {len(progressive_item_pool)} progressive items, {len(priority_item_pool)} priority items and {len(normal_item_pool)} remaining items...")
-
-    # 1. get location node list
-    nodes = LocationNode.from_yaml(Path("rando/test/test_world.yaml"), Path("rando/data/location_table.yaml"))
-
-    # 2. assign the items
-    prev_time = time.time()
-    assign_items(nodes)
-    print(f"Item assigned successfully in {time.time() - prev_time:.3f}s!")
-
-    # 3. update the rom files
-    patch_rom(base_dir, nodes)
-
-    # 4. generate spoiler log
-    create_log(nodes, seed)
-
-    print(f"Seed {seed} was generated successfully in {time.time() - initial_time:.3f}s!")
+    # rando.generate_seed()
+    rando.export_settings()
 
 
 if __name__ == "__main__":

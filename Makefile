@@ -143,6 +143,7 @@ HOOKS_GAME_BIN := $(HOOKS_GAME_ELF:.elf=.bin)
 HOOKS_GAME_MAP := $(HOOKS_GAME_ELF:.elf=.map)
 
 # create output directories
+$(shell $(MKDIR) -p $(BUILD_DIR)/src/settings)
 $(shell $(MKDIR) -p $(BUILD_DIR)/src/overlays)
 $(shell $(MKDIR) -p $(BUILD_DIR)/src/thumb)
 $(shell $(MKDIR) -p $(HOOKS_BUILD_DIR)/src)
