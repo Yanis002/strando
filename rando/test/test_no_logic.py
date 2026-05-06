@@ -219,11 +219,6 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.ForceGem_18, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_19, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_20, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.Unk_25, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Unk_26, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Unk_27, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Unk_28, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Unk_29, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.FinalTrack, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.Unk_31, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.Unk_32, ItemKind.Default, ItemWeight.Progressive),
@@ -685,6 +680,17 @@ class Randomizer:
 
             item_defs.extend(glyphs + sources)
 
+        # only add restoration songs if we want them shuffled
+        if self.settings.shuffle.duets:
+            songs = [
+                ItemDef(ItemId.Unk_25, ItemKind.Default, ItemWeight.Progressive),
+                ItemDef(ItemId.Unk_26, ItemKind.Default, ItemWeight.Progressive),
+                ItemDef(ItemId.Unk_27, ItemKind.Default, ItemWeight.Progressive),
+                ItemDef(ItemId.Unk_28, ItemKind.Default, ItemWeight.Progressive),
+                ItemDef(ItemId.Unk_29, ItemKind.Default, ItemWeight.Progressive),
+            ]
+            item_defs.extend(songs)
+
         ## create the pools
         self.progressive_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Progressive]
         self.priority_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Priority]
@@ -799,6 +805,10 @@ class Randomizer:
                 assert node.room_index == location.infos.room_index
 
                 if location.infos.is_bmg:
+                    # ignore duets if disabled
+                    if not self.settings.shuffle.duets and "Sanctuary Song of Restoration" in location.name:
+                        continue
+
                     for lang in languages:
                         bmg_path = self.extracted_dir / "files" / lang / "Message" / location.infos.bmg
                         assert bmg_path.exists()
