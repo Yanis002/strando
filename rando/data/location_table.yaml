@@ -382,6 +382,7 @@ Dune Sanctuary Song of Restoration:
     - '0x42F8'
   room_index: 2
   scene: f_sand
+  settings: ['duets']
 
 Ends of the Earth Golden Big Chest:
   id_hash: TRLS_0x1F_0x08
@@ -585,6 +586,7 @@ Island Sanctuary Song of Restoration:
     - '0x13048'
   room_index: 4
   scene: f_water2
+  settings: ['duets']
 
 Island Sanctuary Stamp Station:
   id_hash: SPTB_0x1E_0x15
@@ -1228,6 +1230,7 @@ Snowfall Sanctuary Song of Restoration:
     - '0x140C0'
   room_index: 2
   scene: f_snow2
+  settings: ['duets']
 
 Snowfall Sanctuary Stamp Station:
   id_hash: SPTB_0x0C_0x14
@@ -1670,6 +1673,7 @@ Valley Sanctuary Song of Restoration:
     - '0x76B0'
   room_index: 3
   scene: f_flame2
+  settings: ['duets']
 
 Valley Sanctuary Stamp Station:
   id_hash: SPTB_0x1D_0x0B
@@ -1757,6 +1761,7 @@ Woodland Sanctuary Song of Restoration:
     - '0xBF98'
   room_index: 1
   scene: f_forest2
+  settings: ['duets']
 
 Woodland Sanctuary Stamp Station:
   id_hash: SPTB_0x23_0x0D
