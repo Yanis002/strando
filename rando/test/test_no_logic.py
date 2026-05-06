@@ -393,6 +393,8 @@ class LocationInfo:
                         new_info.settings.rupeesanity = True
                     case "glyphs_and_sources":
                         new_info.settings.glyphs_and_sources = True
+                    case "duets":
+                        new_info.settings.duets = True
                     case _:
                         print(f"WARNING: ignoring unknown setting {repr(elem)}!")
 
@@ -414,6 +416,10 @@ class LocationInfo:
 
             # ignore location if glyphs_and_sources is disabled (aka set to vanilla)
             if loc.settings.glyphs_and_sources and not settings.shuffle.glyphs_and_sources != "vanilla":
+                continue
+
+            # ignore duets if disabled
+            if loc.settings.duets and not settings.shuffle.duets:
                 continue
 
             infos.append(loc)
@@ -805,10 +811,6 @@ class Randomizer:
                 assert node.room_index == location.infos.room_index
 
                 if location.infos.is_bmg:
-                    # ignore duets if disabled
-                    if not self.settings.shuffle.duets and "Sanctuary Song of Restoration" in location.name:
-                        continue
-
                     for lang in languages:
                         bmg_path = self.extracted_dir / "files" / lang / "Message" / location.infos.bmg
                         assert bmg_path.exists()
