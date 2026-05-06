@@ -26,7 +26,7 @@ settings:
 
         # - startwith (allowing train rides in forest realm)
         # - anywhere (only allowing travel between outset village and castle town when in forest realm)
-        forest_glyph: "anywhere"
+        forest_glyph: "startwith"
 
         # true/false
         duets: true

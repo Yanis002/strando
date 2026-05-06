@@ -4,7 +4,7 @@
 
 // patch for func_ov070_02142140 & func_ov071_0215ff3c (small key & tears of light item give)
 class CustomFreestandingActor : public Actor {
-public:
+  public:
     CustomFreestandingActor() {}
 
     void TryItemGive(void);

@@ -52,7 +52,7 @@ if __name__ == "__main__":
         if b"ACPN" not in zmb_data and b"BOPM" not in zmb_data:
             continue
 
-        # filter out maps that don't contain any of the IDs we want to change 
+        # filter out maps that don't contain any of the IDs we want to change
         all_ids = actor_ids + mapobj_ids
         for id in all_ids:
             if struct.pack("<4s", id[::-1].encode()) in zmb_data:

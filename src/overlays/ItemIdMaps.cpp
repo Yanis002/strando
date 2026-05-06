@@ -143,6 +143,12 @@ u32 gGetItemMap[] = {
     GIModel_keyN, // ExtraItemId_NormalKey_Marine
     GIModel_keyN, // ExtraItemId_NormalKey_Mountain
     GIModel_keyN, // ExtraItemId_NormalKey_Desert
+
+    GIModel_dummy, // ExtraItemId_ForestSource
+    GIModel_dummy, // ExtraItemId_SnowSource
+    GIModel_dummy, // ExtraItemId_OceanSource
+    GIModel_dummy, // ExtraItemId_FireSource
+    GIModel_dummy, // ExtraItemId_SandSource
 };
 
 // BMG IDs
@@ -280,6 +286,11 @@ u32 gBMGMap[] = {
     MSG(ExtraItemId_NormalKey_Marine), // ExtraItemId_NormalKey_Marine
     MSG(ExtraItemId_NormalKey_Mountain), // ExtraItemId_NormalKey_Mountain
     MSG(ExtraItemId_NormalKey_Desert), // ExtraItemId_NormalKey_Desert
+    MSG(ExtraItemId_ForestSource), // ExtraItemId_ForestSource
+    MSG(ExtraItemId_SnowSource), // ExtraItemId_SnowSource
+    MSG(ExtraItemId_OceanSource), // ExtraItemId_OceanSource
+    MSG(ExtraItemId_FireSource), // ExtraItemId_FireSource
+    MSG(ExtraItemId_SandSource), // ExtraItemId_SandSource
 };
 
 u16 gAdvFlagMap[] = {
@@ -416,4 +427,9 @@ u16 gAdvFlagMap[] = {
     RandoAdventureFlag_NormalKey_Marine, // ExtraItemId_NormalKey_Marine
     RandoAdventureFlag_NormalKey_Mountain, // ExtraItemId_NormalKey_Mountain
     RandoAdventureFlag_NormalKey_Desert, // ExtraItemId_NormalKey_Desert
+    RandoAdventureFlag_ForestSource, // ExtraItemId_ForestSource
+    RandoAdventureFlag_SnowSource, // ExtraItemId_SnowSource
+    RandoAdventureFlag_OceanSource, // ExtraItemId_OceanSource
+    RandoAdventureFlag_FireSource, // ExtraItemId_FireSource
+    RandoAdventureFlag_SandSource, // ExtraItemId_SandSource
 };

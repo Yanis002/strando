@@ -1,4 +1,6 @@
 #include "gz.hpp"
+#include "036_MapA5.hpp"
+#include "settings.hpp"
 
 #include <Cutscene/Cutscene.hpp>
 #include <Save/SaveManager.hpp>
@@ -89,6 +91,13 @@ void GZ::OnGameModeInit() {
                     SET_FLAG(pFlags, flag);
                 }
             }
+        }
+
+        if (gSettings.GetShuffleSettings()->forest_glyph == ForestGlyphMode_Startwith && data_027e09b8 != NULL) {
+            AdventureFlag* pFlags = data_027e09b8->mAdventureFlags;
+
+            SET_FLAG(pFlags, AdventureFlag_ObtainedForestGlyph);
+            SET_FLAG(pFlags, RandoAdventureFlag_ForestGlyph);
         }
     }
 }

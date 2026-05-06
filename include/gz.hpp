@@ -36,6 +36,12 @@ enum ExtraItemId_ {
     ExtraItemId_NormalKey_Mountain,
     ExtraItemId_NormalKey_Desert,
 
+    ExtraItemId_ForestSource,
+    ExtraItemId_SnowSource,
+    ExtraItemId_OceanSource,
+    ExtraItemId_FireSource,
+    ExtraItemId_SandSource,
+
     ExtraItemId_Max,
 };
 

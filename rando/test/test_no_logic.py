@@ -219,10 +219,6 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.ForceGem_18, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_19, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_20, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForestGlyph, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.SnowGlyph, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.OceanGlyph, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.FireGlyph, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.Unk_25, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.Unk_26, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.Unk_27, ItemKind.Default, ItemWeight.Progressive),
@@ -400,6 +396,8 @@ class LocationInfo:
                 match elem:
                     case "rupee_sanity":
                         new_info.settings.rupeesanity = True
+                    case "glyphs_and_sources":
+                        new_info.settings.glyphs_and_sources = True
                     case _:
                         print(f"WARNING: ignoring unknown setting {repr(elem)}!")
 
@@ -417,6 +415,10 @@ class LocationInfo:
 
             # ignore location if rupeesanity is disabled
             if loc.settings.rupeesanity and not settings.shuffle.rupeesanity:
+                continue
+
+            # ignore location if glyphs_and_sources is disabled (aka set to vanilla)
+            if loc.settings.glyphs_and_sources and not settings.shuffle.glyphs_and_sources != "vanilla":
                 continue
 
             infos.append(loc)
@@ -661,6 +663,28 @@ class Randomizer:
             big_rupees = [ItemDef(ItemId.BigGreenRupee, ItemKind.Default, ItemWeight.Normal)] * 4
             item_defs.extend(red_rupees + blue_rupees + big_rupees)
 
+        # only add glyphs/sources if we want them shuffled
+        if self.settings.shuffle.glyphs_and_sources != "vanilla":
+            glyphs = [
+                ItemDef(ItemId.SnowGlyph, ItemKind.Default, ItemWeight.Progressive),
+                ItemDef(ItemId.OceanGlyph, ItemKind.Default, ItemWeight.Progressive),
+                ItemDef(ItemId.FireGlyph, ItemKind.Default, ItemWeight.Progressive),
+            ]
+
+            # only add the forest glyph if we want it shuffled
+            if self.settings.shuffle.forest_glyph == "anywhere":
+                glyphs.append(ItemDef(ItemId.ForestGlyph, ItemKind.Default, ItemWeight.Progressive))
+
+            sources = [
+                ItemDef(ItemId.ExtraItemId_ForestSource, ItemKind.Default, ItemWeight.Progressive),
+                ItemDef(ItemId.ExtraItemId_SnowSource, ItemKind.Default, ItemWeight.Progressive),
+                ItemDef(ItemId.ExtraItemId_OceanSource, ItemKind.Default, ItemWeight.Progressive),
+                ItemDef(ItemId.ExtraItemId_FireSource, ItemKind.Default, ItemWeight.Progressive),
+                ItemDef(ItemId.ExtraItemId_SandSource, ItemKind.Default, ItemWeight.Progressive),
+            ]
+
+            item_defs.extend(glyphs + sources)
+
         ## create the pools
         self.progressive_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Progressive]
         self.priority_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Priority]
@@ -825,6 +849,10 @@ class Randomizer:
 
                         zmb_data = self.update_zmb(entry, zmb_data)
                     elif location.infos.is_mapobj:
+                        # ignore glyphs if it's set to vanilla
+                        if self.settings.shuffle.glyphs_and_sources == "vanilla" and entry.id == "GELG":
+                            continue
+
                         do_save_narc = True
                         entry = MapObjectEntry.from_bytes(zmb_data[offset:offset + MapObjectEntry.entry_size])
                         entry.params[0] = location.items[0].id.value

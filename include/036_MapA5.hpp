@@ -3,6 +3,11 @@
 #include <Save/AdventureFlags.hpp>
 
 // unused flags we can use
+#define RandoAdventureFlag_ForestSource AdventureFlag_Unk_377
+#define RandoAdventureFlag_SnowSource AdventureFlag_Unk_378
+#define RandoAdventureFlag_OceanSource AdventureFlag_Unk_379
+#define RandoAdventureFlag_FireSource AdventureFlag_Unk_37A
+#define RandoAdventureFlag_SandSource AdventureFlag_Unk_37B
 #define RandoAdventureFlag_TearLight_1 AdventureFlag_Unk_37C
 #define RandoAdventureFlag_TearLight_2 AdventureFlag_Unk_37D
 #define RandoAdventureFlag_TearLight_3 AdventureFlag_Unk_37E

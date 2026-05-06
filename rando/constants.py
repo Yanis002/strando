@@ -185,6 +185,11 @@ class ItemId(IntEnum):
     ExtraItemId_NormalKey_Marine = 129
     ExtraItemId_NormalKey_Mountain = 130
     ExtraItemId_NormalKey_Desert = 131
+    ExtraItemId_ForestSource = 132
+    ExtraItemId_SnowSource = 133
+    ExtraItemId_OceanSource = 134
+    ExtraItemId_FireSource = 135
+    ExtraItemId_SandSource = 136
 
 extra_id_to_scene = {
     ItemId.ExtraItemId_TearLight_1: "d_main",

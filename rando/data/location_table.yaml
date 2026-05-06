@@ -1261,6 +1261,7 @@ ToS 12F Ocean Rail Glyph:
   is_mapobj: true
   room_index: 11
   scene: d_main
+  settings: ['glyphs_and_sources']
 
 ToS 13F Central Tear of Light:
   id_hash: SZKU_0x0168_0x0128
@@ -1327,6 +1328,7 @@ ToS 17F Fire Rail Glyph:
   is_mapobj: true
   room_index: 15
   scene: d_main
+  settings: ['glyphs_and_sources']
 
 ToS 18F Center Chest:
   id_hash: TRES_0x1E_0x1D
@@ -1471,6 +1473,7 @@ ToS 3F Forest Rail Glyph:
   is_mapobj: true
   room_index: 2
   scene: d_main
+  settings: ['glyphs_and_sources']
 
 ToS 4F Central Chest:
   id_hash: TRLS_0x20_0x18
@@ -1555,6 +1558,7 @@ ToS 7F Snow Rail Glyph:
   is_mapobj: true
   room_index: 6
   scene: d_main
+  settings: ['glyphs_and_sources']
 
 ToS 8F N Bombable Wall Chest:
   id_hash: TRLS_0x1F_0x14

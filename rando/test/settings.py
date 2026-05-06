@@ -7,6 +7,7 @@ from pathlib import Path
 class LocationSettings:
     def __init__(self):
         self.rupeesanity = False
+        self.glyphs_and_sources = False # this is not actually a bool but we just need to check if it's vanilla or not
 
 
 class ShuffleSettings:

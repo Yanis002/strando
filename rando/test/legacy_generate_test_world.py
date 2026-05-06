@@ -150,7 +150,7 @@ class MapObjectEntry:
             self.unk_14,
             self.unk_18,
         )
-    
+
     def get_params(self):
         return item_id_to_name[f"0x{self.params[0]:02X}"]
 
