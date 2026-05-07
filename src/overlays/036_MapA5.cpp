@@ -206,25 +206,25 @@ u16 CustomShopItem::GetShopItemPrice(void) {
             break;
         case ItemId_FireGlyph:
             break;
-        case ItemId_25:
+        case ItemId_RestoredForestGlyph:
             break;
-        case ItemId_26:
+        case ItemId_RestoredSnowGlyph:
             break;
-        case ItemId_27:
+        case ItemId_RestoredOceanGlyph:
             break;
-        case ItemId_28:
+        case ItemId_RestoredFireGlyph:
             break;
-        case ItemId_29:
+        case ItemId_RestoredDesertOceanGlyph:
             break;
         case ItemId_FinalTrack:
             break;
-        case ItemId_31:
+        case ItemId_SpiritTrain:
             break;
-        case ItemId_32:
+        case ItemId_TrainCannon:
             break;
-        case ItemId_33:
+        case ItemId_SpiritTrainCar:
             break;
-        case ItemId_34:
+        case ItemId_TrainWagon:
             break;
         case ItemId_ForceGem_35:
             break;

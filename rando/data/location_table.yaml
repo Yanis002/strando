@@ -234,22 +234,34 @@ Castle Town Stamp Station:
   scene: f_htown
 
 Castle Town Take 'em All On Level 1:
-  id_hash: JOLN_0x01F8_0x015D
-  is_actor: true
+  bmg: castle_town.bmg
+  is_bmg: true
+  offsets:
+    english:
+    - '0x92D0'
   room_index: 11
   scene: f_htown
+  settings: ['take_em_all_on-easy']
 
 Castle Town Take 'em All On Level 2:
-  id_hash: JOLN_0x01F8_0x015D
-  is_actor: true
+  bmg: castle_town.bmg
+  is_bmg: true
+  offsets:
+    english:
+    - '0x9248'
   room_index: 11
   scene: f_htown
+  settings: ['take_em_all_on-hard']
 
 Castle Town Take 'em All On Level 3:
-  id_hash: JOLN_0x01F8_0x015D
-  is_actor: true
+  bmg: castle_town.bmg
+  is_bmg: true
+  offsets:
+    english:
+    - '0x9228'
   room_index: 11
   scene: f_htown
+  settings: ['take_em_all_on-expert']
 
 Castle Town Take 'em All On Level 3 Capbone Chest:
   id_hash: TRLW_0x1F_0x16
@@ -437,12 +449,14 @@ Goron Target Range Big Chest:
   is_mapobj: true
   room_index: 1
   scene: f_flame3
+  settings: ['goron_range-on']
 
 Goron Target Range Small Chest:
   id_hash: TREN_0x22_0x0F
   is_mapobj: true
   room_index: 1
   scene: f_flame3
+  settings: ['goron_range-on']
 
 Goron Village Chest Above Elder's House:
   id_hash: TRES_0x11_0x0E
@@ -522,6 +536,19 @@ Hyrule Castle Exterior NW Chest:
   is_mapobj: true
   room_index: 0
   scene: f_hyral
+
+Hyrule Castle Sword Minigame:
+  bmg: castle.bmg
+  is_bmg: true
+  offsets:
+    english:
+    - '0xD728'
+    - '0xD748'
+    - '0xD768'
+    - '0xD7E0'
+  room_index: 7
+  scene: f_hyral
+  settings: ['sword_training-on']
 
 Icy Spring Buy Mega Ice:
   id_hash: YUKI_0x0220_0x0160
@@ -799,22 +826,35 @@ Mayscore Whip Chest:
   scene: f_forest3
 
 Mayscore Whip Race 1:05-1:15:
-  id_hash: FOMD_0x02F0_0x00B0
-  is_actor: true
+  bmg: forest.bmg
+  is_bmg: true
+  offsets:
+    english:
+    - '0xB2F8'
   room_index: 0
   scene: f_forest3
+  settings: ['whip_race-hard']
 
 Mayscore Whip Race 1:15-1:30:
-  id_hash: FOMD_0x02F0_0x00B0
-  is_actor: true
+  bmg: forest.bmg
+  is_bmg: true
+  offsets:
+    english:
+    - '0xB3E8'
   room_index: 0
   scene: f_forest3
+  settings: ['whip_race-easy']
 
 Mayscore Whip Race Sub 1:05:
-  id_hash: FOMD_0x02F0_0x00B0
-  is_actor: true
+  bmg: forest.bmg
+  is_bmg: true
+  offsets:
+    english:
+    - '0xB328'
+    - '0xB430'
   room_index: 0
   scene: f_forest3
+  settings: ['whip_race-expert']
 
 Mountain Temple 1F NE Chest:
   id_hash: TRES_0x30_0x0A
@@ -1043,6 +1083,7 @@ Pirate Hideout Minigame 3000-4000:
     - '0x114F0'
   room_index: 0
   scene: f_ajito
+  settings: ['pirate_hideout-easy']
 
 Pirate Hideout Minigame 4000-5000:
   bmg: water.bmg
@@ -1052,6 +1093,7 @@ Pirate Hideout Minigame 4000-5000:
     - '0x114E8'
   room_index: 0
   scene: f_ajito
+  settings: ['pirate_hideout-hard']
 
 Pirate Hideout Minigame 5000+:
   bmg: water.bmg
@@ -1061,6 +1103,7 @@ Pirate Hideout Minigame 5000+:
     - '0x114E0'
   room_index: 0
   scene: f_ajito
+  settings: ['pirate_hideout-expert']
 
 Pirate Hideout Secret Cave Left Treasure:
   id_hash: TRES_0x1D_0x12

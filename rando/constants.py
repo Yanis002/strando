@@ -364,6 +364,11 @@ item_id_to_name = {
     0x81: "Marine Temple Small Key",
     0x82: "Mountain Temple Small Key",
     0x83: "Desert Temple Small Key",
+    0x84: "Forest Source",
+    0x85: "Snow Source",
+    0x86: "Ocean Source",
+    0x87: "Fire Source",
+    0x88: "Sand Source",
 }
 item_name_to_id = {v: k for k, v in item_id_to_name.items()}
 

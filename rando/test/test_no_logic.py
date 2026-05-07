@@ -388,13 +388,25 @@ class LocationInfo:
 
         if "settings" in data:
             for elem in data["settings"]:
-                match elem:
+                split = elem.split("-")
+
+                match split[0]:
                     case "rupee_sanity":
                         new_info.settings.rupeesanity = True
                     case "glyphs_and_sources":
                         new_info.settings.glyphs_and_sources = True
                     case "duets":
                         new_info.settings.duets = True
+                    case "sword_training":
+                        new_info.settings.sword_training = True
+                    case "whip_race":
+                        new_info.settings.whip_race = split[1]
+                    case "goron_range":
+                        new_info.settings.goron_range = True
+                    case "pirate_hideout":
+                        new_info.settings.pirate_hideout = split[1]
+                    case "take_em_all_on":
+                        new_info.settings.take_em_all_on = split[1]
                     case _:
                         print(f"WARNING: ignoring unknown setting {repr(elem)}!")
 
@@ -420,6 +432,22 @@ class LocationInfo:
 
             # ignore duets if disabled
             if loc.settings.duets and not settings.shuffle.duets:
+                continue
+
+            # ignoring minigames we don't want
+            if loc.settings.sword_training and not settings.shuffle.minigames.sword_training:
+                continue
+
+            if len(loc.settings.whip_race) > 0 and loc.settings.whip_race not in settings.shuffle.minigames.whip_race:
+                continue
+
+            if loc.settings.goron_range and not settings.shuffle.minigames.goron_range:
+                continue
+
+            if len(loc.settings.pirate_hideout) > 0 and loc.settings.pirate_hideout not in settings.shuffle.minigames.pirate_hideout:
+                continue
+
+            if len(loc.settings.take_em_all_on) > 0 and loc.settings.take_em_all_on not in settings.shuffle.minigames.take_em_all_on:
                 continue
 
             infos.append(loc)
@@ -567,31 +595,10 @@ class SeedLog:
                     assert item_def is not None
                     location.items.append(item_def)
                 elif isinstance(elem, list):
-                    top_left = elem[0]
-                    middle = elem[1]
-                    top_right = elem[2]
-                    bottom_left = elem[3]
-                    bottom_right = elem[4]
-
-                    item_def = find_item_def(item_name_to_id[top_left[shop_item_positions[0]]])
-                    assert item_def is not None
-                    location.items.append(item_def)
-
-                    item_def = find_item_def(item_name_to_id[middle[shop_item_positions[1]]])
-                    assert item_def is not None
-                    location.items.append(item_def)
-
-                    item_def = find_item_def(item_name_to_id[top_right[shop_item_positions[2]]])
-                    assert item_def is not None
-                    location.items.append(item_def)
-
-                    item_def = find_item_def(item_name_to_id[bottom_left[shop_item_positions[3]]])
-                    assert item_def is not None
-                    location.items.append(item_def)
-
-                    item_def = find_item_def(item_name_to_id[bottom_right[shop_item_positions[4]]])
-                    assert item_def is not None
-                    location.items.append(item_def)
+                    for i in range(0, 5):
+                        item_def = find_item_def(item_name_to_id[elem[i][shop_item_positions[i]]])
+                        assert item_def is not None
+                        location.items.append(item_def)
                 else:
                     raise ValueError(f"unexpected type: {type(elem)}")
 
@@ -807,6 +814,9 @@ class Randomizer:
 
             do_save_narc = False
             for location in node.locations:
+                if location.infos is None:
+                    continue
+
                 assert node.scene_name == location.infos.scene
                 assert node.room_index == location.infos.room_index
 
@@ -919,7 +929,7 @@ def main():
         # Path("output/spoiler.yaml"),
     )
 
-    # rando.generate_seed()
+    rando.generate_seed()
     rando.export_settings()
 
 

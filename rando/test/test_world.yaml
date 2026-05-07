@@ -667,6 +667,12 @@ node_f_hyral_5:
   room_index: 5
   scene: f_hyral
 
+node_f_hyral_7:
+  locations:
+    Hyrule Castle Sword Minigame: 'True'
+  room_index: 7
+  scene: f_hyral
+
 node_f_kakushi1_1:
   locations:
     Snowdrift Station Puzzle Reward: 'True'

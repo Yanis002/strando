@@ -1,6 +1,7 @@
 instructions:
   bl:
     ItemGiveImpl: ['0x021858F4']
+    Custom_ov031_02103878: ['0x02185AD4']
 
 constants:
   gBMGMap: ['0x02185DB0']

@@ -29,15 +29,6 @@ enum ForestGlyphMode_ {
     ForestGlyphMode_Anywhere,
 };
 
-enum MinigameMode_ {
-    MinigameMode_Off,
-    MinigameMode_Easy,
-    MinigameMode_Hard,
-    MinigameMode_Expert,
-    MinigameMode_Reasonable,
-    MinigameMode_All,
-};
-
 enum StampMode_ {
     StampMode_Off,
     StampMode_Anywhere,
@@ -52,7 +43,7 @@ struct ShuffleSettings {
     u8 glyphs_and_sources;
     u8 forest_glyph;
     bool duets;
-    u8 minigames;
+    bool goron_range;
     u8 stamps;
     bool stamp_realm_reward;
     bool rabbitsanity;

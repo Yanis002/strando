@@ -31,13 +31,13 @@ settings:
         # true/false
         duets: true
 
-        # - off
-        # - easy
-        # - hard
-        # - expert
-        # - reasonable (easy and hard)
-        # - all
-        minigames: "easy"
+        # to disable a difficulty level reward or simply disabling the check, change the list
+        minigames:
+            sword_training: ['on']
+            whip_race: ['easy', 'hard', 'expert']
+            goron_range: ['on']
+            pirate_hideout: ['easy', 'hard', 'expert']
+            take_em_all_on: ['easy', 'hard', 'expert']
 
         # - off
         # - anywhere (stamps will be items and stamp stations will give an item)

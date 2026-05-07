@@ -35,16 +35,16 @@ u32 gGetItemMap[] = {
     GIModel_litB, // ItemId_SnowGlyph
     GIModel_litC, // ItemId_OceanGlyph
     GIModel_litD, // ItemId_FireGlyph
-    GIModel_litA, // ItemId_25
-    GIModel_litB, // ItemId_26
-    GIModel_litC, // ItemId_27
-    GIModel_litD, // ItemId_28
-    GIModel_litC, // ItemId_29
+    GIModel_litA, // ItemId_RestoredForestGlyph
+    GIModel_litB, // ItemId_RestoredSnowGlyph
+    GIModel_litC, // ItemId_RestoredOceanGlyph
+    GIModel_litD, // ItemId_RestoredFireGlyph
+    GIModel_litC, // ItemId_RestoredDesertOceanGlyph
     GIModel_litA, // ItemId_FinalTrack
-    GIModel_dummy, // ItemId_31
-    GIModel_dummy, // ItemId_32
-    GIModel_dummy, // ItemId_33
-    GIModel_dummy, // ItemId_34
+    GIModel_dummy, // ItemId_SpiritTrain
+    GIModel_dummy, // ItemId_TrainCannon
+    GIModel_dummy, // ItemId_SpiritTrainCar
+    GIModel_dummy, // ItemId_TrainWagon
     GIModel_frcY, // ItemId_ForceGem_35
     GIModel_frcY, // ItemId_ForceGem_36
     GIModel_frcY, // ItemId_ForceGem_37
@@ -178,16 +178,16 @@ u32 gBMGMap[] = {
     MSG(ItemId_SnowGlyph), // ItemId_SnowGlyph
     MSG(ItemId_OceanGlyph), // ItemId_OceanGlyph
     MSG(ItemId_FireGlyph), // ItemId_FireGlyph
-    MSG(ItemId_25), // ItemId_25
-    MSG(ItemId_26), // ItemId_26
-    MSG(ItemId_27), // ItemId_27
-    MSG(ItemId_28), // ItemId_28
-    MSG(ItemId_29), // ItemId_29
+    MSG(ItemId_RestoredForestGlyph), // ItemId_RestoredForestGlyph
+    MSG(ItemId_RestoredSnowGlyph), // ItemId_RestoredSnowGlyph
+    MSG(ItemId_RestoredOceanGlyph), // ItemId_RestoredOceanGlyph
+    MSG(ItemId_RestoredFireGlyph), // ItemId_RestoredFireGlyph
+    MSG(ItemId_RestoredDesertOceanGlyph), // ItemId_RestoredDesertOceanGlyph
     MSG(ItemId_FinalTrack), // ItemId_FinalTrack
-    MSG(ItemId_31), // ItemId_31
-    MSG(ItemId_32), // ItemId_32
-    MSG(ItemId_33), // ItemId_33
-    MSG(ItemId_34), // ItemId_34
+    MSG(ItemId_SpiritTrain), // ItemId_SpiritTrain
+    MSG(ItemId_TrainCannon), // ItemId_TrainCannon
+    MSG(ItemId_SpiritTrainCar), // ItemId_SpiritTrainCar
+    MSG(ItemId_TrainWagon), // ItemId_TrainWagon
     MSG(ItemId_ForceGem_35), // ItemId_ForceGem_35
     MSG(ItemId_ForceGem_36), // ItemId_ForceGem_36
     MSG(ItemId_ForceGem_37), // ItemId_ForceGem_37
@@ -319,16 +319,16 @@ u16 gAdvFlagMap[] = {
     RandoAdventureFlag_SnowGlyph, // ItemId_SnowGlyph
     RandoAdventureFlag_OceanGlyph, // ItemId_OceanGlyph
     RandoAdventureFlag_FireGlyph, // ItemId_FireGlyph
-    RandoAdventureFlag_25, // ItemId_25
-    RandoAdventureFlag_26, // ItemId_26
-    RandoAdventureFlag_27, // ItemId_27
-    RandoAdventureFlag_28, // ItemId_28
-    RandoAdventureFlag_29, // ItemId_29
+    RandoAdventureFlag_RestoredForestGlyph, // ItemId_RestoredForestGlyph
+    RandoAdventureFlag_RestoredSnowGlyph, // ItemId_RestoredSnowGlyph
+    RandoAdventureFlag_RestoredOceanGlyph, // ItemId_RestoredOceanGlyph
+    RandoAdventureFlag_RestoredFireGlyph, // ItemId_RestoredFireGlyph
+    RandoAdventureFlag_RestoredDesertOceanGlyph, // ItemId_RestoredDesertOceanGlyph
     RandoAdventureFlag_FinalTrack, // ItemId_FinalTrack
-    RandoAdventureFlag_31, // ItemId_31
-    RandoAdventureFlag_32, // ItemId_32
-    RandoAdventureFlag_33, // ItemId_33
-    RandoAdventureFlag_34, // ItemId_34
+    RandoAdventureFlag_SpiritTrain, // ItemId_SpiritTrain
+    RandoAdventureFlag_TrainCannon, // ItemId_TrainCannon
+    RandoAdventureFlag_SpiritTrainCar, // ItemId_SpiritTrainCar
+    RandoAdventureFlag_TrainWagon, // ItemId_TrainWagon
     RandoAdventureFlag_ForceGem_35, // ItemId_ForceGem_35
     RandoAdventureFlag_ForceGem_36, // ItemId_ForceGem_36
     RandoAdventureFlag_ForceGem_37, // ItemId_ForceGem_37

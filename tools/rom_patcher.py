@@ -260,6 +260,9 @@ class HooksConfig:
             with yaml_path.open("r") as file:
                 yaml_file: dict = yaml.safe_load(file)
 
+            if yaml_file is None:
+                continue
+
             def get_sym(in_sym: str):
                 try:
                     return Symbol.new(in_sym, self.elf_path)

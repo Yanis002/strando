@@ -9,6 +9,42 @@ class LocationSettings:
         self.rupeesanity = False
         self.glyphs_and_sources = False # this is not actually a bool but we just need to check if it's vanilla or not
         self.duets = False
+        self.sword_training = False
+        self.whip_race = str()
+        self.goron_range = False
+        self.pirate_hideout = str()
+        self.take_em_all_on = str()
+
+
+class MinigamesSettings:
+    def __init__(self):
+        self.sword_training = False
+        self.whip_race: list[str] = []
+        self.goron_range = False
+        self.pirate_hideout: list[str] = []
+        self.take_em_all_on: list[str] = []
+
+    def validate(self):
+        if not isinstance(self.sword_training, bool):
+            raise ValueError("minigame sword_training is not valid")
+
+        if not isinstance(self.goron_range, bool):
+            raise ValueError("minigame sword_training is not valid")
+
+        difficulties = ["easy", "hard", "expert"]
+
+        for difficulty in self.whip_race:
+            if difficulty not in difficulties:
+                raise ValueError("minigame whip_race is not valid")
+
+        for difficulty in self.pirate_hideout:
+            if difficulty not in difficulties:
+                raise ValueError("minigame pirate_hideout is not valid")
+
+        for difficulty in self.take_em_all_on:
+            if difficulty not in difficulties:
+                raise ValueError("minigame take_em_all_on is not valid")
+
 
 class ShuffleSettings:
     def __init__(self):
@@ -19,7 +55,7 @@ class ShuffleSettings:
         self.glyphs_and_sources = str()
         self.forest_glyph = str()
         self.duets = False
-        self.minigames = str()
+        self.minigames = MinigamesSettings()
 
         self.stamps = str()
         self.stamp_realm_reward = False
@@ -38,9 +74,6 @@ class ShuffleSettings:
 
         self.forest_glyph_mode = ["startwith", "anywhere"]
         self.forest_glyph_mode_map = {mode: i for i, mode in enumerate(self.forest_glyph_mode)}
-
-        self.minigames_mode = ["off", "easy", "hard", "expert", "reasonable", "all"]
-        self.minigames_mode_map = {mode: i for i, mode in enumerate(self.minigames_mode)}
 
         self.stamps_mode = ["off", "anywhere", "shuffled"]
         self.stamps_mode_map = {mode: i for i, mode in enumerate(self.stamps_mode)}
@@ -67,8 +100,7 @@ class ShuffleSettings:
         if not isinstance(self.duets, bool):
             raise ValueError("duets must be true or false")
 
-        if self.minigames not in self.minigames_mode:
-            raise ValueError("minigames is not valid")
+        self.minigames.validate()
 
         if self.stamps not in self.stamps_mode:
             raise ValueError("minigames is not valid")
@@ -108,7 +140,25 @@ class ShuffleSettings:
             settings.duets = data["duets"]
 
         if "minigames" in data:
-            settings.minigames = data["minigames"]
+            if "sword_training" in data["minigames"]:
+                minigame: str = data["minigames"]["sword_training"]
+                settings.minigames.sword_training = "on" in minigame
+
+            if "whip_race" in data["minigames"]:
+                minigame: list[str] = data["minigames"]["whip_race"]
+                settings.minigames.whip_race = minigame
+
+            if "goron_range" in data["minigames"]:
+                minigame: str = data["minigames"]["goron_range"]
+                settings.minigames.goron_range = "on" in minigame
+
+            if "pirate_hideout" in data["minigames"]:
+                minigame: list[str] = data["minigames"]["pirate_hideout"]
+                settings.minigames.pirate_hideout = minigame
+
+            if "take_em_all_on" in data["minigames"]:
+                minigame: list[str] = data["minigames"]["take_em_all_on"]
+                settings.minigames.take_em_all_on = minigame
 
         if "stamps" in data:
             settings.stamps = data["stamps"]
@@ -135,7 +185,7 @@ class ShuffleSettings:
             self.glyphs_and_sources_mode_map[self.glyphs_and_sources],
             self.forest_glyph_mode_map[self.forest_glyph],
             self.duets,
-            self.minigames_mode_map[self.minigames],
+            self.minigames.goron_range,
             self.stamps_mode_map[self.stamps],
             self.stamp_realm_reward,
             self.rabbitsanity,
