@@ -70,6 +70,7 @@ Anouki Village Stamp Station:
   is_mapobj: true
   room_index: 0
   scene: f_snow
+  settings: ['stamps']
 
 Beedle Joe's Force Gem:
   bmg: intrain.bmg
@@ -139,6 +140,7 @@ Blizzard Temple B1 Stamp Station:
   is_mapobj: true
   room_index: 1
   scene: d_snow26
+  settings: ['stamps']
 
 Blizzard Temple Boss Heart Container:
   id_hash: TRLW_0x1F_0x1B
@@ -232,6 +234,7 @@ Castle Town Stamp Station:
   is_mapobj: true
   room_index: 0
   scene: f_htown
+  settings: ['stamps']
 
 Castle Town Take 'em All On Level 1:
   bmg: castle_town.bmg
@@ -358,6 +361,7 @@ Desert Temple B1 Stamp Station:
   is_mapobj: true
   room_index: 3
   scene: d_sand
+  settings: ['stamps']
 
 Desert Temple Boss Heart Container:
   id_hash: TRLW_0x1F_0x16
@@ -395,6 +399,13 @@ Dune Sanctuary Song of Restoration:
   room_index: 2
   scene: f_sand
   settings: ['duets']
+
+Sand Sanctuary Stamp Station:
+  id_hash: SPTB_0x33_0x24
+  is_mapobj: true
+  room_index: 0
+  scene: f_sand
+  settings: ['stamps']
 
 Ends of the Earth Golden Big Chest:
   id_hash: TRLS_0x1F_0x08
@@ -505,6 +516,7 @@ Goron Village West Stamp Station:
   is_mapobj: true
   room_index: 3
   scene: f_flame
+  settings: ['stamps']
 
 Goron Village West Steel Chest:
   id_hash: TRES_0x2E_0x19
@@ -571,6 +583,7 @@ Icy Spring Stamp Station:
   is_mapobj: true
   room_index: 0
   scene: f_tetsuo
+  settings: ['stamps']
 
 Icy Spring Whip Chest:
   id_hash: TRES_0x2D_0x0B
@@ -620,6 +633,7 @@ Island Sanctuary Stamp Station:
   is_mapobj: true
   room_index: 2
   scene: f_water2
+  settings: ['stamps']
 
 Lost at Sea Buried Chest:
   id_hash: TRWS_0x23_0x1E
@@ -710,6 +724,7 @@ Marine Temple 2F Stamp Station:
   is_mapobj: true
   room_index: 7
   scene: d_water27
+  settings: ['stamps']
 
 Marine Temple 3F NE Chest:
   id_hash: TRES_0x2F_0x0B
@@ -818,6 +833,7 @@ Mayscore Stamp Station:
   is_mapobj: true
   room_index: 0
   scene: f_forest3
+  settings: ['stamps']
 
 Mayscore Whip Chest:
   id_hash: TRES_0x12_0x0B
@@ -903,6 +919,7 @@ Mountain Temple B1 Stamp Station:
   is_mapobj: true
   room_index: 2
   scene: d_flame
+  settings: ['stamps']
 
 Mountain Temple B2 NE Chest:
   id_hash: TRES_0x36_0x08
@@ -965,28 +982,44 @@ Outset Ferrus Force Gem:
   scene: f_first
 
 Outset Niko 10 Stamps Reward:
-  id_hash: NICO_0x01F7_0x0151
-  is_actor: true
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    english:
+    - '0x160A0'
   room_index: 10
   scene: f_first
+  settings: ['stamps_rewards-10']
 
 Outset Niko 15 Stamps Reward:
-  id_hash: NICO_0x01F7_0x0151
-  is_actor: true
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    english:
+    - '0x15FA0'
   room_index: 10
   scene: f_first
+  settings: ['stamps_rewards-15']
 
 Outset Niko 20 Stamps Reward:
-  id_hash: NICO_0x01F7_0x0151
-  is_actor: true
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    english:
+    - '0x15FD0'
   room_index: 10
   scene: f_first
+  settings: ['stamps_rewards-20']
 
 Outset Niko Stamp Book:
-  id_hash: NICO_0x01F7_0x0151
-  is_actor: true
+  bmg: village.bmg
+  is_bmg: true
+  offsets:
+    english:
+    - '0x16040'
   room_index: 10
   scene: f_first
+  settings: ['stamp_book']
 
 Outset Niko's House Tree Buried Chest:
   id_hash: TRWS_0x13_0x1C
@@ -999,6 +1032,7 @@ Outset Stamp Station:
   is_mapobj: true
   room_index: 0
   scene: f_first
+  settings: ['stamps']
 
 Papuzia Shop Keeper:
   id_hash: WAWY_0x01F8_0x0160
@@ -1065,6 +1099,7 @@ Papuzia Village Stamp Station:
   is_mapobj: true
   room_index: 0
   scene: f_water3
+  settings: ['stamps']
 
 Papuzia Village Wadatsumi's Force Gem:
   bmg: water.bmg
@@ -1128,6 +1163,7 @@ Pirate Hideout Stamp Station:
   is_mapobj: true
   room_index: 0
   scene: f_ajito
+  settings: ['stamps']
 
 Rabbit Haven Island Chest:
   id_hash: TRES_0x24_0x14
@@ -1280,6 +1316,7 @@ Snowfall Sanctuary Stamp Station:
   is_mapobj: true
   room_index: 0
   scene: f_snow2
+  settings: ['stamps']
 
 Snowfall Sanctuary Steem Gift With Snow Source:
   bmg: snow.bmg
@@ -1647,6 +1684,7 @@ ToS Summit Stamp Station:
   is_mapobj: true
   room_index: 0
   scene: d_main_s
+  settings: ['stamps']
 
 Trading Post Buried Chest:
   id_hash: TRWS_0x17_0x10
@@ -1683,6 +1721,7 @@ Trading Post Stamp Station:
   is_mapobj: true
   room_index: 1
   scene: f_bridge2
+  settings: ['stamps']
 
 Tunnel to ToS 1F Block Chest:
   id_hash: TRES_0x25_0x0E
@@ -1723,6 +1762,7 @@ Valley Sanctuary Stamp Station:
   is_mapobj: true
   room_index: 0
   scene: f_flame2
+  settings: ['stamps']
 
 Wooded Temple 1F Enemy Chest:
   id_hash: TRED_0x26_0x1F
@@ -1741,6 +1781,7 @@ Wooded Temple 1F Stamp Station:
   is_mapobj: true
   room_index: 0
   scene: d_forest
+  settings: ['stamps']
 
 Wooded Temple 1F Switch Chest:
   id_hash: TREW_0x28_0x0E
@@ -1811,6 +1852,7 @@ Woodland Sanctuary Stamp Station:
   is_mapobj: true
   room_index: 0
   scene: f_forest2
+  settings: ['stamps']
 
 Desert Temple B1 Rupee NW Top Left:
   id_hash: RUPE_0x0070_0x0060

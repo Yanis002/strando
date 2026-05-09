@@ -44,8 +44,7 @@ struct ShuffleSettings {
     u8 forest_glyph;
     bool duets;
     bool goron_range;
-    u8 stamps;
-    bool stamp_realm_reward;
+    bool stamps;
     bool rabbitsanity;
     bool rabbitpack;
 

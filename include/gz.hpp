@@ -42,6 +42,27 @@ enum ExtraItemId_ {
     ExtraItemId_FireSource,
     ExtraItemId_SandSource,
 
+    ExtraItemId_StampTowerOfSpirits,
+    ExtraItemId_StampCastleTown,
+    ExtraItemId_StampOutsetVillage,
+    ExtraItemId_StampMayscore,
+    ExtraItemId_StampWoodlandSanctuary,
+    ExtraItemId_StampAnoukiVillage,
+    ExtraItemId_StampSnowfallSanctuary,
+    ExtraItemId_StampPapuziaVillage,
+    ExtraItemId_StampIslandSanctuary,
+    ExtraItemId_StampGoronVillage,
+    ExtraItemId_StampValleySanctuary,
+    ExtraItemId_StampDuneSanctuary,
+    ExtraItemId_StampWoodedTemple,
+    ExtraItemId_StampBlizzardTemple,
+    ExtraItemId_StampMarineTemple,
+    ExtraItemId_StampMountainTemple,
+    ExtraItemId_StampDesertTemple,
+    ExtraItemId_StampPirateHideout,
+    ExtraItemId_StampTradingPost,
+    ExtraItemId_StampIcySpring,
+
     ExtraItemId_Max,
 };
 

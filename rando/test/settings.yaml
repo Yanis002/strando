@@ -39,14 +39,14 @@ settings:
             pirate_hideout: ['easy', 'hard', 'expert']
             take_em_all_on: ['easy', 'hard', 'expert']
 
-        # - off
-        # - anywhere (stamps will be items and stamp stations will give an item)
-        # - shuffled (on relevant when enabling `stamp_realm_reward`,
-        # shuffles the stamps between them, meaning you can get castle town stamp in fire temple)
-        stamps: "anywhere"
+        # true/false (will add stamps as items and monuments will be a location)
+        stamps: true
 
-        # true/false (gives an item once you got all stamps from the same realm)
-        stamp_realm_reward: false
+        # shuffle 10, 15 or 20 stamps rewards from Niko
+        stamps_rewards: [10, 15, 20]
+
+        # true/false (shuffles the stamp book)
+        stamp_book: true
 
         # true/false (rabbits will be items when enabled, meaning catching rabbits will give an item)
         rabbit_sanity: false

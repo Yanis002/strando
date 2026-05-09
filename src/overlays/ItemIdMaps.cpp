@@ -149,6 +149,27 @@ u32 gGetItemMap[] = {
     GIModel_dummy, // ExtraItemId_OceanSource
     GIModel_dummy, // ExtraItemId_FireSource
     GIModel_dummy, // ExtraItemId_SandSource
+
+    GIModel_dummy, // ExtraItemId_StampTowerOfSpirits
+    GIModel_dummy, // ExtraItemId_StampCastleTown
+    GIModel_dummy, // ExtraItemId_StampOutsetVillage
+    GIModel_dummy, // ExtraItemId_StampMayscore
+    GIModel_dummy, // ExtraItemId_StampWoodlandSanctuary
+    GIModel_dummy, // ExtraItemId_StampAnoukiVillage
+    GIModel_dummy, // ExtraItemId_StampSnowfallSanctuary
+    GIModel_dummy, // ExtraItemId_StampPapuziaVillage
+    GIModel_dummy, // ExtraItemId_StampIslandSanctuary
+    GIModel_dummy, // ExtraItemId_StampGoronVillage
+    GIModel_dummy, // ExtraItemId_StampValleySanctuary
+    GIModel_dummy, // ExtraItemId_StampDuneSanctuary
+    GIModel_dummy, // ExtraItemId_StampWoodedTemple
+    GIModel_dummy, // ExtraItemId_StampBlizzardTemple
+    GIModel_dummy, // ExtraItemId_StampMarineTemple
+    GIModel_dummy, // ExtraItemId_StampMountainTemple
+    GIModel_dummy, // ExtraItemId_StampDesertTemple
+    GIModel_dummy, // ExtraItemId_StampPirateHideout
+    GIModel_dummy, // ExtraItemId_StampTradingPost
+    GIModel_dummy, // ExtraItemId_StampIcySpring
 };
 
 // BMG IDs
@@ -291,6 +312,26 @@ u32 gBMGMap[] = {
     MSG(ExtraItemId_OceanSource), // ExtraItemId_OceanSource
     MSG(ExtraItemId_FireSource), // ExtraItemId_FireSource
     MSG(ExtraItemId_SandSource), // ExtraItemId_SandSource
+    MSG(ExtraItemId_StampTowerOfSpirits), // ExtraItemId_StampTowerOfSpirits
+    MSG(ExtraItemId_StampCastleTown), // ExtraItemId_StampCastleTown
+    MSG(ExtraItemId_StampOutsetVillage), // ExtraItemId_StampOutsetVillage
+    MSG(ExtraItemId_StampMayscore), // ExtraItemId_StampMayscore
+    MSG(ExtraItemId_StampWoodlandSanctuary), // ExtraItemId_StampWoodlandSanctuary
+    MSG(ExtraItemId_StampAnoukiVillage), // ExtraItemId_StampAnoukiVillage
+    MSG(ExtraItemId_StampSnowfallSanctuary), // ExtraItemId_StampSnowfallSanctuary
+    MSG(ExtraItemId_StampPapuziaVillage), // ExtraItemId_StampPapuziaVillage
+    MSG(ExtraItemId_StampIslandSanctuary), // ExtraItemId_StampIslandSanctuary
+    MSG(ExtraItemId_StampGoronVillage), // ExtraItemId_StampGoronVillage
+    MSG(ExtraItemId_StampValleySanctuary), // ExtraItemId_StampValleySanctuary
+    MSG(ExtraItemId_StampDuneSanctuary), // ExtraItemId_StampDuneSanctuary
+    MSG(ExtraItemId_StampWoodedTemple), // ExtraItemId_StampWoodedTemple
+    MSG(ExtraItemId_StampBlizzardTemple), // ExtraItemId_StampBlizzardTemple
+    MSG(ExtraItemId_StampMarineTemple), // ExtraItemId_StampMarineTemple
+    MSG(ExtraItemId_StampMountainTemple), // ExtraItemId_StampMountainTemple
+    MSG(ExtraItemId_StampDesertTemple), // ExtraItemId_StampDesertTemple
+    MSG(ExtraItemId_StampPirateHideout), // ExtraItemId_StampPirateHideout
+    MSG(ExtraItemId_StampTradingPost), // ExtraItemId_StampTradingPost
+    MSG(ExtraItemId_StampIcySpring), // ExtraItemId_StampIcySpring
 };
 
 u16 gAdvFlagMap[] = {
@@ -432,4 +473,24 @@ u16 gAdvFlagMap[] = {
     RandoAdventureFlag_OceanSource, // ExtraItemId_OceanSource
     RandoAdventureFlag_FireSource, // ExtraItemId_FireSource
     RandoAdventureFlag_SandSource, // ExtraItemId_SandSource
+    RandoAdventureFlag_StampTowerOfSpirits, // ExtraItemId_StampTowerOfSpirits
+    RandoAdventureFlag_StampCastleTown, // ExtraItemId_StampCastleTown
+    RandoAdventureFlag_StampOutsetVillage, // ExtraItemId_StampOutsetVillage
+    RandoAdventureFlag_StampMayscore, // ExtraItemId_StampMayscore
+    RandoAdventureFlag_StampWoodlandSanctuary, // ExtraItemId_StampWoodlandSanctuary
+    RandoAdventureFlag_StampAnoukiVillage, // ExtraItemId_StampAnoukiVillage
+    RandoAdventureFlag_StampSnowfallSanctuary, // ExtraItemId_StampSnowfallSanctuary
+    RandoAdventureFlag_StampPapuziaVillage, // ExtraItemId_StampPapuziaVillage
+    RandoAdventureFlag_StampIslandSanctuary, // ExtraItemId_StampIslandSanctuary
+    RandoAdventureFlag_StampGoronVillage, // ExtraItemId_StampGoronVillage
+    RandoAdventureFlag_StampValleySanctuary, // ExtraItemId_StampValleySanctuary
+    RandoAdventureFlag_StampDuneSanctuary, // ExtraItemId_StampDuneSanctuary
+    RandoAdventureFlag_StampWoodedTemple, // ExtraItemId_StampWoodedTemple
+    RandoAdventureFlag_StampBlizzardTemple, // ExtraItemId_StampBlizzardTemple
+    RandoAdventureFlag_StampMarineTemple, // ExtraItemId_StampMarineTemple
+    RandoAdventureFlag_StampMountainTemple, // ExtraItemId_StampMountainTemple
+    RandoAdventureFlag_StampDesertTemple, // ExtraItemId_StampDesertTemple
+    RandoAdventureFlag_StampPirateHideout, // ExtraItemId_StampPirateHideout
+    RandoAdventureFlag_StampTradingPost, // ExtraItemId_StampTradingPost
+    RandoAdventureFlag_StampIcySpring, // ExtraItemId_StampIcySpring
 };

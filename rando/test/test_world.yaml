@@ -823,6 +823,7 @@ node_f_sand_0:
     Dune Sanctuary Rupee S (G): 'True'
     Dune Sanctuary Rupee S By Small Island (J): 'True'
     Dune Sanctuary Rupee W Near Train (C): 'True'
+    Sand Sanctuary Stamp Station: 'True'
   room_index: 0
   scene: f_sand
 

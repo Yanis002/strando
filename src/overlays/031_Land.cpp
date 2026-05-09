@@ -4,12 +4,15 @@
 #include "settings.hpp"
 
 #include <Actor/ActorRupee.hpp>
+#include <MapObject/MapObject.hpp>
 #include <Unknown/UnkStruct_027e09b8.hpp>
 #include <Unknown/UnkStruct_027e0ce0.hpp>
 #include <Unknown/UnkStruct_027e0d34.hpp>
 #include <nitro/math.h>
 
 extern "C" unk32 func_02017158(unk32);
+extern "C" unk32 _ZN16MapObjectUnkSPTB19func_ov031_0210b6e4Ev(void*);
+extern "C" bool _ZN16MapObjectUnkSPTB19func_ov031_0210b51cEv(void*);
 
 bool IsGlyphOrSource(ItemId itemId) {
     if (itemId >= ItemId_ForestGlyph && itemId <= ItemId_FireGlyph) {
@@ -248,4 +251,26 @@ ARM void CustomRupee::Custom_ov031_020e9068() {
     }
 
     this->func_ov031_020e8fec();
+}
+
+extern "C" bool StampMonumentInit(MapObject* thisx) {
+    bool result = _ZN16MapObjectUnkSPTB19func_ov031_0210b51cEv(thisx);
+
+    // overriding vfunc_00 just to set "give item" mode (based on chests)
+    if (gSettings.GetShuffleSettings()->stamps) {
+        thisx->mUnk_18[0] = 0x0D;
+    }
+
+    return result;
+}
+
+extern "C" unk32 StampMonumentItemGive(MapObject* thisx) {
+    // if stamps aren't shuffled simply run the original function and return
+    if (!gSettings.GetShuffleSettings()->stamps) {
+        return _ZN16MapObjectUnkSPTB19func_ov031_0210b6e4Ev(thisx);
+    }
+
+    // since "give item" mode is enabled we just have to return the item it here
+    UNSET_FLAG(thisx->mFlags, MapObjFlag_9);
+    return thisx->mUnk_20.mUnk_00[3];
 }

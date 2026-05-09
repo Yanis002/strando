@@ -91,15 +91,14 @@ class MapObjectEntry:
     tile_x: int # u8
     tile_y: int # u8
     angle: int # u16
-    params: list[int] # u8[4]
+    params: list[int] # u16[4]
     unk_0C: int # undetermined
     unk_10: int # undetermined
     unk_14: int # undetermined
-    unk_18: int # undetermined
 
     raw_data: bytes
 
-    format = "<4sBBHBBBBIIII"
+    format = "<4sBBHHHHHIII"
     entry_size = 0x1C
 
     def __post_init__(self):
@@ -111,7 +110,7 @@ class MapObjectEntry:
 
     @staticmethod
     def from_bytes(data: bytes):
-        raw_id, raw_x, raw_y, raw_angle, raw_param1, raw_param2, raw_param3, raw_param4, raw_unk_0C, raw_unk_10, raw_unk_14, raw_unk_18 = struct.unpack_from(MapObjectEntry.format, data)
+        raw_id, raw_x, raw_y, raw_angle, raw_param1, raw_param2, raw_param3, raw_param4, raw_unk_0C, raw_unk_10, raw_unk_14 = struct.unpack_from(MapObjectEntry.format, data)
         return MapObjectEntry(
             raw_id[::-1].decode(),
             raw_x,
@@ -121,7 +120,6 @@ class MapObjectEntry:
             raw_unk_0C,
             raw_unk_10,
             raw_unk_14,
-            raw_unk_18,
             data[:MapObjectEntry.entry_size],
         )
 
@@ -139,7 +137,6 @@ class MapObjectEntry:
             self.unk_0C,
             self.unk_10,
             self.unk_14,
-            self.unk_18,
         )
 
 
@@ -251,7 +248,6 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.ForceGem_60, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_61, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.PanFlute, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.StampBook, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.LightBow, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.LokomoSword, ItemKind.Default, ItemWeight.Progressive),
     ItemDef(ItemId.TenPriceCard, ItemKind.Default, ItemWeight.Priority),
@@ -343,7 +339,7 @@ class BMGOffsets:
 
 
 class LocationInfo:
-    def __init__(self, name: str, scene: str, room_index: int):
+    def __init__(self, name: str, scene: str, room_index: int, rando_settings: Settings):
         self.name = name
         self.scene = scene
         self.room_index = room_index
@@ -360,10 +356,11 @@ class LocationInfo:
         self.item_flag = str()
 
         self.settings = LocationSettings()
+        self.rando_settings = rando_settings
 
     @staticmethod
-    def from_data(name: str, data: dict):
-        new_info = LocationInfo(name, data["scene"], data["room_index"])
+    def from_data(name: str, data: dict, rando_settings: Settings):
+        new_info = LocationInfo(name, data["scene"], data["room_index"], rando_settings)
 
         if "is_bmg" in data:
             new_info.is_bmg = data["is_bmg"]
@@ -407,6 +404,12 @@ class LocationInfo:
                         new_info.settings.pirate_hideout = split[1]
                     case "take_em_all_on":
                         new_info.settings.take_em_all_on = split[1]
+                    case "stamps":
+                        new_info.settings.stamps = True
+                    case "stamps_rewards":
+                        new_info.settings.stamps_rewards = int(split[1], base=0)
+                    case "stamp_book":
+                        new_info.settings.stamp_book = True
                     case _:
                         print(f"WARNING: ignoring unknown setting {repr(elem)}!")
 
@@ -420,39 +423,52 @@ class LocationInfo:
             yaml_file: dict[str, dict] = yaml.safe_load(file)
 
         for name, data in yaml_file.items():
-            loc = LocationInfo.from_data(name, data)
-
-            # ignore location if rupeesanity is disabled
-            if loc.settings.rupeesanity and not settings.shuffle.rupeesanity:
-                continue
-
-            # ignore location if glyphs_and_sources is disabled (aka set to vanilla)
-            if loc.settings.glyphs_and_sources and not settings.shuffle.glyphs_and_sources != "vanilla":
-                continue
-
-            # ignore duets if disabled
-            if loc.settings.duets and not settings.shuffle.duets:
-                continue
-
-            # ignoring minigames we don't want
-            if loc.settings.sword_training and not settings.shuffle.minigames.sword_training:
-                continue
-
-            if len(loc.settings.whip_race) > 0 and loc.settings.whip_race not in settings.shuffle.minigames.whip_race:
-                continue
-
-            if loc.settings.goron_range and not settings.shuffle.minigames.goron_range:
-                continue
-
-            if len(loc.settings.pirate_hideout) > 0 and loc.settings.pirate_hideout not in settings.shuffle.minigames.pirate_hideout:
-                continue
-
-            if len(loc.settings.take_em_all_on) > 0 and loc.settings.take_em_all_on not in settings.shuffle.minigames.take_em_all_on:
-                continue
-
-            infos.append(loc)
+            infos.append(LocationInfo.from_data(name, data, settings))
 
         return infos
+
+    def check_settings(self):
+        # ignore location if rupeesanity is disabled
+        if self.settings.rupeesanity and not self.rando_settings.shuffle.rupeesanity:
+            return False
+
+        # ignore location if glyphs_and_sources is disabled (aka set to vanilla)
+        if self.settings.glyphs_and_sources and not self.rando_settings.shuffle.glyphs_and_sources != "vanilla":
+            return False
+
+        # ignore duets if disabled
+        if self.settings.duets and not self.rando_settings.shuffle.duets:
+            return False
+
+        # ignoring minigames we don't want
+        if self.settings.sword_training and not self.rando_settings.shuffle.minigames.sword_training:
+            return False
+
+        if len(self.settings.whip_race) > 0 and self.settings.whip_race not in self.rando_settings.shuffle.minigames.whip_race:
+            return False
+
+        if self.settings.goron_range and not self.rando_settings.shuffle.minigames.goron_range:
+            return False
+
+        if len(self.settings.pirate_hideout) > 0 and self.settings.pirate_hideout not in self.rando_settings.shuffle.minigames.pirate_hideout:
+            return False
+
+        if len(self.settings.take_em_all_on) > 0 and self.settings.take_em_all_on not in self.rando_settings.shuffle.minigames.take_em_all_on:
+            return False
+
+        # ignore stamps if we don't want them
+        if self.settings.stamps and not self.rando_settings.shuffle.stamps:
+            return False
+
+        # ignore stamp rewards we don't want
+        if self.settings.stamps_rewards != 0 and self.settings.stamps_rewards not in self.rando_settings.shuffle.stamps_rewards:
+            return False
+
+        # ignore stamp book if we don't want it
+        if self.settings.stamp_book and not self.rando_settings.shuffle.stamp_book:
+            return False
+
+        return True
 
 
 @dataclass
@@ -507,7 +523,8 @@ class LocationNode:
                         infos = info
                         break
 
-                new_node.locations.append(LocationDef(entry_name, entry_cond, infos))
+                if infos is not None and infos.check_settings():
+                    new_node.locations.append(LocationDef(entry_name, entry_cond, infos))
 
         return new_node
 
@@ -704,6 +721,35 @@ class Randomizer:
             ]
             item_defs.extend(songs)
 
+        # only add stamp stations if we want them shuffled
+        if self.settings.shuffle.stamps:
+            stamps = [
+                ItemDef(ItemId.ExtraItemId_StampTowerOfSpirits, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampCastleTown, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampOutsetVillage, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampMayscore, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampWoodlandSanctuary, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampAnoukiVillage, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampSnowfallSanctuary, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampPapuziaVillage, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampIslandSanctuary, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampGoronVillage, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampValleySanctuary, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampDuneSanctuary, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampWoodedTemple, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampBlizzardTemple, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampMarineTemple, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampMountainTemple, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampDesertTemple, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampPirateHideout, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampTradingPost, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampIcySpring, ItemKind.Default, ItemWeight.Priority),
+            ]
+            item_defs.extend(stamps)
+
+        if self.settings.shuffle.stamp_book:
+            item_defs.append(ItemDef(ItemId.StampBook, ItemKind.Default, ItemWeight.Priority))
+
         ## create the pools
         self.progressive_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Progressive]
         self.priority_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Priority]
@@ -758,21 +804,21 @@ class Randomizer:
         # shuffle nodes, fetch locations and shuffle that list
         random.shuffle(self.nodes)
         for node in self.nodes:
-            assert len(node.locations) > 0
             all_locations.extend(node.locations)
+        assert len(all_locations) > 0
         random.shuffle(all_locations)
 
         # shuffle prog pool
-        random.shuffle(self.progressive_item_pool)
         prog_pool = self.progressive_item_pool[:]
+        random.shuffle(prog_pool)
 
         # shuffle prio pool
-        random.shuffle(self.priority_item_pool)
         prio_pool = self.priority_item_pool[:]
+        random.shuffle(prio_pool)
 
         # shuffle normal pool
-        random.shuffle(self.normal_item_pool)
         misc_pool = self.normal_item_pool[:]
+        random.shuffle(misc_pool)
 
         item_pool = prog_pool + prio_pool + misc_pool
         random.shuffle(item_pool)
@@ -814,9 +860,7 @@ class Randomizer:
 
             do_save_narc = False
             for location in node.locations:
-                if location.infos is None:
-                    continue
-
+                assert location.infos is not None
                 assert node.scene_name == location.infos.scene
                 assert node.room_index == location.infos.room_index
 
@@ -877,7 +921,13 @@ class Randomizer:
 
                         do_save_narc = True
                         entry = MapObjectEntry.from_bytes(zmb_data[offset:offset + MapObjectEntry.entry_size])
-                        entry.params[0] = location.items[0].id.value
+
+                        # we could just use index 0 for stamp stations but better be safe
+                        if self.settings.shuffle.stamps and entry.id == "SPTB":
+                            entry.params[3] = location.items[0].id.value
+                        else:
+                            entry.params[0] = location.items[0].id.value
+
                         zmb_data = self.update_zmb(entry, zmb_data)
 
             if do_save_narc:

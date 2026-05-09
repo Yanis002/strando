@@ -190,6 +190,26 @@ class ItemId(IntEnum):
     ExtraItemId_OceanSource = 134
     ExtraItemId_FireSource = 135
     ExtraItemId_SandSource = 136
+    ExtraItemId_StampTowerOfSpirits = 137
+    ExtraItemId_StampCastleTown = 138
+    ExtraItemId_StampOutsetVillage = 139
+    ExtraItemId_StampMayscore = 140
+    ExtraItemId_StampWoodlandSanctuary = 141
+    ExtraItemId_StampAnoukiVillage = 142
+    ExtraItemId_StampSnowfallSanctuary = 143
+    ExtraItemId_StampPapuziaVillage = 144
+    ExtraItemId_StampIslandSanctuary = 145
+    ExtraItemId_StampGoronVillage = 146
+    ExtraItemId_StampValleySanctuary = 147
+    ExtraItemId_StampDuneSanctuary = 148
+    ExtraItemId_StampWoodedTemple = 149
+    ExtraItemId_StampBlizzardTemple = 150
+    ExtraItemId_StampMarineTemple = 151
+    ExtraItemId_StampMountainTemple = 152
+    ExtraItemId_StampDesertTemple = 153
+    ExtraItemId_StampPirateHideout = 154
+    ExtraItemId_StampTradingPost = 155
+    ExtraItemId_StampIcySpring = 156
 
 extra_id_to_scene = {
     ItemId.ExtraItemId_TearLight_1: "d_main",
@@ -369,6 +389,26 @@ item_id_to_name = {
     0x86: "Ocean Source",
     0x87: "Fire Source",
     0x88: "Sand Source",
+    0x89: "Tower of Spirits Stamp",
+    0x8A: "Castle Town Stamp",
+    0x8B: "Outset Village Stamp",
+    0x8C: "Mayscore Stamp",
+    0x8D: "Woodland Sanctuary Stamp",
+    0x8E: "Anouki Village Stamp",
+    0x8F: "Snowfall Sanctuary Stamp",
+    0x90: "Papuzia Village Stamp",
+    0x91: "Island Sanctuary Stamp",
+    0x92: "Goron Village Stamp",
+    0x93: "Valley Sanctuary Stamp",
+    0x94: "Dune Sanctuary Stamp",
+    0x95: "Wooded Temple Stamp",
+    0x96: "Blizzard Temple Stamp",
+    0x97: "Marine Temple Stamp",
+    0x98: "Mountain Temple Stamp",
+    0x99: "Desert Temple Stamp",
+    0x9A: "Pirate Hideout Stamp",
+    0x9B: "Trading Post Stamp",
+    0x9C: "Icy Spring Stamp",
 }
 item_name_to_id = {v: k for k, v in item_id_to_name.items()}
 

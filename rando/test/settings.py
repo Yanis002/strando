@@ -14,6 +14,9 @@ class LocationSettings:
         self.goron_range = False
         self.pirate_hideout = str()
         self.take_em_all_on = str()
+        self.stamps = False
+        self.stamps_rewards = 0
+        self.stamp_book = False
 
 
 class MinigamesSettings:
@@ -57,8 +60,9 @@ class ShuffleSettings:
         self.duets = False
         self.minigames = MinigamesSettings()
 
-        self.stamps = str()
-        self.stamp_realm_reward = False
+        self.stamps = False
+        self.stamps_rewards: list[int] = []
+        self.stamp_book = False
 
         self.rabbitsanity = False
         self.rabbitpack = False
@@ -74,9 +78,6 @@ class ShuffleSettings:
 
         self.forest_glyph_mode = ["startwith", "anywhere"]
         self.forest_glyph_mode_map = {mode: i for i, mode in enumerate(self.forest_glyph_mode)}
-
-        self.stamps_mode = ["off", "anywhere", "shuffled"]
-        self.stamps_mode_map = {mode: i for i, mode in enumerate(self.stamps_mode)}
 
     def validate(self):
         if self.shopsanity < 0 or self.shopsanity > 5:
@@ -102,11 +103,15 @@ class ShuffleSettings:
 
         self.minigames.validate()
 
-        if self.stamps not in self.stamps_mode:
+        if not isinstance(self.stamps, bool):
             raise ValueError("minigames is not valid")
 
-        if not isinstance(self.stamp_realm_reward, bool):
-            raise ValueError("stamp_realm_reward must be true or false")
+        for value in self.stamps_rewards:
+            if value not in [10, 15, 20]:
+                raise ValueError("stamps_rewards is not valid")
+
+        if not isinstance(self.stamp_book, bool):
+            raise ValueError("stamp_book must be true or false")
 
         if not isinstance(self.rabbitsanity, bool):
             raise ValueError("rabbit_sanity must be true or false")
@@ -163,8 +168,11 @@ class ShuffleSettings:
         if "stamps" in data:
             settings.stamps = data["stamps"]
 
-        if "stamp_realm_reward" in data:
-            settings.stamp_realm_reward = data["stamp_realm_reward"]
+        if "stamps_rewards" in data:
+            settings.stamps_rewards = data["stamps_rewards"]
+
+        if "stamp_book" in data:
+            settings.stamp_book = data["stamp_book"]
 
         if "rabbit_sanity" in data:
             settings.rabbitsanity = data["rabbit_sanity"]
@@ -177,7 +185,7 @@ class ShuffleSettings:
 
     def to_bin(self):
         return struct.pack(
-            "<BBBBBBBBBBBB",
+            "<BBBBBBBBBBB",
             self.shopsanity,
             self.rupeesanity,
             self.passengers_mode_map[self.passengers],
@@ -186,8 +194,7 @@ class ShuffleSettings:
             self.forest_glyph_mode_map[self.forest_glyph],
             self.duets,
             self.minigames.goron_range,
-            self.stamps_mode_map[self.stamps],
-            self.stamp_realm_reward,
+            self.stamps,
             self.rabbitsanity,
             self.rabbitpack,
         )
