@@ -198,15 +198,15 @@ shop_item_map = {
 item_defs: list[ItemDef] = [
     ItemDef(ItemId.Nothing, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.NormalShield, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.NormalSword, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Whirlwind, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.BombBag, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.NormalBow, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Boomerang, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Whip, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.SandRod, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.NormalSword, ItemKind.Default, ItemWeight.Progression),
+    ItemDef(ItemId.Whirlwind, ItemKind.Default, ItemWeight.Progression),
+    ItemDef(ItemId.BombBag, ItemKind.Default, ItemWeight.Progression),
+    ItemDef(ItemId.NormalBow, ItemKind.Default, ItemWeight.Progression),
+    ItemDef(ItemId.Boomerang, ItemKind.Default, ItemWeight.Progression),
+    ItemDef(ItemId.Whip, ItemKind.Default, ItemWeight.Progression),
+    ItemDef(ItemId.SandRod, ItemKind.Default, ItemWeight.Progression),
     ItemDef(ItemId.Unk_9, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.BossKey, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.BossKey, ItemKind.Default, ItemWeight.Progression),
     ItemDef(ItemId.GreenRupee, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.BlueRupee, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.RedRupee, ItemKind.Default, ItemWeight.Normal),
@@ -216,11 +216,11 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.ForceGem_18, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_19, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_20, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.FinalTrack, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Unk_31, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Unk_32, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Unk_33, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.Unk_34, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.FinalTrack, ItemKind.Default, ItemWeight.Progression),
+    ItemDef(ItemId.Unk_31, ItemKind.Default, ItemWeight.Progression),
+    ItemDef(ItemId.Unk_32, ItemKind.Default, ItemWeight.Progression),
+    ItemDef(ItemId.Unk_33, ItemKind.Default, ItemWeight.Progression),
+    ItemDef(ItemId.Unk_34, ItemKind.Default, ItemWeight.Progression),
     ItemDef(ItemId.ForceGem_35, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_36, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_37, ItemKind.Default, ItemWeight.Priority),
@@ -247,9 +247,9 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.ForceGem_59, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_60, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_61, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.PanFlute, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.LightBow, ItemKind.Default, ItemWeight.Progressive),
-    ItemDef(ItemId.LokomoSword, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.PanFlute, ItemKind.Default, ItemWeight.Progression),
+    ItemDef(ItemId.LightBow, ItemKind.Default, ItemWeight.Progression),
+    ItemDef(ItemId.LokomoSword, ItemKind.Default, ItemWeight.Progression),
     ItemDef(ItemId.TenPriceCard, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.RedPotion, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.PurplePotion, ItemKind.Default, ItemWeight.Normal),
@@ -269,7 +269,7 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.MysticJade, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.AncientCoin, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.PricelessStone, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.RegalRing, ItemKind.Default, ItemWeight.Progressive), # we consider the regal ring is a progressive item because of how you get to ocean land
+    ItemDef(ItemId.RegalRing, ItemKind.Default, ItemWeight.Progression), # we consider the regal ring is a progression item because of how you get to ocean land
     ItemDef(ItemId.ArrowsRefill, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.BombsRefill, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.SoldOutSign, ItemKind.Default, ItemWeight.Normal), # doesn't crash but buggy graphics
@@ -280,15 +280,15 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.RandUncommonTreasure, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.RandRareTreasure, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.RandLegendaryTreasure, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.LightCompass, ItemKind.Default, ItemWeight.Progressive),
+    ItemDef(ItemId.LightCompass, ItemKind.Default, ItemWeight.Progression),
     ItemDef(ItemId.ScrollSpinAttack, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ScrollBeam, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.LinebeckLetter, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.PanFluteSong_101, ItemKind.Song, ItemWeight.Progressive),
-    ItemDef(ItemId.PanFluteSong_102, ItemKind.Song, ItemWeight.Progressive),
-    ItemDef(ItemId.PanFluteSong_103, ItemKind.Song, ItemWeight.Progressive),
-    ItemDef(ItemId.PanFluteSong_104, ItemKind.Song, ItemWeight.Progressive),
-    ItemDef(ItemId.PanFluteSong_105, ItemKind.Song, ItemWeight.Progressive),
+    ItemDef(ItemId.PanFluteSong_101, ItemKind.Song, ItemWeight.Progression),
+    ItemDef(ItemId.PanFluteSong_102, ItemKind.Song, ItemWeight.Progression),
+    ItemDef(ItemId.PanFluteSong_103, ItemKind.Song, ItemWeight.Progression),
+    ItemDef(ItemId.PanFluteSong_104, ItemKind.Song, ItemWeight.Progression),
+    ItemDef(ItemId.PanFluteSong_105, ItemKind.Song, ItemWeight.Progression),
     ItemDef(ItemId.RabbitNet, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.BeedleCard, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.SilverCard, ItemKind.Default, ItemWeight.Priority),
@@ -668,12 +668,12 @@ class Randomizer:
 
         # add extra tears
         for i in range(1, 6):
-            extra_defs = [ItemDef(getattr(ItemId, f"ExtraItemId_TearLight_{i}"), ItemKind.Default, ItemWeight.Progressive)] * 3
+            extra_defs = [ItemDef(getattr(ItemId, f"ExtraItemId_TearLight_{i}"), ItemKind.Default, ItemWeight.Progression)] * 3
             item_defs.extend(extra_defs)
 
         # add extra keys
         for item_id, max_keys in max_keys_map.items():
-            extra_defs = [ItemDef(item_id, ItemKind.Default, ItemWeight.Progressive)] * max_keys
+            extra_defs = [ItemDef(item_id, ItemKind.Default, ItemWeight.Progression)] * max_keys
             item_defs.extend(extra_defs)
 
         ## apply settings
@@ -691,21 +691,21 @@ class Randomizer:
         # only add glyphs/sources if we want them shuffled
         if self.settings.shuffle.glyphs_and_sources != "vanilla":
             glyphs = [
-                ItemDef(ItemId.SnowGlyph, ItemKind.Default, ItemWeight.Progressive),
-                ItemDef(ItemId.OceanGlyph, ItemKind.Default, ItemWeight.Progressive),
-                ItemDef(ItemId.FireGlyph, ItemKind.Default, ItemWeight.Progressive),
+                ItemDef(ItemId.SnowGlyph, ItemKind.Default, ItemWeight.Progression),
+                ItemDef(ItemId.OceanGlyph, ItemKind.Default, ItemWeight.Progression),
+                ItemDef(ItemId.FireGlyph, ItemKind.Default, ItemWeight.Progression),
             ]
 
             # only add the forest glyph if we want it shuffled
             if self.settings.shuffle.forest_glyph == "anywhere":
-                glyphs.append(ItemDef(ItemId.ForestGlyph, ItemKind.Default, ItemWeight.Progressive))
+                glyphs.append(ItemDef(ItemId.ForestGlyph, ItemKind.Default, ItemWeight.Progression))
 
             sources = [
-                ItemDef(ItemId.ExtraItemId_ForestSource, ItemKind.Default, ItemWeight.Progressive),
-                ItemDef(ItemId.ExtraItemId_SnowSource, ItemKind.Default, ItemWeight.Progressive),
-                ItemDef(ItemId.ExtraItemId_OceanSource, ItemKind.Default, ItemWeight.Progressive),
-                ItemDef(ItemId.ExtraItemId_FireSource, ItemKind.Default, ItemWeight.Progressive),
-                ItemDef(ItemId.ExtraItemId_SandSource, ItemKind.Default, ItemWeight.Progressive),
+                ItemDef(ItemId.ExtraItemId_ForestSource, ItemKind.Default, ItemWeight.Progression),
+                ItemDef(ItemId.ExtraItemId_SnowSource, ItemKind.Default, ItemWeight.Progression),
+                ItemDef(ItemId.ExtraItemId_OceanSource, ItemKind.Default, ItemWeight.Progression),
+                ItemDef(ItemId.ExtraItemId_FireSource, ItemKind.Default, ItemWeight.Progression),
+                ItemDef(ItemId.ExtraItemId_SandSource, ItemKind.Default, ItemWeight.Progression),
             ]
 
             item_defs.extend(glyphs + sources)
@@ -713,11 +713,11 @@ class Randomizer:
         # only add restoration songs if we want them shuffled
         if self.settings.shuffle.duets:
             songs = [
-                ItemDef(ItemId.Unk_25, ItemKind.Default, ItemWeight.Progressive),
-                ItemDef(ItemId.Unk_26, ItemKind.Default, ItemWeight.Progressive),
-                ItemDef(ItemId.Unk_27, ItemKind.Default, ItemWeight.Progressive),
-                ItemDef(ItemId.Unk_28, ItemKind.Default, ItemWeight.Progressive),
-                ItemDef(ItemId.Unk_29, ItemKind.Default, ItemWeight.Progressive),
+                ItemDef(ItemId.Unk_25, ItemKind.Default, ItemWeight.Progression),
+                ItemDef(ItemId.Unk_26, ItemKind.Default, ItemWeight.Progression),
+                ItemDef(ItemId.Unk_27, ItemKind.Default, ItemWeight.Progression),
+                ItemDef(ItemId.Unk_28, ItemKind.Default, ItemWeight.Progression),
+                ItemDef(ItemId.Unk_29, ItemKind.Default, ItemWeight.Progression),
             ]
             item_defs.extend(songs)
 
@@ -751,7 +751,7 @@ class Randomizer:
             item_defs.append(ItemDef(ItemId.StampBook, ItemKind.Default, ItemWeight.Priority))
 
         ## create the pools
-        self.progressive_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Progressive]
+        self.progression_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Progression]
         self.priority_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Priority]
         self.normal_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Normal]
 
@@ -809,7 +809,7 @@ class Randomizer:
         random.shuffle(all_locations)
 
         # shuffle prog pool
-        prog_pool = self.progressive_item_pool[:]
+        prog_pool = self.progression_item_pool[:]
         random.shuffle(prog_pool)
 
         # shuffle prio pool
@@ -946,7 +946,7 @@ class Randomizer:
 
     def generate_seed(self):
         initial_time = time.time()
-        print(f"Randomizing with {len(self.progressive_item_pool)} progressive items, {len(self.priority_item_pool)} priority items and {len(self.normal_item_pool)} remaining items...")
+        print(f"Randomizing with {len(self.progression_item_pool)} progression items, {len(self.priority_item_pool)} priority items and {len(self.normal_item_pool)} remaining items...")
 
         # 2. assign the items
         if self.seed_log is None:

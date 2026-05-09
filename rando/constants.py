@@ -419,7 +419,7 @@ class ItemKind(IntEnum):
 
 
 class ItemWeight(IntEnum):
-    Progressive = 0
+    Progression = 0
     Priority = 1
     Normal = 2
 

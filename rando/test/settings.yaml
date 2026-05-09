@@ -8,8 +8,8 @@ settings:
 
         # - remove (disables passenger quests)
         # - vanilla (default start location, gives item when reached destination)
-        # - abstract (no transport, gives an item at pick up location)
-        # - anywhere (same as above but also gives an item at destination location)
+        # - abstract (no transport, same as above but the NPC is an item at pick up location)
+        # - anywhere (same as above but both pick up and destination items are shuffled)
         passengers: "abstract"
 
         # - remove (disables cargo quests)
