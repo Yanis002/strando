@@ -125,27 +125,190 @@ static inline TitleScreenManager* GetTitleScreenManager() { return (TitleScreenM
 struct PassengerAtDestInfos {
     u8 sceneIndex;
     AdventureFlag_Half requiredFlag;
+    AdventureFlag_Half destFlags[3];
 };
 
 static PassengerAtDestInfos sPassengerAtDestInfos[Passenger_Max] = {
-    {SceneIndex_f_tetsuo, RandoAdventureFlag_PassengerAnoukiNoko}, // Passenger_AnoukiNoko
-    {SceneIndex_f_flame5, RandoAdventureFlag_PassengerAnoukiKofu}, // Passenger_AnoukiKofu
-    {SceneIndex_f_rabbit, RandoAdventureFlag_PassengerCastleTownMona}, // Passenger_CastleTownMona
-    {SceneIndex_f_first, RandoAdventureFlag_PassengerCastleTownAlfonzo}, // Passenger_CastleTownAlfonzo
-    {SceneIndex_f_first, RandoAdventureFlag_PassengerSnowRealmFerrus}, // Passenger_SnowRealmFerrus
-    {SceneIndex_d_water27, RandoAdventureFlag_PassengerFireRealmFerrus}, // Passenger_FireRealmFerrus
-    {SceneIndex_f_snow, RandoAdventureFlag_PassengerGoronVillageSnowGoron}, // Passenger_GoronVillageSnowGoron
-    {SceneIndex_f_htown, RandoAdventureFlag_PassengerGoronVillageCityGoron}, // Passenger_GoronVillageCityGoron
-    {SceneIndex_f_water, RandoAdventureFlag_PassengerMayscoreDovok}, // Passenger_MayscoreDovok
-    {SceneIndex_f_water, RandoAdventureFlag_PassengerMayscoreMash}, // Passenger_MayscoreMash
-    {SceneIndex_f_water, RandoAdventureFlag_PassengerMayscoreMorris}, // Passenger_MayscoreMorris
-    {SceneIndex_f_water, RandoAdventureFlag_PassengerMayscoreYamahiko}, // Passenger_MayscoreYamahiko
-    {SceneIndex_f_water, RandoAdventureFlag_PassengerMayscoreWood}, // Passenger_MayscoreWood
-    {SceneIndex_f_trnnpc, RandoAdventureFlag_PassengerOutsetJoe}, // Passenger_OutsetJoe
-    {SceneIndex_f_water, RandoAdventureFlag_PassengerPirateHideoutWadatsumi}, // Passenger_PirateHideoutWadatsumi
-    {SceneIndex_f_bridge2, RandoAdventureFlag_PassengerBridgeWorkersHomeKenzo}, // Passenger_BridgeWorkersHomeKenzo
-    {SceneIndex_f_snow, RandoAdventureFlag_PassengerTradingPostKenzo}, // Passenger_TradingPostKenzo
-    {SceneIndex_f_water2, RandoAdventureFlag_PassengerPapuziaVillageCarben}, // Passenger_PapuziaVillageCarben
+    // Passenger_AnoukiNoko
+    {
+        SceneIndex_f_tetsuo,
+        RandoAdventureFlag_PassengerAnoukiNoko,
+        {
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+        },
+    },
+    // Passenger_AnoukiKofu
+    {
+        SceneIndex_f_flame5,
+        RandoAdventureFlag_PassengerAnoukiKofu,
+        {
+            AdventureFlag_CompletedKofuSidequest,
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+        },
+    },
+    // Passenger_CastleTownMona
+    {
+        SceneIndex_f_rabbit,
+        RandoAdventureFlag_PassengerCastleTownMona,
+        {
+            AdventureFlag_WatchedBunnioMonaCS,
+            AdventureFlag_CompletedMonaSidequest,
+            AdventureFlag_Nothing,
+        },
+    },
+    // Passenger_CastleTownAlfonzo
+    {
+        SceneIndex_f_first,
+        RandoAdventureFlag_PassengerCastleTownAlfonzo,
+        {
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+        },
+    },
+    // Passenger_SnowRealmFerrus
+    {
+        SceneIndex_f_first,
+        RandoAdventureFlag_PassengerSnowRealmFerrus,
+        {
+            AdventureFlag_CompletedFerrusSidequest1,
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+        },
+    },
+    // Passenger_FireRealmFerrus
+    {
+        SceneIndex_d_water27,
+        RandoAdventureFlag_PassengerFireRealmFerrus,
+        {
+            AdventureFlag_CompletedFerrusSidequest2,
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+        },
+    },
+    // Passenger_GoronVillageSnowGoron
+    {
+        SceneIndex_f_snow,
+        RandoAdventureFlag_PassengerGoronVillageSnowGoron,
+        {
+            AdventureFlag_CompletedGoronAdultSidequest,
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+        },
+    },
+    // Passenger_GoronVillageCityGoron
+    {
+        SceneIndex_f_htown,
+        RandoAdventureFlag_PassengerGoronVillageCityGoron,
+        {
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+        },
+    },
+    // Passenger_MayscoreDovok
+    {
+        SceneIndex_f_water,
+        RandoAdventureFlag_PassengerMayscoreDovok,
+        {
+            AdventureFlag_WatchedOrcaDovokCS,
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+        },
+    },
+    // Passenger_MayscoreMash
+    {
+        SceneIndex_f_water,
+        RandoAdventureFlag_PassengerMayscoreMash,
+        {
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+        },
+    },
+    // Passenger_MayscoreMorris
+    {
+        SceneIndex_f_water,
+        RandoAdventureFlag_PassengerMayscoreMorris,
+        {
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+        },
+    },
+    // Passenger_MayscoreYamahiko
+    {
+        SceneIndex_f_water,
+        RandoAdventureFlag_PassengerMayscoreYamahiko,
+        {
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+        },
+    },
+    // Passenger_MayscoreWood
+    {
+        SceneIndex_f_water,
+        RandoAdventureFlag_PassengerMayscoreWood,
+        {
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+        },
+    },
+    // Passenger_OutsetJoe
+    {
+        SceneIndex_f_trnnpc,
+        RandoAdventureFlag_PassengerOutsetJoe,
+        {
+            AdventureFlag_LeftBeedleAfterJoeSidequest,
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+        },
+    },
+    // Passenger_PirateHideoutWadatsumi
+    {
+        SceneIndex_f_water,
+        RandoAdventureFlag_PassengerPirateHideoutWadatsumi,
+        {
+            AdventureFlag_WadatsumiMeetsOrca,
+            AdventureFlag_WatchedOrcaWadatsumiCS,
+            AdventureFlag_WatchedOrcaWadatsumiCS2,
+        },
+    },
+    // Passenger_BridgeWorkersHomeKenzo
+    {
+        SceneIndex_f_bridge2,
+        RandoAdventureFlag_PassengerBridgeWorkersHomeKenzo,
+        {
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+        },
+    },
+    // Passenger_TradingPostKenzo
+    {
+        SceneIndex_f_snow,
+        RandoAdventureFlag_PassengerTradingPostKenzo,
+        {
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+            AdventureFlag_Nothing,
+        },
+    },
+    // Passenger_PapuziaVillageCarben
+    {
+        SceneIndex_f_water2,
+        RandoAdventureFlag_PassengerPapuziaVillageCarben,
+        {
+            AdventureFlag_WonCarbenPirateAmbush,
+            AdventureFlag_CarbenEnterSanctuary,
+            AdventureFlag_Nothing,
+        },
+    },
 };
 
 void GZ::TryGiveItemFromPassengerDestInfos(SceneIndex destSceneIndex) {
@@ -160,6 +323,12 @@ void GZ::TryGiveItemFromPassengerDestInfos(SceneIndex destSceneIndex) {
                 // only give the item id if the related flag is unset
                 this->TryAddItemIfNotInQueue(itemId);
                 SET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId]);
+
+                for (int j = 0; j < ARRAY_LEN(pEntry->destFlags); j++) {
+                    if (pEntry->destFlags[j] != AdventureFlag_Nothing) {
+                        SET_FLAG(data_027e09b8->mAdventureFlags, pEntry->destFlags[j]);
+                    }
+                }
             }
         }
     }
