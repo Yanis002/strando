@@ -153,31 +153,28 @@ struct CardLock {
 
 // defines a randomizer save, it's just a savestate in the end (it doesn't even matter)
 struct RandoSave {
-    u8 tearsAmounts[5];
-    u8 keyAmounts[10];
+    u8 tearsAmounts[5]; // tos light tear section amounts
+    u8 keyAmounts[10]; // dungeon small keys amounts
+    u8 itemQueue[32]; // items to give, 32 to be extremely large (probably too large)
 
-    RandoSave() {
-        memset(this->tearsAmounts, 0, sizeof(this->tearsAmounts));
-        memset(this->keyAmounts, 0, sizeof(this->keyAmounts));
-    }
+    RandoSave();
+    void ClearItemQueue();
 } __attribute__((aligned(4)));
 
 class GZ {
   private:
     Input mButtons;
     TouchControl* mpTouchControl;
-    ItemId mItemId;
+    s16 mItemQueueIndex;
     u8 mSceneLoadState;
     u8 pad[3];
     RandoSave mRandoSave[MAX_SAVE_SLOTS];
 
   public:
     GZ()
-        : mpTouchControl(&data_02049b18.mUnk_06.mTouchControl), mItemId(ItemId_None),
+        : mpTouchControl(&data_02049b18.mUnk_06.mTouchControl), mItemQueueIndex(0),
           mSceneLoadState(SceneLoadState_Wait) {}
     ~GZ() {}
-
-    void SetItemId(ItemId itemId) { this->mItemId = itemId; }
 
     u8 GetTearsAmount(u8 index) { return this->GetCurrentSave()->tearsAmounts[index]; }
 
@@ -248,11 +245,15 @@ class GZ {
     // called when the scene init process is completed
     void OnScenePostInit();
 
+    void TryGiveItemFromPassengerDestInfos(SceneIndex destSceneIndex);
     void ApplyTearsAmounts();
     void ApplyKeyAmounts();
-
     RandoSave* GetCurrentSave();
     void Save(); //! TODO: execute this when we want to save the game
+    bool IsItemInQueue(ItemId itemId);
+    void TryAddItemToQueue(ItemId itemId);
+    void TryAddItemIfNotInQueue(ItemId itemId);
+    void ProcessItemQueue();
 };
 
 extern GZ gGZ;

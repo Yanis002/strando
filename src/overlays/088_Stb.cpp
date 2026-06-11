@@ -37,7 +37,7 @@ extern "C" void GiveItemDuringCS(ItemManager* thisx, ItemFlag itemFlag) {
 
         // hacky? idk (see GZ::OnGameModeUpdate)
         if (pActor != NULL) {
-            gGZ.SetItemId(pActor->mUnk_5C.mParams[0]);
+            gGZ.TryAddItemToQueue(pActor->mUnk_5C.mParams[0]);
         }
     }
 }

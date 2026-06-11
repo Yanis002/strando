@@ -39,6 +39,8 @@ void GZ::Init() {
     // reset if the data is unset, the first byte would be tears amount, this can't be 0xFF
     if (*(u8*)this->mRandoSave == 0xFF) {
         memset(this->mRandoSave, 0, sizeof(this->mRandoSave));
+        this->mRandoSave[0].ClearItemQueue();
+        this->mRandoSave[1].ClearItemQueue();
     }
 }
 
@@ -146,29 +148,22 @@ static PassengerAtDestInfos sPassengerAtDestInfos[Passenger_Max] = {
     {SceneIndex_f_water2, RandoAdventureFlag_PassengerPapuziaVillageCarben}, // Passenger_PapuziaVillageCarben
 };
 
-int GetPassengerFromDestInfos(SceneIndex destSceneIndex) {
+void GZ::TryGiveItemFromPassengerDestInfos(SceneIndex destSceneIndex) {
     for (int i = 0; i < Passenger_Max; i++) {
         PassengerAtDestInfos* pEntry = &sPassengerAtDestInfos[i];
 
         // if the flag is set it means we got the item (the flag is set when the item is received)
         if (pEntry->sceneIndex == destSceneIndex && GET_FLAG(data_027e09b8->mAdventureFlags, pEntry->requiredFlag)) {
-            return i;
+            ItemId itemId = gSettings.GetPassengerAtDestItemId(i);
+
+            if (itemId != ItemId_None && !GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId])) {
+                // only give the item id if the related flag is unset
+                this->TryAddItemIfNotInQueue(itemId);
+                SET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId]);
+                ;
+            }
         }
     }
-
-    return -1;
-}
-
-ItemId GetItemIdFromPassengerDestInfos(SceneIndex destSceneIndex) {
-    int passenger = GetPassengerFromDestInfos(destSceneIndex);
-    ItemId itemId = passenger != -1 ? gSettings.GetPassengerAtDestItemId(passenger) : ItemId_None;
-
-    if (itemId != ItemId_None && !GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId])) {
-        // only return the item id if the related flag is unset
-        return itemId;
-    }
-
-    return ItemId_None;
 }
 
 void GZ::OnGameModeUpdate() {
@@ -189,10 +184,10 @@ void GZ::OnGameModeUpdate() {
         pTitleScreen->func_ov025_020c4ea0(TitleScreenState_ToFileSelect);
     } else if (this->IsAdventureMode()) {
         // special handling for alfonzo passenger
-        // basically if we don't have the passenger item and the board flag is set
+        // basically if the board flag is set
         // then give the item and unset said flag
-        if (this->mItemId == ItemId_None &&
-            !GET_FLAG(data_027e09b8->mAdventureFlags, RandoAdventureFlag_PassengerCastleTownAlfonzo) &&
+        ItemId itemId = gSettings.GetPassengerPickUpItemId(Passenger_CastleTownAlfonzo);
+        if (!this->IsItemInQueue(itemId) &&
             GET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_AlfonzoBoardsTrainToOutsetVillage)) {
             // unset previously set flag
             UNSET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_AlfonzoBoardsTrainToOutsetVillage);
@@ -201,33 +196,16 @@ void GZ::OnGameModeUpdate() {
             UNSET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_TalkedToAlfonzoHyruleCastle);
 
             // set item id to give
-            this->mItemId = gSettings.GetPassengerPickUpItemId(Passenger_CastleTownAlfonzo);
+            this->TryAddItemToQueue(itemId);
 
             // reload the area otherwise we end up leaving castle town
             func_ov000_02070af8(data_027e09a4);
         }
 
-        if (this->mItemId == ItemId_None) {
-            // handle passenger destination item give if alfonzo handling didn't happen
-            this->mItemId = GetItemIdFromPassengerDestInfos(data_027e09a4->CurrentSceneIndex());
-        }
+        // handle passenger destination item give for passengers we have
+        this->TryGiveItemFromPassengerDestInfos(data_027e09a4->CurrentSceneIndex());
 
-        // give item if:
-        // - not during scene init process
-        // - not in a cutscene
-        // - land overlay loaded
-        // - item id is set and less than max
-        // - not in a blocking interaction (`data_027e09b8->mUnk_00->mUnk_FD0`)
-        if (!this->IsSceneInit() && !this->IsStb() && this->IsOnLand() &&
-            data_027e09a4->CurrentCSIndex() == CutsceneIndex_None && this->mItemId != ItemId_None &&
-            data_027e09b8->mUnk_00 != NULL && data_027e09b8->mUnk_00->mUnk_FD0 == 0) {
-            if (this->mItemId < ExtraItemId_Max) {
-                CustomTryItemGive(data_027e0d34->mUnk_04, this->mItemId);
-                this->mItemId = ItemId_None;
-            } else {
-                this->mItemId = ItemId_None;
-            }
-        }
+        this->ProcessItemQueue();
     }
 }
 
@@ -337,6 +315,18 @@ void GZ::ApplyKeyAmounts() {
     }
 }
 
+RandoSave::RandoSave() {
+    memset(this->tearsAmounts, 0, sizeof(this->tearsAmounts));
+    memset(this->keyAmounts, 0, sizeof(this->keyAmounts));
+    this->ClearItemQueue();
+}
+
+void RandoSave::ClearItemQueue() {
+    for (int i = 0; i < ARRAY_LEN(this->itemQueue); i++) {
+        this->itemQueue[i] = (u8)ItemId_None;
+    }
+}
+
 RandoSave* GZ::GetCurrentSave() { return &this->mRandoSave[gSaveManager.mUnk_206]; }
 
 void GZ::Save() {
@@ -344,4 +334,67 @@ void GZ::Save() {
 
     // 0xF5000 is the offset inside the save data, it's unused space we can use
     lock.WriteSave(0xF5000, this->mRandoSave, sizeof(this->mRandoSave));
+}
+
+bool GZ::IsItemInQueue(ItemId itemId) {
+    RandoSave* pSave = this->GetCurrentSave();
+
+    for (int i = 0; i < ARRAY_LEN(pSave->itemQueue); i++) {
+        if (pSave->itemQueue[i] == itemId) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void GZ::TryAddItemToQueue(ItemId itemId) {
+    // ignore if the item id is none
+    if (itemId == ItemId_None) {
+        return;
+    }
+
+    RandoSave* pSave = this->GetCurrentSave();
+    if (this->mItemQueueIndex < ARRAY_LEN(pSave->itemQueue)) {
+        pSave->itemQueue[this->mItemQueueIndex] = itemId;
+        this->mItemQueueIndex++;
+    }
+}
+
+void GZ::TryAddItemIfNotInQueue(ItemId itemId) {
+    // ignore if the item is already present in the queue
+    if (!this->IsItemInQueue(itemId)) {
+        this->TryAddItemToQueue(itemId);
+    }
+}
+
+void GZ::ProcessItemQueue() {
+    // give item if:
+    // - not during scene init process
+    // - not in a cutscene
+    // - land overlay loaded
+    // - item id is set and less than max
+    // - not in a blocking interaction (`data_027e09b8->mUnk_00->mUnk_FD0`)
+    if (this->IsSceneInit() || this->IsStb() || !this->IsOnLand() ||
+        data_027e09a4->CurrentCSIndex() != CutsceneIndex_None ||
+        !(data_027e09b8->mUnk_00 != NULL && data_027e09b8->mUnk_00->mUnk_FD0 == 0)) {
+        return;
+    }
+
+    RandoSave* pSave = this->GetCurrentSave();
+    for (int i = 0; i < ARRAY_LEN(pSave->itemQueue); i++) {
+        ItemId itemId = pSave->itemQueue[i];
+
+        if (itemId != ItemId_None && itemId < ExtraItemId_Max) {
+            CustomTryItemGive(data_027e0d34->mUnk_04, itemId);
+            pSave->itemQueue[i] = (u8)ItemId_None;
+
+            if (this->mItemQueueIndex > 0) {
+                this->mItemQueueIndex--;
+            }
+
+            // we need to wait for the next game update before we can giving another item
+            break;
+        }
+    }
 }

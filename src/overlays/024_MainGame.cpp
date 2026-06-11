@@ -74,7 +74,7 @@ bool CustomPassengerManager::CustomTryBoardTrain(ActorId actorId, SceneIndex des
 
     if (itemId != ItemId_None) {
         // use our item giver to avoid any softlocks
-        gGZ.SetItemId(itemId);
+        gGZ.TryAddItemToQueue(itemId);
     }
 
     return false;
