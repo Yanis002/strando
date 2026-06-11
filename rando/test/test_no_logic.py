@@ -213,33 +213,21 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.BigGreenRupee, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.BigRedRupee, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.BigGoldRupee, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.ForceGem_18, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_19, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_20, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.FinalTrack, ItemKind.Default, ItemWeight.Progression),
     ItemDef(ItemId.Unk_31, ItemKind.Default, ItemWeight.Progression),
-    ItemDef(ItemId.Unk_32, ItemKind.Default, ItemWeight.Progression),
     ItemDef(ItemId.Unk_33, ItemKind.Default, ItemWeight.Progression),
     ItemDef(ItemId.Unk_34, ItemKind.Default, ItemWeight.Progression),
-    ItemDef(ItemId.ForceGem_35, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_36, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_37, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.RecruitUniform, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.PostmasterLetter, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.QuiverMedium, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.BombBagMedium, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_43, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_44, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_45, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_46, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_47, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_48, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_49, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_50, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_51, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_52, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_53, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_54, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_55, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_56, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_57, ItemKind.Default, ItemWeight.Priority),
@@ -302,13 +290,6 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.EngineerUniform, ItemKind.Default, ItemWeight.Priority),
 ]
 
-def find_item_def(item_id: int):
-    for item_def in item_defs:
-        if item_def.id.value == item_id:
-            return item_def
-
-    return None
-
 
 class BMGOffsets:
     def __init__(self):
@@ -319,7 +300,7 @@ class BMGOffsets:
         self.spanish: list[str] = []
 
     def set_from_english(self, bmg: str):
-        with Path("rando/data/bmg/flw1_offsets.yaml").open("r") as file:
+        with Path("rando/data/bmg/flw1_offsets.yaml").open("r", encoding="utf-8") as file:
             flw1_offsets = yaml.safe_load(file)
 
         flw1_offset_en = int(flw1_offsets["English"][bmg], base=16)
@@ -358,11 +339,18 @@ class LocationInfo:
         self.settings = LocationSettings()
         self.rando_settings = rando_settings
 
+        self.is_passenger_pick_up = False
+        self.is_passenger_at_dest = False
+
     @staticmethod
     def from_data(name: str, data: dict, rando_settings: Settings):
         new_info = LocationInfo(name, data["scene"], data["room_index"], rando_settings)
 
-        if "is_bmg" in data:
+        if "is_passenger_pick_up" in data:
+            new_info.is_passenger_pick_up = data["is_passenger_pick_up"]
+        elif "is_passenger_at_dest" in data:
+            new_info.is_passenger_at_dest = data["is_passenger_at_dest"]
+        elif "is_bmg" in data:
             new_info.is_bmg = data["is_bmg"]
         else:
             if "is_actor" in data:
@@ -410,6 +398,12 @@ class LocationInfo:
                         new_info.settings.stamps_rewards = int(split[1], base=0)
                     case "stamp_book":
                         new_info.settings.stamp_book = True
+                    case "passengers":
+                        if split[1] in ["abstract", "anywhere"]:
+                            new_info.settings.passengers = True
+
+                        if new_info.settings.passengers and split[1] in ["remove", "vanilla"]:
+                            new_info.settings.passengers = False
                     case _:
                         print(f"WARNING: ignoring unknown setting {repr(elem)}!")
 
@@ -466,6 +460,10 @@ class LocationInfo:
 
         # ignore stamp book if we don't want it
         if self.settings.stamp_book and not self.rando_settings.shuffle.stamp_book:
+            return False
+
+        # ignore passenger location if we don't want it
+        if self.settings.passengers and self.rando_settings.shuffle.passengers in ["remove", "vanilla"]:
             return False
 
         return True
@@ -594,14 +592,21 @@ class SeedLog:
         self.path.parent.mkdir(exist_ok=True)
 
     @staticmethod
-    def from_yaml(yaml_path: Path, nodes: list[LocationNode]):
+    def from_yaml(yaml_path: Path, nodes: list[LocationNode], item_pool: list[ItemDef]):
         with yaml_path.open("r") as file:
             yaml_file: dict[str, dict] = yaml.safe_load(file)
 
         settings = yaml_file["settings"]
         yaml_file.pop("settings")
 
-        new_log = SeedLog(yaml_path.with_stem("spoiler_parsed"), settings["seed"])
+        new_log = SeedLog(yaml_path.with_stem(f"spoiler_{settings['seed']}_parsed"), settings["seed"])
+
+        def find_item_def(item_id: int):
+            for item_def in item_pool:
+                if item_def.id.value == item_id:
+                    return item_def
+
+            return None
 
         for node in nodes:
             for location in node.locations:
@@ -609,12 +614,12 @@ class SeedLog:
 
                 if isinstance(elem, str):
                     item_def = find_item_def(item_name_to_id[elem])
-                    assert item_def is not None
+                    assert item_def is not None, f"item_def is none ({elem})"
                     location.items.append(item_def)
                 elif isinstance(elem, list):
                     for i in range(0, 5):
                         item_def = find_item_def(item_name_to_id[elem[i][shop_item_positions[i]]])
-                        assert item_def is not None
+                        assert item_def is not None, f"item_def is none ({elem})"
                         location.items.append(item_def)
                 else:
                     raise ValueError(f"unexpected type: {type(elem)}")
@@ -650,7 +655,7 @@ class Randomizer:
         self.create_item_pool()
 
         if seed_log_path is not None:
-            self.seed_log = SeedLog.from_yaml(seed_log_path, self.nodes)
+            self.seed_log = SeedLog.from_yaml(seed_log_path, self.nodes, self.all_item_pool)
             self.seed = self.seed_log.seed
         else:
             self.seed_log = None
@@ -677,7 +682,7 @@ class Randomizer:
             item_defs.extend(extra_defs)
 
         ## apply settings
-        for shop_kind, shop_items in shop_item_map.items():
+        for _, shop_items in shop_item_map.items():
             for i in range(self.settings.shuffle.shopsanity):
                 item_defs.append(shop_items[i])
 
@@ -750,10 +755,59 @@ class Randomizer:
         if self.settings.shuffle.stamp_book:
             item_defs.append(ItemDef(ItemId.StampBook, ItemKind.Default, ItemWeight.Priority))
 
+        self.passenger_pick_pool = [
+            ItemDef(ItemId.ExtraItemId_PassengerAnoukiNoko, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerAnoukiKofu, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerCastleTownMona, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerCastleTownAlfonzo, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerSnowRealmFerrus, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerFireRealmFerrus, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerGoronVillageSnowGoron, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerGoronVillageCityGoron, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerMayscoreDovok, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerMayscoreMash, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerMayscoreMorris, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerMayscoreYamahiko, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerMayscoreWood, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerOutsetJoe, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerPirateHideoutWadatsumi, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerBridgeWorkersHomeKenzo, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerTradingPostKenzo, ItemKind.PassengerPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_PassengerPapuziaVillageCarben, ItemKind.PassengerPickUp, ItemWeight.Progression),
+        ]
+
+        self.passenger_dest_pool: list[ItemDef | None] = [
+            ItemDef(ItemId.ForceGem_53, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_AnoukiNoko
+            ItemDef(ItemId.ForceGem_36, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_AnoukiKofu
+            ItemDef(ItemId.ForceGem_48, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_CastleTownMona
+            ItemDef(ItemId.TrainCannon, ItemKind.PassengerAtDest, ItemWeight.Progression), # Passenger_CastleTownAlfonzo
+            ItemDef(ItemId.ForceGem_51, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_SnowRealmFerrus
+            ItemDef(ItemId.ForceGem_35, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_FireRealmFerrus
+            ItemDef(ItemId.ForceGem_54, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_GoronVillageSnowGoron
+            ItemDef(ItemId.ForceGem_37, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_GoronVillageCityGoron
+            ItemDef(ItemId.ForceGem_44, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_MayscoreDovok
+            None, # Passenger_MayscoreMash
+            None, # Passenger_MayscoreMorris
+            None, # Passenger_MayscoreYamahiko
+            None, # Passenger_MayscoreWood
+            ItemDef(ItemId.ForceGem_47, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_OutsetJoe
+            ItemDef(ItemId.ForceGem_18, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_PirateHideoutWadatsumi
+            None, # Passenger_BridgeWorkersHomeKenzo
+            None, # Passenger_TradingPostKenzo
+            ItemDef(ItemId.ForceGem_45, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_PapuziaVillageCarben
+        ]
+
+        if self.settings.shuffle.passengers == "anywhere":
+            item_defs.extend(self.passenger_pick_pool)
+
+            passenger_dest_pool = [item for item in self.passenger_dest_pool if item is not None]
+            item_defs.extend(passenger_dest_pool)
+
         ## create the pools
         self.progression_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Progression]
         self.priority_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Priority]
         self.normal_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Normal]
+        self.all_item_pool = item_defs[:]
 
     # seed methods from https://github.com/OoTRandomizer/OoT-Randomizer/blob/2900fedb4a5ccd6937db85ec4f15721556656815/Settings.py#L253-L270
     def sanitize(self, s):
@@ -775,7 +829,7 @@ class Randomizer:
         found_file = None
         filename = None
         for i, file in enumerate(archive.files):
-            if file.startswith(b"BPAM"):
+            if file.startswith(b"BPAM1BMZ"):
                 found_file = file
                 filename = archive.filenames[i]
                 break
@@ -823,6 +877,14 @@ class Randomizer:
         item_pool = prog_pool + prio_pool + misc_pool
         random.shuffle(item_pool)
 
+        if self.settings.shuffle.passengers != "anywhere":
+            # if not anywhere keep it vanilla
+            self.settings.passenger_pick_ids = [item.id for item in self.passenger_pick_pool]
+
+            for item in self.passenger_dest_pool:
+                # 0xFF for ItemId_None
+                self.settings.passenger_dest_ids.append(item.id if item is not None else 0xFF)
+
         for loc in all_locations:
             size = self.settings.shuffle.shopsanity if "Shop Keeper" in loc.name else 1
 
@@ -831,9 +893,17 @@ class Randomizer:
                     picked_item = random.choice(item_pool)
                     item_pool.remove(picked_item)
                 else:
+                    # avoids having more than one major item per shop
                     picked_item = random.choice(misc_pool)
 
                 loc.items.append(picked_item)
+
+                if self.settings.shuffle.passengers == "anywhere":
+                    if picked_item.kind == ItemKind.PassengerPickUp:
+                        # if passengers are anywhere and the picked item is a passenger, update the list
+                        self.settings.passenger_pick_ids.append(picked_item.id)
+                    elif picked_item.kind == ItemKind.PassengerAtDest:
+                        self.settings.passenger_dest_ids.append(picked_item.id)
 
         assert len(item_pool) == 0
         self.nodes.sort(key=lambda entry: entry.name)
@@ -856,13 +926,17 @@ class Randomizer:
         # patch the files
         for i, node in enumerate(self.nodes):
             lzss_path = self.extracted_dir / node.lzss
-            lzss_bytes, archive, zmb_data, zmb_filename = self.get_zmb(lzss_path)
+            _, archive, zmb_data, zmb_filename = self.get_zmb(lzss_path)
 
             do_save_narc = False
             for location in node.locations:
                 assert location.infos is not None
                 assert node.scene_name == location.infos.scene
                 assert node.room_index == location.infos.room_index
+
+                if location.infos.is_passenger_pick_up or location.infos.is_passenger_at_dest:
+                    # passengers are exported into the shared settings binary, set by `assign_items``
+                    continue
 
                 if location.infos.is_bmg:
                     for lang in languages:
@@ -882,6 +956,9 @@ class Randomizer:
 
                         bmg_path.write_bytes(bytes(bmg_data_array))
                 else:
+                    if location.infos.settings.passengers:
+                        continue
+
                     id, x, y = location.infos.id_hash.split("_")
 
                     length = 1 if location.infos.is_mapobj else 2
@@ -964,7 +1041,7 @@ class Randomizer:
         print(f"Seed {self.seed} was generated successfully in {time.time() - initial_time:.3f}s!")
 
     def export_settings(self):
-        settings_path = Path(f"src/settings/settings.bin")
+        settings_path = Path("src/settings/settings.bin")
         settings_path.write_bytes(self.settings.to_bin())
 
 
@@ -976,7 +1053,7 @@ def main():
         Path("rando/data/location_table.yaml"),
 
         # plando mode
-        # Path("output/spoiler.yaml"),
+        # Path("output/seed.yaml"),
     )
 
     rando.generate_seed()

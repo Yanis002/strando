@@ -12,26 +12,17 @@
 #include <Unknown/UnkStruct_027e0208.hpp>
 #include <Unknown/UnkStruct_027e09a4.hpp>
 #include <Unknown/UnkStruct_ov000_02067bc4.hpp>
-#include <regs.h>
+#include <nitro/card.h>
+#include <nitro/os.h>
+#include <nitro/reg.h>
 
 extern "C" void func_020196fc();
-extern "C" unk32 CARD_func_0033();
-extern "C" void CARD_func_0034();
 extern "C" void FlushGfxQueue();
 extern "C" void func_020132c8();
 extern "C" void func_020132dc();
 extern "C" void func_02013354();
 extern "C" void func_0201328c();
-extern "C" int OS_DisableInterrupts_Irq();
-extern "C" void OS_RestoreInterrupts(int enabled);
 extern Mat3p gGeomMatrix;
-
-struct SomeSaveFileStruct {
-    /* 00 */ SaveFile* mpSaveFiles[MAX_SAVE_SLOTS];
-
-    SomeSaveFileStruct(unk32 param1);
-    ~SomeSaveFileStruct();
-};
 
 void LoadRandoBMG() {
     UnkStruct_ov000_020b504c_Sub3* pTemp = data_ov000_020b504c.mUnk_000;
@@ -66,8 +57,8 @@ void CustomGame::Run() {
             data_0204999c.func_02013014();
 
             {
-                SomeSaveFileStruct local_28(0x1300);
-                this->mpSaveFile = local_28.mpSaveFiles[0];
+                UnkDataStruct2 local_28(0x1300);
+                this->mpSaveFile = (SaveFile*)local_28.unk_00;
 
                 if (this->mpCurrentGameMode != NULL) {
                     delete this->mpCurrentGameMode;
@@ -98,8 +89,7 @@ void CustomGame::Run() {
                         UnkStruct_SceneChange1* pCurrent = &data_027e09a4->mpWarpUnk1->mUnk_78;
                         UnkStruct_SceneChange1* pNext = &data_027e09a4->mpWarpUnk1->mUnk_8C;
 
-                        if (pCurrent->mNextSceneIndex != pNext->mNextSceneIndex ||
-                            pCurrent->mRoomIndex != pNext->mRoomIndex) {
+                        if (pCurrent->mSceneIndex != pNext->mSceneIndex || pCurrent->mRoomIndex != pNext->mRoomIndex) {
                             gGZ.SetSceneLoadState(SceneLoadState_Init);
                         }
                     }
@@ -185,7 +175,7 @@ void CustomGame::Run() {
         {
             int enabled = OS_DisableInterrupts_Irq();
             this->mUnk_1C.func_02013e18((void*)func_020132dc, 0);
-            REG_SWAP_BUFFERS = 3;
+            REG_GFX_FIFO_SWAP_BUFFERS = 3;
             OS_RestoreInterrupts(enabled);
         }
 

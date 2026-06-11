@@ -21,13 +21,10 @@ Anouki Village Bomb Cave Chest:
   scene: f_snow
 
 Anouki Village Goron Force Gem:
-  bmg: snow.bmg
-  is_bmg: true
-  offsets:
-    english:
-    - '0x13CD8'
   room_index: 0
   scene: f_snow
+  is_passenger_at_dest: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Anouki Village Lake Chest:
   id_hash: TRES_0x09_0x09
@@ -72,14 +69,23 @@ Anouki Village Stamp Station:
   scene: f_snow
   settings: ['stamps']
 
+Anouki Village Pick Up Noko:
+  room_index: 0
+  scene: f_snow
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
+
+Anouki Village Pick Up Kofu:
+  room_index: 0
+  scene: f_snow
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
+
 Beedle Joe's Force Gem:
-  bmg: intrain.bmg
-  is_bmg: true
-  offsets:
-    english:
-    - '0xF1E8'
   room_index: 3
   scene: f_trnnpc
+  is_passenger_at_dest: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Beedle Shop Keeper:
   id_hash: TERY_0x01F8_0x0160
@@ -154,6 +160,12 @@ Bridge Worker's Home Buried Chest:
   room_index: 0
   scene: f_bridge
 
+Bridge Worker's Home Pick Up Kenzo:
+  room_index: 0
+  scene: f_bridge
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
+
 Castle Town Buy Cuccos:
   id_hash: CAMB_0x0100_0x00F0
   is_actor: true
@@ -176,13 +188,10 @@ Castle Town Empty House Roof Chest:
   scene: f_htown
 
 Castle Town Goron Force Gem:
-  bmg: castle_town.bmg
-  is_bmg: true
-  offsets:
-    english:
-    - '0x9480'
   room_index: 0
   scene: f_htown
+  is_passenger_at_dest: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Castle Town Goron Reward:
   bmg: castle_town.bmg
@@ -206,10 +215,16 @@ Castle Town Minigame Roof:
   scene: f_htown
 
 Castle Town Pick Up Mona:
-  id_hash: CAWB_0x0200_0x0160
-  is_actor: true
   room_index: 12
   scene: f_htown
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
+
+Castle Town Pick Up Alfonzo:
+  room_index: 0
+  scene: f_htown
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Castle Town Ramp House Chest:
   id_hash: TRES_0x0E_0x1C
@@ -449,6 +464,18 @@ Forest Realm Ferrus Gift:
   room_index: 2
   scene: f_trnnpc
 
+Snow Realm Pick Up Ferrus:
+  room_index: 2
+  scene: f_trnnpc
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
+
+Fire Realm Pick Up Ferrus:
+  room_index: 2
+  scene: f_trnnpc
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
+
 Goron Shop Keeper:
   id_hash: GORY_0x01F8_0x0140
   is_actor: true
@@ -485,13 +512,10 @@ Goron Village Deliver Ice Force Gem:
   scene: f_flame5
 
 Goron Village Kofu Force Gem:
-  bmg: flame.bmg
-  is_bmg: true
-  offsets:
-    english:
-    - '0xA360'
   room_index: 0
   scene: f_flame5
+  is_passenger_at_dest: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Goron Village West Buy Steel:
   id_hash: GORM_0x0320_0x01F0
@@ -523,6 +547,18 @@ Goron Village West Steel Chest:
   is_mapobj: true
   room_index: 3
   scene: f_flame
+
+Goron Village Pick Up Snow Goron:
+  room_index: 0
+  scene: f_flame5
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
+
+Goron Village Pick Up City Goron:
+  room_index: 0
+  scene: f_flame5
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Hyrule Castle 1F Back Chest:
   id_hash: TRES_0x27_0x0B
@@ -569,14 +605,10 @@ Icy Spring Buy Mega Ice:
   scene: f_tetsuo
 
 Icy Spring Noko's Force Gem:
-  bmg: intrain.bmg
-  is_bmg: true
-  offsets:
-    english:
-    - '0xEA58'
-    - '0xE4A0'
   room_index: 0
   scene: f_tetsuo
+  is_passenger_at_dest: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Icy Spring Stamp Station:
   id_hash: SPTB_0x20_0x08
@@ -592,13 +624,10 @@ Icy Spring Whip Chest:
   scene: f_tetsuo
 
 Island Sanctuary Carben's Force Gem:
-  bmg: water.bmg
-  is_bmg: true
-  offsets:
-    english:
-    - '0x12D80'
   room_index: 0
   scene: f_water2
+  is_passenger_at_dest: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Island Sanctuary Cucco Chest:
   id_hash: TRES_0x33_0x1E
@@ -757,13 +786,10 @@ Marine Temple 6F W Chest:
   scene: d_water27
 
 Marine Temple Ferrus Force Gem:
-  bmg: dungeon.bmg
-  is_bmg: true
-  offsets:
-    english:
-    - '0x65C8'
   room_index: 10
   scene: d_water27
+  is_passenger_at_dest: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Marine Temple Heart Container:
   id_hash: TRLW_0x1F_0x1E
@@ -793,34 +819,34 @@ Mayscore Deliver Steel:
   scene: f_forest1
 
 Mayscore Pick Up Dovok:
-  id_hash: FOMR_0x0200_0x0160
-  is_actor: true
   room_index: 4
   scene: f_forest1
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Mayscore Pick Up Mash:
-  id_hash: FOMB_0x0130_0x0210
-  is_actor: true
   room_index: 0
   scene: f_forest1
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Mayscore Pick Up Morris:
-  id_hash: FOMA_0x0210_0x0160
-  is_actor: true
   room_index: 3
   scene: f_forest1
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Mayscore Pick Up Wood:
-  id_hash: FOMB_0x0130_0x0210
-  is_actor: true
-  room_index: 0
+  room_index: 4
   scene: f_forest1
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Mayscore Pick Up Yamahiko:
-  id_hash: FOMC_0x01C0_0x01C0
-  is_actor: true
   room_index: 0
   scene: f_forest1
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Mayscore Shop Keeper:
   id_hash: FOMY_0x01F8_0x0140
@@ -963,6 +989,12 @@ Outset Clear Rocks:
   room_index: 0
   scene: f_first
 
+Outset Alfonzo Cannon:
+  room_index: 0
+  scene: f_first
+  is_passenger_at_dest: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
+
 Outset Deliver Cuccos:
   bmg: village.bmg
   is_bmg: true
@@ -973,13 +1005,10 @@ Outset Deliver Cuccos:
   scene: f_first
 
 Outset Ferrus Force Gem:
-  bmg: village.bmg
-  is_bmg: true
-  offsets:
-    english:
-    - '0x16710'
   room_index: 11
   scene: f_first
+  is_passenger_at_dest: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Outset Niko 10 Stamps Reward:
   bmg: village.bmg
@@ -1034,6 +1063,12 @@ Outset Stamp Station:
   scene: f_first
   settings: ['stamps']
 
+Outset Pick Up Joe:
+  room_index: 0
+  scene: f_first
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
+
 Papuzia Shop Keeper:
   id_hash: WAWY_0x01F8_0x0160
   is_actor: true
@@ -1068,13 +1103,10 @@ Papuzia Village NE Chest:
   scene: f_water
 
 Papuzia Village Orca's Force Gem:
-  bmg: water.bmg
-  is_bmg: true
-  offsets:
-    english:
-    - '0x11DB0'
   room_index: 3
   scene: f_water
+  is_passenger_at_dest: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Papuzia Village S Center Chest:
   id_hash: TRES_0x26_0x06
@@ -1102,13 +1134,16 @@ Papuzia Village Stamp Station:
   settings: ['stamps']
 
 Papuzia Village Wadatsumi's Force Gem:
-  bmg: water.bmg
-  is_bmg: true
-  offsets:
-    english:
-    - '0x12A20'
   room_index: 0
   scene: f_water
+  is_passenger_at_dest: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
+
+Papuzia Village Pick Up Carben:
+  room_index: 0
+  scene: f_water
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Pirate Hideout Minigame 3000-4000:
   bmg: water.bmg
@@ -1165,6 +1200,12 @@ Pirate Hideout Stamp Station:
   scene: f_ajito
   settings: ['stamps']
 
+Pirate Hideout Pick Up Wadatsumi:
+  room_index: 0
+  scene: f_ajito
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
+
 Rabbit Haven Island Chest:
   id_hash: TRES_0x24_0x14
   is_mapobj: true
@@ -1172,13 +1213,10 @@ Rabbit Haven Island Chest:
   scene: f_rabbit
 
 Rabbit Haven Mona's Force Gem:
-  bmg: village.bmg
-  is_bmg: true
-  offsets:
-    english:
-    - '0x17840'
   room_index: 0
   scene: f_rabbit
+  is_passenger_at_dest: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Rabbit Haven Net Gift:
   bmg: village.bmg
@@ -1722,6 +1760,12 @@ Trading Post Stamp Station:
   room_index: 1
   scene: f_bridge2
   settings: ['stamps']
+
+Trading Post Pick Up Kenzo:
+  room_index: 0
+  scene: f_bridge2
+  is_passenger_pick_up: true
+  settings: ['passengers-abstract', 'passengers-anywhere']
 
 Tunnel to ToS 1F Block Chest:
   id_hash: TRES_0x25_0x0E

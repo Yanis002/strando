@@ -423,6 +423,7 @@ node_f_ajito_0:
     Pirate Hideout Minigame 3000-4000: 'True'
     Pirate Hideout Minigame 4000-5000: 'True'
     Pirate Hideout Minigame 5000+: 'True'
+    Pirate Hideout Pick Up Wadatsumi: 'True'
     Pirate Hideout Stamp Station: 'True'
   room_index: 0
   scene: f_ajito
@@ -437,6 +438,7 @@ node_f_ajito_1:
 
 node_f_bridge2_0:
   locations:
+    Trading Post Pick Up Kenzo: 'True'
     Trading Post Song Statue: 'True'
   room_index: 0
   scene: f_bridge2
@@ -463,15 +465,18 @@ node_f_bridge2_2:
 node_f_bridge_0:
   locations:
     Bridge Worker's Home Buried Chest: 'True'
+    Bridge Worker's Home Pick Up Kenzo: 'True'
   room_index: 0
   scene: f_bridge
 
 node_f_first_0:
   locations:
+    Outset Alfonzo Cannon: 'True'
     Outset Beach Tree Buried Chest: 'True'
     Outset Clear Rocks: 'True'
     Outset Deliver Cuccos: 'True'
     Outset Niko's House Tree Buried Chest: 'True'
+    Outset Pick Up Joe: 'True'
     Outset Stamp Station: 'True'
   room_index: 0
   scene: f_first
@@ -523,6 +528,8 @@ node_f_flame5_0:
     Goron Village Chest Above Elder's House: 'True'
     Goron Village Deliver Ice Force Gem: 'True'
     Goron Village Kofu Force Gem: 'True'
+    Goron Village Pick Up City Goron: 'True'
+    Goron Village Pick Up Snow Goron: 'True'
   room_index: 0
   scene: f_flame5
 
@@ -554,7 +561,6 @@ node_f_forest1_0:
     Mayscore Buy Lumber: 'True'
     Mayscore Deliver Steel: 'True'
     Mayscore Pick Up Mash: 'True'
-    Mayscore Pick Up Wood: 'True'
     Mayscore Pick Up Yamahiko: 'True'
   room_index: 0
   scene: f_forest1
@@ -568,6 +574,7 @@ node_f_forest1_3:
 node_f_forest1_4:
   locations:
     Mayscore Pick Up Dovok: 'True'
+    Mayscore Pick Up Wood: 'True'
   room_index: 4
   scene: f_forest1
 
@@ -610,6 +617,7 @@ node_f_htown_0:
     Castle Town Goron Reward: 'True'
     Castle Town Left Wall Chest: 'True'
     Castle Town Minigame Roof: 'True'
+    Castle Town Pick Up Alfonzo: 'True'
     Castle Town Ramp House Chest: 'True'
     Castle Town Right Wall Chest: 'True'
     Castle Town Stamp Station: 'True'
@@ -858,6 +866,8 @@ node_f_snow_0:
   locations:
     Anouki Village Goron Force Gem: 'True'
     Anouki Village Lake Chest: 'True'
+    Anouki Village Pick Up Kofu: 'True'
+    Anouki Village Pick Up Noko: 'True'
     Anouki Village Repair Fence: 'True'
     Anouki Village Song Statue: 'True'
     Anouki Village Song Statue Chest: 'True'
@@ -888,7 +898,9 @@ node_f_tetsuo_0:
 
 node_f_trnnpc_2:
   locations:
+    Fire Realm Pick Up Ferrus: 'True'
     Forest Realm Ferrus Gift: 'True'
+    Snow Realm Pick Up Ferrus: 'True'
   room_index: 2
   scene: f_trnnpc
 
@@ -953,6 +965,7 @@ node_f_water_0:
     Papuzia Village Buy Fish: 'True'
     Papuzia Village Deliver Ice: 'True'
     Papuzia Village NE Chest: 'True'
+    Papuzia Village Pick Up Carben: 'True'
     Papuzia Village Song Statue: 'True'
     Papuzia Village Wadatsumi's Force Gem: 'True'
   room_index: 0

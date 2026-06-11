@@ -119,7 +119,7 @@ RESERVED_SIZE := 0x10
 CFLAGS_BASE := -marm -mthumb-interwork -march=armv5te -mtune=arm946e-s -nostdlib -nodefaultlibs -nostartfiles
 CC := arm-none-eabi-gcc $(CFLAGS_BASE)
 CXX := arm-none-eabi-g++ $(CFLAGS_BASE)
-WARNINGS := -Wall -Wno-multichar -Wno-unknown-pragmas -Wno-strict-aliasing -Wno-unused-variable
+WARNINGS := -Wall -Wno-multichar -Wno-unknown-pragmas -Wno-strict-aliasing -Wno-unused-variable -Wno-unused-but-set-variable -Wno-return-local-addr
 INCLUDES := -I include -I $(STGZ_DECOMP_DIR)/include -I $(STGZ_DECOMP_DIR)/libs/c/include -I $(STGZ_DECOMP_DIR)/libs/cpp/include -I $(STGZ_DECOMP_DIR)/libs/nitro/include -I $(STGZ_DECOMP_DIR)/libs/nns/include -I $(STGZ_DECOMP_DIR)/libs/runtime/include
 CPP_DEFINES := -DGZ_OVL_ID=114 -DPACKAGE_VERSION='$(PACKAGE_VERSION)' -DPACKAGE_NAME='$(PACKAGE_NAME)' -DPACKAGE_COMMIT_AUTHOR='$(PACKAGE_COMMIT_AUTHOR)' -DPACKAGE_AUTHOR='$(PACKAGE_AUTHOR)' -DVERSION=$(VERSION)
 CFLAGS := -Os -fno-short-enums -fomit-frame-pointer -ffast-math -fno-builtin -fshort-wchar -MMD -MP $(WARNINGS) $(INCLUDES) $(CPP_DEFINES)

@@ -23,7 +23,7 @@ Actor* GetActor(ActorId actorId) {
 extern "C" void GiveItemDuringCS(ItemManager* thisx, ItemFlag itemFlag) {
     ActorId actorId = ActorId_None;
 
-    switch (data_027e09a4->mCutsceneIndex) {
+    switch (data_027e09a4->CurrentCSIndex()) {
         case CutsceneIndex_LokomoSword:
             actorId = ActorId_SYRN;
             break;

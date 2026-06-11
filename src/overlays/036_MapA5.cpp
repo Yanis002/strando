@@ -134,7 +134,7 @@ u16 CustomShopItem::GetShopItemPrice(void) {
         case ItemId_AncientCoin:
         case ItemId_PricelessStone:
         case ItemId_RegalRing: {
-            return data_ov000_020b6510->func_ov000_020a9b4c(this->mItemId - ItemId_DemonFossil) * 2;
+            return gpTreasureManager->func_ov000_020a9b4c(this->mItemId - ItemId_DemonFossil) * 2;
         }
         case ItemId_HeartContainer:
             return 2000;

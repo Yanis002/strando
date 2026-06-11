@@ -170,6 +170,25 @@ u32 gGetItemMap[] = {
     GIModel_dummy, // ExtraItemId_StampPirateHideout
     GIModel_dummy, // ExtraItemId_StampTradingPost
     GIModel_dummy, // ExtraItemId_StampIcySpring
+
+    GIModel_dummy, // ExtraItemId_PassengerAnoukiNoko
+    GIModel_dummy, // ExtraItemId_PassengerAnoukiKofu
+    GIModel_dummy, // ExtraItemId_PassengerCastleTownMona
+    GIModel_dummy, // ExtraItemId_PassengerCastleTownAlfonzo
+    GIModel_dummy, // ExtraItemId_PassengerSnowRealmFerrus
+    GIModel_dummy, // ExtraItemId_PassengerFireRealmFerrus
+    GIModel_dummy, // ExtraItemId_PassengerGoronVillageSnowGoron
+    GIModel_dummy, // ExtraItemId_PassengerGoronVillageCityGoron
+    GIModel_dummy, // ExtraItemId_PassengerMayscoreDovok
+    GIModel_dummy, // ExtraItemId_PassengerMayscoreMash
+    GIModel_dummy, // ExtraItemId_PassengerMayscoreMorris
+    GIModel_dummy, // ExtraItemId_PassengerMayscoreYamahiko
+    GIModel_dummy, // ExtraItemId_PassengerMayscoreWood
+    GIModel_dummy, // ExtraItemId_PassengerOutsetJoe
+    GIModel_dummy, // ExtraItemId_PassengerPirateHideoutWadatsumi
+    GIModel_dummy, // ExtraItemId_PassengerBridgeWorkersHomeKenzo
+    GIModel_dummy, // ExtraItemId_PassengerTradingPostKenzo
+    GIModel_dummy, // ExtraItemId_PassengerPapuziaVillageCarben
 };
 
 // BMG IDs
@@ -332,6 +351,24 @@ u32 gBMGMap[] = {
     MSG(ExtraItemId_StampPirateHideout), // ExtraItemId_StampPirateHideout
     MSG(ExtraItemId_StampTradingPost), // ExtraItemId_StampTradingPost
     MSG(ExtraItemId_StampIcySpring), // ExtraItemId_StampIcySpring
+    MSG(ExtraItemId_PassengerAnoukiNoko), // ExtraItemId_PassengerAnoukiNoko
+    MSG(ExtraItemId_PassengerAnoukiKofu), // ExtraItemId_PassengerAnoukiKofu
+    MSG(ExtraItemId_PassengerCastleTownMona), // ExtraItemId_PassengerCastleTownMona
+    MSG(ExtraItemId_PassengerCastleTownAlfonzo), // ExtraItemId_PassengerCastleTownAlfonzo
+    MSG(ExtraItemId_PassengerSnowRealmFerrus), // ExtraItemId_PassengerSnowRealmFerrus
+    MSG(ExtraItemId_PassengerFireRealmFerrus), // ExtraItemId_PassengerFireRealmFerrus
+    MSG(ExtraItemId_PassengerGoronVillageSnowGoron), // ExtraItemId_PassengerGoronVillageSnowGoron
+    MSG(ExtraItemId_PassengerGoronVillageCityGoron), // ExtraItemId_PassengerGoronVillageCityGoron
+    MSG(ExtraItemId_PassengerMayscoreDovok), // ExtraItemId_PassengerMayscoreDovok
+    MSG(ExtraItemId_PassengerMayscoreMash), // ExtraItemId_PassengerMayscoreMash
+    MSG(ExtraItemId_PassengerMayscoreMorris), // ExtraItemId_PassengerMayscoreMorris
+    MSG(ExtraItemId_PassengerMayscoreYamahiko), // ExtraItemId_PassengerMayscoreYamahiko
+    MSG(ExtraItemId_PassengerMayscoreWood), // ExtraItemId_PassengerMayscoreWood
+    MSG(ExtraItemId_PassengerOutsetJoe), // ExtraItemId_PassengerOutsetJoe
+    MSG(ExtraItemId_PassengerPirateHideoutWadatsumi), // ExtraItemId_PassengerPirateHideoutWadatsumi
+    MSG(ExtraItemId_PassengerBridgeWorkersHomeKenzo), // ExtraItemId_PassengerBridgeWorkersHomeKenzo
+    MSG(ExtraItemId_PassengerTradingPostKenzo), // ExtraItemId_PassengerTradingPostKenzo
+    MSG(ExtraItemId_PassengerPapuziaVillageCarben), // ExtraItemId_PassengerPapuziaVillageCarben
 };
 
 u16 gAdvFlagMap[] = {
@@ -493,4 +530,22 @@ u16 gAdvFlagMap[] = {
     RandoAdventureFlag_StampPirateHideout, // ExtraItemId_StampPirateHideout
     RandoAdventureFlag_StampTradingPost, // ExtraItemId_StampTradingPost
     RandoAdventureFlag_StampIcySpring, // ExtraItemId_StampIcySpring
+    RandoAdventureFlag_PassengerAnoukiNoko,
+    RandoAdventureFlag_PassengerAnoukiKofu,
+    RandoAdventureFlag_PassengerCastleTownMona,
+    RandoAdventureFlag_PassengerCastleTownAlfonzo,
+    RandoAdventureFlag_PassengerSnowRealmFerrus,
+    RandoAdventureFlag_PassengerFireRealmFerrus,
+    RandoAdventureFlag_PassengerGoronVillageSnowGoron,
+    RandoAdventureFlag_PassengerGoronVillageCityGoron,
+    RandoAdventureFlag_PassengerMayscoreDovok,
+    RandoAdventureFlag_PassengerMayscoreMash,
+    RandoAdventureFlag_PassengerMayscoreMorris,
+    RandoAdventureFlag_PassengerMayscoreYamahiko,
+    RandoAdventureFlag_PassengerMayscoreWood,
+    RandoAdventureFlag_PassengerOutsetJoe,
+    RandoAdventureFlag_PassengerPirateHideoutWadatsumi,
+    RandoAdventureFlag_PassengerBridgeWorkersHomeKenzo,
+    RandoAdventureFlag_PassengerTradingPostKenzo,
+    RandoAdventureFlag_PassengerPapuziaVillageCarben,
 };

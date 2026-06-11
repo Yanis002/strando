@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <types.h>
 
-#include <Unknown/UnkMemFuncs.h>
+#include <nitro/mi.h>
 
 extern "C" u8 _heap_start[];
 extern "C" u8 _overlay_end[];

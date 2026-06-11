@@ -5,7 +5,7 @@
 #include <MainGame/MiscAdvManager.hpp>
 #include <Player/PlayerGet.hpp>
 #include <System/OverlayManager.hpp>
-#include <Unknown/UnkStruct_020d8698.hpp>
+#include <Unknown/UICounterManager.hpp>
 #include <Unknown/UnkStruct_027e09b8.hpp>
 
 extern const UnkStruct_ov110_02185dc8 data_ov110_02185dc8[8];
@@ -19,6 +19,73 @@ static inline s16 GetItemFlag(ItemId itemId) {
     }
 
     return ItemFlag_None;
+}
+
+void SetAdventureFlagsAtPickUp(u8 passenger) {
+    // set flags that would normally set at the destination to simulate the train ride itself
+
+    switch (passenger) {
+        case Passenger_AnoukiNoko:
+            SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_GotNokoToIcySpring);
+            break;
+        case Passenger_AnoukiKofu:
+            // there's no flag at the destination
+            break;
+        case Passenger_CastleTownMona:
+            SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_GotMonaToRabbitHaven);
+            break;
+        case Passenger_CastleTownAlfonzo:
+            // has special handling in GZ::OnGameModeUpdate
+            break;
+        case Passenger_SnowRealmFerrus:
+            SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_GotFerrusToOutsetVillage);
+            break;
+        case Passenger_FireRealmFerrus:
+            // there's no flag at the destination
+            break;
+        case Passenger_GoronVillageSnowGoron:
+            // there's no flag at the destination
+            break;
+        case Passenger_GoronVillageCityGoron:
+            SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_GotChildGoronToCastleTown);
+            break;
+        case Passenger_MayscoreDovok:
+            SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_GotDovokToPapuzia);
+            break;
+        case Passenger_MayscoreMash:
+            SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_GotMashToPapuzia);
+            SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_WatchedOrcaMashCS);
+            break;
+        case Passenger_MayscoreMorris:
+            SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_GotMorrisToPapuzia);
+            SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_WatchedOrcaMorrisCS);
+            break;
+        case Passenger_MayscoreYamahiko:
+            SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_GotYamahikoToPapuzia);
+            SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_WatchedOrcaYamahikoCS);
+            break;
+        case Passenger_MayscoreWood:
+            SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_Unk_1B1);
+            SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_Unk_1C9);
+            break;
+        case Passenger_OutsetJoe:
+            SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_GotJoeToBeedlesAirShop);
+            break;
+        case Passenger_PirateHideoutWadatsumi:
+            // there's no flag at the destination
+            break;
+        case Passenger_BridgeWorkersHomeKenzo:
+            SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_GotKenzoToTradingPost);
+            break;
+        case Passenger_TradingPostKenzo:
+            SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_GotKenzoToAnouki);
+            break;
+        case Passenger_PapuziaVillageCarben:
+            // there's no flag at the destination
+            break;
+        default:
+            break;
+    }
 }
 
 // overriding func_ov110_02184a40 to handle our custom items
@@ -45,8 +112,61 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
             gGZ.IncrementKeyAmount(itemId - ExtraItemId_NormalKey_2);
             gGZ.ApplyKeyAmounts();
             break;
+        case ExtraItemId_StampTowerOfSpirits:
+        case ExtraItemId_StampCastleTown:
+        case ExtraItemId_StampOutsetVillage:
+        case ExtraItemId_StampMayscore:
+        case ExtraItemId_StampWoodlandSanctuary:
+        case ExtraItemId_StampAnoukiVillage:
+        case ExtraItemId_StampSnowfallSanctuary:
+        case ExtraItemId_StampPapuziaVillage:
+        case ExtraItemId_StampIslandSanctuary:
+        case ExtraItemId_StampGoronVillage:
+        case ExtraItemId_StampValleySanctuary:
+        case ExtraItemId_StampDuneSanctuary:
+        case ExtraItemId_StampWoodedTemple:
+        case ExtraItemId_StampBlizzardTemple:
+        case ExtraItemId_StampMarineTemple:
+        case ExtraItemId_StampMountainTemple:
+        case ExtraItemId_StampDesertTemple:
+        case ExtraItemId_StampPirateHideout:
+        case ExtraItemId_StampTradingPost:
+        case ExtraItemId_StampIcySpring: {
+            u8 stampType = itemId - ExtraItemId_StampTowerOfSpirits;
+
+            if (stampType > StampType_None && stampType < StampType_Max) {
+                // we could just call gpMiscAdvManager->func_ov024_020d64b4 but we have more control if we set the
+                // values directly
+                gpMiscAdvManager->mObtainedStamps[stampType] = stampType;
+                gpMiscAdvManager->mStampDates[stampType] =
+                    (9 << 9) | (12 << 5) | 7; // 7/12/2009 aka the release date of the game Okayge
+                gpMiscAdvManager->mStampPositions[stampType] = Vec2b(70, 72);
+                gpMiscAdvManager->mStampsFlag |= (1 << stampType);
+            }
+            break;
+        }
+        case ExtraItemId_PassengerAnoukiNoko:
+        case ExtraItemId_PassengerAnoukiKofu:
+        case ExtraItemId_PassengerCastleTownMona:
+        case ExtraItemId_PassengerCastleTownAlfonzo:
+        case ExtraItemId_PassengerSnowRealmFerrus:
+        case ExtraItemId_PassengerFireRealmFerrus:
+        case ExtraItemId_PassengerGoronVillageSnowGoron:
+        case ExtraItemId_PassengerGoronVillageCityGoron:
+        case ExtraItemId_PassengerMayscoreDovok:
+        case ExtraItemId_PassengerMayscoreMash:
+        case ExtraItemId_PassengerMayscoreMorris:
+        case ExtraItemId_PassengerMayscoreYamahiko:
+        case ExtraItemId_PassengerMayscoreWood:
+        case ExtraItemId_PassengerOutsetJoe:
+        case ExtraItemId_PassengerPirateHideoutWadatsumi:
+        case ExtraItemId_PassengerBridgeWorkersHomeKenzo:
+        case ExtraItemId_PassengerTradingPostKenzo:
+        case ExtraItemId_PassengerPapuziaVillageCarben:
+            SetAdventureFlagsAtPickUp(itemId - ExtraItemId_PassengerAnoukiNoko);
+            break;
         case ItemId_NormalKey:
-            thisx->func_ov000_020a87c8(1);
+            thisx->GiveSmallKeys(1);
             break;
         case ItemId_GreenRupee:
             thisx->GiveRupees(1, true, true);
@@ -75,7 +195,7 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
                 thisx->mQuiverCapacity++;
             }
 
-            thisx->mArrowAmount = thisx->func_ov000_020a8728();
+            thisx->mArrowAmount = thisx->GetQuiverCapacity();
             break;
         case ItemId_BombBagMedium:
         case ItemId_BombBagLarge:
@@ -83,22 +203,22 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
                 thisx->mBombBagCapacity++;
             }
 
-            thisx->mBombAmount = thisx->func_ov000_020a8748();
+            thisx->mBombAmount = thisx->GetBombBagCapacity();
             break;
         case ItemId_RedPotion:
-            thisx->func_ov000_020a888c(PotionType_Red);
+            thisx->GivePotion(PotionType_Red);
             break;
         case ItemId_PurplePotion:
-            thisx->func_ov000_020a888c(PotionType_Purple);
+            thisx->GivePotion(PotionType_Purple);
             break;
         case ItemId_YellowPotion:
-            thisx->func_ov000_020a888c(PotionType_Yellow);
+            thisx->GivePotion(PotionType_Yellow);
             break;
         case ItemId_ArrowsRefill:
-            thisx->func_ov000_020a87ec(10);
+            thisx->GiveArrows(10);
             break;
         case ItemId_BombsRefill:
-            thisx->func_ov000_020a8820(10);
+            thisx->GiveBombs(10);
             break;
         case ItemId_TearLight:
             if (thisx->mTearsAmount >= 3) {
@@ -108,10 +228,10 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
             }
             break;
         default:
-            ItemFlag itemFlag = ItemManager::func_ov000_020a8984(itemId);
+            ItemFlag itemFlag = ItemManager::GetEquippedItemFlag(itemId);
 
             if (itemFlag != (ItemFlag)ItemFlag_None) {
-                thisx->func_ov000_020a863c(itemFlag);
+                thisx->SetFlag(itemFlag);
 
                 switch (itemFlag) {
                     case ItemFlag_Bombs:
@@ -128,13 +248,13 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
 
                 if (thisx->mEquippedItem == (ItemFlag)ItemFlag_None) {
                     thisx->mEquippedItem = itemFlag;
-                    data_ov024_020d8698->func_ov024_020cd458(thisx->mEquippedItem, 0);
+                    gpUICounterManager->func_ov024_020cd458(thisx->mEquippedItem, false);
                 }
             } else {
                 itemFlag = GetItemFlag(itemId);
 
                 if (itemFlag != (ItemFlag)ItemFlag_None) {
-                    thisx->func_ov000_020a863c(itemFlag);
+                    thisx->SetFlag(itemFlag);
                 }
             }
             break;
@@ -152,10 +272,10 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
     }
 
     data_027e0ce0->mUnk_34->func_ov110_02185d3c(itemId);
-    data_ov000_020b6510->func_ov000_020aa0ac(itemId);
+    gpTreasureManager->func_ov000_020aa0ac(itemId);
     gpMiscAdvManager->GiveLetterOrPriceCard(itemId);
 
-    if (!GET_FLAG(thisx->mUnk_08, ItemFlag_LokomoSword)) {
+    if (!GET_FLAG(thisx->mFlags, ItemFlag_LokomoSword)) {
         u8 nAmount = 0;
 
         if (itemId >= ExtraItemId_TearLight_1 && itemId <= ExtraItemId_TearLight_5) {

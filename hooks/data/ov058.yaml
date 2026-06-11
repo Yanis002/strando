@@ -1,0 +1,3 @@
+instructions:
+  bl:
+    _ZN22CustomPassengerManager19CustomTryBoardTrainEjjj: ['0x02147A48', '0x0214880C', '0x0214DBB0']

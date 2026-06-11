@@ -129,7 +129,7 @@ ItemId GetProgressiveItemId(ItemId requestedItemId) {
                 break;
         }
     } else if (data_027e0ce0 != NULL && data_027e0ce0->mUnk_2C != NULL) {
-        ItemFlag* pFlags = data_027e0ce0->mUnk_2C->mUnk_08;
+        ItemFlag* pFlags = data_027e0ce0->mUnk_2C->mFlags;
 
         switch (requestedItemId) {
             // progressive shield

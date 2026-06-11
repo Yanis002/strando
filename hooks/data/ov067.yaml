@@ -2,3 +2,4 @@ instructions:
   bl:
     Custom_ov067_02159144: ['0x02158528']
     Custom_ov031_02103878: ['0x0215898C', '0x021589AC']
+    _ZN22CustomPassengerManager19CustomTryBoardTrainEjjj: ['0x021592F8']

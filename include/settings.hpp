@@ -1,5 +1,7 @@
 #pragma once
 
+#include "gz.hpp"
+
 #include <mem.h>
 #include <types.h>
 
@@ -106,6 +108,8 @@ class Settings {
     ShuffleSettings mShuffle;
     ShuffleDungeonSettings mShuffleDgn;
     GoalSettings mGoal;
+    u8 mPassengerPickUpIds[Passenger_Max]; // passenger item ids
+    u8 mPassengerAtDestIds[Passenger_Max]; // passenger item ids
 
   public:
     Settings();
@@ -113,11 +117,8 @@ class Settings {
     ShuffleSettings* GetShuffleSettings() { return &this->mShuffle; }
     ShuffleDungeonSettings* GetShuffleDungeonSettings() { return &this->mShuffleDgn; }
     GoalSettings* GetGoalSettings() { return &this->mGoal; }
-
-    static size_t Sizeof() {
-        // right now this is sizeof(Settings) but just in case we need more game-specific fields in the future
-        return sizeof(u32) + sizeof(ShuffleSettings) + sizeof(ShuffleDungeonSettings) + sizeof(GoalSettings);
-    }
+    u8 GetPassengerPickUpItemId(u8 passenger) { return this->mPassengerPickUpIds[passenger]; }
+    u8 GetPassengerAtDestItemId(u8 passenger) { return this->mPassengerAtDestIds[passenger]; }
 };
 
 extern Settings gSettings;

@@ -150,7 +150,7 @@ class MapObjectEntry:
             self.unk_14,
             self.unk_18,
         )
-    
+
     def get_params(self):
         return item_id_to_name[f"0x{self.params[0]:02X}"]
 
@@ -223,11 +223,11 @@ class SpoilerLogEntry:
 
         if len(self.actors) > 0:
             self.actors.sort(key=lambda entry: entry.id_hash)
-            node.locations.extend([LocationDef(entry.id_hash, f"NPCA - {entry.id};{entry.x};{entry.y}") for entry in self.actors])
+            node.locations.extend([LocationDef(entry.id_hash, f"NPCA - {entry.id};{entry.x};{entry.y} - Params: {';'.join(f'0x{e:02X}' for e in entry.params)}") for entry in self.actors])
 
         if len(self.mapobj) > 0:
             self.mapobj.sort(key=lambda entry: entry.id_hash)
-            node.locations.extend([LocationDef(entry.id_hash, f"MPOB - {entry.id};{entry.tile_x};{entry.tile_y}") for entry in self.mapobj])
+            node.locations.extend([LocationDef(entry.id_hash, f"MPOB - {entry.id};{entry.tile_x};{entry.tile_y} - Params: {';'.join(f'0x{e:02X}' for e in entry.params)}") for entry in self.mapobj])
 
         node.is_shop = self.is_shop
         return node.export()
@@ -309,7 +309,7 @@ exclude = [
     "SWHT",
     "BMFL",
     "TSUB",
-    "SKBN",
+    # "SKBN",
     "BREX",
     "TATZ",
     "STSP",
@@ -515,7 +515,8 @@ def main():
                 for i in range(actor_count):
                     entry = ActorEntry.from_bytes(zmb_data[offset:offset + ActorEntry.entry_size])
 
-                    if entry.id not in exclude:
+                    # if entry.id not in exclude:
+                    if entry.id == "SKBN":
                         spoiler_entry.actors.append(entry)
                     offset += ActorEntry.entry_size
 
@@ -527,7 +528,8 @@ def main():
                 offset = mapobj_offset + 0x0C
                 for i in range(count):
                     entry = MapObjectEntry.from_bytes(zmb_data[offset:offset + MapObjectEntry.entry_size])
-                    if entry.id not in exclude:
+                    # if entry.id not in exclude:
+                    if entry.id == "SKBN":
                         spoiler_entry.mapobj.append(entry)
                     offset += MapObjectEntry.entry_size
 
