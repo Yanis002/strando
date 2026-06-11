@@ -42,9 +42,11 @@ jobs:
           mv /tools/armips/* ./tools/armips
 
       - name: Build
+        # TODO: remove `make test_no_logic` when the logic is implemented
         run: |
           make init
           make setup
+          .venv/bin/python3 -m rando.test.test_no_logic
           make patch
 
       - name: Upload Artifact
