@@ -160,7 +160,6 @@ void GZ::TryGiveItemFromPassengerDestInfos(SceneIndex destSceneIndex) {
                 // only give the item id if the related flag is unset
                 this->TryAddItemIfNotInQueue(itemId);
                 SET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId]);
-                ;
             }
         }
     }
