@@ -245,6 +245,7 @@ class GZ {
     // called when the scene init process is completed
     void OnScenePostInit();
 
+    void SetAllPassengerFlags();
     void TryGiveItemFromPassengerDestInfos(SceneIndex destSceneIndex);
     void ApplyTearsAmounts();
     void ApplyKeyAmounts();
@@ -257,3 +258,4 @@ class GZ {
 };
 
 extern GZ gGZ;
+extern void SetAdventureFlagsAtPickUp(u8 passenger);

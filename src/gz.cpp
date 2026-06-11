@@ -311,6 +311,20 @@ static PassengerAtDestInfos sPassengerAtDestInfos[Passenger_Max] = {
     },
 };
 
+void GZ::SetAllPassengerFlags() {
+    for (int i = 0; i < Passenger_Max; i++) {
+        PassengerAtDestInfos* pEntry = &sPassengerAtDestInfos[i];
+
+        for (int j = 0; j < ARRAY_LEN(pEntry->destFlags); j++) {
+            if (pEntry->destFlags[j] != AdventureFlag_Nothing) {
+                SET_FLAG(data_027e09b8->mAdventureFlags, pEntry->destFlags[j]);
+            }
+        }
+
+        SetAdventureFlagsAtPickUp(i);
+    }
+}
+
 void GZ::TryGiveItemFromPassengerDestInfos(SceneIndex destSceneIndex) {
     for (int i = 0; i < Passenger_Max; i++) {
         PassengerAtDestInfos* pEntry = &sPassengerAtDestInfos[i];
@@ -377,7 +391,13 @@ void GZ::OnGameModeUpdate() {
     }
 }
 
-void GZ::OnScenePreInit() {}
+void GZ::OnScenePreInit() {
+    if (this->IsAdventureMode()) {
+        if (gSettings.GetShuffleSettings()->passengers == PassengerMode_Remove) {
+            this->SetAllPassengerFlags();
+        }
+    }
+}
 
 void GZ::OnScenePostInit() {
     if (this->IsAdventureMode()) {

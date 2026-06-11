@@ -61,7 +61,6 @@ bool CustomPassengerManager::CustomTryBoardTrain(ActorId actorId, SceneIndex des
     ItemId itemId = ItemId_None;
 
     switch (gSettings.GetShuffleSettings()->passengers) {
-        case PassengerMode_Remove:
         case PassengerMode_Vanilla:
             return this->TryBoardTrain(actorId, destSceneIndex, roomIndex);
         case PassengerMode_Abstract:
