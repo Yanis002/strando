@@ -7,12 +7,16 @@ extract/jp
 extract/us
 build/
 libs/libgz.a
+output/
+rando/temp/
 
 # workspace files
 *.nds
 *.ppf
 *.bin
+*.hexpat
 
 # melonDS files
 *.sav
 *.ml*
+*.bak*
