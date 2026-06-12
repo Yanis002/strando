@@ -13,6 +13,7 @@
 extern "C" unk32 func_02017158(unk32);
 extern "C" unk32 _ZN16MapObjectUnkSPTB19func_ov031_0210b6e4Ev(void*);
 extern "C" bool _ZN16MapObjectUnkSPTB19func_ov031_0210b51cEv(void*);
+extern "C" void func_ov000_02068194(UnkStruct_ov000_020b504c*, u32, int, Vec2s*);
 
 bool IsGlyphOrSource(ItemId itemId) {
     if (itemId >= ItemId_ForestGlyph && itemId <= ItemId_FireGlyph) {
@@ -208,7 +209,21 @@ extern "C" bool CustomTryItemGive(UnkStruct_027e0d34_04* thisx, ItemId requested
     // handle progressive items
     itemId = GetProgressiveItemId(requestedItemId);
 
-    return thisx->func_ov000_02093bc8(itemId);
+    if (!gGZ.IsOnLand()) {
+        // if on not on land just add to the item queue
+        gGZ.TryAddItemToQueue(itemId);
+
+        // show text
+        Vec2s local(135, 100);
+        func_ov000_02068194(&data_ov000_020b504c, gBMGMap[itemId], 0, &local);
+        return true;
+    }
+
+    if (thisx != NULL) {
+        return thisx->func_ov000_02093bc8(itemId);
+    }
+
+    return false;
 }
 
 class CustomRupee : public ActorRupee {

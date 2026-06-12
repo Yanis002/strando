@@ -186,9 +186,9 @@ struct CardLock {
 
 // defines a randomizer save, it's just a savestate in the end (it doesn't even matter)
 struct RandoSave {
+    u8 itemQueue[256]; // items to give, accounts for train rides
     u8 tearsAmounts[5]; // tos light tear section amounts
     u8 keyAmounts[10]; // dungeon small keys amounts
-    u8 itemQueue[32]; // items to give, 32 to be extremely large (probably too large)
 
     RandoSave();
     void ClearItemQueue();
