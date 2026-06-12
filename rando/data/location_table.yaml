@@ -49,6 +49,9 @@ Anouki Village Repair Fence:
     - '0x13920'
   room_index: 0
   scene: f_snow
+  is_passenger_at_dest: true
+  is_cargo_at_dest: true
+  settings: ['passengers-abstract', 'passengers-anywhere', 'cargo-abstract', 'cargo-anywhere']
 
 Anouki Village Song Statue:
   id_hash: WDST_0x1F_0x0A
@@ -167,10 +170,10 @@ Bridge Worker's Home Pick Up Kenzo:
   settings: ['passengers-abstract', 'passengers-anywhere']
 
 Castle Town Buy Cuccos:
-  id_hash: CAMB_0x0100_0x00F0
-  is_actor: true
   room_index: 0
   scene: f_htown
+  is_cargo_pick_up: true
+  settings: ['cargo-abstract', 'cargo-anywhere']
 
 Castle Town Deliver Fish:
   bmg: castle_town.bmg
@@ -180,6 +183,8 @@ Castle Town Deliver Fish:
     - '0x8D40'
   room_index: 14
   scene: f_htown
+  is_cargo_at_dest: true
+  settings: ['cargo-abstract', 'cargo-anywhere']
 
 Castle Town Empty House Roof Chest:
   id_hash: TRES_0x16_0x0D
@@ -294,10 +299,10 @@ Dark Ore Mine Buried Chest:
   scene: f_flame4
 
 Dark Ore Mine Buy Ore:
-  id_hash: GORM_0x01F9_0x018F
-  is_actor: true
   room_index: 1
   scene: f_flame4
+  is_cargo_pick_up: true
+  settings: ['cargo-abstract', 'cargo-anywhere']
 
 Desert Temple 1F Entrance Chest:
   id_hash: TRES_0x20_0x17
@@ -404,6 +409,8 @@ Dune Sanctuary Deliver Cuccos:
     - '0x4378'
   room_index: 0
   scene: f_sand
+  is_cargo_at_dest: true
+  settings: ['cargo-abstract', 'cargo-anywhere']
 
 Dune Sanctuary Song of Restoration:
   bmg: desert.bmg
@@ -510,6 +517,8 @@ Goron Village Deliver Ice Force Gem:
     - '0xA4B0'
   room_index: 0
   scene: f_flame5
+  is_cargo_at_dest: true
+  settings: ['cargo-abstract', 'cargo-anywhere']
 
 Goron Village Kofu Force Gem:
   room_index: 0
@@ -518,10 +527,10 @@ Goron Village Kofu Force Gem:
   settings: ['passengers-abstract', 'passengers-anywhere']
 
 Goron Village West Buy Steel:
-  id_hash: GORM_0x0320_0x01F0
-  is_actor: true
   room_index: 3
   scene: f_flame
+  is_cargo_pick_up: true
+  settings: ['cargo-abstract', 'cargo-anywhere']
 
 Goron Village West Center Chest:
   id_hash: TRES_0x23_0x1E
@@ -599,10 +608,10 @@ Hyrule Castle Sword Minigame:
   settings: ['sword_training-on']
 
 Icy Spring Buy Mega Ice:
-  id_hash: YUKI_0x0220_0x0160
-  is_actor: true
   room_index: 0
   scene: f_tetsuo
+  is_cargo_pick_up: true
+  settings: ['cargo-abstract', 'cargo-anywhere']
 
 Icy Spring Noko's Force Gem:
   room_index: 0
@@ -804,10 +813,10 @@ Marine Temple Song Statue:
   scene: d_water27
 
 Mayscore Buy Lumber:
-  id_hash: FOMB_0x0130_0x0210
-  is_actor: true
   room_index: 0
   scene: f_forest1
+  is_cargo_pick_up: true
+  settings: ['cargo-abstract', 'cargo-anywhere']
 
 Mayscore Deliver Steel:
   bmg: forest.bmg
@@ -817,6 +826,8 @@ Mayscore Deliver Steel:
     - '0xB5B8'
   room_index: 0
   scene: f_forest1
+  is_cargo_at_dest: true
+  settings: ['cargo-abstract', 'cargo-anywhere']
 
 Mayscore Pick Up Dovok:
   room_index: 4
@@ -1003,6 +1014,8 @@ Outset Deliver Cuccos:
     - '0x16588'
   room_index: 0
   scene: f_first
+  is_cargo_at_dest: true
+  settings: ['cargo-abstract', 'cargo-anywhere']
 
 Outset Ferrus Force Gem:
   room_index: 11
@@ -1076,16 +1089,16 @@ Papuzia Shop Keeper:
   scene: f_water
 
 Papuzia Village Buy Fish:
-  id_hash: WAWC_0x00F0_0x0210
-  is_actor: true
   room_index: 0
   scene: f_water
+  is_cargo_pick_up: true
+  settings: ['cargo-abstract', 'cargo-anywhere']
 
 Papuzia Village Buy Vessel:
-  id_hash: VCFT_0x01F8_0x0168
-  is_actor: true
   room_index: 4
   scene: f_water
+  is_cargo_pick_up: true
+  settings: ['cargo-abstract', 'cargo-anywhere']
 
 Papuzia Village Deliver Ice:
   bmg: water.bmg
@@ -1095,6 +1108,8 @@ Papuzia Village Deliver Ice:
     - '0x12908'
   room_index: 0
   scene: f_water
+  is_cargo_at_dest: true
+  settings: ['cargo-abstract', 'cargo-anywhere']
 
 Papuzia Village NE Chest:
   id_hash: TRES_0x26_0x0E
@@ -1331,6 +1346,8 @@ Snowfall Sanctuary Deliver Vessel:
     - '0x142C0'
   room_index: 2
   scene: f_snow2
+  is_cargo_at_dest: true
+  settings: ['cargo-abstract', 'cargo-anywhere']
 
 Snowfall Sanctuary Shop Keeper:
   id_hash: YUKY_0x01F8_0x0150
@@ -1747,6 +1764,8 @@ Trading Post Deliver Dark Ore:
     - '0x17170'
   room_index: 10
   scene: f_bridge2
+  is_cargo_at_dest: true
+  settings: ['cargo-abstract', 'cargo-anywhere']
 
 Trading Post Song Statue:
   id_hash: WDST_0x11_0x0C

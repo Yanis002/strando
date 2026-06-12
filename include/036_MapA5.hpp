@@ -3,6 +3,13 @@
 #include <Save/AdventureFlags.hpp>
 
 // unused flags we can use
+#define RandoAdventureFlag_CargoMegaIce AdventureFlag_Unk_34A
+#define RandoAdventureFlag_CargoWood AdventureFlag_Unk_34B
+#define RandoAdventureFlag_CargoIron AdventureFlag_Unk_34C
+#define RandoAdventureFlag_CargoFish AdventureFlag_Unk_34D
+#define RandoAdventureFlag_CargoCuccos AdventureFlag_Unk_34E
+#define RandoAdventureFlag_CargoVessel AdventureFlag_Unk_34F
+#define RandoAdventureFlag_CargoDarkOre AdventureFlag_Unk_350
 #define RandoAdventureFlag_PassengerAnoukiNoko AdventureFlag_Unk_351
 #define RandoAdventureFlag_PassengerAnoukiKofu AdventureFlag_Unk_352
 #define RandoAdventureFlag_PassengerCastleTownMona AdventureFlag_Unk_353

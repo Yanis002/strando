@@ -165,6 +165,15 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
         case ExtraItemId_PassengerPapuziaVillageCarben:
             SetAdventureFlagsAtPickUp(itemId - ExtraItemId_PassengerAnoukiNoko);
             break;
+        case ExtraItemId_CargoMegaIce:
+        case ExtraItemId_CargoWood:
+        case ExtraItemId_CargoIron:
+        case ExtraItemId_CargoFish:
+        case ExtraItemId_CargoCuccos:
+        case ExtraItemId_CargoVessel:
+        case ExtraItemId_CargoDarkOre:
+            // nothing to do except setting the flag (which is done later)
+            break;
         case ItemId_NormalKey:
             thisx->GiveSmallKeys(1);
             break;

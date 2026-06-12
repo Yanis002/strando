@@ -2,6 +2,7 @@
 #include "settings.hpp"
 
 #include "Save/AdventureFlags.hpp"
+#include <MainGame/CargoManager.hpp>
 #include <MainGame/PassengerManager.hpp>
 #include <Unknown/UnkStruct_027e09b8.hpp>
 #include <Unknown/UnkStruct_027e0d34.hpp>
@@ -58,23 +59,55 @@ ItemId GetItemIdFromPassengerPickUpInfos(ActorId actorId, SceneIndex destSceneIn
 }
 
 bool CustomPassengerManager::CustomTryBoardTrain(ActorId actorId, SceneIndex destSceneIndex, u32 roomIndex) {
-    ItemId itemId = ItemId_None;
-
     switch (gSettings.GetShuffleSettings()->passengers) {
         case PassengerMode_Vanilla:
             return this->TryBoardTrain(actorId, destSceneIndex, roomIndex);
         case PassengerMode_Abstract:
         case PassengerMode_Anywhere:
-            itemId = GetItemIdFromPassengerPickUpInfos(actorId, destSceneIndex);
+            gGZ.TryAddItemToQueue(GetItemIdFromPassengerPickUpInfos(actorId, destSceneIndex));
             break;
         default:
             break;
     }
 
-    if (itemId != ItemId_None) {
-        // use our item giver to avoid any softlocks
-        gGZ.TryAddItemToQueue(itemId);
-    }
-
     return false;
+}
+
+class CustomCargoManager : public CargoManager {
+  public:
+    void CustomReset();
+    void CustomInit(unk32 type, unk32 amount);
+};
+
+void CustomCargoManager::CustomReset() {
+    // this executes when an actor tries to clear the cargo
+
+    switch (gSettings.GetShuffleSettings()->cargo) {
+        case CargoMode_Vanilla:
+            this->Reset();
+            break;
+        case CargoMode_Abstract:
+        case CargoMode_Anywhere:
+            // the actors will handle giving the item so we have nothing to do
+            break;
+        default:
+            break;
+    }
+}
+
+void CustomCargoManager::CustomInit(unk32 type, unk32 amount) {
+    // this executes when an actor tries to initialize the cargo
+    // instead of letting things happen normally (except for vanilla), we give a cargo pick up item
+
+    switch (gSettings.GetShuffleSettings()->cargo) {
+        case CargoMode_Vanilla:
+            this->Init(type, amount);
+            break;
+        case CargoMode_Abstract:
+        case CargoMode_Anywhere:
+            gGZ.TryAddItemToQueue(gSettings.GetCargoPickUpItemId(type));
+            break;
+        default:
+            break;
+    }
 }

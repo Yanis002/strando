@@ -2,6 +2,8 @@ instructions:
   bl:
     Custom_02014995: ['0x0206111C']
     _ZN22CustomPassengerManager19CustomTryBoardTrainEjjj: ['0x020A95B4']
+    _ZN18CustomCargoManager10CustomInitEii: ['0x02067164']
+    _ZN18CustomCargoManager11CustomResetEv: ['0x02066CC8', '0x02067174']
 
 constants:
   gGetItemMap: ['0x020A4C0C']

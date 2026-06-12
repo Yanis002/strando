@@ -2,6 +2,7 @@
 
 #include "gz.hpp"
 
+#include <MainGame/CargoManager.hpp>
 #include <mem.h>
 #include <types.h>
 
@@ -108,8 +109,9 @@ class Settings {
     ShuffleSettings mShuffle;
     ShuffleDungeonSettings mShuffleDgn;
     GoalSettings mGoal;
-    u8 mPassengerPickUpIds[Passenger_Max]; // passenger item ids
-    u8 mPassengerAtDestIds[Passenger_Max]; // passenger item ids
+    u8 mPassengerPickUpIds[Passenger_Max]; // passenger pick up item ids
+    u8 mPassengerAtDestIds[Passenger_Max]; // passenger destination item ids
+    u8 mCargoPickUpIds[CargoType_Max]; // cargo pick up item ids
 
   public:
     Settings();
@@ -119,6 +121,7 @@ class Settings {
     GoalSettings* GetGoalSettings() { return &this->mGoal; }
     u8 GetPassengerPickUpItemId(u8 passenger) { return this->mPassengerPickUpIds[passenger]; }
     u8 GetPassengerAtDestItemId(u8 passenger) { return this->mPassengerAtDestIds[passenger]; }
+    u8 GetCargoPickUpItemId(u8 cargo) { return this->mCargoPickUpIds[cargo]; }
 };
 
 extern Settings gSettings;

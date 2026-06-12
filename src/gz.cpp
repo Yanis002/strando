@@ -12,6 +12,7 @@
 #include <TitleScreen/TitleScreen.hpp>
 #pragma GCC diagnostic pop
 
+#include <MainGame/CargoManager.hpp>
 #include <Unknown/UnkStruct_027e09a4.hpp>
 #include <Unknown/UnkStruct_027e09b8.hpp>
 #include <Unknown/UnkStruct_027e0ce0.hpp>
@@ -23,6 +24,15 @@
 
 extern "C" bool CustomTryItemGive(UnkStruct_027e0d34_04* thisx, ItemId requestedItemId);
 extern "C" void func_ov000_02070af8(UnkStruct_027e09a4*);
+
+struct CargoInfos {
+    /* 00 */ u16 timerMax;
+    /* 02 */ s8 amountDecr;
+    /* 03 */ s8 amountDamageDecr;
+    /* 04 */ s16 amount;
+    /* 06 */
+};
+extern CargoInfos sCargoInfos[];
 
 GZ gGZ;
 s32 gCardLockId = -3;
@@ -391,10 +401,51 @@ void GZ::OnGameModeUpdate() {
     }
 }
 
+static SceneIndex_Half sCargoTypeToSceneIndex[CargoDelivery_Max] = {
+    SceneIndex_f_water, // CargoDelivery_PapuziaIce
+    SceneIndex_f_flame5, // CargoDelivery_GoronVillageIce
+    SceneIndex_f_htown, // CargoDelivery_CastleTownFish
+    SceneIndex_f_sand, // CargoDelivery_LokomoCuccos
+    SceneIndex_f_first, // CargoDelivery_OutsetCuccos
+    SceneIndex_f_forest1, // CargoDelivery_MayscoreSteel
+    SceneIndex_f_snow, // CargoDelivery_AnoukiVillageFence
+    SceneIndex_f_snow2, // CargoDelivery_LokomoVessel
+    SceneIndex_f_bridge2, // CargoDelivery_TradingPostDarkOre
+};
+
 void GZ::OnScenePreInit() {
     if (this->IsAdventureMode()) {
         if (gSettings.GetShuffleSettings()->passengers == PassengerMode_Remove) {
             this->SetAllPassengerFlags();
+        }
+
+        switch (gSettings.GetShuffleSettings()->cargo) {
+            case CargoMode_Remove:
+                SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_GiveMegaIceToKagoron);
+                UNSET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_MegaIceToGoronVillageMainQuest);
+                break;
+            case CargoMode_Vanilla:
+                break;
+            case CargoMode_Abstract:
+            case CargoMode_Anywhere:
+                if (gpCargoManager->GetCargo()->IsTypeSet()) {
+                    // reset when leaving the scene
+                    gpCargoManager->Reset();
+                } else if (data_027e09a4->mpWarpUnk1 != NULL) {
+                    // set the cargo if we have the cargo item and the destination scene is about to load
+                    SceneIndex nextScene = data_027e09a4->mpWarpUnk1->mUnk_8C.mSceneIndex;
+
+                    for (int i = 0; i < CargoDelivery_Max; i++) {
+                        if (GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[ExtraItemId_CargoMegaIce + i]) &&
+                            sCargoTypeToSceneIndex[i] == nextScene) {
+                            // I wanted to set to 9999 but the cargo counter don't like it :(
+                            gpCargoManager->Init(i, 99);
+                        }
+                    }
+                }
+                break;
+            default:
+                break;
         }
     }
 }
@@ -403,6 +454,11 @@ void GZ::OnScenePostInit() {
     if (this->IsAdventureMode()) {
         this->ApplyTearsAmounts();
         this->ApplyKeyAmounts();
+
+        if (this->IsCourseExec()) {
+            // remove cargo timers and damage stuff
+            memset(sCargoInfos, 0, sizeof(CargoInfos) * CargoType_Max);
+        }
     }
 }
 

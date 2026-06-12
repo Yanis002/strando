@@ -85,6 +85,14 @@ enum ExtraItemId_ {
     ExtraItemId_PassengerTradingPostKenzo,
     ExtraItemId_PassengerPapuziaVillageCarben,
 
+    ExtraItemId_CargoMegaIce,
+    ExtraItemId_CargoWood,
+    ExtraItemId_CargoIron,
+    ExtraItemId_CargoFish,
+    ExtraItemId_CargoCuccos,
+    ExtraItemId_CargoVessel,
+    ExtraItemId_CargoDarkOre,
+
     ExtraItemId_Max,
 };
 
@@ -108,7 +116,6 @@ passenger trips:
 - goron village to castle town
 - pirate hideout to papuzia
 */
-
 enum Passenger_ {
     Passenger_None = -1,
     Passenger_AnoukiNoko, // mega ice
@@ -130,6 +137,32 @@ enum Passenger_ {
     Passenger_TradingPostKenzo, // no item at destination
     Passenger_PapuziaVillageCarben,
     Passenger_Max,
+};
+
+/*
+cargo deliveries:
+- papuzia ice from icy spring
+- goron village ice (the second time) from icy spring
+- castle town fish from papuzia
+- lokomo cuccos from castle town
+- outset cuccos from castle town
+- mayscore steel from goron village
+- anouki fence wood from mayscore
+- lokomo vessel from papuzia
+- linebeck dark ore from dark ore mine
+*/
+enum CargoDelivery_ {
+    CargoDelivery_None = -1,
+    CargoDelivery_PapuziaIce,
+    CargoDelivery_GoronVillageIce,
+    CargoDelivery_CastleTownFish,
+    CargoDelivery_LokomoCuccos,
+    CargoDelivery_OutsetCuccos,
+    CargoDelivery_MayscoreSteel,
+    CargoDelivery_AnoukiVillageFence,
+    CargoDelivery_LokomoVessel,
+    CargoDelivery_TradingPostDarkOre,
+    CargoDelivery_Max,
 };
 
 extern s32 gCardLockId;
@@ -226,6 +259,8 @@ class GZ {
     bool IsSceneInit() { return gOverlayManager.mLoadedOverlays[OverlaySlot_1] == OverlayIndex_SceneInit; }
 
     bool IsStb() { return gOverlayManager.mLoadedOverlays[OverlaySlot_9] == OverlayIndex_Stb; }
+
+    bool IsCourseExec() { return gOverlayManager.mLoadedOverlays[OverlaySlot_2] == OverlayIndex_CourseExec; }
 
     // global init
     void Init();

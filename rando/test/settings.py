@@ -18,6 +18,7 @@ class LocationSettings:
         self.stamps_rewards = 0
         self.stamp_book = False
         self.passengers = False
+        self.cargo = False
 
 
 class MinigamesSettings:
@@ -335,6 +336,7 @@ class Settings:
         self.goal = goal
         self.passenger_pick_ids: list[int] = []
         self.passenger_dest_ids: list[int] = []
+        self.cargo_pick_ids: list[int] = []
 
     @staticmethod
     def from_yaml(yaml_path: Path):
@@ -348,14 +350,20 @@ class Settings:
         )
 
     def to_bin(self):
-        pick_ids = b""
+        passenger_pick_ids = b""
         assert len(self.passenger_pick_ids) == 18, f"len is {len(self.passenger_pick_ids)}" # passenger max
         for i in self.passenger_pick_ids:
-            pick_ids += i.to_bytes(1, byteorder="little")
+            passenger_pick_ids += i.to_bytes(1, byteorder="little")
 
-        dest_ids = b""
+        passenger_dest_ids = b""
         assert len(self.passenger_dest_ids) == 18, f"len is {len(self.passenger_dest_ids)}" # passenger max
         for i in self.passenger_dest_ids:
-            dest_ids += i.to_bytes(1, byteorder="little")
+            passenger_dest_ids += i.to_bytes(1, byteorder="little")
 
-        return struct.pack("<4s", b"RANDO") + self.shuffle.to_bin() + self.shuffle_dgn.to_bin() + self.goal.to_bin() + pick_ids + dest_ids
+        cargo_pick_ids = b""
+        assert len(self.cargo_pick_ids) == 7, f"len is {len(self.cargo_pick_ids)}" # cargo pick up max
+        for i in self.cargo_pick_ids:
+            cargo_pick_ids += i.to_bytes(1, byteorder="little")
+
+        extras = passenger_pick_ids + passenger_dest_ids + cargo_pick_ids
+        return struct.pack("<4s", b"RANDO") + self.shuffle.to_bin() + self.shuffle_dgn.to_bin() + self.goal.to_bin() + extras

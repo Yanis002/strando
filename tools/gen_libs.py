@@ -41,14 +41,8 @@ def gen_libst(libs_dir: Path):
                 split = line.split(" ")
                 sym_name = split.pop(0)
 
-                is_local = False
-                for elem in split:
-                    if "local" in elem:
-                        is_local = True
-                        break
-
-                # ignore static initializers, local and anonymous symbols (TODO: solve sqrt oddity)
-                if "sinit" in sym_name or sym_name.startswith("@") or is_local or sym_name == "Sqrt":
+                # ignore static initializers and anonymous symbols (TODO: solve sqrt oddity)
+                if "sinit" in sym_name or sym_name.startswith("@") or sym_name == "Sqrt":
                     continue
 
                 kind_match = re.search(r"kind:function\(([a-zA-Z]*),", line)

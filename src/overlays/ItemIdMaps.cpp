@@ -189,6 +189,14 @@ u32 gGetItemMap[] = {
     GIModel_dummy, // ExtraItemId_PassengerBridgeWorkersHomeKenzo
     GIModel_dummy, // ExtraItemId_PassengerTradingPostKenzo
     GIModel_dummy, // ExtraItemId_PassengerPapuziaVillageCarben
+
+    GIModel_dummy, // ExtraItemId_CargoMegaIce
+    GIModel_dummy, // ExtraItemId_CargoWood
+    GIModel_dummy, // ExtraItemId_CargoIron
+    GIModel_dummy, // ExtraItemId_CargoFish
+    GIModel_dummy, // ExtraItemId_CargoCuccos
+    GIModel_dummy, // ExtraItemId_CargoVessel
+    GIModel_dummy, // ExtraItemId_CargoDarkOre
 };
 
 // BMG IDs
@@ -369,6 +377,13 @@ u32 gBMGMap[] = {
     MSG(ExtraItemId_PassengerBridgeWorkersHomeKenzo), // ExtraItemId_PassengerBridgeWorkersHomeKenzo
     MSG(ExtraItemId_PassengerTradingPostKenzo), // ExtraItemId_PassengerTradingPostKenzo
     MSG(ExtraItemId_PassengerPapuziaVillageCarben), // ExtraItemId_PassengerPapuziaVillageCarben
+    MSG(ExtraItemId_CargoMegaIce), // ExtraItemId_CargoMegaIce
+    MSG(ExtraItemId_CargoWood), // ExtraItemId_CargoWood
+    MSG(ExtraItemId_CargoIron), // ExtraItemId_CargoIron
+    MSG(ExtraItemId_CargoFish), // ExtraItemId_CargoFish
+    MSG(ExtraItemId_CargoCuccos), // ExtraItemId_CargoCuccos
+    MSG(ExtraItemId_CargoVessel), // ExtraItemId_CargoVessel
+    MSG(ExtraItemId_CargoDarkOre), // ExtraItemId_CargoDarkOre
 };
 
 u16 gAdvFlagMap[] = {
@@ -548,4 +563,11 @@ u16 gAdvFlagMap[] = {
     RandoAdventureFlag_PassengerBridgeWorkersHomeKenzo,
     RandoAdventureFlag_PassengerTradingPostKenzo,
     RandoAdventureFlag_PassengerPapuziaVillageCarben,
+    RandoAdventureFlag_CargoMegaIce,
+    RandoAdventureFlag_CargoWood,
+    RandoAdventureFlag_CargoIron,
+    RandoAdventureFlag_CargoFish,
+    RandoAdventureFlag_CargoCuccos,
+    RandoAdventureFlag_CargoVessel,
+    RandoAdventureFlag_CargoDarkOre,
 };

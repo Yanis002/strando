@@ -228,6 +228,13 @@ class ItemId(IntEnum):
     ExtraItemId_PassengerBridgeWorkersHomeKenzo = 172
     ExtraItemId_PassengerTradingPostKenzo = 173
     ExtraItemId_PassengerPapuziaVillageCarben = 174
+    ExtraItemId_CargoMegaIce = 175
+    ExtraItemId_CargoWood = 176
+    ExtraItemId_CargoIron = 177
+    ExtraItemId_CargoFish = 178
+    ExtraItemId_CargoCuccos = 179
+    ExtraItemId_CargoVessel = 180
+    ExtraItemId_CargoDarkOre = 181
 
 extra_id_to_scene = {
     ItemId.ExtraItemId_TearLight_1: "d_main",
@@ -445,6 +452,13 @@ item_id_to_name = {
     ItemId.ExtraItemId_PassengerBridgeWorkersHomeKenzo.value: "Passenger Kenzo (Worker's Home)",
     ItemId.ExtraItemId_PassengerTradingPostKenzo.value: "Passenger Kenzo (Trading Post)",
     ItemId.ExtraItemId_PassengerPapuziaVillageCarben.value: "Passenger Carben",
+    ItemId.ExtraItemId_CargoMegaIce.value: "Cargo Mega Ice",
+    ItemId.ExtraItemId_CargoWood.value: "Cargo Wood",
+    ItemId.ExtraItemId_CargoIron.value: "Cargo Iron",
+    ItemId.ExtraItemId_CargoFish.value: "Cargo Fish",
+    ItemId.ExtraItemId_CargoCuccos.value: "Cargo Cuccos",
+    ItemId.ExtraItemId_CargoVessel.value: "Cargo Vessel",
+    ItemId.ExtraItemId_CargoDarkOre.value: "Cargo Dark Ore",
 }
 item_name_to_id = {v: k for k, v in item_id_to_name.items()}
 
@@ -454,6 +468,8 @@ class ItemKind(IntEnum):
     Song = 2
     PassengerPickUp = 3
     PassengerAtDest = 4
+    CargoPickUp = 5
+    CargoAtDest = 6
 
 
 class ItemWeight(IntEnum):

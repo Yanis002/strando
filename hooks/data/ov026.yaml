@@ -1,0 +1,3 @@
+instructions:
+  bl:
+    _ZN18CustomCargoManager11CustomResetEv: ['0x020DF460']

@@ -213,8 +213,6 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.BigGreenRupee, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.BigRedRupee, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.BigGoldRupee, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.ForceGem_19, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_20, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.FinalTrack, ItemKind.Default, ItemWeight.Progression),
     ItemDef(ItemId.Unk_31, ItemKind.Default, ItemWeight.Progression),
     ItemDef(ItemId.Unk_33, ItemKind.Default, ItemWeight.Progression),
@@ -223,18 +221,7 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.PostmasterLetter, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.QuiverMedium, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.BombBagMedium, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_43, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_46, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_49, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_50, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_52, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_55, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_56, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.ForceGem_57, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_58, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_59, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_60, ItemKind.Default, ItemWeight.Priority),
-    ItemDef(ItemId.ForceGem_61, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.PanFlute, ItemKind.Default, ItemWeight.Progression),
     ItemDef(ItemId.LightBow, ItemKind.Default, ItemWeight.Progression),
     ItemDef(ItemId.LokomoSword, ItemKind.Default, ItemWeight.Progression),
@@ -342,6 +329,9 @@ class LocationInfo:
         self.is_passenger_pick_up = False
         self.is_passenger_at_dest = False
 
+        self.is_cargo_pick_up = False
+        self.is_cargo_at_dest = False
+
     @staticmethod
     def from_data(name: str, data: dict, rando_settings: Settings):
         new_info = LocationInfo(name, data["scene"], data["room_index"], rando_settings)
@@ -350,7 +340,13 @@ class LocationInfo:
             new_info.is_passenger_pick_up = data["is_passenger_pick_up"]
         elif "is_passenger_at_dest" in data:
             new_info.is_passenger_at_dest = data["is_passenger_at_dest"]
-        elif "is_bmg" in data:
+
+        if "is_cargo_pick_up" in data:
+            new_info.is_cargo_pick_up = data["is_cargo_pick_up"]
+        elif "is_cargo_at_dest" in data:
+            new_info.is_cargo_at_dest = data["is_cargo_at_dest"]
+
+        if "is_bmg" in data:
             new_info.is_bmg = data["is_bmg"]
         else:
             if "is_actor" in data:
@@ -404,6 +400,12 @@ class LocationInfo:
 
                         if new_info.settings.passengers and split[1] in ["remove", "vanilla"]:
                             new_info.settings.passengers = False
+                    case "cargo":
+                        if split[1] in ["abstract", "anywhere"]:
+                            new_info.settings.cargo = True
+
+                        if new_info.settings.cargo and split[1] in ["remove", "vanilla"]:
+                            new_info.settings.cargo = False
                     case _:
                         print(f"WARNING: ignoring unknown setting {repr(elem)}!")
 
@@ -464,6 +466,10 @@ class LocationInfo:
 
         # ignore passenger location if we don't want it
         if self.settings.passengers and self.rando_settings.shuffle.passengers in ["remove", "vanilla"]:
+            return False
+
+        # ignore cargo location if we don't want it
+        if self.settings.cargo and self.rando_settings.shuffle.cargo in ["remove", "vanilla"]:
             return False
 
         return True
@@ -800,8 +806,37 @@ class Randomizer:
         if self.settings.shuffle.passengers == "anywhere":
             item_defs.extend(self.passenger_pick_pool)
 
+        if self.settings.shuffle.passengers != "remove":
             passenger_dest_pool = [item for item in self.passenger_dest_pool if item is not None]
             item_defs.extend(passenger_dest_pool)
+
+        self.cargo_pick_pool = [
+            ItemDef(ItemId.ExtraItemId_CargoMegaIce, ItemKind.CargoPickUp, ItemWeight.Progression),
+            ItemDef(ItemId.ExtraItemId_CargoWood, ItemKind.CargoPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_CargoIron, ItemKind.CargoPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_CargoFish, ItemKind.CargoPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_CargoCuccos, ItemKind.CargoPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_CargoVessel, ItemKind.CargoPickUp, ItemWeight.Priority),
+            ItemDef(ItemId.ExtraItemId_CargoDarkOre, ItemKind.CargoPickUp, ItemWeight.Priority),
+        ]
+
+        self.cargo_dest_pool = [
+            ItemDef(ItemId.ForceGem_19, ItemKind.CargoAtDest, ItemWeight.Priority), # papuzia ice
+            ItemDef(ItemId.ForceGem_20, ItemKind.CargoAtDest, ItemWeight.Priority), # goron village ice (2nd time?)
+            ItemDef(ItemId.ForceGem_43, ItemKind.CargoAtDest, ItemWeight.Priority), # castle town fish
+            ItemDef(ItemId.ForceGem_46, ItemKind.CargoAtDest, ItemWeight.Priority), # lokomo cuccos
+            ItemDef(ItemId.ForceGem_49, ItemKind.CargoAtDest, ItemWeight.Priority), # outset cuccos
+            ItemDef(ItemId.ForceGem_50, ItemKind.CargoAtDest, ItemWeight.Priority), # mayscore steel
+            ItemDef(ItemId.ForceGem_52, ItemKind.CargoAtDest, ItemWeight.Priority), # anouki fence wood
+            ItemDef(ItemId.ForceGem_55, ItemKind.CargoAtDest, ItemWeight.Priority), # lokomo vessel
+            ItemDef(ItemId.ForceGem_56, ItemKind.CargoAtDest, ItemWeight.Priority), # linebeck dark ore
+        ]
+
+        if self.settings.shuffle.cargo == "anywhere":
+            item_defs.extend(self.cargo_pick_pool)
+
+        if self.settings.shuffle.cargo != "remove":
+            item_defs.extend(self.cargo_dest_pool)
 
         ## create the pools
         self.progression_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Progression]
@@ -885,6 +920,10 @@ class Randomizer:
                 # 0xFF for ItemId_None
                 self.settings.passenger_dest_ids.append(item.id if item is not None else 0xFF)
 
+        if self.settings.shuffle.cargo != "anywhere":
+            # if not anywhere keep it vanilla
+            self.settings.cargo_pick_ids = [item.id for item in self.cargo_pick_pool]
+
         for loc in all_locations:
             size = self.settings.shuffle.shopsanity if "Shop Keeper" in loc.name else 1
 
@@ -899,11 +938,14 @@ class Randomizer:
                 loc.items.append(picked_item)
 
                 if self.settings.shuffle.passengers == "anywhere":
-                    if picked_item.kind == ItemKind.PassengerPickUp:
-                        # if passengers are anywhere and the picked item is a passenger, update the list
+                    if loc.infos.is_passenger_pick_up:
                         self.settings.passenger_pick_ids.append(picked_item.id)
-                    elif picked_item.kind == ItemKind.PassengerAtDest:
+                    elif loc.infos.is_passenger_at_dest:
                         self.settings.passenger_dest_ids.append(picked_item.id)
+
+                if self.settings.shuffle.cargo == "anywhere":
+                    if loc.infos.is_cargo_pick_up:
+                        self.settings.cargo_pick_ids.append(picked_item.id)
 
         assert len(item_pool) == 0
         self.nodes.sort(key=lambda entry: entry.name)
@@ -935,7 +977,12 @@ class Randomizer:
                 assert node.room_index == location.infos.room_index
 
                 if location.infos.is_passenger_pick_up or location.infos.is_passenger_at_dest:
-                    # passengers are exported into the shared settings binary, set by `assign_items``
+                    # passengers are exported into the shared settings binary, set by `assign_items`
+                    continue
+
+                if location.infos.is_cargo_pick_up:
+                    # cargos are exported into the shared settings binary, set by `assign_items`
+                    # cargo destination are set from the bmg though
                     continue
 
                 if location.infos.is_bmg:
@@ -956,7 +1003,8 @@ class Randomizer:
 
                         bmg_path.write_bytes(bytes(bmg_data_array))
                 else:
-                    if location.infos.settings.passengers:
+                    # probably completely useless? whatever
+                    if location.infos.settings.passengers or location.infos.settings.cargo:
                         continue
 
                     id, x, y = location.infos.id_hash.split("_")
