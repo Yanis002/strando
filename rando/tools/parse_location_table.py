@@ -823,9 +823,7 @@ if __name__ == "__main__":
                         "bmg": split[0],
                         "scene": scene,
                         "room_index": int(room),
-                        "offsets": {
-                            "english": split[1].split(", ")
-                        },
+                        "offsets": {"english": split[1].split(", ")},
                     }
                 case _:
                     if len(id) > 0 and len(x) > 0 and len(y) > 0:
@@ -865,11 +863,7 @@ if __name__ == "__main__":
         node_name = f"node_{scene}_{room_index}"
 
         if node_name not in world:
-            world[node_name] = {
-                "scene": scene,
-                "room_index": room_index,
-                "locations": {}
-            }
+            world[node_name] = {"scene": scene, "room_index": room_index, "locations": {}}
 
         if loc not in world[node_name]["locations"]:
             world[node_name]["locations"][loc] = "True"

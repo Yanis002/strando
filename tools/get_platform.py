@@ -8,7 +8,7 @@ class Platform:
         self.machine = machine
         '''Name of machine architecture: "x86_64"'''
         self.exe = exe
-        '''Executable file extension: ".exe" for Windows, "" otherwise'''
+        """Executable file extension: ".exe" for Windows, "" otherwise"""
 
 
 def get_platform() -> Platform | None:
@@ -23,7 +23,8 @@ def get_platform() -> Platform | None:
         print(f"Unknown system '{system}'")
         return None
     match platform.machine().lower():
-        case "amd64" | "x86_64": machine = "x86_64"
+        case "amd64" | "x86_64":
+            machine = "x86_64"
         case machine:
             print(f"Unknown machine: {machine}")
             return None

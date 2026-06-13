@@ -11,7 +11,16 @@ import yaml
 from dataclasses import dataclass
 from ndspy import lz10 as LZSS, narc, bmg
 from pathlib import Path
-from rando.constants import ItemId, ItemKind, ItemWeight, item_id_to_name, item_name_to_id, shop_actor_ids, max_keys_map, shop_item_positions
+from rando.constants import (
+    ItemId,
+    ItemKind,
+    ItemWeight,
+    item_id_to_name,
+    item_name_to_id,
+    shop_actor_ids,
+    max_keys_map,
+    shop_item_positions,
+)
 from rando.test.settings import Settings, LocationSettings
 
 
@@ -28,14 +37,14 @@ class MyDumper(yaml.SafeDumper):
 
 @dataclass
 class ActorEntry:
-    id: str # u32 (+0x00)
-    x: int # u16 (+0x04)
-    y: int # u16 (+0x06)
-    z: int # u16 (+0x08)
-    angle: int # u16 (+0x0A)
-    params: list[int] # u16[4] (+0x0C)
-    unk_18: int # undetermined
-    unk_1C: int # undetermined
+    id: str  # u32 (+0x00)
+    x: int  # u16 (+0x04)
+    y: int  # u16 (+0x06)
+    z: int  # u16 (+0x08)
+    angle: int  # u16 (+0x0A)
+    params: list[int]  # u16[4] (+0x0C)
+    unk_18: int  # undetermined
+    unk_1C: int  # undetermined
 
     is_shop: bool
     raw_data: bytes
@@ -53,7 +62,19 @@ class ActorEntry:
     @staticmethod
     def from_bytes(data: bytes):
         # print(data)
-        raw_id, raw_x, raw_y, raw_z, raw_angle, raw_param1, raw_param2, raw_param3, raw_param4, raw_unk_18, raw_unk_1C = struct.unpack_from(ActorEntry.format, data)
+        (
+            raw_id,
+            raw_x,
+            raw_y,
+            raw_z,
+            raw_angle,
+            raw_param1,
+            raw_param2,
+            raw_param3,
+            raw_param4,
+            raw_unk_18,
+            raw_unk_1C,
+        ) = struct.unpack_from(ActorEntry.format, data)
         id = raw_id[::-1].decode()
         return ActorEntry(
             id,
@@ -65,7 +86,7 @@ class ActorEntry:
             raw_unk_18,
             raw_unk_1C,
             id in shop_actor_ids,
-            data[:ActorEntry.entry_size - 4],
+            data[: ActorEntry.entry_size - 4],
         )
 
     def to_bytes(self):
@@ -87,14 +108,14 @@ class ActorEntry:
 
 @dataclass
 class MapObjectEntry:
-    id: str # u32
-    tile_x: int # u8
-    tile_y: int # u8
-    angle: int # u16
-    params: list[int] # u16[4]
-    unk_0C: int # undetermined
-    unk_10: int # undetermined
-    unk_14: int # undetermined
+    id: str  # u32
+    tile_x: int  # u8
+    tile_y: int  # u8
+    angle: int  # u16
+    params: list[int]  # u16[4]
+    unk_0C: int  # undetermined
+    unk_10: int  # undetermined
+    unk_14: int  # undetermined
 
     raw_data: bytes
 
@@ -110,7 +131,19 @@ class MapObjectEntry:
 
     @staticmethod
     def from_bytes(data: bytes):
-        raw_id, raw_x, raw_y, raw_angle, raw_param1, raw_param2, raw_param3, raw_param4, raw_unk_0C, raw_unk_10, raw_unk_14 = struct.unpack_from(MapObjectEntry.format, data)
+        (
+            raw_id,
+            raw_x,
+            raw_y,
+            raw_angle,
+            raw_param1,
+            raw_param2,
+            raw_param3,
+            raw_param4,
+            raw_unk_0C,
+            raw_unk_10,
+            raw_unk_14,
+        ) = struct.unpack_from(MapObjectEntry.format, data)
         return MapObjectEntry(
             raw_id[::-1].decode(),
             raw_x,
@@ -120,7 +153,7 @@ class MapObjectEntry:
             raw_unk_0C,
             raw_unk_10,
             raw_unk_14,
-            data[:MapObjectEntry.entry_size],
+            data[: MapObjectEntry.entry_size],
         )
 
     def to_bytes(self):
@@ -244,10 +277,12 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.MysticJade, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.AncientCoin, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.PricelessStone, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.RegalRing, ItemKind.Default, ItemWeight.Progression), # we consider the regal ring is a progression item because of how you get to ocean land
+    ItemDef(
+        ItemId.RegalRing, ItemKind.Default, ItemWeight.Progression
+    ),  # we consider the regal ring is a progression item because of how you get to ocean land
     ItemDef(ItemId.ArrowsRefill, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.BombsRefill, ItemKind.Default, ItemWeight.Normal),
-    ItemDef(ItemId.SoldOutSign, ItemKind.Default, ItemWeight.Normal), # doesn't crash but buggy graphics
+    ItemDef(ItemId.SoldOutSign, ItemKind.Default, ItemWeight.Normal),  # doesn't crash but buggy graphics
     ItemDef(ItemId.AncientShield, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.QuiverLarge, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.BombBagLarge, ItemKind.Default, ItemWeight.Priority),
@@ -446,16 +481,25 @@ class LocationInfo:
         if self.settings.sword_training and not self.rando_settings.shuffle.minigames.sword_training:
             return False
 
-        if len(self.settings.whip_race) > 0 and self.settings.whip_race not in self.rando_settings.shuffle.minigames.whip_race:
+        if (
+            len(self.settings.whip_race) > 0
+            and self.settings.whip_race not in self.rando_settings.shuffle.minigames.whip_race
+        ):
             return False
 
         if self.settings.goron_range and not self.rando_settings.shuffle.minigames.goron_range:
             return False
 
-        if len(self.settings.pirate_hideout) > 0 and self.settings.pirate_hideout not in self.rando_settings.shuffle.minigames.pirate_hideout:
+        if (
+            len(self.settings.pirate_hideout) > 0
+            and self.settings.pirate_hideout not in self.rando_settings.shuffle.minigames.pirate_hideout
+        ):
             return False
 
-        if len(self.settings.take_em_all_on) > 0 and self.settings.take_em_all_on not in self.rando_settings.shuffle.minigames.take_em_all_on:
+        if (
+            len(self.settings.take_em_all_on) > 0
+            and self.settings.take_em_all_on not in self.rando_settings.shuffle.minigames.take_em_all_on
+        ):
             return False
 
         # ignore stamps if we don't want them
@@ -463,7 +507,10 @@ class LocationInfo:
             return False
 
         # ignore stamp rewards we don't want
-        if self.settings.stamps_rewards != 0 and self.settings.stamps_rewards not in self.rando_settings.shuffle.stamps_rewards:
+        if (
+            self.settings.stamps_rewards != 0
+            and self.settings.stamps_rewards not in self.rando_settings.shuffle.stamps_rewards
+        ):
             return False
 
         # ignore stamp book if we don't want it
@@ -479,7 +526,11 @@ class LocationInfo:
             return False
 
         # ignore rabbit location if we don't want it
-        if self.settings.rabbitsanity is not None and "all" not in self.rando_settings.shuffle.rabbitsanity and self.settings.rabbitsanity not in self.rando_settings.shuffle.rabbitsanity:
+        if (
+            self.settings.rabbitsanity is not None
+            and "all" not in self.rando_settings.shuffle.rabbitsanity
+            and self.settings.rabbitsanity not in self.rando_settings.shuffle.rabbitsanity
+        ):
             return False
 
         return True
@@ -633,7 +684,9 @@ class SeedLog:
 
 
 class Randomizer:
-    def __init__(self, version: str, settings_path: Path, world_path: Path, loc_tbl_path: Path, seed_log_path: Path | None = None):
+    def __init__(
+        self, version: str, settings_path: Path, world_path: Path, loc_tbl_path: Path, seed_log_path: Path | None = None
+    ):
         self.version = version
         self.extracted_dir = Path("extract").resolve() / self.version
         assert self.extracted_dir.exists()
@@ -671,7 +724,9 @@ class Randomizer:
 
         # add extra tears
         for i in range(1, 6):
-            extra_defs = [ItemDef(getattr(ItemId, f"ExtraItemId_TearLight_{i}"), ItemKind.Default, ItemWeight.Progression)] * 3
+            extra_defs = [
+                ItemDef(getattr(ItemId, f"ExtraItemId_TearLight_{i}"), ItemKind.Default, ItemWeight.Progression)
+            ] * 3
             item_defs.extend(extra_defs)
 
         # add extra keys
@@ -775,24 +830,24 @@ class Randomizer:
         ]
 
         self.passenger_dest_pool: list[ItemDef | None] = [
-            ItemDef(ItemId.ForceGem_53, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_AnoukiNoko
-            ItemDef(ItemId.ForceGem_36, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_AnoukiKofu
-            ItemDef(ItemId.ForceGem_48, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_CastleTownMona
-            ItemDef(ItemId.TrainCannon, ItemKind.PassengerAtDest, ItemWeight.Progression), # Passenger_CastleTownAlfonzo
-            ItemDef(ItemId.ForceGem_51, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_SnowRealmFerrus
-            ItemDef(ItemId.ForceGem_35, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_FireRealmFerrus
-            ItemDef(ItemId.ForceGem_54, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_GoronVillageSnowGoron
-            ItemDef(ItemId.ForceGem_37, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_GoronVillageCityGoron
-            ItemDef(ItemId.ForceGem_44, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_MayscoreDovok
-            None, # Passenger_MayscoreMash
-            None, # Passenger_MayscoreMorris
-            None, # Passenger_MayscoreYamahiko
-            None, # Passenger_MayscoreWood
-            ItemDef(ItemId.ForceGem_47, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_OutsetJoe
-            ItemDef(ItemId.ForceGem_18, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_PirateHideoutWadatsumi
-            None, # Passenger_BridgeWorkersHomeKenzo
-            None, # Passenger_TradingPostKenzo
-            ItemDef(ItemId.ForceGem_45, ItemKind.PassengerAtDest, ItemWeight.Priority), # Passenger_PapuziaVillageCarben
+            ItemDef(ItemId.ForceGem_53, ItemKind.PassengerAtDest, ItemWeight.Priority),  # Passenger_AnoukiNoko
+            ItemDef(ItemId.ForceGem_36, ItemKind.PassengerAtDest, ItemWeight.Priority),  # Passenger_AnoukiKofu
+            ItemDef(ItemId.ForceGem_48, ItemKind.PassengerAtDest, ItemWeight.Priority),  # Passenger_CastleTownMona
+            ItemDef(ItemId.TrainCannon, ItemKind.PassengerAtDest, ItemWeight.Progression),  # Passenger_CastleTownAlfonzo
+            ItemDef(ItemId.ForceGem_51, ItemKind.PassengerAtDest, ItemWeight.Priority),  # Passenger_SnowRealmFerrus
+            ItemDef(ItemId.ForceGem_35, ItemKind.PassengerAtDest, ItemWeight.Priority),  # Passenger_FireRealmFerrus
+            ItemDef(ItemId.ForceGem_54, ItemKind.PassengerAtDest, ItemWeight.Priority),  # Passenger_GoronVillageSnowGoron
+            ItemDef(ItemId.ForceGem_37, ItemKind.PassengerAtDest, ItemWeight.Priority),  # Passenger_GoronVillageCityGoron
+            ItemDef(ItemId.ForceGem_44, ItemKind.PassengerAtDest, ItemWeight.Priority),  # Passenger_MayscoreDovok
+            None,  # Passenger_MayscoreMash
+            None,  # Passenger_MayscoreMorris
+            None,  # Passenger_MayscoreYamahiko
+            None,  # Passenger_MayscoreWood
+            ItemDef(ItemId.ForceGem_47, ItemKind.PassengerAtDest, ItemWeight.Priority),  # Passenger_OutsetJoe
+            ItemDef(ItemId.ForceGem_18, ItemKind.PassengerAtDest, ItemWeight.Priority),  # Passenger_PirateHideoutWadatsumi
+            None,  # Passenger_BridgeWorkersHomeKenzo
+            None,  # Passenger_TradingPostKenzo
+            ItemDef(ItemId.ForceGem_45, ItemKind.PassengerAtDest, ItemWeight.Priority),  # Passenger_PapuziaVillageCarben
         ]
 
         if self.settings.shuffle.passengers == "anywhere":
@@ -813,15 +868,15 @@ class Randomizer:
         ]
 
         self.cargo_dest_pool = [
-            ItemDef(ItemId.ForceGem_19, ItemKind.CargoAtDest, ItemWeight.Priority), # papuzia ice
-            ItemDef(ItemId.ForceGem_20, ItemKind.CargoAtDest, ItemWeight.Priority), # goron village ice (2nd time?)
-            ItemDef(ItemId.ForceGem_43, ItemKind.CargoAtDest, ItemWeight.Priority), # castle town fish
-            ItemDef(ItemId.ForceGem_46, ItemKind.CargoAtDest, ItemWeight.Priority), # lokomo cuccos
-            ItemDef(ItemId.ForceGem_49, ItemKind.CargoAtDest, ItemWeight.Priority), # outset cuccos
-            ItemDef(ItemId.ForceGem_50, ItemKind.CargoAtDest, ItemWeight.Priority), # mayscore steel
-            ItemDef(ItemId.ForceGem_52, ItemKind.CargoAtDest, ItemWeight.Priority), # anouki fence wood
-            ItemDef(ItemId.ForceGem_55, ItemKind.CargoAtDest, ItemWeight.Priority), # lokomo vessel
-            ItemDef(ItemId.ForceGem_56, ItemKind.CargoAtDest, ItemWeight.Priority), # linebeck dark ore
+            ItemDef(ItemId.ForceGem_19, ItemKind.CargoAtDest, ItemWeight.Priority),  # papuzia ice
+            ItemDef(ItemId.ForceGem_20, ItemKind.CargoAtDest, ItemWeight.Priority),  # goron village ice (2nd time?)
+            ItemDef(ItemId.ForceGem_43, ItemKind.CargoAtDest, ItemWeight.Priority),  # castle town fish
+            ItemDef(ItemId.ForceGem_46, ItemKind.CargoAtDest, ItemWeight.Priority),  # lokomo cuccos
+            ItemDef(ItemId.ForceGem_49, ItemKind.CargoAtDest, ItemWeight.Priority),  # outset cuccos
+            ItemDef(ItemId.ForceGem_50, ItemKind.CargoAtDest, ItemWeight.Priority),  # mayscore steel
+            ItemDef(ItemId.ForceGem_52, ItemKind.CargoAtDest, ItemWeight.Priority),  # anouki fence wood
+            ItemDef(ItemId.ForceGem_55, ItemKind.CargoAtDest, ItemWeight.Priority),  # lokomo vessel
+            ItemDef(ItemId.ForceGem_56, ItemKind.CargoAtDest, ItemWeight.Priority),  # linebeck dark ore
         ]
 
         if self.settings.shuffle.cargo == "anywhere":
@@ -845,7 +900,9 @@ class Randomizer:
                 rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitWater, ItemKind.Rabbit, ItemWeight.Priority)] * factor)
 
             if is_all or "mountain" in self.settings.shuffle.rabbitsanity:
-                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitMountain, ItemKind.Rabbit, ItemWeight.Priority)] * factor)
+                rabbit_pool.extend(
+                    [ItemDef(ItemId.ExtraItemId_RabbitMountain, ItemKind.Rabbit, ItemWeight.Priority)] * factor
+                )
 
             if is_all or "sand" in self.settings.shuffle.rabbitsanity:
                 rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitSand, ItemKind.Rabbit, ItemWeight.Priority)] * factor)
@@ -1070,8 +1127,8 @@ class Randomizer:
 
                         for raw_offset in getattr(location.infos.bmg_offsets, lang.lower()):
                             offset = int(raw_offset, base=16)
-                            assert bmg_data[offset + 0x00] == 0x03 # FLW1 "event" instruction
-                            assert bmg_data[offset + 0x01] == 0x09 # function callback index
+                            assert bmg_data[offset + 0x00] == 0x03  # FLW1 "event" instruction
+                            assert bmg_data[offset + 0x01] == 0x09  # function callback index
 
                             # function callback parameters
                             bmg_data_array[offset + 0x04] = location.items[0].id.value
@@ -1093,7 +1150,7 @@ class Randomizer:
                     assert offset is not None
 
                     if location.infos.is_actor:
-                        entry = ActorEntry.from_bytes(zmb_data[offset:offset + ActorEntry.entry_size])
+                        entry = ActorEntry.from_bytes(zmb_data[offset : offset + ActorEntry.entry_size])
                         do_save_narc = True
 
                         if entry.is_shop:
@@ -1120,7 +1177,7 @@ class Randomizer:
                             continue
 
                         do_save_narc = True
-                        entry = MapObjectEntry.from_bytes(zmb_data[offset:offset + MapObjectEntry.entry_size])
+                        entry = MapObjectEntry.from_bytes(zmb_data[offset : offset + MapObjectEntry.entry_size])
 
                         # we could just use index 0 for stamp stations but better be safe
                         if self.settings.shuffle.stamps and entry.id == "SPTB":
@@ -1151,7 +1208,9 @@ class Randomizer:
 
     def generate_seed(self):
         initial_time = time.time()
-        print(f"Randomizing with {len(self.progression_item_pool)} progression items, {len(self.priority_item_pool)} priority items and {len(self.normal_item_pool)} remaining items...")
+        print(
+            f"Randomizing with {len(self.progression_item_pool)} progression items, {len(self.priority_item_pool)} priority items and {len(self.normal_item_pool)} remaining items..."
+        )
 
         # 2. assign the items
         if self.seed_log is None:
@@ -1174,10 +1233,10 @@ class Randomizer:
         # lang: [default, nothing, rabbits]
         prefix_map = {
             "English": ["You got the ", "You got ", "You got a "],
-            "French": [], # TODO
-            "German": [], # TODO
-            "Italian": [], # TODO
-            "Spanish": [], # TODO
+            "French": [],  # TODO
+            "German": [],  # TODO
+            "Italian": [],  # TODO
+            "Spanish": [],  # TODO
         }
 
         if len(prefix_map[use_lang]) == 0:
@@ -1226,9 +1285,9 @@ class Randomizer:
         text_map = {
             "English": "You found a new item!\nGo to a station to find out!",
             "French": "Vous avez trouvé un objet!\nDécouvrez-le à une station!",
-            "German": "", # TODO
-            "Italian": "", # TODO
-            "Spanish": "", # TODO
+            "German": "",  # TODO
+            "Italian": "",  # TODO
+            "Spanish": "",  # TODO
         }
         msg = bmg.Message(INFO, [text_map[lang] if len(text_map[lang]) > 0 else text_map["English"]])
         msg_list.append(msg)
@@ -1247,7 +1306,6 @@ def main():
         Path("rando/test/settings.yaml"),
         Path("rando/test/test_world.yaml"),
         Path("rando/data/location_table.yaml"),
-
         # plando mode
         # Path("output/seed.yaml"),
     )

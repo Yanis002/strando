@@ -40,7 +40,7 @@ if __name__ == "__main__":
     response = requests.get(download_url)
     out_path: Path = args.path / args.tool
 
-    if download_url.endswith('.zip'):
+    if download_url.endswith(".zip"):
         zip_file = zipfile.ZipFile(io.BytesIO(response.content))
         zip_file.extractall(out_path)
 
@@ -51,6 +51,6 @@ if __name__ == "__main__":
                 cur_path = dir_path / file
                 cur_path.chmod(cur_path.stat().st_mode | stat.S_IEXEC)
     else:
-        with out_path.open('wb') as f:
+        with out_path.open("wb") as f:
             f.write(response.content)
         out_path.chmod(out_path.stat().st_mode | stat.S_IEXEC)

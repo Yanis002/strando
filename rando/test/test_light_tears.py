@@ -27,18 +27,19 @@ print("found:", filename)
 
 base_offset = found_file.index(b"ACPN")
 start_offset = base_offset + 0x0C
-magic, size, count, unk_0A = struct.unpack_from('<4sIHh', found_file, base_offset)
+magic, size, count, unk_0A = struct.unpack_from("<4sIHh", found_file, base_offset)
+
 
 @dataclass
 class ActorEntry:
-    id: str # u32
-    x: int # u16
-    y: int # u16
-    z: int # u16
-    angle: int # u16
-    params: list[int] # u16[4]
-    unk_18: int # undetermined
-    unk_1C: int # undetermined
+    id: str  # u32
+    x: int  # u16
+    y: int  # u16
+    z: int  # u16
+    angle: int  # u16
+    params: list[int]  # u16[4]
+    unk_18: int  # undetermined
+    unk_1C: int  # undetermined
 
     raw_data: bytes
 
@@ -47,7 +48,19 @@ class ActorEntry:
 
     @staticmethod
     def from_bytes(data: bytes):
-        raw_id, raw_x, raw_y, raw_z, raw_angle, raw_param1, raw_param2, raw_param3, raw_param4, raw_unk_18, raw_unk_1C = struct.unpack_from("<4sHHHHHHHHIIII", data)
+        (
+            raw_id,
+            raw_x,
+            raw_y,
+            raw_z,
+            raw_angle,
+            raw_param1,
+            raw_param2,
+            raw_param3,
+            raw_param4,
+            raw_unk_18,
+            raw_unk_1C,
+        ) = struct.unpack_from("<4sHHHHHHHHIIII", data)
         return ActorEntry(
             raw_id[::-1].decode(),
             raw_x,
@@ -75,6 +88,7 @@ class ActorEntry:
             self.unk_18,
             self.unk_1C,
         )
+
 
 entries: list[ActorEntry] = []
 offset = start_offset

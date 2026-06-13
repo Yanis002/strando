@@ -7,7 +7,7 @@ from pathlib import Path
 class LocationSettings:
     def __init__(self):
         self.rupeesanity = False
-        self.glyphs_and_sources = False # this is not actually a bool but we just need to check if it's vanilla or not
+        self.glyphs_and_sources = False  # this is not actually a bool but we just need to check if it's vanilla or not
         self.duets = False
         self.sword_training = False
         self.whip_race = str()
@@ -375,11 +375,7 @@ class GoalSettings:
         return settings
 
     def to_bin(self):
-        return struct.pack(
-            "<BB",
-            self.unlock_dark_realm_mode_map[self.unlock_dark_realm],
-            self.dungeon_amount
-        )
+        return struct.pack("<BB", self.unlock_dark_realm_mode_map[self.unlock_dark_realm], self.dungeon_amount)
 
     def to_yaml(self):
         return {
@@ -417,17 +413,17 @@ class Settings:
 
     def to_bin(self):
         passenger_pick_ids = b""
-        assert len(self.passenger_pick_ids) == 18, f"len is {len(self.passenger_pick_ids)}" # passenger max
+        assert len(self.passenger_pick_ids) == 18, f"len is {len(self.passenger_pick_ids)}"  # passenger max
         for i in self.passenger_pick_ids:
             passenger_pick_ids += i.to_bytes(1, byteorder="little")
 
         passenger_dest_ids = b""
-        assert len(self.passenger_dest_ids) == 18, f"len is {len(self.passenger_dest_ids)}" # passenger max
+        assert len(self.passenger_dest_ids) == 18, f"len is {len(self.passenger_dest_ids)}"  # passenger max
         for i in self.passenger_dest_ids:
             passenger_dest_ids += i.to_bytes(1, byteorder="little")
 
         cargo_pick_ids = b""
-        assert len(self.cargo_pick_ids) == 7, f"len is {len(self.cargo_pick_ids)}" # cargo pick up max
+        assert len(self.cargo_pick_ids) == 7, f"len is {len(self.cargo_pick_ids)}"  # cargo pick up max
         for i in self.cargo_pick_ids:
             cargo_pick_ids += i.to_bytes(1, byteorder="little")
 

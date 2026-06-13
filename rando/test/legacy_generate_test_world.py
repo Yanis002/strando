@@ -25,14 +25,14 @@ class MyDumper(yaml.SafeDumper):
 
 @dataclass
 class ActorEntry:
-    id: str # u32
-    x: int # u16
-    y: int # u16
-    z: int # u16
-    angle: int # u16
-    params: list[int] # u16[4]
-    unk_18: int # undetermined
-    unk_1C: int # undetermined
+    id: str  # u32
+    x: int  # u16
+    y: int  # u16
+    z: int  # u16
+    angle: int  # u16
+    params: list[int]  # u16[4]
+    unk_18: int  # undetermined
+    unk_1C: int  # undetermined
 
     is_shop: bool
     raw_data: bytes
@@ -50,7 +50,19 @@ class ActorEntry:
     @staticmethod
     def from_bytes(data: bytes):
         # print(data)
-        raw_id, raw_x, raw_y, raw_z, raw_angle, raw_param1, raw_param2, raw_param3, raw_param4, raw_unk_18, raw_unk_1C = struct.unpack_from(ActorEntry.format, data)
+        (
+            raw_id,
+            raw_x,
+            raw_y,
+            raw_z,
+            raw_angle,
+            raw_param1,
+            raw_param2,
+            raw_param3,
+            raw_param4,
+            raw_unk_18,
+            raw_unk_1C,
+        ) = struct.unpack_from(ActorEntry.format, data)
         id = raw_id[::-1].decode()
         return ActorEntry(
             id,
@@ -62,7 +74,7 @@ class ActorEntry:
             raw_unk_18,
             raw_unk_1C,
             id in shop_actor_ids,
-            data[:ActorEntry.entry_size - 4],
+            data[: ActorEntry.entry_size - 4],
         )
 
     def to_bytes(self):
@@ -96,15 +108,15 @@ class ActorEntry:
 
 @dataclass
 class MapObjectEntry:
-    id: str # u32
-    tile_x: int # u8
-    tile_y: int # u8
-    angle: int # u16
-    params: list[int] # u8[4]
-    unk_0C: int # undetermined
-    unk_10: int # undetermined
-    unk_14: int # undetermined
-    unk_18: int # undetermined
+    id: str  # u32
+    tile_x: int  # u8
+    tile_y: int  # u8
+    angle: int  # u16
+    params: list[int]  # u8[4]
+    unk_0C: int  # undetermined
+    unk_10: int  # undetermined
+    unk_14: int  # undetermined
+    unk_18: int  # undetermined
 
     raw_data: bytes
 
@@ -120,7 +132,20 @@ class MapObjectEntry:
 
     @staticmethod
     def from_bytes(data: bytes):
-        raw_id, raw_x, raw_y, raw_angle, raw_param1, raw_param2, raw_param3, raw_param4, raw_unk_0C, raw_unk_10, raw_unk_14, raw_unk_18 = struct.unpack_from(MapObjectEntry.format, data)
+        (
+            raw_id,
+            raw_x,
+            raw_y,
+            raw_angle,
+            raw_param1,
+            raw_param2,
+            raw_param3,
+            raw_param4,
+            raw_unk_0C,
+            raw_unk_10,
+            raw_unk_14,
+            raw_unk_18,
+        ) = struct.unpack_from(MapObjectEntry.format, data)
         return MapObjectEntry(
             raw_id[::-1].decode(),
             raw_x,
@@ -131,7 +156,7 @@ class MapObjectEntry:
             raw_unk_10,
             raw_unk_14,
             raw_unk_18,
-            data[:MapObjectEntry.entry_size],
+            data[: MapObjectEntry.entry_size],
         )
 
     def to_bytes(self):
@@ -419,7 +444,7 @@ def main():
             if count > 0:
                 offset = actor_offset + 0x0C
                 for i in range(count):
-                    entry = ActorEntry.from_bytes(zmb_data[offset:offset + ActorEntry.entry_size])
+                    entry = ActorEntry.from_bytes(zmb_data[offset : offset + ActorEntry.entry_size])
 
                     for actor_id in actor_ids:
                         if entry.id == actor_id:
@@ -435,7 +460,7 @@ def main():
             if count > 0:
                 offset = mapobj_offset + 0x0C
                 for i in range(count):
-                    entry = MapObjectEntry.from_bytes(zmb_data[offset:offset + MapObjectEntry.entry_size])
+                    entry = MapObjectEntry.from_bytes(zmb_data[offset : offset + MapObjectEntry.entry_size])
 
                     for mapobj_id in mapobj_ids:
                         if entry.id == mapobj_id:
@@ -448,6 +473,7 @@ def main():
         spoiler_log.entries.append(spoiler_entry)
 
     spoiler_log.export()
+
 
 if __name__ == "__main__":
     main()

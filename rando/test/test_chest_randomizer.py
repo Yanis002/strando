@@ -27,19 +27,20 @@ print("found:", filename)
 
 base_offset = found_file.index(b"BOPM")
 start_offset = base_offset + 0x0C
-magic, size, count, unk_0A = struct.unpack_from('<4sIHh', found_file, base_offset)
+magic, size, count, unk_0A = struct.unpack_from("<4sIHh", found_file, base_offset)
+
 
 @dataclass
 class MapObjectEntry:
-    id: str # u32
-    tile_x: int # u8
-    tile_y: int # u8
-    angle: int # u16
-    params: list[int] # u8[4]
-    unk_0C: int # undetermined
-    unk_10: int # undetermined
-    unk_14: int # undetermined
-    unk_18: int # undetermined
+    id: str  # u32
+    tile_x: int  # u8
+    tile_y: int  # u8
+    angle: int  # u16
+    params: list[int]  # u8[4]
+    unk_0C: int  # undetermined
+    unk_10: int  # undetermined
+    unk_14: int  # undetermined
+    unk_18: int  # undetermined
 
     raw_data: bytes
 
@@ -48,7 +49,20 @@ class MapObjectEntry:
 
     @staticmethod
     def from_bytes(data: bytes):
-        raw_id, raw_x, raw_y, raw_angle, raw_param1, raw_param2, raw_param3, raw_param4, raw_unk_0C, raw_unk_10, raw_unk_14, raw_unk_18 = struct.unpack_from("<4sBBHBBBBIIII", data)
+        (
+            raw_id,
+            raw_x,
+            raw_y,
+            raw_angle,
+            raw_param1,
+            raw_param2,
+            raw_param3,
+            raw_param4,
+            raw_unk_0C,
+            raw_unk_10,
+            raw_unk_14,
+            raw_unk_18,
+        ) = struct.unpack_from("<4sBBHBBBBIIII", data)
         return MapObjectEntry(
             raw_id[::-1].decode(),
             raw_x,
@@ -78,6 +92,7 @@ class MapObjectEntry:
             self.unk_14,
             self.unk_18,
         )
+
 
 entries: list[MapObjectEntry] = []
 offset = start_offset

@@ -3,6 +3,7 @@ import yaml
 
 from pathlib import Path
 
+
 # from https://github.com/yaml/pyyaml/issues/127#issuecomment-525800484
 class MyDumper(yaml.SafeDumper):
     # HACK: insert blank lines between top-level objects
@@ -12,6 +13,7 @@ class MyDumper(yaml.SafeDumper):
 
         if len(self.indents) == 1:
             super().write_line_break()
+
 
 if __name__ == "__main__":
     languages = [
@@ -31,7 +33,7 @@ if __name__ == "__main__":
             bmg_data = bmg_file.read_bytes()
 
             try:
-                data[lang][bmg_file.stem + bmg_file.suffix] = f"0x{bmg_data.index(b"FLW1"):X}"
+                data[lang][bmg_file.stem + bmg_file.suffix] = f"0x{bmg_data.index(b'FLW1'):X}"
             except ValueError:
                 pass
 

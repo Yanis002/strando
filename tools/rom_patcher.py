@@ -111,9 +111,7 @@ class Instruction:
 
     def to_asm(self):
         if self.new_sym is not None:
-            instr = (
-                f"blx {self.new_sym.name}" if self.is_blx else f"bl {self.new_sym.name}"
-            )
+            instr = f"blx {self.new_sym.name}" if self.is_blx else f"bl {self.new_sym.name}"
         else:
             instr = "nop"
 
@@ -167,9 +165,7 @@ class Hook:
                 bin_path = EXTRACTED_DIR / version / "arm9" / "arm9.bin"
             case _:
                 config_dir = base_dir / "overlays" / self.module
-                bin_path = (
-                    EXTRACTED_DIR / version / "arm9_overlays" / f"{self.module}.bin"
-                )
+                bin_path = EXTRACTED_DIR / version / "arm9_overlays" / f"{self.module}.bin"
         assert config_dir.exists(), f"{config_dir} ({self.module})"
         assert bin_path.exists(), f"{bin_path} ({self.module})"
 
@@ -271,6 +267,7 @@ class HooksConfig:
 
             instrs: list[Instruction] = []
             if "instructions" in yaml_file:
+
                 def parse_bl(data: dict, is_blx: bool):
                     for target_sym, to_addrs in data.items():
                         for to_addr in to_addrs:
@@ -354,7 +351,7 @@ class HooksConfig:
 
                 yaml_file["constants"][sym].append(f"0x{const.at_addr:08X}")
 
-            if len(hook.incbins) > 0: 
+            if len(hook.incbins) > 0:
                 yaml_file["incbins"] = []
 
             for incbin in hook.incbins:
@@ -415,9 +412,7 @@ def check_code_size(bin_path: Path, max_size: int, kind: str):
     hooks_size = len(hooks_data)
 
     if len(hooks_data) < max_size:
-        print(
-            f"{kind} code size is OK! (code size: 0x{hooks_size:X} < max: 0x{max_size:X})"
-        )
+        print(f"{kind} code size is OK! (code size: 0x{hooks_size:X} < max: 0x{max_size:X})")
     else:
         raise ValueError(
             f"{kind} code size exceeds the available space! (code size: 0x{hooks_size:X} >= max: 0x{max_size:X})"
@@ -495,17 +490,11 @@ def update_yaml(extracted_dir: Path, map_path: Path, ovl_list: list[int]):
     for ovl_id in ovl_list:
         for overlay in yaml_file["overlays"]:
             if overlay.get("id") == ovl_id and "_mod" not in overlay["file_name"]:
-                overlay["file_name"] = (
-                    f"{overlay['file_name'].removesuffix('.bin')}_mod.bin"
-                )
+                overlay["file_name"] = f"{overlay['file_name'].removesuffix('.bin')}_mod.bin"
                 break
 
     is_extra_overlay_present = map_path.stem in yaml_file["overlays"][-1]["file_name"]
-    file_id = (
-        len(yaml_file["overlays"]) - 1
-        if is_extra_overlay_present
-        else len(yaml_file["overlays"])
-    )
+    file_id = len(yaml_file["overlays"]) - 1 if is_extra_overlay_present else len(yaml_file["overlays"])
     extra_overlay = get_extra_overlay(map_path, file_id)
 
     if is_extra_overlay_present:
