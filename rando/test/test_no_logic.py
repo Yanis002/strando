@@ -937,7 +937,7 @@ class Randomizer:
         for i, file in enumerate(archive.files):
             if file.startswith(b"BPAM1BMZ"):
                 found_file = file
-                filename = archive.filenames[i]
+                filename = str(archive.filenames[i])
                 break
 
         if found_file is not None and filename is not None:
@@ -945,7 +945,7 @@ class Randomizer:
             assert b"ACPN" in found_file or b"BOPM" in found_file
             return lzss_bytes, archive, found_file, filename
 
-        return None
+        raise ValueError("ERROR: unexpected result")
 
     def update_zmb(self, entry: ActorEntry | MapObjectEntry, base_data: bytes):
         old_data = entry.raw_data
@@ -995,6 +995,8 @@ class Randomizer:
         self.settings.cargo_pick_ids = self.cargo_pick_ids[:]
 
     def assign_items_from_log(self):
+        assert self.seed_log is not None and self.seed_log.yaml_file is not None
+
         def find_item_def(item_id: int):
             for item_def in self.all_item_pool:
                 if item_def.id.value == item_id:
@@ -1172,12 +1174,12 @@ class Randomizer:
 
                         zmb_data = self.update_zmb(entry, zmb_data)
                     elif location.infos.is_mapobj:
+                        entry = MapObjectEntry.from_bytes(zmb_data[offset : offset + MapObjectEntry.entry_size])
+                        do_save_narc = True
+
                         # ignore glyphs if it's set to vanilla
                         if self.settings.shuffle.glyphs_and_sources == "vanilla" and entry.id == "GELG":
                             continue
-
-                        do_save_narc = True
-                        entry = MapObjectEntry.from_bytes(zmb_data[offset : offset + MapObjectEntry.entry_size])
 
                         # we could just use index 0 for stamp stations but better be safe
                         if self.settings.shuffle.stamps and entry.id == "SPTB":
