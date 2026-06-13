@@ -264,6 +264,8 @@ class GZ {
 
     bool IsOnLand() { return gOverlayManager.mLoadedOverlays[OverlaySlot_6] == OverlayIndex_Land; }
 
+    bool IsOnTrain() { return gOverlayManager.mLoadedOverlays[OverlaySlot_6] == OverlayIndex_Train; }
+
     bool IsSceneInit() { return gOverlayManager.mLoadedOverlays[OverlaySlot_1] == OverlayIndex_SceneInit; }
 
     bool IsStb() { return gOverlayManager.mLoadedOverlays[OverlaySlot_9] == OverlayIndex_Stb; }

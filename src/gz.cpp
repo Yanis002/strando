@@ -13,6 +13,7 @@
 #pragma GCC diagnostic pop
 
 #include <MainGame/CargoManager.hpp>
+#include <Unknown/Common.hpp>
 #include <Unknown/UnkStruct_027e09a4.hpp>
 #include <Unknown/UnkStruct_027e09b8.hpp>
 #include <Unknown/UnkStruct_027e0ce0.hpp>
@@ -23,6 +24,7 @@
 #include <nitro/reg.h>
 
 extern "C" void func_ov000_02070af8(UnkStruct_027e09a4*);
+extern TrainSpeedPreset data_ov026_02135fec[];
 
 struct CargoInfos {
     /* 00 */ u16 timerMax;
@@ -396,6 +398,36 @@ void GZ::OnGameModeUpdate() {
         this->TryGiveItemFromPassengerDestInfos(data_027e09a4->CurrentSceneIndex());
 
         this->ProcessItemQueue();
+
+        if (this->IsOnTrain()) {
+            TrainSpeedPreset* pDefault = &data_ov026_02135fec[TrainPresetType_Default];
+
+            // new default speed preset
+            // changes:
+            // - reverse speed x2
+            // - slow and fast speeds x3
+            // - related `unk_04` set to 256 (unsure what it is)
+            // - `unk_24` set to 0xFFFF, this is what lets us change the state instantly (for some reasons)
+            // - "emergency break" duration x2
+            static TrainSpeedPreset sDefaultSpeedPreset = {
+                .reverse = {.speed = -143 * 2, .unk_04 = 256},
+                .stop = {.speed = 0, .unk_04 = 0},
+                .slow = {.speed = 115 * 3, .unk_04 = 256},
+                .fast = {.speed = 193 * 3, .unk_04 = 256},
+                .unk_20 = 0,
+                .unk_24 = 0xFFFF,
+                .unk_28 = 0,
+                .unk_2C = 50,
+                .unk_30 = 143,
+                .unk_34 = 5,
+                .unk_38 = 30 * 2,
+                .unk_3C = FLOAT_TO_FX32(225.0f),
+            };
+
+            if (pDefault->fast.speed != sDefaultSpeedPreset.fast.speed) {
+                MI_CpuCopyFast(&sDefaultSpeedPreset, pDefault, sizeof(TrainSpeedPreset));
+            }
+        }
     }
 }
 
