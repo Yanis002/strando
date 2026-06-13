@@ -427,6 +427,11 @@ void GZ::OnGameModeUpdate() {
             if (pDefault->fast.speed != sDefaultSpeedPreset.fast.speed) {
                 MI_CpuCopyFast(&sDefaultSpeedPreset, pDefault, sizeof(TrainSpeedPreset));
             }
+
+            if (data_027e0478.train.mUnk_058 != NULL && data_027e0478.train.mUnk_058->mUnk_33C > 0) {
+                // tchou tchouuuuuuuuuuuu !!!
+                data_027e0478.train.mUnk_058->mUnk_338 = 0;
+            }
         }
     }
 }
