@@ -1,6 +1,7 @@
 #include "036_MapA5.hpp"
 #include "ItemIdMaps.hpp"
 #include "gz.hpp"
+#include "settings.hpp"
 
 #include <MainGame/MiscAdvManager.hpp>
 #include <Player/PlayerGet.hpp>
@@ -185,8 +186,20 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
         case ExtraItemId_RabbitMountain:
         case ExtraItemId_RabbitSand:
             rabbitType = itemId - ExtraItemId_RabbitGrass;
-            SET_FLAG(gSaveManager.GetUnk000()->unk_B78.rabbitFlags, pRandoSave->rabbitIndices[rabbitType]);
-            pRandoSave->rabbitIndices[rabbitType]++;
+
+            if (gSettings.GetShuffleSettings()->rabbitpack) {
+                // all in one
+                int startingFlag = rabbitType * 10; // see RabbitFlag
+
+                for (int i = startingFlag; i < (startingFlag + 10); i++) {
+                    SET_FLAG(gSaveManager.GetUnk000()->unk_B78.rabbitFlags, i);
+                }
+
+                pRandoSave->rabbitIndices[rabbitType] = 10;
+            } else {
+                SET_FLAG(gSaveManager.GetUnk000()->unk_B78.rabbitFlags, pRandoSave->rabbitIndices[rabbitType]);
+                pRandoSave->rabbitIndices[rabbitType]++;
+            }
 
             // only set the item adventure flag on the last rabbit
             if (pRandoSave->rabbitIndices[rabbitType] < 10) {

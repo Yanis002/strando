@@ -205,7 +205,11 @@ ItemId GetProgressiveItemId(ItemId requestedItemId) {
 
 #define TRAIN_GET_ITEM_MSG MSG(ExtraItemId_Max * 2)
 
-extern "C" bool CustomTryItemGive(ItemId requestedItemId) {
+extern "C" bool CustomTryItemGive(UnkStruct_027e0d34_04* thisx, ItemId requestedItemId) {
+    return RandoTryItemGive(requestedItemId);
+}
+
+bool RandoTryItemGive(ItemId requestedItemId) {
     ItemId itemId;
 
     // handle progressive items

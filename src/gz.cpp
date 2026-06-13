@@ -661,7 +661,7 @@ void GZ::ProcessItemQueue() {
         ItemId itemId = pSave->itemQueue[i];
 
         if (itemId != ItemId_None && itemId < ExtraItemId_Max) {
-            CustomTryItemGive(itemId);
+            RandoTryItemGive(itemId);
             pSave->itemQueue[i] = (u8)ItemId_None;
 
             if (this->mItemQueueIndex > 0) {

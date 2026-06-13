@@ -304,4 +304,4 @@ class GZ {
 
 extern GZ gGZ;
 extern void SetAdventureFlagsAtPickUp(u8 passenger);
-extern "C" bool CustomTryItemGive(ItemId requestedItemId);
+extern bool RandoTryItemGive(ItemId requestedItemId);

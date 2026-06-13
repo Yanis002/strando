@@ -47,7 +47,7 @@ void CustomRabbit::CustomSetFlag() {
     // if the rabbit is not valid it means it's not meant to be shuffled
     // so we execute the vanilla behavior instead of giving the item
     if (IsRabbitValid(this->mUnk_5C.mParams[1])) {
-        CustomTryItemGive(this->mUnk_5C.mParams[0]);
+        RandoTryItemGive(this->mUnk_5C.mParams[0]);
         SET_FLAG(gGZ.GetCurrentSave()->rabbitFlags, this->mUnk_5C.mParams[1]);
     } else {
         SET_FLAG(gSaveManager.GetUnk000()->unk_B78.rabbitFlags, this->mUnk_5C.mParams[1]);
