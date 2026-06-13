@@ -703,9 +703,9 @@ class Randomizer:
 
         # list of item ids that will be exported in the settings binary
         # "settings binary" refers to the data that is sent to the game from this generator
-        self.passenger_pick_ids: list[ItemId] = []
-        self.passenger_dest_ids: list[ItemId] = []
-        self.cargo_pick_ids: list[ItemId] = []
+        self.passenger_pick_ids: list[int] = []
+        self.passenger_dest_ids: list[int] = []
+        self.cargo_pick_ids: list[int] = []
 
         # will assign items from the seed log if it's set
         # we can't do it earlier since we need the nodes and the item pool
@@ -967,25 +967,25 @@ class Randomizer:
 
             for item in self.passenger_dest_pool:
                 # 0xFF for ItemId_None
-                self.passenger_dest_ids.append(item.id if item is not None else 0xFF)
+                self.passenger_dest_ids.append(item.id.value if item is not None else 0xFF)
 
-            self.passenger_pick_ids = [item.id for item in self.passenger_pick_pool]
+            self.passenger_pick_ids = [item.id.value for item in self.passenger_pick_pool]
 
         if self.settings.shuffle.cargo != "anywhere":
-            self.cargo_pick_ids = [item.id for item in self.cargo_pick_pool]
+            self.cargo_pick_ids = [item.id.value for item in self.cargo_pick_pool]
 
     def add_elem_to_id_lists(self, location: LocationDef, item: ItemDef):
         """Tries to add the item's id to the lists that will be exported in the settings binary"""
 
         if self.settings.shuffle.passengers == "anywhere":
             if location.infos.is_passenger_pick_up:
-                self.passenger_pick_ids.append(item.id)
+                self.passenger_pick_ids.append(item.id.value)
             elif location.infos.is_passenger_at_dest:
-                self.passenger_dest_ids.append(item.id)
+                self.passenger_dest_ids.append(item.id.value)
 
         if self.settings.shuffle.cargo == "anywhere":
             if location.infos.is_cargo_pick_up:
-                self.cargo_pick_ids.append(item.id)
+                self.cargo_pick_ids.append(item.id.value)
 
     def copy_id_lists_to_settings(self):
         """Copies the item id lists to the settings"""
