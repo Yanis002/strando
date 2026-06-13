@@ -19,6 +19,7 @@ class LocationSettings:
         self.stamp_book = False
         self.passengers = False
         self.cargo = False
+        self.rabbitsanity: str | None = None
 
 
 class MinigamesSettings:
@@ -66,7 +67,7 @@ class ShuffleSettings:
         self.stamps_rewards: list[int] = []
         self.stamp_book = False
 
-        self.rabbitsanity = False
+        self.rabbitsanity: list[str] = []
         self.rabbitpack = False
 
         self.passengers_mode = ["remove", "vanilla", "abstract", "anywhere"]
@@ -80,6 +81,9 @@ class ShuffleSettings:
 
         self.forest_glyph_mode = ["startwith", "anywhere"]
         self.forest_glyph_mode_map = {mode: i for i, mode in enumerate(self.forest_glyph_mode)}
+
+    def is_rabbitsanity_enabled(self):
+        return len(self.rabbitsanity) > 0 and "none" not in self.rabbitsanity
 
     def validate(self):
         if self.shopsanity < 0 or self.shopsanity > 5:
@@ -115,8 +119,9 @@ class ShuffleSettings:
         if not isinstance(self.stamp_book, bool):
             raise ValueError("stamp_book must be true or false")
 
-        if not isinstance(self.rabbitsanity, bool):
-            raise ValueError("rabbit_sanity must be true or false")
+        for value in self.rabbitsanity:
+            if value not in ["grass", "snow", "water", "fire", "sand", "all"]:
+                raise ValueError("rabbit_sanity is not valid")
 
         if not isinstance(self.rabbitpack, bool):
             raise ValueError("rabbit_pack must be true or false")
@@ -186,6 +191,18 @@ class ShuffleSettings:
         return settings
 
     def to_bin(self):
+        rabbitsanity = 0
+        rabbit_map = {
+            "grass": 1 << 0,
+            "snow": 1 << 1,
+            "water": 1 << 2,
+            "mountain": 1 << 3,
+            "sand": 1 << 4,
+            "all": 0x1F,
+        }
+        for value in self.rabbitsanity:
+            rabbitsanity |= rabbit_map[value]
+
         return struct.pack(
             "<BBBBBBBBBBB",
             self.shopsanity,
@@ -197,7 +214,7 @@ class ShuffleSettings:
             self.duets,
             self.minigames.goron_range,
             self.stamps,
-            self.rabbitsanity,
+            rabbitsanity,
             self.rabbitpack,
         )
 

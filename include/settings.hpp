@@ -38,6 +38,15 @@ enum StampMode_ {
     StampMode_Shuffled,
 };
 
+enum RabbitMode_ {
+    RabbitMode_Grass = (1 << 0),
+    RabbitMode_Snow = (1 << 1),
+    RabbitMode_Water = (1 << 2),
+    RabbitMode_Mountain = (1 << 3),
+    RabbitMode_Sand = (1 << 4),
+    RabbitMode_All = RabbitMode_Grass | RabbitMode_Snow | RabbitMode_Water | RabbitMode_Mountain | RabbitMode_Sand,
+};
+
 struct ShuffleSettings {
     u8 shopsanity;
     bool rupeesanity;
@@ -48,7 +57,7 @@ struct ShuffleSettings {
     bool duets;
     bool goron_range;
     bool stamps;
-    bool rabbitsanity;
+    u8 rabbitsanity;
     bool rabbitpack;
 
     ShuffleSettings() { memset(this, 0, sizeof(ShuffleSettings)); }
@@ -69,11 +78,11 @@ enum BossKeysanityMode_ {
 };
 
 enum TearSanityMode_ {
-    TearSanityMode__Off,
-    TearSanityMode__Section,
-    TearSanityMode__Dungeon,
-    TearSanityMode__Anywhere,
-    TearSanityMode__Removed,
+    TearSanityMode_Off,
+    TearSanityMode_Section,
+    TearSanityMode_Dungeon,
+    TearSanityMode_Anywhere,
+    TearSanityMode_Removed,
 };
 
 struct ShuffleDungeonSettings {

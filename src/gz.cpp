@@ -22,7 +22,6 @@
 #include <nitro/pad.h>
 #include <nitro/reg.h>
 
-extern "C" bool CustomTryItemGive(UnkStruct_027e0d34_04* thisx, ItemId requestedItemId);
 extern "C" void func_ov000_02070af8(UnkStruct_027e09a4*);
 
 struct CargoInfos {
@@ -48,9 +47,8 @@ void GZ::Init() {
 
     // reset if the data is unset, the first byte would be tears amount, this can't be 0xFF
     if (*(u8*)this->mRandoSave == 0xFF) {
-        memset(this->mRandoSave, 0, sizeof(this->mRandoSave));
-        this->mRandoSave[0].ClearItemQueue();
-        this->mRandoSave[1].ClearItemQueue();
+        this->mRandoSave[0].Init();
+        this->mRandoSave[1].Init();
     }
 }
 
@@ -559,9 +557,10 @@ void GZ::ApplyKeyAmounts() {
     }
 }
 
-RandoSave::RandoSave() {
-    memset(this->tearsAmounts, 0, sizeof(this->tearsAmounts));
-    memset(this->keyAmounts, 0, sizeof(this->keyAmounts));
+RandoSave::RandoSave() { this->Init(); }
+
+void RandoSave::Init() {
+    memset(this, 0, sizeof(RandoSave));
     this->ClearItemQueue();
 }
 
@@ -630,7 +629,7 @@ void GZ::ProcessItemQueue() {
         ItemId itemId = pSave->itemQueue[i];
 
         if (itemId != ItemId_None && itemId < ExtraItemId_Max) {
-            CustomTryItemGive(data_027e0d34->mUnk_04, itemId);
+            CustomTryItemGive(itemId);
             pSave->itemQueue[i] = (u8)ItemId_None;
 
             if (this->mItemQueueIndex > 0) {

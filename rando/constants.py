@@ -235,6 +235,11 @@ class ItemId(IntEnum):
     ExtraItemId_CargoCuccos = 179
     ExtraItemId_CargoVessel = 180
     ExtraItemId_CargoDarkOre = 181
+    ExtraItemId_RabbitGrass = 182
+    ExtraItemId_RabbitSnow = 183
+    ExtraItemId_RabbitWater = 184
+    ExtraItemId_RabbitMountain = 185
+    ExtraItemId_RabbitSand = 186
 
 extra_id_to_scene = {
     ItemId.ExtraItemId_TearLight_1: "d_main",
@@ -459,6 +464,11 @@ item_id_to_name = {
     ItemId.ExtraItemId_CargoCuccos.value: "Cargo Cuccos",
     ItemId.ExtraItemId_CargoVessel.value: "Cargo Vessel",
     ItemId.ExtraItemId_CargoDarkOre.value: "Cargo Dark Ore",
+    ItemId.ExtraItemId_RabbitGrass.value: "Grass Rabbit",
+    ItemId.ExtraItemId_RabbitSnow.value: "Snow Rabbit",
+    ItemId.ExtraItemId_RabbitWater.value: "Water Rabbit",
+    ItemId.ExtraItemId_RabbitMountain.value: "Mountain Rabbit",
+    ItemId.ExtraItemId_RabbitSand.value: "Sand Rabbit",
 }
 item_name_to_id = {v: k for k, v in item_id_to_name.items()}
 

@@ -28,12 +28,12 @@ class MyDumper(yaml.SafeDumper):
 
 @dataclass
 class ActorEntry:
-    id: str # u32
-    x: int # u16
-    y: int # u16
-    z: int # u16
-    angle: int # u16
-    params: list[int] # u16[4]
+    id: str # u32 (+0x00)
+    x: int # u16 (+0x04)
+    y: int # u16 (+0x06)
+    z: int # u16 (+0x08)
+    angle: int # u16 (+0x0A)
+    params: list[int] # u16[4] (+0x0C)
     unk_18: int # undetermined
     unk_1C: int # undetermined
 
@@ -406,6 +406,12 @@ class LocationInfo:
 
                         if new_info.settings.cargo and split[1] in ["remove", "vanilla"]:
                             new_info.settings.cargo = False
+                    case "rabbit":
+                        if split[1] in ["grass", "snow", "water", "fire", "sand", "all"]:
+                            new_info.settings.rabbitsanity = split[1]
+
+                        if new_info.settings.rabbitsanity is not None and split[1] == "none":
+                            new_info.settings.rabbitsanity = None
                     case _:
                         print(f"WARNING: ignoring unknown setting {repr(elem)}!")
 
@@ -470,6 +476,10 @@ class LocationInfo:
 
         # ignore cargo location if we don't want it
         if self.settings.cargo and self.rando_settings.shuffle.cargo in ["remove", "vanilla"]:
+            return False
+
+        # ignore rabbit location if we don't want it
+        if self.settings.rabbitsanity is not None and "all" not in self.rando_settings.shuffle.rabbitsanity and self.settings.rabbitsanity not in self.rando_settings.shuffle.rabbitsanity:
             return False
 
         return True
@@ -838,6 +848,27 @@ class Randomizer:
         if self.settings.shuffle.cargo != "remove":
             item_defs.extend(self.cargo_dest_pool)
 
+        if self.settings.shuffle.is_rabbitsanity_enabled():
+            rabbit_pool: list[ItemDef] = []
+            is_all = "all" in self.settings.shuffle.rabbitsanity
+
+            if is_all or "grass" in self.settings.shuffle.rabbitsanity:
+                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitGrass, ItemKind.Default, ItemWeight.Priority)] * 10)
+
+            if is_all or "snow" in self.settings.shuffle.rabbitsanity:
+                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitSnow, ItemKind.Default, ItemWeight.Priority)] * 10)
+
+            if is_all or "water" in self.settings.shuffle.rabbitsanity:
+                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitWater, ItemKind.Default, ItemWeight.Priority)] * 10)
+
+            if is_all or "mountain" in self.settings.shuffle.rabbitsanity:
+                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitMountain, ItemKind.Default, ItemWeight.Priority)] * 10)
+
+            if is_all or "sand" in self.settings.shuffle.rabbitsanity:
+                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitSand, ItemKind.Default, ItemWeight.Priority)] * 10)
+
+            item_defs.extend(rabbit_pool)
+
         ## create the pools
         self.progression_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Progression]
         self.priority_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Priority]
@@ -930,6 +961,11 @@ class Randomizer:
             while len(loc.items) < size:
                 if len(item_pool) > 0:
                     picked_item = random.choice(item_pool)
+
+                    # don't process the picked item if the location is a rabbit and the picked item is the rabbit net
+                    if loc.infos.settings.rabbitsanity is not None and picked_item.id.value == ItemId.RabbitNet.value:
+                        continue
+
                     item_pool.remove(picked_item)
                 else:
                     # avoids having more than one major item per shop
@@ -1062,7 +1098,7 @@ class Randomizer:
             print(f"({(i / (len(self.nodes) - 1)) * 100:.2f}%) Processed", node.name)
 
     def create_log(self):
-        spoiler_log = SeedLog(Path("output/spoiler.yaml"), self.seed)
+        spoiler_log = SeedLog(Path(f"output/spoiler_{self.seed}.yaml"), self.seed)
 
         for node in self.nodes:
             spoiler_log.entries.append(SeedLogEntry(node))

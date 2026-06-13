@@ -4,6 +4,7 @@
 
 #include <MainGame/MiscAdvManager.hpp>
 #include <Player/PlayerGet.hpp>
+#include <Save/SaveManager.hpp>
 #include <System/OverlayManager.hpp>
 #include <Unknown/UICounterManager.hpp>
 #include <Unknown/UnkStruct_027e09b8.hpp>
@@ -90,6 +91,10 @@ void SetAdventureFlagsAtPickUp(u8 passenger) {
 
 // overriding func_ov110_02184a40 to handle our custom items
 extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
+    RandoSave* pRandoSave = gGZ.GetCurrentSave();
+    bool setAdvFlag = true;
+    int rabbitType = -1;
+
     switch (itemId) {
         case ExtraItemId_TearLight_1:
         case ExtraItemId_TearLight_2:
@@ -173,6 +178,20 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
         case ExtraItemId_CargoVessel:
         case ExtraItemId_CargoDarkOre:
             // nothing to do except setting the flag (which is done later)
+            break;
+        case ExtraItemId_RabbitGrass:
+        case ExtraItemId_RabbitSnow:
+        case ExtraItemId_RabbitWater:
+        case ExtraItemId_RabbitMountain:
+        case ExtraItemId_RabbitSand:
+            rabbitType = itemId - ExtraItemId_RabbitGrass;
+            SET_FLAG(gSaveManager.GetUnk000()->unk_B78.rabbitFlags, pRandoSave->rabbitIndices[rabbitType]);
+            pRandoSave->rabbitIndices[rabbitType]++;
+
+            // only set the item adventure flag on the last rabbit
+            if (pRandoSave->rabbitIndices[rabbitType] < 10) {
+                setAdvFlag = false;
+            }
             break;
         case ItemId_NormalKey:
             thisx->GiveSmallKeys(1);
@@ -269,7 +288,9 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
             break;
     }
 
-    SET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId]);
+    if (setAdvFlag) {
+        SET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId]);
+    }
 
     if (itemId <= ItemId_EngineerUniform) {
         AdventureFlag advFlag = ItemManager::GetAdvFlagFromItem(itemId);

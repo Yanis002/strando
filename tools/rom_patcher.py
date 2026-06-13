@@ -78,7 +78,7 @@ class Symbol:
                 break
 
         if line is None or not found:
-            raise ValueError("symbol not found!")
+            raise ValueError(f"symbol '{name}' not found!")
 
         return Symbol(name, int(line.split(" ")[0], base=16))
 

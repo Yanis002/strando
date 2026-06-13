@@ -48,8 +48,16 @@ settings:
         # true/false (shuffles the stamp book)
         stamp_book: true
 
-        # true/false (rabbits will be items when enabled, meaning catching rabbits will give an item)
-        rabbit_sanity: false
+        # shuffle rabbits, catching rabbits will be a location
+        # list of:
+        # - "grass"
+        # - "snow"
+        # - "water"
+        # - "fire"
+        # - "sand"
+        # - "all" - note that this will shuffle all 5 types of rabbits (for convenience)
+        # to disable the shuffle you need to use "none" or make the list empty
+        rabbit_sanity: ["all"]
 
         # true/false (will give all 10 rabbits of the realm when enabled)
         rabbit_pack: false

@@ -2196,3 +2196,353 @@ Papuzia Village Centre Island Rupee 4:
   room_index: 0
   scene: f_water3
   settings: [rupee_sanity]
+
+Rabbit Grass 01:
+  id_hash: RB1T_0x02B0_0x0680
+  is_actor: true
+  room_index: 0
+  scene: t_area0
+  settings: ["rabbit-all", "rabbit-grass"]
+
+Rabbit Grass 02:
+  id_hash: RB1T_0x02E0_0x0460
+  is_actor: true
+  room_index: 0
+  scene: t_area0
+  settings: ["rabbit-all", "rabbit-grass"]
+
+Rabbit Grass 03:
+  id_hash: RB1T_0x0370_0x06F0
+  is_actor: true
+  room_index: 0
+  scene: t_area0
+  settings: ["rabbit-all", "rabbit-grass"]
+
+Rabbit Grass 04:
+  id_hash: RB1T_0x0650_0x0200
+  is_actor: true
+  room_index: 0
+  scene: t_area0
+  settings: ["rabbit-all", "rabbit-grass"]
+
+Rabbit Grass 05:
+  id_hash: RB1T_0x0950_0x09E0
+  is_actor: true
+  room_index: 0
+  scene: t_area0
+  settings: ["rabbit-all", "rabbit-grass"]
+
+Rabbit Grass 06:
+  id_hash: RB1T_0x0A60_0x02C0
+  is_actor: true
+  room_index: 0
+  scene: t_area0
+  settings: ["rabbit-all", "rabbit-grass"]
+
+Rabbit Grass 07:
+  id_hash: RB1T_0x0AD0_0x0A50
+  is_actor: true
+  room_index: 0
+  scene: t_area0
+  settings: ["rabbit-all", "rabbit-grass"]
+
+Rabbit Grass 08:
+  id_hash: RB1T_0x0C20_0x0740
+  is_actor: true
+  room_index: 0
+  scene: t_area0
+  settings: ["rabbit-all", "rabbit-grass"]
+
+Rabbit Grass 09:
+  id_hash: RB1T_0x0D90_0x0630
+  is_actor: true
+  room_index: 0
+  scene: t_area0
+  settings: ["rabbit-all", "rabbit-grass"]
+
+Rabbit Grass 10:
+  id_hash: RB1T_0x0E90_0x0900
+  is_actor: true
+  room_index: 0
+  scene: t_area0
+  settings: ["rabbit-all", "rabbit-grass"]
+
+Rabbit Snow 01:
+  id_hash: RB1T_0x01E0_0x0430
+  is_actor: true
+  room_index: 0
+  scene: t_area1
+  settings: ["rabbit-all", "rabbit-snow"]
+
+Rabbit Snow 02:
+  id_hash: RB1T_0x02E0_0x0630
+  is_actor: true
+  room_index: 0
+  scene: t_area1
+  settings: ["rabbit-all", "rabbit-snow"]
+
+Rabbit Snow 03:
+  id_hash: RB1T_0x03C0_0x08C0
+  is_actor: true
+  room_index: 0
+  scene: t_area1
+  settings: ["rabbit-all", "rabbit-snow"]
+
+Rabbit Snow 04:
+  id_hash: RB1T_0x04D0_0x0240
+  is_actor: true
+  room_index: 0
+  scene: t_area1
+  settings: ["rabbit-all", "rabbit-snow"]
+
+Rabbit Snow 05:
+  id_hash: RB1T_0x0550_0x04B0
+  is_actor: true
+  room_index: 0
+  scene: t_area1
+  settings: ["rabbit-all", "rabbit-snow"]
+
+Rabbit Snow 06:
+  id_hash: RB1T_0x05B0_0x07E0
+  is_actor: true
+  room_index: 0
+  scene: t_area1
+  settings: ["rabbit-all", "rabbit-snow"]
+
+Rabbit Snow 07:
+  id_hash: RB1T_0x06E0_0x02C0
+  is_actor: true
+  room_index: 0
+  scene: t_area1
+  settings: ["rabbit-all", "rabbit-snow"]
+
+Rabbit Snow 08:
+  id_hash: RB1T_0x0890_0x0540
+  is_actor: true
+  room_index: 0
+  scene: t_area1
+  settings: ["rabbit-all", "rabbit-snow"]
+
+Rabbit Snow 09:
+  id_hash: RB1T_0x09A0_0x05C0
+  is_actor: true
+  room_index: 0
+  scene: t_area1
+  settings: ["rabbit-all", "rabbit-snow"]
+
+Rabbit Snow 10:
+  id_hash: RB1T_0x0A10_0x0450
+  is_actor: true
+  room_index: 0
+  scene: t_area1
+  settings: ["rabbit-all", "rabbit-snow"]
+
+Rabbit Water 01:
+  id_hash: RB1T_0x0150_0x06F0
+  is_actor: true
+  room_index: 0
+  scene: t_area2
+  settings: ["rabbit-all", "rabbit-water"]
+
+Rabbit Water 02:
+  id_hash: RB1T_0x03A0_0x06C0
+  is_actor: true
+  room_index: 0
+  scene: t_area2
+  settings: ["rabbit-all", "rabbit-water"]
+
+Rabbit Water 03:
+  id_hash: RB1T_0x06F0_0x0640
+  is_actor: true
+  room_index: 0
+  scene: t_area2
+  settings: ["rabbit-all", "rabbit-water"]
+
+Rabbit Water 04:
+  id_hash: RB1T_0x0860_0x0A00
+  is_actor: true
+  room_index: 0
+  scene: t_area2
+  settings: ["rabbit-all", "rabbit-water"]
+
+Rabbit Water 05:
+  id_hash: RB1T_0x0960_0x0510
+  is_actor: true
+  room_index: 0
+  scene: t_area2
+  settings: ["rabbit-all", "rabbit-water"]
+
+Rabbit Water 06:
+  id_hash: RB1T_0x09A0_0x07F0
+  is_actor: true
+  room_index: 0
+  scene: t_area2
+  settings: ["rabbit-all", "rabbit-water"]
+
+Rabbit Water 07:
+  id_hash: RB1T_0x0BA0_0x0AF0
+  is_actor: true
+  room_index: 0
+  scene: t_area2
+  settings: ["rabbit-all", "rabbit-water"]
+
+Rabbit Water 08:
+  id_hash: RB1T_0x0CC0_0x0980
+  is_actor: true
+  room_index: 0
+  scene: t_area2
+  settings: ["rabbit-all", "rabbit-water"]
+
+Rabbit Water 09:
+  id_hash: RB1T_0x0D20_0x0470
+  is_actor: true
+  room_index: 0
+  scene: t_area2
+  settings: ["rabbit-all", "rabbit-water"]
+
+Rabbit Water 10:
+  id_hash: RB1T_0x0D50_0x0740
+  is_actor: true
+  room_index: 0
+  scene: t_area2
+  settings: ["rabbit-all", "rabbit-water"]
+
+Rabbit Mountain 01:
+  id_hash: RB1T_0x0350_0x06E0
+  is_actor: true
+  room_index: 0
+  scene: t_area3
+  settings: ["rabbit-all", "rabbit-mountain"]
+
+Rabbit Mountain 02:
+  id_hash: RB1T_0x0350_0x0920
+  is_actor: true
+  room_index: 0
+  scene: t_area3
+  settings: ["rabbit-all", "rabbit-mountain"]
+
+Rabbit Mountain 03:
+  id_hash: RB1T_0x0410_0x01C0
+  is_actor: true
+  room_index: 0
+  scene: t_area3
+  settings: ["rabbit-all", "rabbit-mountain"]
+
+Rabbit Mountain 04:
+  id_hash: RB1T_0x0520_0x0330
+  is_actor: true
+  room_index: 0
+  scene: t_area3
+  settings: ["rabbit-all", "rabbit-mountain"]
+
+Rabbit Mountain 05:
+  id_hash: RB1T_0x0720_0x0360
+  is_actor: true
+  room_index: 0
+  scene: t_area3
+  settings: ["rabbit-all", "rabbit-mountain"]
+
+Rabbit Mountain 06:
+  id_hash: RB1T_0x08C0_0x0590
+  is_actor: true
+  room_index: 0
+  scene: t_area3
+  settings: ["rabbit-all", "rabbit-mountain"]
+
+Rabbit Mountain 07:
+  id_hash: RB1T_0x09D0_0x0340
+  is_actor: true
+  room_index: 0
+  scene: t_area3
+  settings: ["rabbit-all", "rabbit-mountain"]
+
+Rabbit Mountain 08:
+  id_hash: RB1T_0x0A10_0x0130
+  is_actor: true
+  room_index: 0
+  scene: t_area3
+  settings: ["rabbit-all", "rabbit-mountain"]
+
+Rabbit Mountain 09:
+  id_hash: RB1T_0x0BD0_0x0280
+  is_actor: true
+  room_index: 0
+  scene: t_area3
+  settings: ["rabbit-all", "rabbit-mountain"]
+
+Rabbit Mountain 10:
+  id_hash: RB1T_0x0C50_0x06E0
+  is_actor: true
+  room_index: 0
+  scene: t_area3
+  settings: ["rabbit-all", "rabbit-mountain"]
+
+Rabbit Sand 01:
+  id_hash: RB1T_0x0330_0x0340
+  is_actor: true
+  room_index: 0
+  scene: t_area2
+  settings: ["rabbit-all", "rabbit-sand"]
+
+Rabbit Sand 02:
+  id_hash: RB1T_0x0560_0x0130
+  is_actor: true
+  room_index: 0
+  scene: t_area2
+  settings: ["rabbit-all", "rabbit-sand"]
+
+Rabbit Sand 03:
+  id_hash: RB1T_0x0650_0x04B0
+  is_actor: true
+  room_index: 0
+  scene: t_area2
+  settings: ["rabbit-all", "rabbit-sand"]
+
+Rabbit Sand 04:
+  id_hash: RB1T_0x08D0_0x0280
+  is_actor: true
+  room_index: 0
+  scene: t_area2
+  settings: ["rabbit-all", "rabbit-sand"]
+
+Rabbit Sand 05:
+  id_hash: RB1T_0x0A50_0x0230
+  is_actor: true
+  room_index: 0
+  scene: t_area2
+  settings: ["rabbit-all", "rabbit-sand"]
+
+Rabbit Sand 06:
+  id_hash: RB1T_0x0DB0_0x01D0
+  is_actor: true
+  room_index: 0
+  scene: t_area2
+  settings: ["rabbit-all", "rabbit-sand"]
+
+Rabbit Sand 07:
+  id_hash: RB1T_0x04E0_0x0AC0
+  is_actor: true
+  room_index: 0
+  scene: t_area3
+  settings: ["rabbit-all", "rabbit-sand"]
+
+Rabbit Sand 08:
+  id_hash: RB1T_0x0B00_0x0AB0
+  is_actor: true
+  room_index: 0
+  scene: t_area3
+  settings: ["rabbit-all", "rabbit-sand"]
+
+Rabbit Sand 09:
+  id_hash: RB1T_0x0BE0_0x0A30
+  is_actor: true
+  room_index: 0
+  scene: t_area3
+  settings: ["rabbit-all", "rabbit-sand"]
+
+Rabbit Sand 10:
+  id_hash: RB1T_0x0D30_0x0950
+  is_actor: true
+  room_index: 0
+  scene: t_area3
+  settings: ["rabbit-all", "rabbit-sand"]

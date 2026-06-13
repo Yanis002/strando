@@ -203,7 +203,9 @@ ItemId GetProgressiveItemId(ItemId requestedItemId) {
     return itemId;
 }
 
-extern "C" bool CustomTryItemGive(UnkStruct_027e0d34_04* thisx, ItemId requestedItemId) {
+#define TRAIN_GET_ITEM_MSG MSG(ExtraItemId_Max * 2)
+
+extern "C" bool CustomTryItemGive(ItemId requestedItemId) {
     ItemId itemId;
 
     // handle progressive items
@@ -215,12 +217,12 @@ extern "C" bool CustomTryItemGive(UnkStruct_027e0d34_04* thisx, ItemId requested
 
         // show text
         Vec2s local(135, 100);
-        func_ov000_02068194(&data_ov000_020b504c, gBMGMap[itemId], 0, &local);
+        func_ov000_02068194(&data_ov000_020b504c, TRAIN_GET_ITEM_MSG, 0, &local);
         return true;
     }
 
-    if (thisx != NULL) {
-        return thisx->func_ov000_02093bc8(itemId);
+    if (data_027e0d34 != NULL && data_027e0d34->mUnk_04 != NULL) {
+        return data_027e0d34->mUnk_04->func_ov000_02093bc8(itemId);
     }
 
     return false;

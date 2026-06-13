@@ -1,3 +1,7 @@
 instructions:
   bl:
     _ZN18CustomCargoManager11CustomResetEv: ['0x020DF460']
+
+constants:
+  _ZN12CustomRabbit13CustomSetFlagEv: ['0x021381F8']
+  _ZN12CustomRabbit17CustomSpawnOrKillEi: ['0x02138144']

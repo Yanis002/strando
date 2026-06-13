@@ -93,6 +93,12 @@ enum ExtraItemId_ {
     ExtraItemId_CargoVessel,
     ExtraItemId_CargoDarkOre,
 
+    ExtraItemId_RabbitGrass,
+    ExtraItemId_RabbitSnow,
+    ExtraItemId_RabbitWater,
+    ExtraItemId_RabbitMountain,
+    ExtraItemId_RabbitSand,
+
     ExtraItemId_Max,
 };
 
@@ -189,8 +195,11 @@ struct RandoSave {
     u8 itemQueue[256]; // items to give, accounts for train rides
     u8 tearsAmounts[5]; // tos light tear section amounts
     u8 keyAmounts[10]; // dungeon small keys amounts
+    u32 rabbitFlags[2];
+    u8 rabbitIndices[5]; // 5 types of rabbits, used as a way to set the flags in the save manager
 
     RandoSave();
+    void Init();
     void ClearItemQueue();
 } __attribute__((aligned(4)));
 
@@ -200,7 +209,6 @@ class GZ {
     TouchControl* mpTouchControl;
     s16 mItemQueueIndex;
     u8 mSceneLoadState;
-    u8 pad[3];
     RandoSave mRandoSave[MAX_SAVE_SLOTS];
 
   public:
@@ -294,3 +302,4 @@ class GZ {
 
 extern GZ gGZ;
 extern void SetAdventureFlagsAtPickUp(u8 passenger);
+extern "C" bool CustomTryItemGive(ItemId requestedItemId);

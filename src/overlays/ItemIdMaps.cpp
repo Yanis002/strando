@@ -197,6 +197,12 @@ u32 gGetItemMap[] = {
     GIModel_dummy, // ExtraItemId_CargoCuccos
     GIModel_dummy, // ExtraItemId_CargoVessel
     GIModel_dummy, // ExtraItemId_CargoDarkOre
+
+    GIModel_rbnt, // ExtraItemId_RabbitGrass
+    GIModel_rbnt, // ExtraItemId_RabbitSnow
+    GIModel_rbnt, // ExtraItemId_RabbitWater
+    GIModel_rbnt, // ExtraItemId_RabbitMountain
+    GIModel_rbnt, // ExtraItemId_RabbitSand
 };
 
 // BMG IDs
@@ -384,6 +390,11 @@ u32 gBMGMap[] = {
     MSG(ExtraItemId_CargoCuccos), // ExtraItemId_CargoCuccos
     MSG(ExtraItemId_CargoVessel), // ExtraItemId_CargoVessel
     MSG(ExtraItemId_CargoDarkOre), // ExtraItemId_CargoDarkOre
+    MSG(ExtraItemId_RabbitGrass), // ExtraItemId_RabbitGrass
+    MSG(ExtraItemId_RabbitSnow), // ExtraItemId_RabbitSnow
+    MSG(ExtraItemId_RabbitWater), // ExtraItemId_RabbitWater
+    MSG(ExtraItemId_RabbitMountain), // ExtraItemId_RabbitMountain
+    MSG(ExtraItemId_RabbitSand), // ExtraItemId_RabbitSand
 };
 
 u16 gAdvFlagMap[] = {
@@ -570,4 +581,9 @@ u16 gAdvFlagMap[] = {
     RandoAdventureFlag_CargoCuccos,
     RandoAdventureFlag_CargoVessel,
     RandoAdventureFlag_CargoDarkOre,
+    RandoAdventureFlag_RabbitGrass,
+    RandoAdventureFlag_RabbitSnow,
+    RandoAdventureFlag_RabbitWater,
+    RandoAdventureFlag_RabbitMountain,
+    RandoAdventureFlag_RabbitSand,
 };

@@ -13,11 +13,22 @@ if __name__ == "__main__":
     INFO = b"\xCE\x00\x00\x01"
     ITEM_MAX = max(list(item_id_to_name.keys())) + 1
 
+    RABBIT_IDS = [
+        ItemId.ExtraItemId_RabbitGrass.value,
+        ItemId.ExtraItemId_RabbitSnow.value,
+        ItemId.ExtraItemId_RabbitWater.value,
+        ItemId.ExtraItemId_RabbitMountain.value,
+        ItemId.ExtraItemId_RabbitSand.value,
+    ]
+
     for i in range(0, ITEM_MAX):
         prefix = "You got the "
 
         if i == ItemId.Nothing.value:
             prefix = "You got "
+
+        if i in RABBIT_IDS:
+            prefix = "You got a "
 
         fake_str = prefix + item_id_to_name[i] + "!"
 
@@ -33,6 +44,10 @@ if __name__ == "__main__":
         msg_parts = [RED, item_id_to_name[i], WHITE]
         msg = bmg.Message(INFO, msg_parts)
         msg_list.append(msg)
+
+    print("Train item message at index", len(msg_list))
+    msg = bmg.Message(INFO, ["You found a new item!\nGo to a station to find out!"])
+    msg_list.append(msg)
 
     bmg_file = bmg.BMG.fromMessages(msg_list, id=0x1F)
     bmg_file.saveToFile(Path("extract/eur/files/English/Message/rando.bmg").resolve())

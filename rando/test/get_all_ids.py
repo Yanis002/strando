@@ -252,7 +252,7 @@ class SpoilerLog:
         for entry in entries:
             yaml_file.update(entry)
 
-        with open(Path("rando/test/actors.yaml"), "w", encoding="utf-8") as file:
+        with open(Path("rando/temp/actors.yaml"), "w", encoding="utf-8") as file:
             yaml.dump(yaml_file, file, sort_keys=False, Dumper=MyDumper)
 
 
@@ -516,7 +516,7 @@ def main():
                     entry = ActorEntry.from_bytes(zmb_data[offset:offset + ActorEntry.entry_size])
 
                     # if entry.id not in exclude:
-                    if entry.id == "SKBN":
+                    if entry.id == "RB1T":
                         spoiler_entry.actors.append(entry)
                     offset += ActorEntry.entry_size
 

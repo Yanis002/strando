@@ -3,6 +3,11 @@
 #include <Save/AdventureFlags.hpp>
 
 // unused flags we can use
+#define RandoAdventureFlag_RabbitGrass AdventureFlag_Unk_345
+#define RandoAdventureFlag_RabbitSnow AdventureFlag_Unk_346
+#define RandoAdventureFlag_RabbitWater AdventureFlag_Unk_347
+#define RandoAdventureFlag_RabbitMountain AdventureFlag_Unk_348
+#define RandoAdventureFlag_RabbitSand AdventureFlag_Unk_349
 #define RandoAdventureFlag_CargoMegaIce AdventureFlag_Unk_34A
 #define RandoAdventureFlag_CargoWood AdventureFlag_Unk_34B
 #define RandoAdventureFlag_CargoIron AdventureFlag_Unk_34C

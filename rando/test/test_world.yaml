@@ -990,6 +990,76 @@ node_f_water_4:
   room_index: 4
   scene: f_water
 
+node_t_area0_0:
+  locations:
+    Rabbit Grass 01: 'True'
+    Rabbit Grass 02: 'True'
+    Rabbit Grass 03: 'True'
+    Rabbit Grass 04: 'True'
+    Rabbit Grass 05: 'True'
+    Rabbit Grass 06: 'True'
+    Rabbit Grass 07: 'True'
+    Rabbit Grass 08: 'True'
+    Rabbit Grass 09: 'True'
+    Rabbit Grass 10: 'True'
+  room_index: 0
+  scene: t_area0
+
+node_t_area1_0:
+  locations:
+    Rabbit Snow 01: 'True'
+    Rabbit Snow 02: 'True'
+    Rabbit Snow 03: 'True'
+    Rabbit Snow 04: 'True'
+    Rabbit Snow 05: 'True'
+    Rabbit Snow 06: 'True'
+    Rabbit Snow 07: 'True'
+    Rabbit Snow 08: 'True'
+    Rabbit Snow 09: 'True'
+    Rabbit Snow 10: 'True'
+  room_index: 0
+  scene: t_area1
+
+node_t_area2_0:
+  locations:
+    Rabbit Sand 01: 'True'
+    Rabbit Sand 02: 'True'
+    Rabbit Sand 03: 'True'
+    Rabbit Sand 04: 'True'
+    Rabbit Sand 05: 'True'
+    Rabbit Sand 06: 'True'
+    Rabbit Water 01: 'True'
+    Rabbit Water 02: 'True'
+    Rabbit Water 03: 'True'
+    Rabbit Water 04: 'True'
+    Rabbit Water 05: 'True'
+    Rabbit Water 06: 'True'
+    Rabbit Water 07: 'True'
+    Rabbit Water 08: 'True'
+    Rabbit Water 09: 'True'
+    Rabbit Water 10: 'True'
+  room_index: 0
+  scene: t_area2
+
+node_t_area3_0:
+  locations:
+    Rabbit Mountain 01: 'True'
+    Rabbit Mountain 02: 'True'
+    Rabbit Mountain 03: 'True'
+    Rabbit Mountain 04: 'True'
+    Rabbit Mountain 05: 'True'
+    Rabbit Mountain 06: 'True'
+    Rabbit Mountain 07: 'True'
+    Rabbit Mountain 08: 'True'
+    Rabbit Mountain 09: 'True'
+    Rabbit Mountain 10: 'True'
+    Rabbit Sand 07: 'True'
+    Rabbit Sand 08: 'True'
+    Rabbit Sand 09: 'True'
+    Rabbit Sand 10: 'True'
+  room_index: 0
+  scene: t_area3
+
 node_tekiya09_1:
   locations:
     Castle Town Take 'em All On Level 3 Capbone Chest: 'True'
