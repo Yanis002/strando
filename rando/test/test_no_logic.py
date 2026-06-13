@@ -579,17 +579,16 @@ class SeedLogEntry:
         self.node = node
 
     def get_params(self, items: list[ItemDef], is_shop: bool, is_rabbitpack: bool):
-        if is_shop:
-            return [
-                {shop_item_positions[0]: item_id_to_name[items[0].id.value]},
-                {shop_item_positions[1]: item_id_to_name[items[1].id.value]},
-                {shop_item_positions[2]: item_id_to_name[items[2].id.value]},
-                {shop_item_positions[3]: item_id_to_name[items[3].id.value]},
-                {shop_item_positions[4]: item_id_to_name[items[4].id.value]},
-            ]
+        def get_suffix(item: ItemDef):
+            return " Pack" if is_rabbitpack and item.kind == ItemKind.Rabbit else ""
 
-        suffix = " Pack" if is_rabbitpack else ""
-        return item_id_to_name[items[0].id.value] + suffix
+        if is_shop:
+            ret = []
+            for i, item in enumerate(items):
+                ret.append({shop_item_positions[i]: item_id_to_name[item.id.value] + get_suffix(item)})
+            return ret
+
+        return item_id_to_name[items[0].id.value] + get_suffix(items[0])
 
     def export(self, settings: Settings):
         data = {}
@@ -602,48 +601,23 @@ class SeedLogEntry:
 
 
 class SeedLog:
-    def __init__(self, path: Path, seed: str):
+    def __init__(self, path: Path, seed: str, yaml_file: dict | None = None):
         self.path = path
         self.seed = seed
+        self.yaml_file = yaml_file
         self.entries: list[SeedLogEntry] = []
         self.path.parent.mkdir(exist_ok=True)
 
     @staticmethod
-    def from_yaml(yaml_path: Path, nodes: list[LocationNode], item_pool: list[ItemDef]):
+    def from_yaml(yaml_path: Path):
         with yaml_path.open("r") as file:
             yaml_file: dict[str, dict] = yaml.safe_load(file)
 
-        settings = yaml_file["settings"]
+        settings = Settings.from_yaml(yaml_file["settings"])
         yaml_file.pop("settings")
 
-        new_log = SeedLog(yaml_path.with_stem(f"spoiler_{settings['seed']}_parsed"), settings["seed"])
-
-        def find_item_def(item_id: int):
-            for item_def in item_pool:
-                if item_def.id.value == item_id:
-                    return item_def
-
-            return None
-
-        for node in nodes:
-            for location in node.locations:
-                elem = yaml_file[node.name]["locations"][location.name]
-
-                if isinstance(elem, str):
-                    item_def = find_item_def(item_name_to_id[elem])
-                    assert item_def is not None, f"item_def is none ({elem})"
-                    location.items.append(item_def)
-                elif isinstance(elem, list):
-                    for i in range(0, 5):
-                        item_def = find_item_def(item_name_to_id[elem[i][shop_item_positions[i]]])
-                        assert item_def is not None, f"item_def is none ({elem})"
-                        location.items.append(item_def)
-                else:
-                    raise ValueError(f"unexpected type: {type(elem)}")
-
-            new_log.entries.append(SeedLogEntry(node))
-
-        return new_log
+        new_log = SeedLog(yaml_path.with_stem(f"spoiler_{settings.seed}_parsed"), settings.seed, yaml_file)
+        return new_log, settings
 
     def export(self, settings: Settings):
         self.entries.sort(key=lambda entry: entry.node.scene_name)
@@ -660,19 +634,30 @@ class SeedLog:
 
 class Randomizer:
     def __init__(self, version: str, settings_path: Path, world_path: Path, loc_tbl_path: Path, seed_log_path: Path | None = None):
-        self.settings = Settings.from_yaml(settings_path)
-        self.nodes = LocationNode.from_yaml(world_path, loc_tbl_path, self.settings)
         self.version = version
         self.extracted_dir = Path("extract").resolve() / self.version
         assert self.extracted_dir.exists()
-        self.create_item_pool()
 
         if seed_log_path is not None:
-            self.seed_log = SeedLog.from_yaml(seed_log_path, self.nodes, self.all_item_pool)
-            self.settings.seed = self.seed_log.seed
+            self.seed_log, self.settings = SeedLog.from_yaml(seed_log_path)
         else:
             self.seed_log = None
+            self.settings = Settings.from_yaml(settings_path)
             self.create_seed()
+
+        self.nodes = LocationNode.from_yaml(world_path, loc_tbl_path, self.settings)
+        self.create_item_pool()
+
+        # list of item ids that will be exported in the settings binary
+        # "settings binary" refers to the data that is sent to the game from this generator
+        self.passenger_pick_ids: list[ItemId] = []
+        self.passenger_dest_ids: list[ItemId] = []
+        self.cargo_pick_ids: list[ItemId] = []
+
+        # will assign items from the seed log if it's set
+        # we can't do it earlier since we need the nodes and the item pool
+        if self.seed_log is not None and self.seed_log.yaml_file is not None:
+            self.assign_items_from_log()
 
         self.seed_num = 0
         self.set_seed_num()
@@ -851,19 +836,19 @@ class Randomizer:
             factor = 1 if self.settings.shuffle.rabbitpack else 10
 
             if is_all or "grass" in self.settings.shuffle.rabbitsanity:
-                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitGrass, ItemKind.Default, ItemWeight.Priority)] * factor)
+                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitGrass, ItemKind.Rabbit, ItemWeight.Priority)] * factor)
 
             if is_all or "snow" in self.settings.shuffle.rabbitsanity:
-                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitSnow, ItemKind.Default, ItemWeight.Priority)] * factor)
+                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitSnow, ItemKind.Rabbit, ItemWeight.Priority)] * factor)
 
             if is_all or "water" in self.settings.shuffle.rabbitsanity:
-                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitWater, ItemKind.Default, ItemWeight.Priority)] * factor)
+                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitWater, ItemKind.Rabbit, ItemWeight.Priority)] * factor)
 
             if is_all or "mountain" in self.settings.shuffle.rabbitsanity:
-                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitMountain, ItemKind.Default, ItemWeight.Priority)] * factor)
+                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitMountain, ItemKind.Rabbit, ItemWeight.Priority)] * factor)
 
             if is_all or "sand" in self.settings.shuffle.rabbitsanity:
-                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitSand, ItemKind.Default, ItemWeight.Priority)] * factor)
+                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitSand, ItemKind.Rabbit, ItemWeight.Priority)] * factor)
 
             item_defs.extend(rabbit_pool)
 
@@ -916,7 +901,80 @@ class Randomizer:
 
         return new_zmb_data
 
-    def assign_items(self):
+    def init_id_lists(self):
+        """Initializes the item id lists that will be exported in the settings binary"""
+
+        if self.settings.shuffle.passengers != "anywhere":
+            # if not anywhere keep it vanilla
+            self.passenger_dest_ids.clear()
+
+            for item in self.passenger_dest_pool:
+                # 0xFF for ItemId_None
+                self.passenger_dest_ids.append(item.id if item is not None else 0xFF)
+
+            self.passenger_pick_ids = [item.id for item in self.passenger_pick_pool]
+
+        if self.settings.shuffle.cargo != "anywhere":
+            self.cargo_pick_ids = [item.id for item in self.cargo_pick_pool]
+
+    def add_elem_to_id_lists(self, location: LocationDef, item: ItemDef):
+        """Tries to add the item's id to the lists that will be exported in the settings binary"""
+
+        if self.settings.shuffle.passengers == "anywhere":
+            if location.infos.is_passenger_pick_up:
+                self.passenger_pick_ids.append(item.id)
+            elif location.infos.is_passenger_at_dest:
+                self.passenger_dest_ids.append(item.id)
+
+        if self.settings.shuffle.cargo == "anywhere":
+            if location.infos.is_cargo_pick_up:
+                self.cargo_pick_ids.append(item.id)
+
+    def copy_id_lists_to_settings(self):
+        """Copies the item id lists to the settings"""
+
+        self.settings.passenger_pick_ids = self.passenger_pick_ids[:]
+        self.settings.passenger_dest_ids = self.passenger_dest_ids[:]
+        self.settings.cargo_pick_ids = self.cargo_pick_ids[:]
+
+    def assign_items_from_log(self):
+        def find_item_def(item_id: int):
+            for item_def in self.all_item_pool:
+                if item_def.id.value == item_id:
+                    return item_def
+
+            return None
+
+        def strip_name(name: str):
+            if name.endswith(" Rabbit Pack"):
+                return name.removesuffix(" Pack")
+            return name
+
+        self.init_id_lists()
+
+        for node in self.nodes:
+            for location in node.locations:
+                elem: list | str = self.seed_log.yaml_file[node.name]["locations"][location.name]
+
+                if isinstance(elem, str):
+                    item_def = find_item_def(item_name_to_id[strip_name(elem)])
+                    assert item_def is not None, f"item_def is none ({elem})"
+                    location.items.append(item_def)
+                    self.add_elem_to_id_lists(location, item_def)
+                elif isinstance(elem, list):
+                    for i in range(0, 5):
+                        item_def = find_item_def(item_name_to_id[strip_name(elem[i][shop_item_positions[i]])])
+                        assert item_def is not None, f"item_def is none ({elem})"
+                        location.items.append(item_def)
+                        self.add_elem_to_id_lists(location, item_def)
+                else:
+                    raise ValueError(f"unexpected type: {type(elem)}")
+
+            self.seed_log.entries.append(SeedLogEntry(node))
+
+        self.copy_id_lists_to_settings()
+
+    def assign_items_randomly(self):
         all_locations: list[LocationDef] = []
 
         # shuffle nodes, fetch locations and shuffle that list
@@ -941,17 +999,7 @@ class Randomizer:
         item_pool = prog_pool + prio_pool + misc_pool
         random.shuffle(item_pool)
 
-        if self.settings.shuffle.passengers != "anywhere":
-            # if not anywhere keep it vanilla
-            self.settings.passenger_pick_ids = [item.id for item in self.passenger_pick_pool]
-
-            for item in self.passenger_dest_pool:
-                # 0xFF for ItemId_None
-                self.settings.passenger_dest_ids.append(item.id if item is not None else 0xFF)
-
-        if self.settings.shuffle.cargo != "anywhere":
-            # if not anywhere keep it vanilla
-            self.settings.cargo_pick_ids = [item.id for item in self.cargo_pick_pool]
+        self.init_id_lists()
 
         for loc in all_locations:
             size = self.settings.shuffle.shopsanity if "Shop Keeper" in loc.name else 1
@@ -970,16 +1018,9 @@ class Randomizer:
                     picked_item = random.choice(misc_pool)
 
                 loc.items.append(picked_item)
+                self.add_elem_to_id_lists(loc, picked_item)
 
-                if self.settings.shuffle.passengers == "anywhere":
-                    if loc.infos.is_passenger_pick_up:
-                        self.settings.passenger_pick_ids.append(picked_item.id)
-                    elif loc.infos.is_passenger_at_dest:
-                        self.settings.passenger_dest_ids.append(picked_item.id)
-
-                if self.settings.shuffle.cargo == "anywhere":
-                    if loc.infos.is_cargo_pick_up:
-                        self.settings.cargo_pick_ids.append(picked_item.id)
+        self.copy_id_lists_to_settings()
 
         assert len(item_pool) == 0
         self.nodes.sort(key=lambda entry: entry.name)
@@ -1011,11 +1052,11 @@ class Randomizer:
                 assert node.room_index == location.infos.room_index
 
                 if location.infos.is_passenger_pick_up or location.infos.is_passenger_at_dest:
-                    # passengers are exported into the shared settings binary, set by `assign_items`
+                    # passengers are exported into the shared settings binary, set by `assign_items_randomly`
                     continue
 
                 if location.infos.is_cargo_pick_up:
-                    # cargos are exported into the shared settings binary, set by `assign_items`
+                    # cargos are exported into the shared settings binary, set by `assign_items_randomly`
                     # cargo destination are set from the bmg though
                     continue
 
@@ -1115,7 +1156,7 @@ class Randomizer:
         # 2. assign the items
         if self.seed_log is None:
             prev_time = time.time()
-            self.assign_items()
+            self.assign_items_randomly()
             print(f"Item assigned successfully in {time.time() - prev_time:.3f}s!")
 
         self.patch_rom()

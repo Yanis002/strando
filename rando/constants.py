@@ -480,6 +480,7 @@ class ItemKind(IntEnum):
     PassengerAtDest = 4
     CargoPickUp = 5
     CargoAtDest = 6
+    Rabbit = 7
 
 
 class ItemWeight(IntEnum):

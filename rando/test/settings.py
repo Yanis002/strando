@@ -389,8 +389,8 @@ class GoalSettings:
 
 
 class Settings:
-    def __init__(self, shuffle: ShuffleSettings, shuffle_dgn: ShuffleDungeonSettings, goal: GoalSettings):
-        self.seed = "Unknown"
+    def __init__(self, seed: str, shuffle: ShuffleSettings, shuffle_dgn: ShuffleDungeonSettings, goal: GoalSettings):
+        self.seed = seed
         self.shuffle = shuffle
         self.shuffle_dgn = shuffle_dgn
         self.goal = goal
@@ -399,14 +399,20 @@ class Settings:
         self.cargo_pick_ids: list[int] = []
 
     @staticmethod
-    def from_yaml(yaml_path: Path):
-        with yaml_path.open("r") as file:
-            yaml_file = yaml.safe_load(file)
+    def from_yaml(yaml_path_or_data: Path | dict):
+        if isinstance(yaml_path_or_data, Path):
+            with yaml_path_or_data.open("r") as file:
+                yaml_file = yaml.safe_load(file)["settings"]
+        elif isinstance(yaml_path_or_data, dict):
+            yaml_file = yaml_path_or_data
+        else:
+            raise NotImplementedError("ERROR: unrecognized type.")
 
         return Settings(
-            ShuffleSettings.from_yaml(yaml_file["settings"]["shuffle"]),
-            ShuffleDungeonSettings.from_yaml(yaml_file["settings"]["shuffle_dungeon"]),
-            GoalSettings.from_yaml(yaml_file["settings"]["goal"]),
+            yaml_file["seed"] if "seed" in yaml_file else "Unknown",
+            ShuffleSettings.from_yaml(yaml_file["shuffle"]),
+            ShuffleDungeonSettings.from_yaml(yaml_file["shuffle_dungeon"]),
+            GoalSettings.from_yaml(yaml_file["goal"]),
         )
 
     def to_bin(self):
