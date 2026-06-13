@@ -9,7 +9,7 @@ import time
 import yaml
 
 from dataclasses import dataclass
-from ndspy import lz10 as LZSS, narc
+from ndspy import lz10 as LZSS, narc, bmg
 from pathlib import Path
 from rando.constants import ItemId, ItemKind, ItemWeight, item_id_to_name, item_name_to_id, shop_actor_ids, max_keys_map, shop_item_positions
 from rando.test.settings import Settings, LocationSettings
@@ -543,7 +543,7 @@ class LocationNode:
         return new_node
 
     @staticmethod
-    def from_yaml(yaml_path: Path, yaml_infos: Path, settings: "Settings"):
+    def from_yaml(yaml_path: Path, yaml_infos: Path, settings: Settings):
         info_entries = LocationInfo.from_yaml(yaml_infos, settings)
 
         nodes: list["LocationNode"] = []
@@ -578,7 +578,7 @@ class SeedLogEntry:
     def __init__(self, node: LocationNode):
         self.node = node
 
-    def get_params(self, items: list[ItemDef], is_shop: bool):
+    def get_params(self, items: list[ItemDef], is_shop: bool, is_rabbitpack: bool):
         if is_shop:
             return [
                 {shop_item_positions[0]: item_id_to_name[items[0].id.value]},
@@ -588,14 +588,15 @@ class SeedLogEntry:
                 {shop_item_positions[4]: item_id_to_name[items[4].id.value]},
             ]
 
-        return item_id_to_name[items[0].id.value]
+        suffix = " Pack" if is_rabbitpack else ""
+        return item_id_to_name[items[0].id.value] + suffix
 
-    def export(self):
+    def export(self, settings: Settings):
         data = {}
 
         for location in self.node.locations:
             is_shop = len(location.items) > 1 and "Shop Keeper" in location.name
-            data[location.name] = self.get_params(location.items, is_shop)
+            data[location.name] = self.get_params(location.items, is_shop, settings.shuffle.rabbitpack)
 
         return {self.node.name: {"locations": data}}
 
@@ -644,15 +645,11 @@ class SeedLog:
 
         return new_log
 
-    def export(self):
+    def export(self, settings: Settings):
         self.entries.sort(key=lambda entry: entry.node.scene_name)
-        entries = [entry.export() for entry in self.entries]
+        entries = [entry.export(settings) for entry in self.entries]
 
-        yaml_file = {
-            "settings": {
-                "seed": self.seed,
-            },
-        }
+        yaml_file = settings.to_yaml()
 
         for entry in entries:
             yaml_file.update(entry)
@@ -672,7 +669,7 @@ class Randomizer:
 
         if seed_log_path is not None:
             self.seed_log = SeedLog.from_yaml(seed_log_path, self.nodes, self.all_item_pool)
-            self.seed = self.seed_log.seed
+            self.settings.seed = self.seed_log.seed
         else:
             self.seed_log = None
             self.create_seed()
@@ -851,21 +848,22 @@ class Randomizer:
         if self.settings.shuffle.is_rabbitsanity_enabled():
             rabbit_pool: list[ItemDef] = []
             is_all = "all" in self.settings.shuffle.rabbitsanity
+            factor = 1 if self.settings.shuffle.rabbitpack else 10
 
             if is_all or "grass" in self.settings.shuffle.rabbitsanity:
-                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitGrass, ItemKind.Default, ItemWeight.Priority)] * 10)
+                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitGrass, ItemKind.Default, ItemWeight.Priority)] * factor)
 
             if is_all or "snow" in self.settings.shuffle.rabbitsanity:
-                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitSnow, ItemKind.Default, ItemWeight.Priority)] * 10)
+                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitSnow, ItemKind.Default, ItemWeight.Priority)] * factor)
 
             if is_all or "water" in self.settings.shuffle.rabbitsanity:
-                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitWater, ItemKind.Default, ItemWeight.Priority)] * 10)
+                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitWater, ItemKind.Default, ItemWeight.Priority)] * factor)
 
             if is_all or "mountain" in self.settings.shuffle.rabbitsanity:
-                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitMountain, ItemKind.Default, ItemWeight.Priority)] * 10)
+                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitMountain, ItemKind.Default, ItemWeight.Priority)] * factor)
 
             if is_all or "sand" in self.settings.shuffle.rabbitsanity:
-                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitSand, ItemKind.Default, ItemWeight.Priority)] * 10)
+                rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitSand, ItemKind.Default, ItemWeight.Priority)] * factor)
 
             item_defs.extend(rabbit_pool)
 
@@ -880,10 +878,10 @@ class Randomizer:
         return re.sub(r"[^a-zA-Z0-9_-]", "", s)
 
     def create_seed(self):
-        self.seed = self.sanitize("".join(random.choices(string.ascii_uppercase + string.digits, k=10)))
+        self.settings.seed = self.sanitize("".join(random.choices(string.ascii_uppercase + string.digits, k=10)))
 
     def set_seed_num(self):
-        final_seed = self.seed
+        final_seed = self.settings.seed
         self.seed_num = int(hashlib.sha256(final_seed.encode("utf-8")).hexdigest(), base=16)
 
     def get_zmb(self, lzss_path: Path):
@@ -1097,13 +1095,18 @@ class Randomizer:
 
             print(f"({(i / (len(self.nodes) - 1)) * 100:.2f}%) Processed", node.name)
 
+        # create/update rando.bmg
+        for lang in languages:
+            self.generate_bmg(lang)
+        print("Created rando.bmg!")
+
     def create_log(self):
-        spoiler_log = SeedLog(Path(f"output/spoiler_{self.seed}.yaml"), self.seed)
+        spoiler_log = SeedLog(Path(f"output/spoiler_{self.settings.seed}.yaml"), self.settings.seed)
 
         for node in self.nodes:
             spoiler_log.entries.append(SeedLogEntry(node))
 
-        spoiler_log.export()
+        spoiler_log.export(self.settings)
 
     def generate_seed(self):
         initial_time = time.time()
@@ -1122,7 +1125,75 @@ class Randomizer:
             # 4. generate spoiler log
             self.create_log()
 
-        print(f"Seed {self.seed} was generated successfully in {time.time() - initial_time:.3f}s!")
+        print(f"Seed {self.settings.seed} was generated successfully in {time.time() - initial_time:.3f}s!")
+
+    def generate_bmg(self, lang: str):
+        use_lang = lang
+
+        # lang: [default, nothing, rabbits]
+        prefix_map = {
+            "English": ["You got the ", "You got ", "You got a "],
+            "French": [], # TODO
+            "German": [], # TODO
+            "Italian": [], # TODO
+            "Spanish": [], # TODO
+        }
+
+        if len(prefix_map[use_lang]) == 0:
+            use_lang = "English"
+
+        msg_list = []
+
+        RED = bmg.Message.Escape(255, b"\x00\x00\x01\x00")
+        WHITE = bmg.Message.Escape(255, b"\x00\x00\x00\x00")
+        INFO = b"\xCE\x00\x00\x01"
+        ITEM_MAX = max(list(item_id_to_name.keys())) + 1
+
+        RABBIT_IDS = [
+            ItemId.ExtraItemId_RabbitGrass.value,
+            ItemId.ExtraItemId_RabbitSnow.value,
+            ItemId.ExtraItemId_RabbitWater.value,
+            ItemId.ExtraItemId_RabbitMountain.value,
+            ItemId.ExtraItemId_RabbitSand.value,
+        ]
+
+        for i in range(0, ITEM_MAX):
+            prefix_index = 1 if i == ItemId.Nothing.value else 2 if i in RABBIT_IDS else 0
+            prefix = prefix_map[use_lang][prefix_index]
+
+            suffix = ""
+            if i in RABBIT_IDS and self.settings.shuffle.rabbitpack:
+                suffix = " Pack"
+
+            # only there to determine the potential length of the string if it's on one line
+            fake_str = prefix + item_id_to_name[i] + suffix + "!"
+
+            if len(fake_str) > 26:
+                msg_parts = [prefix + "\n", RED, item_id_to_name[i], suffix, WHITE, "!"]
+            else:
+                msg_parts = [prefix, RED, item_id_to_name[i], suffix, WHITE, "!"]
+
+            msg = bmg.Message(INFO, msg_parts)
+            msg_list.append(msg)
+
+        for i in range(0, ITEM_MAX):
+            msg_parts = [RED, item_id_to_name[i], WHITE]
+            msg = bmg.Message(INFO, msg_parts)
+            msg_list.append(msg)
+
+        # print("Train item message at index", len(msg_list), "for", lang)
+        text_map = {
+            "English": "You found a new item!\nGo to a station to find out!",
+            "French": "Vous avez trouvé un objet!\nDécouvrez-le à une station!",
+            "German": "", # TODO
+            "Italian": "", # TODO
+            "Spanish": "", # TODO
+        }
+        msg = bmg.Message(INFO, [text_map[lang] if len(text_map[lang]) > 0 else text_map["English"]])
+        msg_list.append(msg)
+
+        bmg_file = bmg.BMG.fromMessages(msg_list, id=0x1F)
+        bmg_file.saveToFile(self.extracted_dir / "files" / lang / "Message" / "rando.bmg")
 
     def export_settings(self):
         settings_path = Path("src/settings/settings.bin")

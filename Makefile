@@ -239,8 +239,6 @@ endif
 	$(STGZ_EMULATOR) $(OUT_ROM)
 
 setup: extract
-	$(V)$(PYTHON) -m rando.tools.generate_bmg
-	$(call print_no_args,Created rando.bmg!)
 
 test_no_logic: build
 	$(call print_no_args,Randomizing items...)

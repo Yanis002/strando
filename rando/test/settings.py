@@ -51,6 +51,15 @@ class MinigamesSettings:
             if difficulty not in difficulties:
                 raise ValueError("minigame take_em_all_on is not valid")
 
+    def to_yaml(self):
+        return {
+            "sword_training": self.sword_training,
+            "whip_race": self.whip_race,
+            "goron_range": self.goron_range,
+            "pirate_hideout": self.pirate_hideout,
+            "take_em_all_on": self.take_em_all_on,
+        }
+
 
 class ShuffleSettings:
     def __init__(self):
@@ -153,16 +162,14 @@ class ShuffleSettings:
 
         if "minigames" in data:
             if "sword_training" in data["minigames"]:
-                minigame: str = data["minigames"]["sword_training"]
-                settings.minigames.sword_training = "on" in minigame
+                settings.minigames.sword_training = data["minigames"]["sword_training"]
 
             if "whip_race" in data["minigames"]:
                 minigame: list[str] = data["minigames"]["whip_race"]
                 settings.minigames.whip_race = minigame
 
             if "goron_range" in data["minigames"]:
-                minigame: str = data["minigames"]["goron_range"]
-                settings.minigames.goron_range = "on" in minigame
+                settings.minigames.goron_range = data["minigames"]["goron_range"]
 
             if "pirate_hideout" in data["minigames"]:
                 minigame: list[str] = data["minigames"]["pirate_hideout"]
@@ -217,6 +224,23 @@ class ShuffleSettings:
             rabbitsanity,
             self.rabbitpack,
         )
+
+    def to_yaml(self):
+        return {
+            "shop_sanity": self.shopsanity,
+            "rupee_sanity": self.rupeesanity,
+            "passengers": self.passengers,
+            "cargo": self.cargo,
+            "glyphs_and_sources": self.glyphs_and_sources,
+            "forest_glyph": self.forest_glyph,
+            "duets": self.duets,
+            "minigames": self.minigames.to_yaml(),
+            "stamps": self.stamps,
+            "stamps_rewards": self.stamps_rewards,
+            "stamp_book": self.stamp_book,
+            "rabbit_sanity": self.rabbitsanity,
+            "rabbit_pack": self.rabbitpack,
+        }
 
 
 class ShuffleDungeonSettings:
@@ -308,6 +332,18 @@ class ShuffleDungeonSettings:
             self.tos_section_reward,
         )
 
+    def to_yaml(self):
+        return {
+            "key_sanity": self.keysanity,
+            "bosskey_sanity": self.bksanity,
+            "tear_sanity": self.tear_sanity,
+            "key_ring": self.keyring,
+            "bosskey_ring": self.bkeyring,
+            "tear_ring": self.tear_ring,
+            "tos_sections": self.tos_sections,
+            "tos_section_reward": self.tos_section_reward,
+        }
+
 
 class GoalSettings:
     def __init__(self):
@@ -345,9 +381,16 @@ class GoalSettings:
             self.dungeon_amount
         )
 
+    def to_yaml(self):
+        return {
+            "unlock_dark_realm": self.unlock_dark_realm,
+            "dungeon_amount": self.dungeon_amount,
+        }
+
 
 class Settings:
     def __init__(self, shuffle: ShuffleSettings, shuffle_dgn: ShuffleDungeonSettings, goal: GoalSettings):
+        self.seed = "Unknown"
         self.shuffle = shuffle
         self.shuffle_dgn = shuffle_dgn
         self.goal = goal
@@ -384,3 +427,13 @@ class Settings:
 
         extras = passenger_pick_ids + passenger_dest_ids + cargo_pick_ids
         return struct.pack("<4s", b"RANDO") + self.shuffle.to_bin() + self.shuffle_dgn.to_bin() + self.goal.to_bin() + extras
+
+    def to_yaml(self):
+        return {
+            "settings": {
+                "seed": self.seed,
+                "shuffle": self.shuffle.to_yaml(),
+                "shuffle_dungeon": self.shuffle_dgn.to_yaml(),
+                "goal": self.goal.to_yaml(),
+            },
+        }

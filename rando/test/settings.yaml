@@ -33,9 +33,9 @@ settings:
 
         # to disable a difficulty level reward or simply disabling the check, change the list
         minigames:
-            sword_training: ['on']
+            sword_training: true
             whip_race: ['easy', 'hard', 'expert']
-            goron_range: ['on']
+            goron_range: true
             pirate_hideout: ['easy', 'hard', 'expert']
             take_em_all_on: ['easy', 'hard', 'expert']
 
@@ -60,7 +60,7 @@ settings:
         rabbit_sanity: ["all"]
 
         # true/false (will give all 10 rabbits of the realm when enabled)
-        rabbit_pack: false
+        rabbit_pack: true
 
     shuffle_dungeon:
         # off, section (tears only), dungeon, anywhere, removed
