@@ -512,7 +512,7 @@ thumb_func func_ov000_020a2750, 0x020A2751
 thumb_func func_ov000_020a275c, 0x020A275D
 thumb_func func_ov000_020a278c, 0x020A278D
 thumb_func func_ov000_020a279c, 0x020A279D
-thumb_func _ZN15SaveManager_21C19func_ov000_020a1000Ev, 0x020A27D9
+thumb_func _ZN28SaveFile_00000_0000_Data_D9C19func_ov000_020a1000Ev, 0x020A27D9
 thumb_func _ZN8SaveSlot19func_ov000_020a1028EP12SaveInfoData, 0x020A2801
 thumb_func func_ov000_020a9dbc, 0x020A9DBD
 thumb_func _ZN11ItemManager19func_ov000_020a89bcEv, 0x020AA1BD
