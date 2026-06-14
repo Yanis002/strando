@@ -13,6 +13,8 @@ class CustomFileSelectMain : public FileSelectMain {
 static u32 sAdventureFlagsToSet[] = {
     AdventureFlag_ObtainedSpiritTrain,
     AdventureFlag_CompletedForestRestorationSong, // skips lost woods
+    AdventureFlag_ObtainedForestGlyph, // we give this so we can go to castle town and the tower, see
+                                       // `GZ::OnScenePreInit`
     AdventureFlag_CompletedSwordTutorial,
     AdventureFlag_PlayedHyruleGuardGetLostText,
     AdventureFlag_HyruleGuardMovesAfterCole,
@@ -66,10 +68,8 @@ void CustomFileSelectMain::SetStartingFlags() {
         u32* pFlags = gSaveManager.GetSaveSlot(i)->mInfoData[0].inventory.adventureFlags;
 
         if (pSettings->forest_glyph == ForestGlyphMode_Startwith) {
-            SET_FLAG(pFlags, AdventureFlag_ObtainedForestGlyph);
             SET_FLAG(pFlags, RandoAdventureFlag_ForestGlyph);
         } else {
-            UNSET_FLAG(pFlags, AdventureFlag_ObtainedForestGlyph);
             UNSET_FLAG(pFlags, RandoAdventureFlag_ForestGlyph);
         }
 

@@ -378,6 +378,44 @@ static SceneIndex_Half sCargoTypeToSceneIndex[CargoDelivery_Max] = {
 
 void GZ::OnScenePreInit() {
     if (this->IsAdventureMode()) {
+        UnkStruct_SceneChange1* pNext = &data_027e09a4->mpWarpUnk1->mUnk_8C;
+
+        // prevent reaching all forest realm stations (except castle town, outset and the tower)
+        // if the forest glyph is shuffled and we don't have it yet
+        // this just overrides the next scene and spawn indices
+        if (this->IsOnTrain() && gSettings.GetShuffleSettings()->forest_glyph == ForestGlyphMode_Anywhere &&
+            !GET_FLAG(data_027e09b8->mAdventureFlags, RandoAdventureFlag_ForestGlyph)) {
+            int spawn = -1;
+
+            switch (pNext->mSceneIndex) {
+                case SceneIndex_t_forest:
+                    spawn = 5;
+                    break;
+                case SceneIndex_d_forest:
+                    spawn = 4;
+                    break;
+                case SceneIndex_f_forest1:
+                    spawn = 2;
+                    break;
+                case SceneIndex_f_forest2:
+                    spawn = 3;
+                    break;
+                case SceneIndex_f_bridge2:
+                    spawn = 7;
+                    break;
+                case SceneIndex_f_rabbit:
+                    spawn = 8;
+                    break;
+                default:
+                    break;
+            }
+
+            if (spawn != -1) {
+                pNext->mSceneIndex = SceneIndex_t_area0;
+                pNext->mSpawnIndex = spawn;
+            }
+        }
+
         if (gSettings.GetShuffleSettings()->passengers == PassengerMode_Remove) {
             this->SetAllPassengerFlags();
         }
