@@ -176,6 +176,7 @@ build: hooks
 clean:
 	$(V)$(RM) -r $(BUILD_DIR) $(HOOKS_BUILD_DIR)
 	$(V)$(RM) $(OUT_ROM)
+	$(V)$(RM) src/settings/settings.bin
 	$(call print_no_args,Success!)
 
 distclean: clean
@@ -240,7 +241,7 @@ endif
 
 setup: extract
 
-test_no_logic: build
+test_no_logic:
 	$(call print_no_args,Randomizing items...)
 	$(V)$(PYTHON) -m rando.test.test_no_logic
 	$(V)$(MAKE) $(OUT_ROM)
