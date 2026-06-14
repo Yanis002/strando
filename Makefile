@@ -176,11 +176,11 @@ build: hooks
 clean:
 	$(V)$(RM) -r $(BUILD_DIR) $(HOOKS_BUILD_DIR)
 	$(V)$(RM) $(OUT_ROM)
-	$(V)$(RM) src/settings/settings.bin
 	$(call print_no_args,Success!)
 
 distclean: clean
 	$(V)$(RM) -r $(EXTRACTED_DIR)
+	$(V)$(RM) src/settings/settings.bin
 	$(call print_no_args,Success!)
 
 extract:
