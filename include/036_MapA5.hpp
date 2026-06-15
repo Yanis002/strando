@@ -3,6 +3,18 @@
 #include <Save/AdventureFlags.hpp>
 
 // unused flags we can use
+#define RandoAdventureFlag_BossKey_3 AdventureFlag_Unk_339
+#define RandoAdventureFlag_BossKey_5 AdventureFlag_Unk_33A
+#define RandoAdventureFlag_BossKey_Wooded AdventureFlag_Unk_33B
+#define RandoAdventureFlag_BossKey_Blizzard AdventureFlag_Unk_33C
+#define RandoAdventureFlag_BossKey_Marine AdventureFlag_Unk_33D
+#define RandoAdventureFlag_BossKey_Mountain AdventureFlag_Unk_33E
+#define RandoAdventureFlag_BossKey_Desert AdventureFlag_Unk_33F
+#define RandoAdventureFlag_TowerSection_1 AdventureFlag_Unk_340
+#define RandoAdventureFlag_TowerSection_2 AdventureFlag_Unk_341
+#define RandoAdventureFlag_TowerSection_3 AdventureFlag_Unk_342
+#define RandoAdventureFlag_TowerSection_4 AdventureFlag_Unk_343
+#define RandoAdventureFlag_TowerSection_5 AdventureFlag_Unk_344
 #define RandoAdventureFlag_RabbitGrass AdventureFlag_Unk_345
 #define RandoAdventureFlag_RabbitSnow AdventureFlag_Unk_346
 #define RandoAdventureFlag_RabbitWater AdventureFlag_Unk_347

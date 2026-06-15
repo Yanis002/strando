@@ -99,6 +99,20 @@ enum ExtraItemId_ {
     ExtraItemId_RabbitMountain,
     ExtraItemId_RabbitSand,
 
+    ExtraItemId_BossKey_3,
+    ExtraItemId_BossKey_5,
+    ExtraItemId_BossKey_Wooded,
+    ExtraItemId_BossKey_Blizzard,
+    ExtraItemId_BossKey_Marine,
+    ExtraItemId_BossKey_Mountain,
+    ExtraItemId_BossKey_Desert,
+
+    ExtraItemId_TowerSection_1,
+    ExtraItemId_TowerSection_2,
+    ExtraItemId_TowerSection_3,
+    ExtraItemId_TowerSection_4,
+    ExtraItemId_TowerSection_5,
+
     ExtraItemId_Max,
 };
 

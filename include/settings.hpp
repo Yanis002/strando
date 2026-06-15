@@ -93,7 +93,7 @@ struct ShuffleDungeonSettings {
     bool bkeyring;
     bool tear_ring;
     bool tos_sections;
-    bool tos_section_reward;
+    bool is_tos_dungeon;
 
     ShuffleDungeonSettings() { memset(this, 0, sizeof(ShuffleDungeonSettings)); }
 };

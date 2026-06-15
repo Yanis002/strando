@@ -1,0 +1,6 @@
+instructions:
+  bl:
+    _ZN15CustomMapObject15OpenDoorBossKeyEv: ['0x0212C9F0', '0x0212D084']
+
+constants:
+  _ZN15CustomMapObject15OpenDoorBossKeyEv: ['0x0212E068']

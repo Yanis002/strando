@@ -203,6 +203,20 @@ u32 gGetItemMap[] = {
     GIModel_rbnt, // ExtraItemId_RabbitWater
     GIModel_rbnt, // ExtraItemId_RabbitMountain
     GIModel_rbnt, // ExtraItemId_RabbitSand
+
+    GIModel_dummy, // ExtraItemId_BossKey_3
+    GIModel_dummy, // ExtraItemId_BossKey_5
+    GIModel_dummy, // ExtraItemId_BossKey_Wooded
+    GIModel_dummy, // ExtraItemId_BossKey_Blizzard
+    GIModel_dummy, // ExtraItemId_BossKey_Marine
+    GIModel_dummy, // ExtraItemId_BossKey_Mountain
+    GIModel_dummy, // ExtraItemId_BossKey_Desert
+
+    GIModel_dummy, // ExtraItemId_TowerSection_1
+    GIModel_dummy, // ExtraItemId_TowerSection_2
+    GIModel_dummy, // ExtraItemId_TowerSection_3
+    GIModel_dummy, // ExtraItemId_TowerSection_4
+    GIModel_dummy, // ExtraItemId_TowerSection_5
 };
 
 // BMG IDs
@@ -395,6 +409,18 @@ u32 gBMGMap[] = {
     MSG(ExtraItemId_RabbitWater), // ExtraItemId_RabbitWater
     MSG(ExtraItemId_RabbitMountain), // ExtraItemId_RabbitMountain
     MSG(ExtraItemId_RabbitSand), // ExtraItemId_RabbitSand
+    MSG(ExtraItemId_BossKey_3), // ExtraItemId_BossKey_3
+    MSG(ExtraItemId_BossKey_5), // ExtraItemId_BossKey_5
+    MSG(ExtraItemId_BossKey_Wooded), // ExtraItemId_BossKey_Wooded
+    MSG(ExtraItemId_BossKey_Blizzard), // ExtraItemId_BossKey_Blizzard
+    MSG(ExtraItemId_BossKey_Marine), // ExtraItemId_BossKey_Marine
+    MSG(ExtraItemId_BossKey_Mountain), // ExtraItemId_BossKey_Mountain
+    MSG(ExtraItemId_BossKey_Desert), // ExtraItemId_BossKey_Desert
+    MSG(ExtraItemId_TowerSection_1), // ExtraItemId_TowerSection_1
+    MSG(ExtraItemId_TowerSection_2), // ExtraItemId_TowerSection_2
+    MSG(ExtraItemId_TowerSection_3), // ExtraItemId_TowerSection_3
+    MSG(ExtraItemId_TowerSection_4), // ExtraItemId_TowerSection_4
+    MSG(ExtraItemId_TowerSection_5), // ExtraItemId_TowerSection_5
 };
 
 u16 gAdvFlagMap[] = {
@@ -556,34 +582,46 @@ u16 gAdvFlagMap[] = {
     RandoAdventureFlag_StampPirateHideout, // ExtraItemId_StampPirateHideout
     RandoAdventureFlag_StampTradingPost, // ExtraItemId_StampTradingPost
     RandoAdventureFlag_StampIcySpring, // ExtraItemId_StampIcySpring
-    RandoAdventureFlag_PassengerAnoukiNoko,
-    RandoAdventureFlag_PassengerAnoukiKofu,
-    RandoAdventureFlag_PassengerCastleTownMona,
-    RandoAdventureFlag_PassengerCastleTownAlfonzo,
-    RandoAdventureFlag_PassengerSnowRealmFerrus,
-    RandoAdventureFlag_PassengerFireRealmFerrus,
-    RandoAdventureFlag_PassengerGoronVillageSnowGoron,
-    RandoAdventureFlag_PassengerGoronVillageCityGoron,
-    RandoAdventureFlag_PassengerMayscoreDovok,
-    RandoAdventureFlag_PassengerMayscoreMash,
-    RandoAdventureFlag_PassengerMayscoreMorris,
-    RandoAdventureFlag_PassengerMayscoreYamahiko,
-    RandoAdventureFlag_PassengerMayscoreWood,
-    RandoAdventureFlag_PassengerOutsetJoe,
-    RandoAdventureFlag_PassengerPirateHideoutWadatsumi,
-    RandoAdventureFlag_PassengerBridgeWorkersHomeKenzo,
-    RandoAdventureFlag_PassengerTradingPostKenzo,
-    RandoAdventureFlag_PassengerPapuziaVillageCarben,
-    RandoAdventureFlag_CargoMegaIce,
-    RandoAdventureFlag_CargoWood,
-    RandoAdventureFlag_CargoIron,
-    RandoAdventureFlag_CargoFish,
-    RandoAdventureFlag_CargoCuccos,
-    RandoAdventureFlag_CargoVessel,
-    RandoAdventureFlag_CargoDarkOre,
-    RandoAdventureFlag_RabbitGrass,
-    RandoAdventureFlag_RabbitSnow,
-    RandoAdventureFlag_RabbitWater,
-    RandoAdventureFlag_RabbitMountain,
-    RandoAdventureFlag_RabbitSand,
+    RandoAdventureFlag_PassengerAnoukiNoko, // ExtraItemId_PassengerAnoukiNoko
+    RandoAdventureFlag_PassengerAnoukiKofu, // ExtraItemId_PassengerAnoukiKofu
+    RandoAdventureFlag_PassengerCastleTownMona, // ExtraItemId_PassengerCastleTownMona
+    RandoAdventureFlag_PassengerCastleTownAlfonzo, // ExtraItemId_PassengerCastleTownAlfonzo
+    RandoAdventureFlag_PassengerSnowRealmFerrus, // ExtraItemId_PassengerSnowRealmFerrus
+    RandoAdventureFlag_PassengerFireRealmFerrus, // ExtraItemId_PassengerFireRealmFerrus
+    RandoAdventureFlag_PassengerGoronVillageSnowGoron, // ExtraItemId_PassengerGoronVillageSnowGoron
+    RandoAdventureFlag_PassengerGoronVillageCityGoron, // ExtraItemId_PassengerGoronVillageCityGoron
+    RandoAdventureFlag_PassengerMayscoreDovok, // ExtraItemId_PassengerMayscoreDovok
+    RandoAdventureFlag_PassengerMayscoreMash, // ExtraItemId_PassengerMayscoreMash
+    RandoAdventureFlag_PassengerMayscoreMorris, // ExtraItemId_PassengerMayscoreMorris
+    RandoAdventureFlag_PassengerMayscoreYamahiko, // ExtraItemId_PassengerMayscoreYamahiko
+    RandoAdventureFlag_PassengerMayscoreWood, // ExtraItemId_PassengerMayscoreWood
+    RandoAdventureFlag_PassengerOutsetJoe, // ExtraItemId_PassengerOutsetJoe
+    RandoAdventureFlag_PassengerPirateHideoutWadatsumi, // ExtraItemId_PassengerPirateHideoutWadatsumi
+    RandoAdventureFlag_PassengerBridgeWorkersHomeKenzo, // ExtraItemId_PassengerBridgeWorkersHomeKenzo
+    RandoAdventureFlag_PassengerTradingPostKenzo, // ExtraItemId_PassengerTradingPostKenzo
+    RandoAdventureFlag_PassengerPapuziaVillageCarben, // ExtraItemId_PassengerPapuziaVillageCarben
+    RandoAdventureFlag_CargoMegaIce, // ExtraItemId_CargoMegaIce
+    RandoAdventureFlag_CargoWood, // ExtraItemId_CargoWood
+    RandoAdventureFlag_CargoIron, // ExtraItemId_CargoIron
+    RandoAdventureFlag_CargoFish, // ExtraItemId_CargoFish
+    RandoAdventureFlag_CargoCuccos, // ExtraItemId_CargoCuccos
+    RandoAdventureFlag_CargoVessel, // ExtraItemId_CargoVessel
+    RandoAdventureFlag_CargoDarkOre, // ExtraItemId_CargoDarkOre
+    RandoAdventureFlag_RabbitGrass, // ExtraItemId_RabbitGrass
+    RandoAdventureFlag_RabbitSnow, // ExtraItemId_RabbitSnow
+    RandoAdventureFlag_RabbitWater, // ExtraItemId_RabbitWater
+    RandoAdventureFlag_RabbitMountain, // ExtraItemId_RabbitMountain
+    RandoAdventureFlag_RabbitSand, // ExtraItemId_RabbitSand
+    RandoAdventureFlag_BossKey_3, // ExtraItemId_BossKey_3
+    RandoAdventureFlag_BossKey_5, // ExtraItemId_BossKey_5
+    RandoAdventureFlag_BossKey_Wooded, // ExtraItemId_BossKey_Wooded
+    RandoAdventureFlag_BossKey_Blizzard, // ExtraItemId_BossKey_Blizzard
+    RandoAdventureFlag_BossKey_Marine, // ExtraItemId_BossKey_Marine
+    RandoAdventureFlag_BossKey_Mountain, // ExtraItemId_BossKey_Mountain
+    RandoAdventureFlag_BossKey_Desert, // ExtraItemId_BossKey_Desert
+    RandoAdventureFlag_TowerSection_1, // ExtraItemId_TowerSection_1
+    RandoAdventureFlag_TowerSection_2, // ExtraItemId_TowerSection_2
+    RandoAdventureFlag_TowerSection_3, // ExtraItemId_TowerSection_3
+    RandoAdventureFlag_TowerSection_4, // ExtraItemId_TowerSection_4
+    RandoAdventureFlag_TowerSection_5, // ExtraItemId_TowerSection_5
 };

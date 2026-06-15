@@ -416,6 +416,16 @@ void GZ::OnScenePreInit() {
             }
         }
 
+        // other sections are handled in `GZ::OnScenePostInit`
+        // we only need to prevent loading the scene if we don't have section 1
+        // otherwise we are blocked by default by the game, assuming the flag is unset
+        if (this->IsOnLand() && !GET_FLAG(data_027e09b8->mAdventureFlags, RandoAdventureFlag_TowerSection_1)) {
+            if (pNext->mSceneIndex == SceneIndex_d_main_w) {
+                pNext->mSceneIndex = SceneIndex_d_main_f;
+                pNext->mSpawnIndex = 1;
+            }
+        }
+
         if (gSettings.GetShuffleSettings()->passengers == PassengerMode_Remove) {
             this->SetAllPassengerFlags();
         }
@@ -459,6 +469,31 @@ void GZ::OnScenePostInit() {
         if (this->IsCourseExec()) {
             // remove cargo timers and damage stuff
             memset(sCargoInfos, 0, sizeof(CargoInfos) * CargoType_Max);
+        }
+
+        // remove the source flag if we don't have the corresponding section flag
+        // (except section 1, see `GZ::OnScenePreInit`)
+        if (gSettings.GetShuffleDungeonSettings()->tos_sections) {
+            static AdventureFlag_Half sSourceFlags[] = {
+                AdventureFlag_ObtainedForestSource,
+                AdventureFlag_ObtainedSnowSource,
+                AdventureFlag_ObtainedOceanSource,
+                AdventureFlag_ObtainedFireSource,
+            };
+
+            static AdventureFlag_Half sToSSectionFlags[] = {
+                RandoAdventureFlag_TowerSection_2,
+                RandoAdventureFlag_TowerSection_3,
+                RandoAdventureFlag_TowerSection_4,
+                RandoAdventureFlag_TowerSection_5,
+            };
+
+            for (int i = 0; i < ARRAY_LEN(sSourceFlags); i++) {
+                if (GET_FLAG(data_027e09b8->mAdventureFlags, sSourceFlags[i]) &&
+                    !GET_FLAG(data_027e09b8->mAdventureFlags, sToSSectionFlags[i])) {
+                    UNSET_FLAG(data_027e09b8->mAdventureFlags, sSourceFlags[i]);
+                }
+            }
         }
     }
 }

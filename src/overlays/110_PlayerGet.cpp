@@ -206,6 +206,24 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
                 setAdvFlag = false;
             }
             break;
+        case ExtraItemId_BossKey_3:
+        case ExtraItemId_BossKey_5:
+        case ExtraItemId_BossKey_Wooded:
+        case ExtraItemId_BossKey_Blizzard:
+        case ExtraItemId_BossKey_Marine:
+        case ExtraItemId_BossKey_Mountain:
+        case ExtraItemId_BossKey_Desert:
+            // nothing to do except setting the flag (which is done later)
+            // (see `CustomMapObject::OpenDoorBossKey`)
+            break;
+        case ExtraItemId_TowerSection_1:
+        case ExtraItemId_TowerSection_2:
+        case ExtraItemId_TowerSection_3:
+        case ExtraItemId_TowerSection_4:
+        case ExtraItemId_TowerSection_5:
+            // nothing to do except setting the flag (which is done later)
+            // (see `GZ::OnScenePreInit` and `GZ::OnScenePostInit`)
+            break;
         case ItemId_NormalKey:
             thisx->GiveSmallKeys(1);
             break;
