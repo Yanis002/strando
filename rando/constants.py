@@ -29,29 +29,6 @@ mapobj_ids = [
 
 
 class ItemId(IntEnum):
-    # special handling
-    RupeesShops = -21  # adjustable rupee count
-    ProgressiveShield = -20
-    DefeatBubble = -19  # bombs or bow or whip or (sword and (boomerang or whirlwind))
-    RingBell = -18  # sword or boomerang
-    RabbitsAll = -17
-    RabbitsAny = -16
-    RabbitsGrass = -15
-    RabbitsSnow = -14
-    RabbitsOcean = -13
-    RabbitsMountain = -12
-    RabbitsSand = -11
-    Repeater = -10  # sword or boomerang or whip
-    BoomerangOrBeam = -9
-    RangeOrBeam = -8
-    Weapons = -7  # sword or bombs or bow or whip
-    RangeWeapons = -6  # boomerang or bow
-    SmallKeys = -5
-    Rupees = -4
-    ProgressiveBow = -3
-    ProgressiveBombBag = -2
-    ProgressiveSword = -1
-
     Nothing = 0  # 0x00
     NormalShield = 1  # 0x01
     NormalSword = 2  # 0x02
@@ -240,6 +217,18 @@ class ItemId(IntEnum):
     ExtraItemId_RabbitWater = 184
     ExtraItemId_RabbitMountain = 185
     ExtraItemId_RabbitSand = 186
+    ExtraItemId_BossKey_3 = 187
+    ExtraItemId_BossKey_5 = 188
+    ExtraItemId_BossKey_Wooded = 189
+    ExtraItemId_BossKey_Blizzard = 190
+    ExtraItemId_BossKey_Marine = 191
+    ExtraItemId_BossKey_Mountain = 192
+    ExtraItemId_BossKey_Desert = 193
+    ExtraItemId_TowerSection_1 = 194
+    ExtraItemId_TowerSection_2 = 195
+    ExtraItemId_TowerSection_3 = 196
+    ExtraItemId_TowerSection_4 = 197
+    ExtraItemId_TowerSection_5 = 198
 
 
 extra_id_to_scene = {
@@ -258,19 +247,6 @@ extra_id_to_scene = {
     ItemId.ExtraItemId_NormalKey_Marine: "d_water",
     ItemId.ExtraItemId_NormalKey_Mountain: "d_flame",
     ItemId.ExtraItemId_NormalKey_Desert: "d_sand",
-}
-
-max_keys_map = {
-    ItemId.ExtraItemId_NormalKey_2: 2,
-    ItemId.ExtraItemId_NormalKey_4: 3,
-    ItemId.ExtraItemId_NormalKey_5: 2,
-    ItemId.ExtraItemId_NormalKey_6: 3,
-    ItemId.ExtraItemId_NormalKey_Tunnel: 1,
-    ItemId.ExtraItemId_NormalKey_Wooded: 2,
-    ItemId.ExtraItemId_NormalKey_Blizzard: 1,
-    ItemId.ExtraItemId_NormalKey_Marine: 2,
-    ItemId.ExtraItemId_NormalKey_Mountain: 3,
-    ItemId.ExtraItemId_NormalKey_Desert: 2,
 }
 
 tos_room_map = {
@@ -470,6 +446,18 @@ item_id_to_name = {
     ItemId.ExtraItemId_RabbitWater.value: "Water Rabbit",
     ItemId.ExtraItemId_RabbitMountain.value: "Mountain Rabbit",
     ItemId.ExtraItemId_RabbitSand.value: "Sand Rabbit",
+    ItemId.ExtraItemId_BossKey_3.value: "ToS 3 Boss Key",
+    ItemId.ExtraItemId_BossKey_5.value: "ToS 5 Boss Key",
+    ItemId.ExtraItemId_BossKey_Wooded.value: "Wooded Temple Boss Key",
+    ItemId.ExtraItemId_BossKey_Blizzard.value: "Blizzard Temple Boss Key",
+    ItemId.ExtraItemId_BossKey_Marine.value: "Marine Temple Boss Key",
+    ItemId.ExtraItemId_BossKey_Mountain.value: "Mountain Temple Boss Key",
+    ItemId.ExtraItemId_BossKey_Desert.value: "Desert Temple Boss Key",
+    ItemId.ExtraItemId_TowerSection_1.value: "Tower Section 1",
+    ItemId.ExtraItemId_TowerSection_2.value: "Tower Section 2",
+    ItemId.ExtraItemId_TowerSection_3.value: "Tower Section 3",
+    ItemId.ExtraItemId_TowerSection_4.value: "Tower Section 4",
+    ItemId.ExtraItemId_TowerSection_5.value: "Tower Section 5",
 }
 item_name_to_id = {v: k for k, v in item_id_to_name.items()}
 
@@ -483,6 +471,7 @@ class ItemKind(IntEnum):
     CargoPickUp = 5
     CargoAtDest = 6
     Rabbit = 7
+    Tear = 8
 
 
 class ItemWeight(IntEnum):

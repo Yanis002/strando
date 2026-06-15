@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import copy
 import hashlib
 import random
 import re
@@ -18,10 +19,17 @@ from rando.constants import (
     item_id_to_name,
     item_name_to_id,
     shop_actor_ids,
-    max_keys_map,
     shop_item_positions,
+    tos_room_map,
 )
 from rando.test.settings import Settings, LocationSettings
+
+TOS_SECTION_1_INDEX = 0
+TOS_SECTION_2_INDEX = 1
+TOS_SECTION_3_INDEX = 2
+TOS_SECTION_4_INDEX = 3
+TOS_SECTION_5_INDEX = 4
+TOS_SECTION_6_INDEX = 5
 
 
 # from https://github.com/yaml/pyyaml/issues/127#issuecomment-525800484
@@ -173,6 +181,32 @@ class MapObjectEntry:
         )
 
 
+def get_tos_section_from_room(room_index: int):
+    for section, room_indices in tos_room_map.items():
+        if room_index in room_indices:
+            return section
+
+    return None
+
+
+def get_item_name_suffix(settings: Settings, cond: bool):
+    if (settings.shuffle.rabbitpack and cond) or (
+        settings.shuffle_dgn.is_tearsanity_enabled() and settings.shuffle_dgn.tear_ring
+    ):
+        # "X Rabbit Pack" or "X Tear of Light Pack"
+        return " Pack"
+
+    if settings.shuffle_dgn.is_keysanity_enabled() and settings.shuffle_dgn.keyring:
+        # "X Key Ring"
+        return " Ring"
+
+    if settings.shuffle_dgn.is_bksanity_enabled() and settings.shuffle_dgn.bkeyring:
+        # "X Boss Key Ring"
+        return " Ring"
+
+    return ""
+
+
 @dataclass
 class ItemDef:
     id: ItemId
@@ -180,7 +214,44 @@ class ItemDef:
     weight: ItemWeight
 
     def is_random_treasure(self):
-        return self.id >= ItemId.RandCommonTreasure and self.id <= ItemId.RandLegendaryTreasure
+        return self.id.value >= ItemId.RandCommonTreasure.value and self.id.value <= ItemId.RandLegendaryTreasure.value
+
+    def is_small_key(self):
+        return (
+            self.id.value >= ItemId.ExtraItemId_NormalKey_2.value
+            and self.id.value <= ItemId.ExtraItemId_NormalKey_Desert.value
+        )
+
+    def is_boss_key(self):
+        return (
+            self.id.value >= ItemId.ExtraItemId_BossKey_3.value and self.id.value <= ItemId.ExtraItemId_BossKey_Desert.value
+        )
+
+    def is_light_tear(self):
+        return (
+            self.id.value >= ItemId.ExtraItemId_TearLight_1.value and self.id.value <= ItemId.ExtraItemId_TearLight_5.value
+        )
+
+    def is_rabbit_net(self):
+        return self.id.value == ItemId.RabbitNet.value
+
+    def get_tos_section_from_tear(self):
+        if not self.is_light_tear():
+            return None
+
+        match self.id.value:
+            case ItemId.ExtraItemId_TearLight_1.value:
+                return 1
+            case ItemId.ExtraItemId_TearLight_2.value:
+                return 2
+            case ItemId.ExtraItemId_TearLight_3.value:
+                return 3
+            case ItemId.ExtraItemId_TearLight_4.value:
+                return 4
+            case ItemId.ExtraItemId_TearLight_5.value:
+                return 5
+            case _:
+                return None
 
 
 shop_item_map = {
@@ -228,8 +299,10 @@ shop_item_map = {
     ],
 }
 
+itemdef_nothing = ItemDef(ItemId.Nothing, ItemKind.Default, ItemWeight.Normal)
+
 item_defs: list[ItemDef] = [
-    ItemDef(ItemId.Nothing, ItemKind.Default, ItemWeight.Normal),
+    itemdef_nothing,
     ItemDef(ItemId.NormalShield, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.NormalSword, ItemKind.Default, ItemWeight.Progression),
     ItemDef(ItemId.Whirlwind, ItemKind.Default, ItemWeight.Progression),
@@ -367,6 +440,8 @@ class LocationInfo:
         self.is_cargo_pick_up = False
         self.is_cargo_at_dest = False
 
+        self.tos_section: int | None = None
+
     @staticmethod
     def from_data(name: str, data: dict, rando_settings: Settings):
         new_info = LocationInfo(name, data["scene"], data["room_index"], rando_settings)
@@ -402,7 +477,21 @@ class LocationInfo:
 
             new_info.bmg_offsets.set_from_english(new_info.bmg)
 
+        if "tos_section" in data:
+            new_info.tos_section = data["tos_section"]
+            assert new_info.tos_section == get_tos_section_from_room(new_info.room_index)
+
         if "settings" in data:
+
+            def set_value_cond(
+                value: str, valid_params: list[str], invalid_params: list[str], attr: str, is_bool: bool = True
+            ):
+                if value in valid_params:
+                    setattr(new_info.settings, attr, True if is_bool else value)
+
+                if getattr(new_info.settings, attr) and value in invalid_params:
+                    setattr(new_info.settings, attr, False if is_bool else None)
+
             for elem in data["settings"]:
                 split = elem.split("-")
 
@@ -430,23 +519,23 @@ class LocationInfo:
                     case "stamp_book":
                         new_info.settings.stamp_book = True
                     case "passengers":
-                        if split[1] in ["abstract", "anywhere"]:
-                            new_info.settings.passengers = True
-
-                        if new_info.settings.passengers and split[1] in ["remove", "vanilla"]:
-                            new_info.settings.passengers = False
+                        set_value_cond(split[1], ["abstract", "anywhere"], ["remove", "vanilla"], "passengers")
                     case "cargo":
-                        if split[1] in ["abstract", "anywhere"]:
-                            new_info.settings.cargo = True
-
-                        if new_info.settings.cargo and split[1] in ["remove", "vanilla"]:
-                            new_info.settings.cargo = False
+                        set_value_cond(split[1], ["abstract", "anywhere"], ["remove", "vanilla"], "cargo")
                     case "rabbit":
-                        if split[1] in ["grass", "snow", "water", "fire", "sand", "all"]:
-                            new_info.settings.rabbitsanity = split[1]
-
-                        if new_info.settings.rabbitsanity is not None and split[1] == "none":
-                            new_info.settings.rabbitsanity = None
+                        set_value_cond(
+                            split[1],
+                            ["grass", "snow", "water", "fire", "sand", "all"],
+                            ["none"],
+                            "rabbitsanity",
+                            is_bool=False,
+                        )
+                    case "keysanity":
+                        set_value_cond(split[1], ["dungeon", "anywhere"], ["removed", "vanilla"], "keysanity")
+                    case "bkeysanity":
+                        set_value_cond(split[1], ["dungeon", "anywhere"], ["removed", "vanilla"], "bkeysanity")
+                    case "tearsanity":
+                        set_value_cond(split[1], ["section", "dungeon", "anywhere"], ["removed", "vanilla"], "tearsanity")
                     case _:
                         print(f"WARNING: ignoring unknown setting {repr(elem)}!")
 
@@ -533,6 +622,19 @@ class LocationInfo:
         ):
             return False
 
+        # ignore keysanity if we don't want it
+        # for "remove" mode we allow this location and we'll set the item to nothing later
+        if self.settings.keysanity and self.rando_settings.shuffle_dgn == "vanilla":
+            return False
+
+        # ignore bkeysanity if we don't want it
+        if self.settings.bkeysanity and self.rando_settings.shuffle_dgn == "vanilla":
+            return False
+
+        # ignore tearsanity if we don't want it
+        if self.settings.tearsanity and self.rando_settings.shuffle_dgn == "vanilla":
+            return False
+
         return True
 
 
@@ -548,8 +650,42 @@ class LocationDef:
         self.cond = cond
         self.infos = infos
 
+        dungeons = [
+            "d_main",
+            "d_tutorial",
+            "d_forest",
+            "d_snow26",
+            "d_water27",
+            "d_flame",
+            "d_sand",
+        ]
+        self.is_dungeon = self.infos.scene in dungeons
+
         # need 1-5 for shops
         self.items: list[ItemDef] = []
+
+    def allow_assign(self, settings: Settings, item: ItemDef):
+        # don't process the picked item if the location is a rabbit and the picked item is the rabbit net
+        if item.is_rabbit_net() and self.infos.settings.rabbitsanity is not None:
+            return False
+
+        if item.is_small_key() and settings.shuffle_dgn.keysanity == "dungeon" and not self.is_dungeon:
+            return False
+
+        if item.is_boss_key() and settings.shuffle_dgn.bksanity == "dungeon" and not self.is_dungeon:
+            return False
+
+        if item.is_light_tear():
+            if settings.shuffle_dgn.tear_sanity == "dungeon" and not self.is_dungeon:
+                return False
+
+            if settings.shuffle_dgn.tear_sanity == "section":
+                tear_section = item.get_tos_section_from_tear()
+
+                if not self.is_dungeon or self.infos.tos_section is None or self.infos.tos_section != tear_section:
+                    return False
+
+        return True
 
 
 class LocationNode:
@@ -629,24 +765,26 @@ class SeedLogEntry:
     def __init__(self, node: LocationNode):
         self.node = node
 
-    def get_params(self, items: list[ItemDef], is_shop: bool, is_rabbitpack: bool):
-        def get_suffix(item: ItemDef):
-            return " Pack" if is_rabbitpack and item.kind == ItemKind.Rabbit else ""
-
+    def get_params(self, items: list[ItemDef], is_shop: bool, settings: Settings):
         if is_shop:
             ret = []
             for i, item in enumerate(items):
-                ret.append({shop_item_positions[i]: item_id_to_name[item.id.value] + get_suffix(item)})
+                ret.append(
+                    {
+                        shop_item_positions[i]: item_id_to_name[item.id.value]
+                        + get_item_name_suffix(settings, item.kind == ItemKind.Rabbit)
+                    }
+                )
             return ret
 
-        return item_id_to_name[items[0].id.value] + get_suffix(items[0])
+        return item_id_to_name[items[0].id.value] + get_item_name_suffix(settings, items[0].kind == ItemKind.Rabbit)
 
     def export(self, settings: Settings):
         data = {}
 
         for location in self.node.locations:
             is_shop = len(location.items) > 1 and "Shop Keeper" in location.name
-            data[location.name] = self.get_params(location.items, is_shop, settings.shuffle.rabbitpack)
+            data[location.name] = self.get_params(location.items, is_shop, settings)
 
         return {self.node.name: {"locations": data}}
 
@@ -683,6 +821,29 @@ class SeedLog:
             yaml.dump(yaml_file, file, sort_keys=False, Dumper=MyDumper)
 
 
+class DungeonDef:
+    def __init__(self, name: str, tos_section: int | None = None):
+        self.name = name
+        self.tos_section = tos_section
+        self.keys: list[ItemDef] = []
+        self.boss_keys: list[ItemDef] = []
+        self.tears: list[ItemDef] = []
+        self.locations: list[LocationDef] = []
+
+    def fill_locations(self, locations: list[LocationDef], check_tos_section: bool = False):
+        for loc in locations:
+            if (
+                check_tos_section
+                and loc.infos.tos_section is not None
+                and self.tos_section is not None
+                and loc.infos.tos_section != self.tos_section
+            ):
+                continue
+
+            if loc.is_dungeon and self.name == loc.infos.scene:
+                self.locations.append(loc)
+
+
 class Randomizer:
     def __init__(
         self, version: str, settings_path: Path, world_path: Path, loc_tbl_path: Path, seed_log_path: Path | None = None
@@ -697,6 +858,26 @@ class Randomizer:
             self.seed_log = None
             self.settings = Settings.from_yaml(settings_path)
             self.create_seed()
+
+        self.dgn_tos_defs = [DungeonDef("d_main", tos_section=i) for i in range(1, 7)]
+        self.dgn_tos_map = {section: dgn_def for section, dgn_def in enumerate(self.dgn_tos_defs)}
+
+        self.dgn_tunnel_def = DungeonDef("d_tutorial")
+        self.dgn_forest_def = DungeonDef("d_forest")
+        self.dgn_snow_def = DungeonDef("d_snow26")
+        self.dgn_marine_def = DungeonDef("d_water27")
+        self.dgn_mount_def = DungeonDef("d_flame")
+        self.dgn_sand_def = DungeonDef("d_sand")
+
+        self.dgn_defs = self.dgn_tos_defs + [
+            self.dgn_tunnel_def,
+            self.dgn_forest_def,
+            self.dgn_snow_def,
+            self.dgn_marine_def,
+            self.dgn_mount_def,
+            self.dgn_sand_def,
+        ]
+        self.dgn_def_map = {i: dgn_def for i, dgn_def in enumerate(self.dgn_defs)}
 
         self.nodes = LocationNode.from_yaml(world_path, loc_tbl_path, self.settings)
         self.create_item_pool()
@@ -723,16 +904,103 @@ class Randomizer:
         item_defs.extend(heart_containers)
 
         # add extra tears
-        for i in range(1, 6):
-            extra_defs = [
-                ItemDef(getattr(ItemId, f"ExtraItemId_TearLight_{i}"), ItemKind.Default, ItemWeight.Progression)
-            ] * 3
-            item_defs.extend(extra_defs)
+        if self.settings.shuffle_dgn.is_tearsanity_enabled():
+            for i in range(0, 5):
+                assert i + 1 == self.dgn_tos_defs[i].tos_section
+
+                self.dgn_tos_defs[i].tears = [
+                    ItemDef(getattr(ItemId, f"ExtraItemId_TearLight_{i + 1}"), ItemKind.Tear, ItemWeight.Progression)
+                ] * 3
+                item_defs.extend(self.dgn_tos_defs[i].tears)
 
         # add extra keys
-        for item_id, max_keys in max_keys_map.items():
-            extra_defs = [ItemDef(item_id, ItemKind.Default, ItemWeight.Progression)] * max_keys
-            item_defs.extend(extra_defs)
+        # TODO: improve this horrible thing
+        if self.settings.shuffle_dgn.is_keysanity_enabled():
+            self.dgn_tos_map[TOS_SECTION_2_INDEX].keys = [
+                ItemDef(ItemId.ExtraItemId_NormalKey_2, ItemKind.Default, ItemWeight.Progression)
+            ] * 2
+            self.dgn_tos_map[TOS_SECTION_4_INDEX].keys = [
+                ItemDef(ItemId.ExtraItemId_NormalKey_4, ItemKind.Default, ItemWeight.Progression)
+            ] * 3
+            self.dgn_tos_map[TOS_SECTION_5_INDEX].keys = [
+                ItemDef(ItemId.ExtraItemId_NormalKey_5, ItemKind.Default, ItemWeight.Progression)
+            ] * 2
+            self.dgn_tos_map[TOS_SECTION_6_INDEX].keys = [
+                ItemDef(ItemId.ExtraItemId_NormalKey_6, ItemKind.Default, ItemWeight.Progression)
+            ] * 3
+            self.dgn_tunnel_def.keys = [
+                ItemDef(ItemId.ExtraItemId_NormalKey_Tunnel, ItemKind.Default, ItemWeight.Progression)
+            ] * 1
+            self.dgn_forest_def.keys = [
+                ItemDef(ItemId.ExtraItemId_NormalKey_Wooded, ItemKind.Default, ItemWeight.Progression)
+            ] * 2
+            self.dgn_snow_def.keys = [
+                ItemDef(ItemId.ExtraItemId_NormalKey_Blizzard, ItemKind.Default, ItemWeight.Progression)
+            ] * 1
+            self.dgn_marine_def.keys = [
+                ItemDef(ItemId.ExtraItemId_NormalKey_Marine, ItemKind.Default, ItemWeight.Progression)
+            ] * 2
+            self.dgn_mount_def.keys = [
+                ItemDef(ItemId.ExtraItemId_NormalKey_Mountain, ItemKind.Default, ItemWeight.Progression)
+            ] * 3
+            self.dgn_sand_def.keys = [
+                ItemDef(ItemId.ExtraItemId_NormalKey_Desert, ItemKind.Default, ItemWeight.Progression)
+            ] * 2
+
+            item_defs.extend(
+                self.dgn_tos_map[TOS_SECTION_2_INDEX].keys
+                + self.dgn_tos_map[TOS_SECTION_4_INDEX].keys
+                + self.dgn_tos_map[TOS_SECTION_5_INDEX].keys
+                + self.dgn_tos_map[TOS_SECTION_6_INDEX].keys
+                + self.dgn_tunnel_def.keys
+                + self.dgn_forest_def.keys
+                + self.dgn_snow_def.keys
+                + self.dgn_marine_def.keys
+                + self.dgn_mount_def.keys
+                + self.dgn_sand_def.keys
+            )
+
+        # add extra boss keys
+        if self.settings.shuffle_dgn.is_bksanity_enabled():
+            self.dgn_tos_map[TOS_SECTION_3_INDEX].boss_keys = [
+                ItemDef(ItemId.ExtraItemId_BossKey_3, ItemKind.Default, ItemWeight.Progression)
+            ]
+            self.dgn_tos_map[TOS_SECTION_5_INDEX].boss_keys = [
+                ItemDef(ItemId.ExtraItemId_BossKey_5, ItemKind.Default, ItemWeight.Progression)
+            ]
+            self.dgn_forest_def.boss_keys = [
+                ItemDef(ItemId.ExtraItemId_BossKey_Wooded, ItemKind.Default, ItemWeight.Progression)
+            ]
+            self.dgn_snow_def.boss_keys = [
+                ItemDef(ItemId.ExtraItemId_BossKey_Blizzard, ItemKind.Default, ItemWeight.Progression)
+            ]
+            self.dgn_marine_def.boss_keys = [
+                ItemDef(ItemId.ExtraItemId_BossKey_Marine, ItemKind.Default, ItemWeight.Progression)
+            ]
+            self.dgn_mount_def.boss_keys = [
+                ItemDef(ItemId.ExtraItemId_BossKey_Mountain, ItemKind.Default, ItemWeight.Progression)
+            ]
+            self.dgn_sand_def.boss_keys = [
+                ItemDef(ItemId.ExtraItemId_BossKey_Desert, ItemKind.Default, ItemWeight.Progression)
+            ]
+
+            item_defs.extend(
+                self.dgn_tos_map[TOS_SECTION_3_INDEX].boss_keys
+                + self.dgn_tos_map[TOS_SECTION_5_INDEX].boss_keys
+                + self.dgn_forest_def.boss_keys
+                + self.dgn_snow_def.boss_keys
+                + self.dgn_marine_def.boss_keys
+                + self.dgn_mount_def.boss_keys
+                + self.dgn_sand_def.boss_keys
+            )
+
+        # add tower sections
+        if self.settings.shuffle_dgn.tos_sections:
+            sections = []
+            for i in range(1, 6):
+                sections.append(
+                    ItemDef(getattr(ItemId, f"ExtraItemId_TowerSection_{i}"), ItemKind.Default, ItemWeight.Progression)
+                )
 
         ## apply settings
         for _, shop_items in shop_item_map.items():
@@ -1060,15 +1328,15 @@ class Randomizer:
 
         self.init_id_lists()
 
-        for loc in all_locations:
-            size = self.settings.shuffle.shopsanity if "Shop Keeper" in loc.name else 1
-
+        def do_assign(loc: LocationDef, size: int = 1, is_pre_assign: bool = False):
             while len(loc.items) < size:
                 if len(item_pool) > 0:
                     picked_item = random.choice(item_pool)
 
-                    # don't process the picked item if the location is a rabbit and the picked item is the rabbit net
-                    if loc.infos.settings.rabbitsanity is not None and picked_item.id.value == ItemId.RabbitNet.value:
+                    if is_pre_assign and picked_item.kind != ItemKind.Tear:
+                        continue
+
+                    if not loc.allow_assign(self.settings, picked_item):
                         continue
 
                     item_pool.remove(picked_item)
@@ -1078,6 +1346,76 @@ class Randomizer:
 
                 loc.items.append(picked_item)
                 self.add_elem_to_id_lists(loc, picked_item)
+
+        def do_specialized_assign(item_defs: list[ItemDef], locations: list[LocationDef]):
+            while len(item_defs) > 0:
+                # choose randomly a location and a dungeon item (key, boss key, tear of light)
+                loc = random.choice(locations)
+                picked_item = random.choice(item_defs)
+                loc.items.append(picked_item)
+
+                # remove both from the local lists
+                locations.remove(loc)
+                item_defs.remove(picked_item)
+
+                # remove both from the global lists
+                all_locations.remove(loc)
+                item_pool.remove(picked_item)
+
+        # assign tears first if shuffled by section
+        if self.settings.shuffle_dgn.tear_sanity == "section":
+            for dgn_def in self.dgn_tos_defs:
+                if dgn_def.tos_section == 6:
+                    continue
+
+                dgn_def.fill_locations(all_locations, check_tos_section=True)
+                do_specialized_assign(dgn_def.tears, dgn_def.locations)
+
+        attr_map = {
+            "keysanity": "keys",
+            "bksanity": "boss_keys",
+            "tear_sanity": "tears",
+        }
+
+        # for each type
+        for attr_settings, attr_def in attr_map.items():
+            # if the type's setting is set to "dungeon"
+            if getattr(self.settings.shuffle_dgn, attr_settings) == "dungeon":
+                # create location and item maps for every dungeons
+                locs_map: dict[int, list[LocationDef]] = {}
+                items_map: dict[int, list[ItemDef]] = {}
+
+                for i, dgn_def in self.dgn_def_map.items():
+                    if i not in locs_map:
+                        locs_map[i] = []
+
+                    if i not in items_map:
+                        items_map[i] = []
+
+                    dgn_def.fill_locations(all_locations)
+                    locs_map[i].extend(dgn_def.locations)
+                    items_map[i].extend(getattr(dgn_def, attr_def))
+
+                # then assign the items to the locations
+                for i, dgn_def in self.dgn_def_map.items():
+                    do_specialized_assign(items_map[i], locs_map[i])
+
+        for loc in all_locations:
+            size = self.settings.shuffle.shopsanity if "Shop Keeper" in loc.name else 1
+            set_to_nothing = False
+
+            # with "remove" mode we put nothing in chests and skip to the next location
+            if loc.infos.settings.keysanity and self.settings.shuffle_dgn.keysanity == "removed":
+                set_to_nothing = True
+            elif loc.infos.settings.bkeysanity and self.settings.shuffle_dgn.bksanity == "removed":
+                set_to_nothing = True
+            elif loc.infos.settings.tearsanity and self.settings.shuffle_dgn.tear_sanity == "removed":
+                set_to_nothing = True
+
+            if set_to_nothing:
+                loc.items.append(itemdef_nothing)
+            else:
+                do_assign(loc, size=size)
 
         self.copy_id_lists_to_settings()
 
@@ -1262,10 +1600,7 @@ class Randomizer:
         for i in range(0, ITEM_MAX):
             prefix_index = 1 if i == ItemId.Nothing.value else 2 if i in RABBIT_IDS else 0
             prefix = prefix_map[use_lang][prefix_index]
-
-            suffix = ""
-            if i in RABBIT_IDS and self.settings.shuffle.rabbitpack:
-                suffix = " Pack"
+            suffix = get_item_name_suffix(self.settings, i in RABBIT_IDS)
 
             # only there to determine the potential length of the string if it's on one line
             fake_str = prefix + item_id_to_name[i] + suffix + "!"

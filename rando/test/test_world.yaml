@@ -61,6 +61,7 @@ node_d_flame_3:
 
 node_d_flame_4:
   locations:
+    Mountain Temple B3 Boss Key: 'True'
     Mountain Temple B3 N Chest: 'True'
   room_index: 4
   scene: d_flame
@@ -89,6 +90,7 @@ node_d_forest_10:
 
 node_d_forest_2:
   locations:
+    Wooded Temple 3F Boss Key: 'True'
     Wooded Temple 3F Chestnut Chest: 'True'
     Wooded Temple 3F SE Chest: 'True'
   room_index: 2
@@ -193,6 +195,12 @@ node_d_main_22:
   room_index: 22
   scene: d_main
 
+node_d_main_24:
+  locations:
+    ToS 22F Boss Key: 'True'
+  room_index: 24
+  scene: d_main
+
 node_d_main_3:
   locations:
     ToS 4F Central Chest: 'True'
@@ -293,6 +301,7 @@ node_d_main_8:
 
 node_d_main_9:
   locations:
+    ToS 10F Boss Key: 'True'
     ToS 10F NW Chest: 'True'
   room_index: 9
   scene: d_main
@@ -329,6 +338,7 @@ node_d_sand_2:
 
 node_d_sand_3:
   locations:
+    Desert Temple B1 Boss Key: 'True'
     Desert Temple B1 NW Buried Rupee: 'True'
     Desert Temple B1 Near Boss Door Chest: 'True'
     Desert Temple B1 Rupee NW Bottom Left: 'True'
@@ -363,6 +373,12 @@ node_d_snow26_1:
     Blizzard Temple B1 SW Chest: 'True'
     Blizzard Temple B1 Stamp Station: 'True'
   room_index: 1
+  scene: d_snow26
+
+node_d_snow26_2:
+  locations:
+    Blizzard Temple 2F Boss Key: 'True'
+  room_index: 2
   scene: d_snow26
 
 node_d_tutorial_0:
@@ -407,6 +423,7 @@ node_d_water27_2:
 
 node_d_water27_5:
   locations:
+    Marine Temple 6F Boss Key: 'True'
     Marine Temple 6F E Chest: 'True'
     Marine Temple 6F W Chest: 'True'
   room_index: 5

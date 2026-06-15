@@ -65,7 +65,7 @@ settings:
     shuffle_dungeon:
         # off, section (tears only), dungeon, anywhere, removed
         key_sanity: "anywhere" # (vanilla: off)
-        bosskey_sanity: "off" # (vanilla: off)
+        bosskey_sanity: "dungeon" # (vanilla: off)
         tear_sanity: "anywhere" # (vanilla: off)
 
         # true/false
@@ -79,8 +79,8 @@ settings:
         # - sources (vanilla behavior)
         tos_sections: false
 
-        # true/false (vanilla: false)
-        tos_section_reward: true
+        # true/false, do we count ToS as a dungeon (vanilla: false)
+        is_tos_dungeon: true
 
     goal:
         # open, dungeons, compass, restoration_songs (vanilla: compass)

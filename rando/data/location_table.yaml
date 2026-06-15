@@ -137,6 +137,8 @@ Blizzard Temple B1 SE Chest:
   is_mapobj: true
   room_index: 1
   scene: d_snow26
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 Blizzard Temple B1 SW Chest:
   id_hash: TRES_0x2B_0x22
@@ -150,6 +152,13 @@ Blizzard Temple B1 Stamp Station:
   room_index: 1
   scene: d_snow26
   settings: ['stamps']
+
+Blizzard Temple 2F Boss Key:
+  id_hash: KEYB_0x0270_0x0190
+  is_actor: true
+  room_index: 2
+  scene: d_snow26
+  settings: ['bkeysanity-dungeon', 'bkeysanity-anywhere']
 
 Blizzard Temple Boss Heart Container:
   id_hash: TRLW_0x1F_0x1B
@@ -315,12 +324,15 @@ Desert Temple 1F N Arena Chest:
   is_mapobj: true
   room_index: 0
   scene: d_sand
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 Desert Temple 1F N Buried Key:
   id_hash: KEYN_0x01D0_0x00C0
   is_actor: true
   room_index: 0
   scene: d_sand
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 Desert Temple 1F N Ergtorok Chest:
   id_hash: TREW_0x1C_0x06
@@ -382,6 +394,13 @@ Desert Temple B1 Stamp Station:
   room_index: 3
   scene: d_sand
   settings: ['stamps']
+
+Desert Temple B1 Boss Key:
+  id_hash: KEYB_0x00D0_0x0060
+  is_actor: true
+  room_index: 3
+  scene: d_sand
+  settings: ['bkeysanity-dungeon', 'bkeysanity-anywhere']
 
 Desert Temple Boss Heart Container:
   id_hash: TRLW_0x1F_0x16
@@ -775,6 +794,8 @@ Marine Temple 3F Puzzle Chest:
   is_mapobj: true
   room_index: 2
   scene: d_water27
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 Marine Temple 3F Whip Chest:
   id_hash: TRLD_0x20_0x17
@@ -787,6 +808,15 @@ Marine Temple 6F E Chest:
   is_mapobj: true
   room_index: 5
   scene: d_water27
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
+
+Marine Temple 6F Boss Key:
+  id_hash: KEYB_0x01F8_0x0260
+  is_actor: true
+  room_index: 5
+  scene: d_water27
+  settings: ['bkeysanity-dungeon', 'bkeysanity-anywhere']
 
 Marine Temple 6F W Chest:
   id_hash: TREW_0x0F_0x11
@@ -938,12 +968,16 @@ Mountain Temple 2F Left Chest:
   is_mapobj: true
   room_index: 1
   scene: d_flame
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 Mountain Temple 2F NW Chest:
   id_hash: TRES_0x12_0x07
   is_mapobj: true
   room_index: 1
   scene: d_flame
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 Mountain Temple B1 Heatoise Chest:
   id_hash: TREW_0x1F_0x20
@@ -969,6 +1003,8 @@ Mountain Temple B2 NW Chest:
   is_mapobj: true
   room_index: 3
   scene: d_flame
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 Mountain Temple B2 SE Chest:
   id_hash: TRES_0x2D_0x25
@@ -981,6 +1017,13 @@ Mountain Temple B3 N Chest:
   is_mapobj: true
   room_index: 4
   scene: d_flame
+
+Mountain Temple B3 Boss Key:
+  id_hash: KEYB_0x02D0_0x00E0
+  is_actor: true
+  room_index: 4
+  scene: d_flame
+  settings: ['bkeysanity-dungeon', 'bkeysanity-anywhere']
 
 Mountain Temple Song Statue:
   id_hash: WDST_0x1A_0x0B
@@ -1387,18 +1430,29 @@ ToS 10F NW Chest:
   is_mapobj: true
   room_index: 9
   scene: d_main
+  tos_section: 3
+
+ToS 10F Boss Key:
+  id_hash: KEYT_0x0328_0x01E0
+  is_actor: true
+  room_index: 9
+  scene: d_main
+  tos_section: 3
+  settings: ['bkeysanity-dungeon', 'bkeysanity-anywhere']
 
 ToS 11F Chest:
   id_hash: TRLW_0x1B_0x11
   is_mapobj: true
   room_index: 10
   scene: d_main
+  tos_section: 3
 
 ToS 12F Ocean Rail Glyph:
   id_hash: GELG_0x1F_0x17
   is_mapobj: true
   room_index: 11
   scene: d_main
+  tos_section: 3
   settings: ['glyphs_and_sources']
 
 ToS 13F Central Tear of Light:
@@ -1406,66 +1460,86 @@ ToS 13F Central Tear of Light:
   is_actor: true
   room_index: 12
   scene: d_main
+  tos_section: 4
+  settings: ['tearsanity-section', 'tearsanity-dungeon', 'tearsanity-anywhere']
 
 ToS 13F E Swing Chest:
   id_hash: TRLS_0x36_0x11
   is_mapobj: true
   room_index: 12
   scene: d_main
+  tos_section: 4
 
 ToS 13F N Chest:
   id_hash: TREW_0x26_0x0F
   is_mapobj: true
   room_index: 12
   scene: d_main
+  tos_section: 4
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 ToS 13F SE Raised Chest:
   id_hash: TRLS_0x29_0x1F
   is_mapobj: true
   room_index: 12
   scene: d_main
+  tos_section: 4
 
 ToS 13F SE Tear of Light:
   id_hash: SZKU_0x02E0_0x01F0
   is_actor: true
   room_index: 12
   scene: d_main
+  tos_section: 4
+  settings: ['tearsanity-section', 'tearsanity-dungeon', 'tearsanity-anywhere']
 
 ToS 13F SW Raised Chest:
   id_hash: TREW_0x1B_0x22
   is_mapobj: true
   room_index: 12
   scene: d_main
+  tos_section: 4
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 ToS 14F SE Chest:
   id_hash: TRLS_0x2E_0x1C
   is_mapobj: true
   room_index: 13
   scene: d_main
+  tos_section: 4
 
 ToS 14F Tear of Light:
   id_hash: SZKU_0x02A8_0x0088
   is_actor: true
   room_index: 13
   scene: d_main
+  tos_section: 4
+  settings: ['tearsanity-section', 'tearsanity-dungeon', 'tearsanity-anywhere']
 
 ToS 15F NE Chest:
   id_hash: TRES_0x33_0x08
   is_mapobj: true
   room_index: 14
   scene: d_main
+  tos_section: 4
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 ToS 16F Bombable Wall Chest:
   id_hash: TRLS_0x1F_0x15
   is_mapobj: true
   room_index: 43
   scene: d_main
+  tos_section: 4
 
 ToS 17F Fire Rail Glyph:
   id_hash: GELG_0x1F_0x17
   is_mapobj: true
   room_index: 15
   scene: d_main
+  tos_section: 4
   settings: ['glyphs_and_sources']
 
 ToS 18F Center Chest:
@@ -1473,144 +1547,192 @@ ToS 18F Center Chest:
   is_mapobj: true
   room_index: 17
   scene: d_main
+  tos_section: 5
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 ToS 18F N Chest:
   id_hash: TREW_0x23_0x08
   is_mapobj: true
   room_index: 17
   scene: d_main
+  tos_section: 5
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 ToS 18F SE Tear of Light:
   id_hash: SZKU_0x0348_0x0278
   is_actor: true
   room_index: 17
   scene: d_main
+  tos_section: 5
+  settings: ['tearsanity-section', 'tearsanity-dungeon', 'tearsanity-anywhere']
 
 ToS 18F SW Chest:
   id_hash: TRLS_0x1A_0x27
   is_mapobj: true
   room_index: 17
   scene: d_main
+  tos_section: 5
 
 ToS 19F Center E Chest:
   id_hash: TRLW_0x24_0x18
   is_mapobj: true
   room_index: 18
   scene: d_main
+  tos_section: 5
 
 ToS 19F Center W Chest:
   id_hash: TRLW_0x1F_0x17
   is_mapobj: true
   room_index: 18
   scene: d_main
+  tos_section: 5
 
 ToS 19F S Tear of Light:
   id_hash: SZKU_0x01F0_0x0230
   is_actor: true
   room_index: 18
   scene: d_main
+  tos_section: 5
+  settings: ['tearsanity-section', 'tearsanity-dungeon', 'tearsanity-anywhere']
 
 ToS 1F Chest:
   id_hash: TRLW_0x1F_0x06
   is_mapobj: true
   room_index: 0
   scene: d_main
+  tos_section: 1
 
 ToS 1F E Tear of Light:
   id_hash: SZKU_0x02E8_0x0148
   is_actor: true
   room_index: 0
   scene: d_main
+  tos_section: 1
+  settings: ['tearsanity-section', 'tearsanity-dungeon', 'tearsanity-anywhere']
 
 ToS 1F N Tear of Light:
   id_hash: SZKU_0x01F8_0x0078
   is_actor: true
   room_index: 0
   scene: d_main
+  tos_section: 1
+  settings: ['tearsanity-section', 'tearsanity-dungeon', 'tearsanity-anywhere']
 
 ToS 1F W Tear of Light:
   id_hash: SZKU_0x0118_0x0148
   is_actor: true
   room_index: 0
   scene: d_main
+  tos_section: 1
+  settings: ['tearsanity-section', 'tearsanity-dungeon', 'tearsanity-anywhere']
 
 ToS 20F SW Tear of Light:
   id_hash: SZKU_0x00E8_0x0168
   is_actor: true
   room_index: 19
   scene: d_main
+  tos_section: 5
+  settings: ['tearsanity-section', 'tearsanity-dungeon', 'tearsanity-anywhere']
 
 ToS 21F Bomb Wall Chest:
   id_hash: TRLS_0x1F_0x16
   is_mapobj: true
   room_index: 46
   scene: d_main
+  tos_section: 5
+
+ToS 22F Boss Key:
+  id_hash: KEYT_0x0230_0x01B0
+  is_actor: true
+  room_index: 24
+  scene: d_main
+  tos_section: 5
+  settings: ['bkeysanity-dungeon', 'bkeysanity-anywhere']
 
 ToS 24F Final Chest:
   id_hash: TRLS_0x1F_0x17
   is_mapobj: true
   room_index: 35
   scene: d_main
+  tos_section: 6
 
 ToS 28F E Raised Chest:
   id_hash: TRLW_0x18_0x1F
   is_mapobj: true
   room_index: 32
   scene: d_main
+  tos_section: 6
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 ToS 28F W Raised Chest:
   id_hash: TRLW_0x09_0x23
   is_mapobj: true
   room_index: 32
   scene: d_main
+  tos_section: 6
 
 ToS 29F SE Large Chest:
   id_hash: TRLW_0x36_0x1D
   is_mapobj: true
   room_index: 31
   scene: d_main
+  tos_section: 6
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 ToS 29F SE Small Chest:
   id_hash: TREW_0x34_0x1D
   is_mapobj: true
   room_index: 31
   scene: d_main
+  tos_section: 6
 
 ToS 2F Bomb Wall Chest:
   id_hash: TRLS_0x1F_0x16
   is_mapobj: true
   room_index: 40
   scene: d_main
+  tos_section: 1
 
 ToS 2F Raised Chest:
   id_hash: TRLS_0x20_0x0E
   is_mapobj: true
   room_index: 1
   scene: d_main
+  tos_section: 1
 
 ToS 2F Whirlwind Chest:
   id_hash: TRLS_0x27_0x09
   is_mapobj: true
   room_index: 1
   scene: d_main
+  tos_section: 1
 
 ToS 30F SE Wrecker Chest:
   id_hash: TRLS_0x32_0x19
   is_mapobj: true
   room_index: 30
   scene: d_main
+  tos_section: 6
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 ToS 30F W Chest:
   id_hash: TRLS_0x06_0x19
   is_mapobj: true
   room_index: 30
   scene: d_main
+  tos_section: 6
 
 ToS 3F Forest Rail Glyph:
   id_hash: GELG_0x1F_0x17
   is_mapobj: true
   room_index: 2
   scene: d_main
+  tos_section: 1
   settings: ['glyphs_and_sources']
 
 ToS 4F Central Chest:
@@ -1618,84 +1740,103 @@ ToS 4F Central Chest:
   is_mapobj: true
   room_index: 3
   scene: d_main
+  tos_section: 2
 
 ToS 4F E Tear of Light:
   id_hash: SZKU_0x0200_0x00D0
   is_actor: true
   room_index: 3
   scene: d_main
+  tos_section: 2
+  settings: ['tearsanity-section', 'tearsanity-dungeon', 'tearsanity-anywhere']
 
 ToS 4F Lava Tear of Light:
   id_hash: SZKU_0x0150_0x0190
   is_actor: true
   room_index: 3
   scene: d_main
+  tos_section: 2
+  settings: ['tearsanity-section', 'tearsanity-dungeon', 'tearsanity-anywhere']
 
 ToS 4F NE Chest:
   id_hash: TRLS_0x29_0x0A
   is_mapobj: true
   room_index: 3
   scene: d_main
+  tos_section: 2
 
 ToS 4F W Tear of Light:
   id_hash: SZKU_0x0090_0x0190
   is_actor: true
   room_index: 3
   scene: d_main
+  tos_section: 2
+  settings: ['tearsanity-section', 'tearsanity-dungeon', 'tearsanity-anywhere']
 
 ToS 5F Bomb Wall Chest:
   id_hash: TRLS_0x1F_0x16
   is_mapobj: true
   room_index: 41
   scene: d_main
+  tos_section: 2
 
 ToS 5F Island Chest:
   id_hash: TRLS_0x18_0x22
   is_mapobj: true
   room_index: 4
   scene: d_main
+  tos_section: 2
 
 ToS 5F Spinnit Key:
   id_hash: MKUR_0x00E0_0x01B0
   is_actor: true
   room_index: 4
   scene: d_main
+  tos_section: 2
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 ToS 6F Enemy Bottom Left:
   id_hash: TRLS_0x2B_0x17
   is_mapobj: true
   room_index: 5
   scene: d_main
+  tos_section: 2
 
 ToS 6F Enemy Chest Bottom Right:
   id_hash: TRES_0x30_0x18
   is_mapobj: true
   room_index: 5
   scene: d_main
+  tos_section: 2
 
 ToS 6F Enemy Chest Top Left:
   id_hash: TRES_0x29_0x15
   is_mapobj: true
   room_index: 5
   scene: d_main
+  tos_section: 2
 
 ToS 6F Enemy Chest Top Right:
   id_hash: TRES_0x31_0x15
   is_mapobj: true
   room_index: 5
   scene: d_main
+  tos_section: 2
 
 ToS 6F Key:
   id_hash: KEYN_0x02F0_0x0230
   is_actor: true
   room_index: 5
   scene: d_main
+  tos_section: 2
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 ToS 7F Snow Rail Glyph:
   id_hash: GELG_0x1F_0x17
   is_mapobj: true
   room_index: 6
   scene: d_main
+  tos_section: 2
   settings: ['glyphs_and_sources']
 
 ToS 8F N Bombable Wall Chest:
@@ -1703,36 +1844,45 @@ ToS 8F N Bombable Wall Chest:
   is_mapobj: true
   room_index: 21
   scene: d_main
+  tos_section: 3
 
 ToS 8F S Bombable Wall Chest:
   id_hash: TRLS_0x1F_0x15
   is_mapobj: true
   room_index: 42
   scene: d_main
+  tos_section: 3
 
 ToS 9F NE Bombable Wall Tear of Light:
   id_hash: SZKU_0x01F8_0x0178
   is_actor: true
   room_index: 22
   scene: d_main
+  tos_section: 3
+  settings: ['tearsanity-section', 'tearsanity-dungeon', 'tearsanity-anywhere']
 
 ToS 9F NE Tear of Light:
   id_hash: SZKU_0x02B8_0x0128
   is_actor: true
   room_index: 8
   scene: d_main
+  tos_section: 3
+  settings: ['tearsanity-section', 'tearsanity-dungeon', 'tearsanity-anywhere']
 
 ToS 9F NW Secret Chest:
   id_hash: TRLS_0x0C_0x08
   is_mapobj: true
   room_index: 8
   scene: d_main
+  tos_section: 3
 
 ToS 9F NW Tear of Light:
   id_hash: SZKU_0x00E0_0x0120
   is_actor: true
   room_index: 8
   scene: d_main
+  tos_section: 3
+  settings: ['tearsanity-section', 'tearsanity-dungeon', 'tearsanity-anywhere']
 
 ToS Summit Stamp Station:
   id_hash: SPTB_0x22_0x23
@@ -1791,6 +1941,8 @@ Tunnel to ToS 1F Block Chest:
   is_mapobj: true
   room_index: 0
   scene: d_tutorial
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 Tunnel to ToS 2F Chest:
   id_hash: TRES_0x28_0x19
@@ -1838,6 +1990,7 @@ Wooded Temple 1F Key:
   is_actor: true
   room_index: 0
   scene: d_forest
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
 
 Wooded Temple 1F Stamp Station:
   id_hash: SPTB_0x26_0x09
@@ -1869,6 +2022,15 @@ Wooded Temple 3F Chestnut Chest:
   is_mapobj: true
   room_index: 2
   scene: d_forest
+  vanilla: 0x0A
+  settings: ['keysanity-dungeon', 'keysanity-anywhere']
+
+Wooded Temple 3F Boss Key:
+  id_hash: KEYB_0x02F8_0x0098
+  is_actor: true
+  room_index: 2
+  scene: d_forest
+  settings: ['bkeysanity-dungeon', 'bkeysanity-anywhere']
 
 Wooded Temple 3F SE Chest:
   id_hash: TREW_0x2B_0x17

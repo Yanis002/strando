@@ -20,6 +20,9 @@ class LocationSettings:
         self.passengers = False
         self.cargo = False
         self.rabbitsanity: str | None = None
+        self.keysanity = False
+        self.tearsanity = False
+        self.bkeysanity = False
 
 
 class MinigamesSettings:
@@ -252,7 +255,7 @@ class ShuffleDungeonSettings:
         self.bkeyring = False
         self.tear_ring = False
         self.tos_sections = False
-        self.tos_section_reward = False
+        self.is_tos_dungeon = False
 
         self.keysanity_mode = ["off", "dungeon", "anywhere", "removed"]
         self.keysanity_mode_map = {mode: i for i, mode in enumerate(self.keysanity_mode)}
@@ -285,8 +288,8 @@ class ShuffleDungeonSettings:
         if not isinstance(self.tos_sections, bool):
             raise ValueError("tos_sections must be true or false")
 
-        if not isinstance(self.tos_section_reward, bool):
-            raise ValueError("tos_section_reward must be true or false")
+        if not isinstance(self.is_tos_dungeon, bool):
+            raise ValueError("is_tos_dungeon must be true or false")
 
     @staticmethod
     def from_yaml(data: dict):
@@ -313,8 +316,8 @@ class ShuffleDungeonSettings:
         if "tos_sections" in data:
             settings.tos_sections = data["tos_sections"]
 
-        if "tos_section_reward" in data:
-            settings.tos_section_reward = data["tos_section_reward"]
+        if "is_tos_dungeon" in data:
+            settings.is_tos_dungeon = data["is_tos_dungeon"]
 
         settings.validate()
         return settings
@@ -329,7 +332,7 @@ class ShuffleDungeonSettings:
             self.bkeyring,
             self.tear_ring,
             self.tos_sections,
-            self.tos_section_reward,
+            self.is_tos_dungeon,
         )
 
     def to_yaml(self):
@@ -341,8 +344,17 @@ class ShuffleDungeonSettings:
             "bosskey_ring": self.bkeyring,
             "tear_ring": self.tear_ring,
             "tos_sections": self.tos_sections,
-            "tos_section_reward": self.tos_section_reward,
+            "is_tos_dungeon": self.is_tos_dungeon,
         }
+
+    def is_keysanity_enabled(self):
+        return self.keysanity not in ["removed", "vanilla"]
+
+    def is_bksanity_enabled(self):
+        return self.bksanity not in ["removed", "vanilla"]
+
+    def is_tearsanity_enabled(self):
+        return self.tear_sanity not in ["removed", "vanilla"]
 
 
 class GoalSettings:
