@@ -714,7 +714,7 @@ class LocationNode:
         if "is_shop" in data:
             new_node.is_shop = data["is_shop"]
 
-        if "entrances" in data:
+        if "entrances" in data and data["entrances"] is not None:
             for entry_name, entry_cond in data["entrances"].items():
                 new_node.entrances.append(EntranceDef(entry_name, entry_cond))
 
