@@ -419,7 +419,8 @@ void GZ::OnScenePreInit() {
         // other sections are handled in `GZ::OnScenePostInit`
         // we only need to prevent loading the scene if we don't have section 1
         // otherwise we are blocked by default by the game, assuming the flag is unset
-        if (this->IsOnLand() && !GET_FLAG(data_027e09b8->mAdventureFlags, RandoAdventureFlag_TowerSection_1)) {
+        if (this->IsOnLand() && gSettings.GetShuffleDungeonSettings()->tos_sections &&
+            !GET_FLAG(data_027e09b8->mAdventureFlags, RandoAdventureFlag_TowerSection_1)) {
             if (pNext->mSceneIndex == SceneIndex_d_main_w) {
                 pNext->mSceneIndex = SceneIndex_d_main_f;
                 pNext->mSpawnIndex = 1;
