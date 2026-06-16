@@ -93,7 +93,6 @@ struct ShuffleDungeonSettings {
     bool bkeyring;
     bool tear_ring;
     bool tos_sections;
-    bool is_tos_dungeon;
 
     ShuffleDungeonSettings() { memset(this, 0, sizeof(ShuffleDungeonSettings)); }
 };
@@ -106,6 +105,7 @@ enum DarkRealmMode_ {
 };
 
 struct GoalSettings {
+    bool is_tos_dungeon;
     u8 unlock_dark_realm;
     u8 dungeon_amount;
 

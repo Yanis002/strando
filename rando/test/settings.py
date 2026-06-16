@@ -255,7 +255,6 @@ class ShuffleDungeonSettings:
         self.bkeyring = False
         self.tear_ring = False
         self.tos_sections = False
-        self.is_tos_dungeon = False
 
         self.keysanity_mode = ["off", "dungeon", "anywhere", "removed"]
         self.keysanity_mode_map = {mode: i for i, mode in enumerate(self.keysanity_mode)}
@@ -288,9 +287,6 @@ class ShuffleDungeonSettings:
         if not isinstance(self.tos_sections, bool):
             raise ValueError("tos_sections must be true or false")
 
-        if not isinstance(self.is_tos_dungeon, bool):
-            raise ValueError("is_tos_dungeon must be true or false")
-
     @staticmethod
     def from_yaml(data: dict):
         settings = ShuffleDungeonSettings()
@@ -316,15 +312,12 @@ class ShuffleDungeonSettings:
         if "tos_sections" in data:
             settings.tos_sections = data["tos_sections"]
 
-        if "is_tos_dungeon" in data:
-            settings.is_tos_dungeon = data["is_tos_dungeon"]
-
         settings.validate()
         return settings
 
     def to_bin(self):
         return struct.pack(
-            "<BBBBBBBB",
+            "<BBBBBBB",
             self.keysanity_mode_map[self.keysanity],
             self.bksanity_mode_map[self.bksanity],
             self.tear_sanity_mode_map[self.tear_sanity],
@@ -332,7 +325,6 @@ class ShuffleDungeonSettings:
             self.bkeyring,
             self.tear_ring,
             self.tos_sections,
-            self.is_tos_dungeon,
         )
 
     def to_yaml(self):
@@ -344,7 +336,6 @@ class ShuffleDungeonSettings:
             "bosskey_ring": self.bkeyring,
             "tear_ring": self.tear_ring,
             "tos_sections": self.tos_sections,
-            "is_tos_dungeon": self.is_tos_dungeon,
         }
 
     def is_keysanity_enabled(self):
@@ -359,6 +350,7 @@ class ShuffleDungeonSettings:
 
 class GoalSettings:
     def __init__(self):
+        self.is_tos_dungeon = False
         self.unlock_dark_realm = str()
         self.unlock_dark_realm = str()
         self.dungeon_amount = -1
@@ -367,6 +359,9 @@ class GoalSettings:
         self.unlock_dark_realm_mode_map = {mode: i for i, mode in enumerate(self.unlock_dark_realm_mode)}
 
     def validate(self):
+        if not isinstance(self.is_tos_dungeon, bool):
+            raise ValueError("is_tos_dungeon must be true or false")
+
         if self.unlock_dark_realm not in self.unlock_dark_realm_mode:
             raise ValueError("unlock_dark_realm is not valid")
 
@@ -376,6 +371,9 @@ class GoalSettings:
     @staticmethod
     def from_yaml(data: dict):
         settings = GoalSettings()
+
+        if "is_tos_dungeon" in data:
+            settings.is_tos_dungeon = data["is_tos_dungeon"]
 
         if "unlock_dark_realm" in data:
             settings.unlock_dark_realm = data["unlock_dark_realm"]
@@ -387,10 +385,13 @@ class GoalSettings:
         return settings
 
     def to_bin(self):
-        return struct.pack("<BB", self.unlock_dark_realm_mode_map[self.unlock_dark_realm], self.dungeon_amount)
+        return struct.pack(
+            "<BBB", self.is_tos_dungeon, self.unlock_dark_realm_mode_map[self.unlock_dark_realm], self.dungeon_amount
+        )
 
     def to_yaml(self):
         return {
+            "is_tos_dungeon": self.is_tos_dungeon,
             "unlock_dark_realm": self.unlock_dark_realm,
             "dungeon_amount": self.dungeon_amount,
         }

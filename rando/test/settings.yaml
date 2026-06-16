@@ -79,12 +79,12 @@ settings:
         # - sources (vanilla behavior)
         tos_sections: false
 
+    goal:
         # true/false, do we count ToS as a dungeon (vanilla: false)
         is_tos_dungeon: true
 
-    goal:
         # open, dungeons, compass, restoration_songs (vanilla: compass)
         unlock_dark_realm: "dungeons"
 
-        # 1-5, only relevant when choosing `dungeons` for `dark_realm`
+        # 1-5, only relevant when choosing `dungeons` for `unlock_dark_realm`
         dungeon_amount: 5
