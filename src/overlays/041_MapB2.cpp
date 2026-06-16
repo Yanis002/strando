@@ -7,6 +7,8 @@
 #include <Actor/ActorUnkKEYT.hpp>
 #include <Unknown/UnkStruct_027e09b8.hpp>
 
+extern "C" bool func_ov041_02129ec0(Actor* thisx, ActorGrabParams grabParams);
+
 bool BossKeyItemGive(ItemId itemId) {
     switch (gSettings.GetShuffleDungeonSettings()->bksanity) {
         case BossKeysanityMode_Dungeon:
@@ -36,7 +38,7 @@ bool CustomBossKey::CustomGrab(ActorGrabParams grabParams) {
     // this is done simply by returning false
 
     if (BossKeyItemGive(this->mUnk_5C.mParams[3])) {
-        return this->ActorUnkKEYB::Grab(grabParams);
+        return func_ov041_02129ec0(this, grabParams);
     }
 
     return false;
