@@ -1,0 +1,100 @@
+"Tower of Spirits - 1F":
+  scene: "d_main"
+  room_index: 0
+  events:
+    TOS_1F_DOORS: "can_possess_phantom(1)"
+  entrances:
+    "Tower of Spirits - Stairs Section 1": "true"
+    "Tower of Spirits - 1F Stairs": "event(TOS_1F_DOORS)"
+    "Tower of Spirits - 1F Right": "hit_melee_crystal_switch()"
+  locations:
+    "Tower of Spirits - 1F Chest": "hit_ranged_crystal_switch()"
+    "Tower of Spirits - 1F Tear of Light W": "true"
+    "Tower of Spirits - 1F Tear of Light N": "true"
+
+"Tower of Spirits - 1F Stairs":
+  scene: "d_main"
+  room_index: 0
+  entrances:
+    "Tower of Spirits - 1F": "event(TOS_1F_DOORS)"
+    "Tower of Spirits - 2F": "true"
+
+"Tower of Spirits - 1F Right":
+  scene: "d_main"
+  room_index: 0
+  entrances:
+    "Tower of Spirits - 1F": "hit_melee_crystal_switch()"
+  locations:
+    "Tower of Spirits - 1F Tear of Light E": "true"
+
+"Tower of Spirits - 2F":
+  scene: "d_main"
+  room_index: 1
+  entrances:
+    "Tower of Spirits - 1F Stairs": "true"
+    "Tower of Spirits - 2F After Spikes Near 1F Stairs": "can_possess_phantom(1)"
+
+"Tower of Spirits - 2F After Spikes Near 1F Stairs":
+  scene: "d_main"
+  room_index: 1
+  events:
+    TOS_2F_DOOR: "can_possess_phantom(1)"
+  entrances:
+    "Tower of Spirits - 2F": "can_possess_phantom(1) or hit_melee_crystal_switch()"
+    "Tower of Spirits - 2F After Bridge": "event(TOS_2F_BRIDGE)"
+    "Tower of Spirits - 2F After Door": "event(TOS_2F_DOOR)"
+
+"Tower of Spirits - 2F After Bridge":
+  scene: "d_main"
+  room_index: 1
+  events:
+    TOS_2F_BRIDGE: "can_possess_phantom(1) and got_item('WhirlWind')"
+    TOS_2F_CAN_CLIMB: "can_possess_phantom(1)"
+  entrances:
+    "Tower of Spirits - 2F After Spikes Near 1F Stairs": "event(TOS_2F_BRIDGE)"
+    "Tower of Spirits - 2F After Other Spikes": "true"
+  locations:
+    "Tower of Spirits - 2F Chest Top": "true"
+
+"Tower of Spirits - 2F After Door":
+  scene: "d_main"
+  room_index: 1
+  entrances:
+    "Tower of Spirits - 2F After Spikes Near 1F Stairs": "event(TOS_2F_DOOR)"
+    "Tower of Spirits - 2F After Other Spikes": "can_possess_phantom(1) or event(TOS_2F_SWITCH_NEAR_3F)"
+
+"Tower of Spirits - 2F After Other Spikes":
+  scene: "d_main"
+  room_index: 1
+  events:
+    TOS_2F_SWITCH_NEAR_3F: "hit_melee_crystal_switch()"
+  entrances:
+    "Tower of Spirits - 2F After Bridge": "event(TOS_2F_SWITCH_NEAR_3F)"
+    "Tower of Spirits - 3F": "true"
+    "Tower of Spirits - 2F Center Ledge": "event(TOS_2F_CAN_CLIMB)"
+    "Tower of Spirits - 2F Weak Wall": "got_item('ProgressiveBombBag')"
+
+"Tower of Spirits - 2F Center Ledge":
+  scene: "d_main"
+  room_index: 1
+  entrances:
+    "Tower of Spirits - 2F After Other Spikes": "true"
+  locations:
+    "Tower of Spirits - 2F Chest Center": "true"
+
+"Tower of Spirits - 3F":
+  scene: "d_main"
+  room_index: 2
+  entrances:
+    "Tower of Spirits - 2F After Other Spikes": "true"
+  locations:
+    "Tower of Spirits - 3F Chest": "true"
+    "Tower of Spirits - Base": "true"
+
+"Tower of Spirits - 2F Weak Wall":
+  scene: "d_main"
+  room_index: 40
+  entrances:
+    "Tower of Spirits - 2F After Other Spikes": "true"
+  locations:
+    "Tower of Spirits - 2F Chest Behind Weak Wall": "true"

@@ -1,0 +1,42 @@
+"Outset Village - Niko's House":
+  scene: "f_first"
+  room_index: 10
+  locations:
+    "Outset Village - Stamp Book": "got_adv_flag('AlfonzoBoardsTrainToOutsetVillage')"
+    "Outset Village - 10 Stamps Reward": "can_reach_stamps(10)"
+    "Outset Village - 15 Stamps Reward": "can_reach_stamps(15)"
+    "Outset Village - 20 Stamps Reward": "can_reach_stamps(20)"
+  entrances:
+    "Outset Village - Exterior": "True"
+
+"Outset Village - Exterior":
+  scene: "f_first"
+  room_index: 0
+  locations:
+    "Outset Village - Clear Rocks": "True"
+    "Outset Village - Bee Tree": "True"
+    "Outset Village - Stamp Monument": "got_item('Stamp Monument')"
+    "Outset Village - Buried Chest by Beach Tree": "can_play_song('Discovery')"
+    "Outset Village - Buried Chest by Niko's House": "can_play_song('Discovery')"
+    "Outset Village - Pick up Joe": "shuffle_passengers && got_source('Ocean')"
+    "Outset Village - Deliver Cuccos": "is_merch_available('Cuccos')"
+  entrances:
+    "Outset Village - Niko's House": "True"
+    "Outset Village - Alfonzo's House": "True" # TODO: verify
+    "Outset Village - Mary's House": "True"
+
+"Outset Village - Alfonzo's House":
+  scene: "f_first"
+  room_index: 11
+  entrances:
+    "Outset Village - Exterior": "True"
+  locations:
+    "Outset Village - Ferrus' Force Gem": "got_adv_flag('AlfonzoBoardsTrainToOutset\
+      Village') && got_adv_flag('CompletedFireRestorationSong')"
+
+# future proofing for ER
+"Outset Village - Mary's House":
+  scene: "f_first"
+  room_index: 12
+  entrances:
+    "Outset Village - Exterior": "True"

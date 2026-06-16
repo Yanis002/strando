@@ -1,0 +1,77 @@
+"Castle Town - Plaza":
+  scene: "f_htown"
+  room_index: 0
+  entrances:
+    "Hyrule Castle - Exterior": "True"
+    "Castle Town - Take 'em All On": "True"
+    "Castle Town - Shop": "True"
+    "Castle Town - Mona's House": "True"
+    "Castle Town - Walls": "got_item('ProgressiveBombBag')"
+  locations:
+    "Castle Town - Goron's Force Gem": "shuffle_passengers && got_glyph('Fire')"
+    # Merch
+    "Castle Town - Buy Cuccos": "got_wagon()"
+    "Castle Town - Deliver Fish": "is_merch_available('Fish')"
+    # Passengers
+    "Castle Town - Pick Up Alfonzo": "shuffle_passengers && got_glyph('Snow')"
+    "Castle Town - Pick Up Teacher": "shuffle_passengers" # TODO: verify
+
+"Castle Town - Walls":
+  scene: "f_htown"
+  room_index: 0
+  entrances:
+    "Castle Town - Plaza": "True"
+    "Castle Town - Roofs": "can_play_song('Birds')"
+  locations:
+    "Castle Town - Walls Left Chest": "True"
+    "Castle Town - Walls Right Chest": "True"
+    "Castle Town - Stamp Monument": "got_item('StampBook')"
+
+"Castle Town - Roofs":
+  scene: "f_htown"
+  room_index: 0
+  entrances:
+    "Castle Town - Walls": "can_play_song('Birds')"
+    "Castle Town - Plaza": "True"
+  locations:
+    "Castle Town - Roofs Ramp House Chest": "True"
+    "Castle Town - Roofs Empty House Chest": "True"
+    "Castle Town - Roofs Parkour Chest": "True"
+
+"Castle Town - Take 'em All On":
+  scene: "f_htown"
+  room_index: 11
+  entrances:
+    "Castle Town - Plaza": "True"
+    "Caste Town - Take 'em All On Level 3 Top": "got_many_items(['WhirlWind', 'ProgressiveSword', 'Boomerang', 'Whip', 'ProgressiveBow', 'SandRod']) && got_bow_of_light() && take_em_all_on(2)"
+
+  locations:
+    "Castle Town - Take 'em All On Level 1": "got_many_items(['WhirlWind', 'ProgressiveSword']) && got_source('Forest')"
+    "Castle Town - Take 'em All On Level 2": "got_many_items(['WhirlWind', 'ProgressiveSword', 'Boomerang', 'Whip']) && got_source('Ocean') && take_em_all_on(1)"
+    "Castle Town - Take 'em All On Level 3": "got_many_items(['WhirlWind', 'ProgressiveSword', 'Boomerang', 'Whip', 'ProgressiveBow', 'SandRod']) && got_bow_of_light() && take_em_all_on(2)"
+
+"Castle Town - Shop":
+  scene: "f_htown"
+  room_index: 10
+  entrances:
+    "Castle Town - Plaza": "True"
+  locations:
+    "Castle Town - Shop Top Left": "True"
+    "Castle Town - Shop Top Middle": "True"
+    "Castle Town - Shop Top Right": "True"
+    "Castle Town - Shop Bottom Left": "True"
+    "Castle Town - Shop Bottom Right": "True"
+
+"Castle Town - Mona's House":
+  scene: "f_htown"
+  room_index: 12
+  entrances:
+    "Castle Town - Plaza": "True"
+  locations:
+    "Castle Town - Pick Up Mona": "shuffle_passengers"
+
+"Caste Town - Take 'em All On Level 3 Top":
+  scene: "tekiya09"
+  room_index: 1
+  locations:
+    "Castle Town - Take 'em All On Level 3 Top Chest": "True"

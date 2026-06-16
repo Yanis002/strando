@@ -1,0 +1,117 @@
+"Hyrule Castle - Exterior":
+  scene: "f_hyral"
+  room_index: 0
+  entrances:
+    "Castle Town - Plaza": "True"
+    "Hyrule Castle - Main Hall": "True"
+
+"Hyrule Castle - Main Hall":
+  scene: "f_hyral"
+  room_index: 1
+  entrances:
+    "Hyrule Castle - Exterior": "True"
+    "Hyrule Castle - Ceremony Room": "True"
+    "Hyrule Castle - Guards Room": "True"
+    "Hyrule Castle - Nursery": "True"
+    "Hyrule Castle - 2F Exterior Left Side": "True"
+    "Hyrule Castle - 2F Exterior Right Side": "True"
+  locations:
+    "Hyrule Castle - Main Hall Left Chest": "True"
+
+"Hyrule Castle - Ceremony Room":
+  scene: "f_hyral"
+  room_index: 6
+  entrances:
+    "Hyrule Castle - Main Hall": "True"
+    "Hyrule Castle - 2F Interior Top Left": "True"
+    "Hyrule Castle - 2F Interior Top Right": "True"
+
+"Hyrule Castle - Guards Room":
+  scene: "f_hyral"
+  room_index: 7
+  entrances:
+    "Hyrule Castle - Main Hall": "True"
+  locations:
+    "Hyrule Castle - Guards Room Sword Minigame 60 Points": "got_item('ProgressiveSword') && got_source('Snow')"
+
+"Hyrule Castle - Nursery":
+  scene: "f_hyral"
+  room_index: 3
+  entrances:
+    "Hyrule Castle - Main Hall": "True"
+
+"Hyrule Castle - 2F Exterior Left Side":
+  scene: "f_hyral"
+  room_index: 0
+  entrances:
+    "Hyrule Castle - Main Hall": "True"
+    "Hyrule Castle - 2F Exterior": "True"
+
+"Hyrule Castle - 2F Exterior Right Side":
+  scene: "f_hyral"
+  room_index: 0
+  entrances:
+    "Hyrule Castle - Main Hall": "True"
+    "Hyrule Castle - 2F Exterior": "True"
+
+"Hyrule Castle - 2F Exterior":
+  scene: "f_hyral"
+  room_index: 0
+  entrances:
+    "Hyrule Castle - 2F Exterior Left Side": "True"
+    "Hyrule Castle - 2F Exterior Right Side": "True"
+    "Hyrule Castle - 2F Interior Lower Half": "True"
+    "Hyrule Castle - 2F Interior Top Right": "True"
+
+"Hyrule Castle - 2F Interior Top Right":
+  scene: "f_hyral"
+  room_index: 2
+  entrances:
+    "Hyrule Castle - Ceremony Room": "True"
+    "Hyrule Castle - 2F Exterior": "True"
+    "Hyrule Castle - 2F Interior Lower Half": "True"
+    "Hyrule Castle - Zelda's Room": "True"
+
+"Hyrule Castle - 2F Interior Lower Half":
+  scene: "f_hyral"
+  room_index: 2
+  entrances:
+    "Hyrule Castle - 2F Exterior": "True"
+    "Hyrule Castle - 2F Interior Top Right": "True"
+    "Hyrule Castle - 2F Interior Top Left": "True"
+  locations:
+    "Hyrule Castle - 2F Interior Lower Half Chest": "True"
+
+"Hyrule Castle - 2F Interior Top Left":
+  scene: "f_hyral"
+  room_index: 2
+  entrances:
+    "Hyrule Castle - Ceremony Room": "True"
+    "Hyrule Castle - 2F Interior Lower Half": "True"
+    "Hyrule Castle - 2F Exterior Top Left": "True"
+    "Hyrule Castle - Hidden Hallway": "True"
+
+"Hyrule Castle - Hidden Hallway":
+  scene: "f_hyral"
+  room_index: 1
+  entrances:
+    "Hyrule Castle - 2F Interior Top Left": "True"
+    "Hyrule Castle - Backyard": "got_item('ProgressiveSword')"
+  locations:
+    "Hyrule Castle - Hidden Hallway Chest": "True"
+    # also 3 pots below the chest... not hinting at anything ;)
+
+"Hyrule Castle - Zelda's Room":
+  scene: "f_hyral"
+  room_index: 5
+  entrances:
+    "Hyrule Castle - 2F Interior Top Right": "True"
+  locations:
+    "Hyrule Castle - Spirit Pipes": "True"
+
+"Hyrule Castle - Backyard":
+  scene: "f_hyral"
+  room_index: 4
+  entrances:
+    "Hyrule Castle - Hidden Hallway": "True"
+    "Tunnel to Tower - 1F": "True"

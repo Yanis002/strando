@@ -1,0 +1,181 @@
+"Tower of Spirits - 4F":
+  scene: "d_main"
+  room_index: 3
+  entrances:
+    "Tower of Spirits - Stairs Section 2": "true"
+    "Tower of Spirits - 4F After Lava Pit": "can_possess_phantom(2)"
+  locations:
+    "Tower of Spirits - 4F Tear of Light W": "true"
+    "Tower of Spirits - 4F Tear of Light N": "true"
+    "Tower of Spirits - 4F Tear of Light Middle": "got_item('WhirlWind')"
+    "Tower of Spirits - 4F Center Chest": "true"
+
+"Tower of Spirits - 4F After Lava Pit":
+  scene: "d_main"
+  room_index: 3
+  entrances:
+    "Tower of Spirits - 4F": "can_possess_phantom(2)"
+    "Tower of Spirits - 5F": "true"
+
+"Tower of Spirits - 5F":
+  scene: "d_main"
+  room_index: 4
+  entrances:
+    "Tower of Spirits - 4F After Lava Pit": "true"
+    "Tower of Spirits - 5F Lava Pit Center": "can_possess_phantom(2)"
+
+"Tower of Spirits - 5F Lava Pit Center":
+  scene: "d_main"
+  room_index: 4
+  events:
+    TOS_5F_WIND_SWITCHES: "can_possess_phantom(2) and got_item('WhirlWind')"
+  entrances:
+    "Tower of Spirits - 5F After Lava Pit Center": "event(TOS_5F_WIND_SWITCHES)"
+  locations:
+    "Tower of Spirits - 5F Chest": "true"
+
+"Tower of Spirits - 5F After Lava Pit Center":
+  scene: "d_main"
+  room_index: 4
+  entrances:
+    "Tower of Spirits - 5F Lava Pit Center": "event(TOS_5F_WIND_SWITCHES)"
+    "Tower of Spirits - 5F Lava Pit North West": "small_keys('ToS_Section_Second', 1)"
+    "Tower of Spirits - 5F Lava Pit North": "true"
+
+"Tower of Spirits - 5F Lava Pit North West":
+  scene: "d_main"
+  room_index: 4
+  entrances:
+    "Tower of Spirits - 5F After Lava Pit Center": "small_keys('ToS_Section_Second', 1)"
+    "Tower of Spirits - 5F Main Stairs to 6F": "can_possess_phantom(2)"
+
+"Tower of Spirits - 5F Main Stairs to 6F":
+  scene: "d_main"
+  room_index: 4
+  entrances:
+    "Tower of Spirits - 5F Lava Pit North West": "can_possess_phantom(2)"
+    "Tower of Spirits - 6F Main Section": "true"
+
+"Tower of Spirits - 5F Lava Pit North":
+  scene: "d_main"
+  room_index: 4
+  events:
+    TOS_5F_LAVA_PIT_NORTH_DOOR: "can_possess_phantom(2) and got_item('Boomerang')"
+  entrances:
+    "Tower of Spirits - 5F After Lava Pit Center": "true"
+    "Tower of Spirits - 5F Lava Pit North East": "event(TOS_5F_LAVA_PIT_NORTH_DOOR)"
+
+"Tower of Spirits - 5F Lava Pit North East":
+  scene: "d_main"
+  room_index: 4
+  entrances:
+    "Tower of Spirits - 5F Lava Pit North": "event(TOS_5F_LAVA_PIT_NORTH_DOOR)"
+    "Tower of Spirits - 5F Sub Stairs to 6F": "can_possess_phantom(2)"
+    "Tower of Spirits - 5F Sub Stairs to 4F": "can_possess_phantom(2)"
+
+"Tower of Spirits - 5F Sub Stairs to 4F":
+  scene: "d_main"
+  room_index: 4
+  entrances:
+    "Tower of Spirits - 5F Lava Pit North East": "can_possess_phantom(2)"
+    "Tower of Spirits - 4F East Subsection": "true"
+    "Tower of Spirits - 5F Weak Wall": "got_item('ProgressiveBombBag')"
+
+"Tower of Spirits - 5F Weak Wall":
+  scene: "d_main"
+  room_index: 41
+  entrances:
+    "Tower of Spirits - 5F Sub Stairs to 4F": "true"
+  locations:
+    "Tower of Spirits - 5F Chest Behind Weak Wall": "true"
+
+"Tower of Spirits - 4F East Subsection":
+  scene: "d_main"
+  room_index: 3
+  entrances:
+    "Tower of Spirits - 5F Sub Stairs to 4F": "true"
+  locations:
+    "Tower of Spirits - 4F East Subsection Chest": "can_possess_phantom(2) && got_many_items(['WhirlWind', 'Boomerang', 'ProgressiveBombBag'])"
+
+"Tower of Spirits - 6F Main Section":
+  scene: "d_main"
+  room_index: 5
+  events:
+    TOS_6F_MAIN_GEOZARD: "can_possess_phantom(2) or got_item('Whip')"
+  entrances:
+    "Tower of Spirits - 5F Main Stairs to 6F": "event(TOS_6F_MAIN_GEOZARD)"
+    "Tower of Spirits - 6F Main After Arena": "event(TOS_6F_MAIN_GEOZARD)"
+  # locations:
+  #   "Tower of Spirits - 6F Main Section Arena Pot Left": "true"
+  #   "Tower of Spirits - 6F Main Section Arena Pot Right": "true"
+  
+"Tower of Spirits - 6F Main After Arena":
+  scene: "d_main"
+  room_index: 5
+  entrances:
+    "Tower of Spirits - 6F Main Section": "event(TOS_6F_MAIN_GEOZARD)"
+    "Tower of Spirits - 6F Main Middle Section": "can_possess_phantom(2)"
+  # locations:
+  #   "Tower of Spirits - 6F Main Section After Arena Pot Left": "true"
+  #   "Tower of Spirits - 6F Main Section After Arena Pot Right": "true"
+
+"Tower of Spirits - 6F Main Middle Section":
+  scene: "d_main"
+  room_index: 5
+  events:
+    TOS_6F_CAN_CLIMB: "can_possess_phantom(2)"
+  entrances:
+    "Tower of Spirits - 6F Main After Arena": "can_possess_phantom(2)"
+    "Tower of Spirits - 6F Main South East Section": "can_possess_phantom(2)"
+    "Tower of Spirits - 6F Stairs to 7F": "small_keys('ToS_Section_Second', 2)"
+  # locations:
+  #   "Tower of Spirits - 6F Main Middle Section Pot Left": "true"
+  #   "Tower of Spirits - 6F Main Middle Section Pot Right": "true"
+
+"Tower of Spirits - 6F Main South East Section":
+  scene: "d_main"
+  room_index: 5
+  entrances:
+    "Tower of Spirits - 6F Main Middle Section": "can_possess_phantom(2)"
+  locations:
+    "Tower of Spirits - 6F Main Section Small Key": "event(TOS_6F_CAN_CLIMB) && got_item('WhirlWind')"
+
+"Tower of Spirits - 6F Stairs to 7F":
+  scene: "d_main"
+  room_index: 5
+  entrances:
+    "Tower of Spirits - 6F Main Middle Section": "small_keys('ToS_Section_Second', 2)"
+    "Tower of Spirits - 7F": "true"
+
+"Tower of Spirits - 6F Subsection":
+  scene: "d_main"
+  room_index: 5
+  events:
+    TOS_6F_SUB_GEOZARD: "can_possess_phantom(2) or got_item('Whip')"
+  entrances:
+    "Tower of Spirits - 5F Sub Stairs to 6F": "event(TOS_6F_SUB_GEOZARD)"
+    "Tower of Spirits - 6F Treasure Room": "event(TOS_6F_SUB_GEOZARD)"
+
+"Tower of Spirits - 6F Treasure Room":
+  scene: "d_main"
+  room_index: 5
+  entrances:
+    "Tower of Spirits - 6F Subsection": "event(TOS_6F_SUB_GEOZARD)"
+  locations:
+    "Tower of Spirits - 6F Treasure Room Top Left Chest": "true"
+    "Tower of Spirits - 6F Treasure Room Top Right Chest": "true"
+    "Tower of Spirits - 6F Treasure Room Bottom Left Chest": "true"
+    "Tower of Spirits - 6F Treasure Room Bottom Right Chest": "true"
+    # "Tower of Spirits - 6F Treasure Room Pot Left Top": "true"
+    # "Tower of Spirits - 6F Treasure Room Pot Left Bottom": "true"
+    # "Tower of Spirits - 6F Treasure Room Pot Right": "true"
+
+
+"Tower of Spirits - 7F":
+  scene: "d_main"
+  room_index: 6
+  entrances:
+    "Tower of Spirits - 6F Stairs to 7F": "true"
+  locations:
+    "Tower of Spirits - 7F Chest": "true"
+

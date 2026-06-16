@@ -1,0 +1,49 @@
+"Tower of Spirits - Base":
+  scene: "d_main_f"
+  room_index: 0
+  entrances:
+    "Tower of Spirits - Stairs Section 1": "true" 
+    "Forest Land - Source Tracks": "true"
+    "Snow Land - Source Tracks": "got_source('Snow')"
+    "Ocean Land - Source Tracks": "got_source('Ocean')"
+    "Fire Land - Source Tracks": "got_source('Fire')"
+
+"Tower of Spirits - Stairs Section 1":
+  scene: "d_main_w"
+  room_index: 0
+  entrances:
+    "Tower of Spirit - Base": "true"
+    "Tower of Spirits - Stairs Section 2": ""
+    "Tower of Spirits - 1F": "true"
+
+"Tower of Spirits - Stairs Section 2":
+  scene: "d_main_w"
+  room_index: 0
+  entrances:
+    "Tower of Spirits - Stairs Section 1": "true"
+    "Tower of Spirits - Stairs Section 3": ""
+    "Tower of Spirits - 4F": "true"
+
+"Tower of Spirits - Stairs Section 3":
+  scene: "d_main_w"
+  room_index: 0
+  entrances:
+    "Tower of Spirits - Stairs Section 2": "true"
+    "Tower of Spirits - Stairs Section 4": ""
+    "Tower of Spirits - 8F": "true"
+
+"Tower of Spirits - Stairs Section 4":
+  scene: "d_main_w"
+  room_index: 0
+  entrances:
+    "Tower of Spirits - Stairs Section 3": "true"
+    "Tower of Spirits - Stairs Section 5": ""
+    "Tower of Spirits - 13F": "true"
+
+"Tower of Spirits - Stairs Section 5":
+  scene: "d_main_w"
+  room_index: 0
+  entrances:
+    "Tower of Spirits - Stairs Section 4": "true"
+    "Tower of Spirits - Before Staven Arena": "" # blue warp
+    "Tower of Spirits - 18F": "true"

@@ -1,0 +1,38 @@
+"Tunnel to Tower - 1F":
+  scene: "d_tutorial"
+  room_index: 0
+  entrances:
+    "Hyrule Castle - Backyard": "True"
+    "Tunnel to Tower - 2F": "small_keys('ToS_Tunnel', 1)"
+  locations:
+    "Tunnel to Tower - 1F Block Chest": "True"
+
+"Tunnel to Tower - 2F":
+  scene: "d_tutorial"
+  room_index: 1
+  entrances:
+    "Tunnel to Tower - 1F": "small_keys('ToS_Tunnel', 1)"
+    "Tunnel to Tower - 2F Before Blocks": "True"
+
+"Tunnel to Tower - 2F Before Blocks":
+  scene: "d_tutorial"
+  room_index: 1
+  entrances:
+    "Tunnel to Tower - 2F": "True"
+    "Tunnel to Tower - 2F Switches": "True"
+
+"Tunnel to Tower - 2F Switches":
+  scene: "d_tutorial"
+  room_index: 1
+  events:
+    TUNNEL_TOS_SWITCHES: "hit_melee_crystal_switch()"
+  entrances:
+    "Tunnel to Tower - 2F Before Blocks": "got_item('ProgressiveBombBag')"
+    "Tunnel to Tower - 3F": "event(TUNNEL_TOS_SWITCHES)"
+
+"Tunnel to Tower - 3F":
+  scene: "d_tutorial"
+  room_index: 2
+  entrances:
+    "Tunnel to Tower - 2F Switches": "event(TUNNEL_TOS_SWITCHES)"
+    "Tower of Spirits - Base": "true"
