@@ -189,18 +189,21 @@ def get_tos_section_from_room(room_index: int):
     return None
 
 
-def get_item_name_suffix(settings: Settings, cond: bool):
-    if (settings.shuffle.rabbitpack and cond) or (
-        settings.shuffle_dgn.is_tearsanity_enabled() and settings.shuffle_dgn.tear_ring
+def get_item_name_suffix(settings: Settings, kind: ItemKind | None):
+    if kind is None:
+        return ""
+
+    if (settings.shuffle.rabbitpack and kind == ItemKind.Rabbit) or (
+        settings.shuffle_dgn.is_tearsanity_enabled() and settings.shuffle_dgn.tear_ring and kind == ItemKind.Tear
     ):
         # "X Rabbit Pack" or "X Tear of Light Pack"
         return " Pack"
 
-    if settings.shuffle_dgn.is_keysanity_enabled() and settings.shuffle_dgn.keyring:
+    if settings.shuffle_dgn.is_keysanity_enabled() and settings.shuffle_dgn.keyring and kind == ItemKind.DungeonKey:
         # "X Key Ring"
         return " Ring"
 
-    if settings.shuffle_dgn.is_bksanity_enabled() and settings.shuffle_dgn.bkeyring:
+    if settings.shuffle_dgn.is_bksanity_enabled() and settings.shuffle_dgn.bkeyring and kind == ItemKind.DungeonKey:
         # "X Boss Key Ring"
         return " Ring"
 
@@ -770,14 +773,11 @@ class SeedLogEntry:
             ret = []
             for i, item in enumerate(items):
                 ret.append(
-                    {
-                        shop_item_positions[i]: item_id_to_name[item.id.value]
-                        + get_item_name_suffix(settings, item.kind == ItemKind.Rabbit)
-                    }
+                    {shop_item_positions[i]: item_id_to_name[item.id.value] + get_item_name_suffix(settings, item.kind)}
                 )
             return ret
 
-        return item_id_to_name[items[0].id.value] + get_item_name_suffix(settings, items[0].kind == ItemKind.Rabbit)
+        return item_id_to_name[items[0].id.value] + get_item_name_suffix(settings, items[0].kind)
 
     def export(self, settings: Settings):
         data = {}
@@ -913,38 +913,42 @@ class Randomizer:
                 ] * 3
                 item_defs.extend(self.dgn_tos_defs[i].tears)
 
+        add_keys = True
+        if self.settings.shuffle_dgn.is_bksanity_enabled() and self.settings.shuffle_dgn.bkeyring:
+            add_keys = False
+
         # add extra keys
         # TODO: improve this horrible thing
-        if self.settings.shuffle_dgn.is_keysanity_enabled():
+        if self.settings.shuffle_dgn.is_keysanity_enabled() and add_keys:
             self.dgn_tos_map[TOS_SECTION_2_INDEX].keys = [
-                ItemDef(ItemId.ExtraItemId_NormalKey_2, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_NormalKey_2, ItemKind.DungeonKey, ItemWeight.Progression)
             ] * 2
             self.dgn_tos_map[TOS_SECTION_4_INDEX].keys = [
-                ItemDef(ItemId.ExtraItemId_NormalKey_4, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_NormalKey_4, ItemKind.DungeonKey, ItemWeight.Progression)
             ] * 3
             self.dgn_tos_map[TOS_SECTION_5_INDEX].keys = [
-                ItemDef(ItemId.ExtraItemId_NormalKey_5, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_NormalKey_5, ItemKind.DungeonKey, ItemWeight.Progression)
             ] * 2
             self.dgn_tos_map[TOS_SECTION_6_INDEX].keys = [
-                ItemDef(ItemId.ExtraItemId_NormalKey_6, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_NormalKey_6, ItemKind.DungeonKey, ItemWeight.Progression)
             ] * 3
             self.dgn_tunnel_def.keys = [
-                ItemDef(ItemId.ExtraItemId_NormalKey_Tunnel, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_NormalKey_Tunnel, ItemKind.DungeonKey, ItemWeight.Progression)
             ] * 1
             self.dgn_forest_def.keys = [
-                ItemDef(ItemId.ExtraItemId_NormalKey_Wooded, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_NormalKey_Wooded, ItemKind.DungeonKey, ItemWeight.Progression)
             ] * 2
             self.dgn_snow_def.keys = [
-                ItemDef(ItemId.ExtraItemId_NormalKey_Blizzard, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_NormalKey_Blizzard, ItemKind.DungeonKey, ItemWeight.Progression)
             ] * 1
             self.dgn_marine_def.keys = [
-                ItemDef(ItemId.ExtraItemId_NormalKey_Marine, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_NormalKey_Marine, ItemKind.DungeonKey, ItemWeight.Progression)
             ] * 2
             self.dgn_mount_def.keys = [
-                ItemDef(ItemId.ExtraItemId_NormalKey_Mountain, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_NormalKey_Mountain, ItemKind.DungeonKey, ItemWeight.Progression)
             ] * 3
             self.dgn_sand_def.keys = [
-                ItemDef(ItemId.ExtraItemId_NormalKey_Desert, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_NormalKey_Desert, ItemKind.DungeonKey, ItemWeight.Progression)
             ] * 2
 
             item_defs.extend(
@@ -963,25 +967,25 @@ class Randomizer:
         # add extra boss keys
         if self.settings.shuffle_dgn.is_bksanity_enabled():
             self.dgn_tos_map[TOS_SECTION_3_INDEX].boss_keys = [
-                ItemDef(ItemId.ExtraItemId_BossKey_3, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_BossKey_3, ItemKind.DungeonKey, ItemWeight.Progression)
             ]
             self.dgn_tos_map[TOS_SECTION_5_INDEX].boss_keys = [
-                ItemDef(ItemId.ExtraItemId_BossKey_5, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_BossKey_5, ItemKind.DungeonKey, ItemWeight.Progression)
             ]
             self.dgn_forest_def.boss_keys = [
-                ItemDef(ItemId.ExtraItemId_BossKey_Wooded, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_BossKey_Wooded, ItemKind.DungeonKey, ItemWeight.Progression)
             ]
             self.dgn_snow_def.boss_keys = [
-                ItemDef(ItemId.ExtraItemId_BossKey_Blizzard, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_BossKey_Blizzard, ItemKind.DungeonKey, ItemWeight.Progression)
             ]
             self.dgn_marine_def.boss_keys = [
-                ItemDef(ItemId.ExtraItemId_BossKey_Marine, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_BossKey_Marine, ItemKind.DungeonKey, ItemWeight.Progression)
             ]
             self.dgn_mount_def.boss_keys = [
-                ItemDef(ItemId.ExtraItemId_BossKey_Mountain, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_BossKey_Mountain, ItemKind.DungeonKey, ItemWeight.Progression)
             ]
             self.dgn_sand_def.boss_keys = [
-                ItemDef(ItemId.ExtraItemId_BossKey_Desert, ItemKind.Default, ItemWeight.Progression)
+                ItemDef(ItemId.ExtraItemId_BossKey_Desert, ItemKind.DungeonKey, ItemWeight.Progression)
             ]
 
             item_defs.extend(
@@ -1591,18 +1595,26 @@ class Randomizer:
         INFO = b"\xCE\x00\x00\x01"
         ITEM_MAX = max(list(item_id_to_name.keys())) + 1
 
-        RABBIT_IDS = [
-            ItemId.ExtraItemId_RabbitGrass.value,
-            ItemId.ExtraItemId_RabbitSnow.value,
-            ItemId.ExtraItemId_RabbitWater.value,
-            ItemId.ExtraItemId_RabbitMountain.value,
-            ItemId.ExtraItemId_RabbitSand.value,
-        ]
+        def get_kind(index: int):
+            if index >= ItemId.ExtraItemId_RabbitGrass.value and index <= ItemId.ExtraItemId_RabbitSand.value:
+                return ItemKind.Rabbit
+
+            if index >= ItemId.ExtraItemId_TearLight_1.value and index <= ItemId.ExtraItemId_TearLight_5.value:
+                return ItemKind.Tear
+
+            if index >= ItemId.ExtraItemId_NormalKey_2.value and index <= ItemId.ExtraItemId_NormalKey_Desert.value:
+                return ItemKind.DungeonKey
+
+            if index >= ItemId.ExtraItemId_BossKey_3.value and index <= ItemId.ExtraItemId_BossKey_Desert.value:
+                return ItemKind.DungeonKey
+
+            return None
 
         for i in range(0, ITEM_MAX):
-            prefix_index = 1 if i == ItemId.Nothing.value else 2 if i in RABBIT_IDS else 0
+            kind = get_kind(i)
+            prefix_index = 1 if i == ItemId.Nothing.value else 2 if kind is not None and kind == ItemKind.Rabbit else 0
             prefix = prefix_map[use_lang][prefix_index]
-            suffix = get_item_name_suffix(self.settings, i in RABBIT_IDS)
+            suffix = get_item_name_suffix(self.settings, kind)
 
             # only there to determine the potential length of the string if it's on one line
             fake_str = prefix + item_id_to_name[i] + suffix + "!"

@@ -105,6 +105,21 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
             gGZ.IncrementTearsAmount(itemId - ExtraItemId_TearLight_1);
             gGZ.ApplyTearsAmounts();
             break;
+        case ExtraItemId_BossKey_3:
+        case ExtraItemId_BossKey_5:
+        case ExtraItemId_BossKey_Wooded:
+        case ExtraItemId_BossKey_Blizzard:
+        case ExtraItemId_BossKey_Marine:
+        case ExtraItemId_BossKey_Mountain:
+        case ExtraItemId_BossKey_Desert:
+            if (!gSettings.GetShuffleDungeonSettings()->bkeyring) {
+                // nothing to do except setting the flag (which is done later)
+                // (see `CustomMapObject::OpenDoorBossKey`)
+                break;
+            }
+
+            // if boss key ring is enabled also run the key giving code
+            // fallthrough
         case ExtraItemId_NormalKey_2:
         case ExtraItemId_NormalKey_4:
         case ExtraItemId_NormalKey_5:
@@ -205,16 +220,6 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
             if (pRandoSave->rabbitIndices[rabbitType] < 10) {
                 setAdvFlag = false;
             }
-            break;
-        case ExtraItemId_BossKey_3:
-        case ExtraItemId_BossKey_5:
-        case ExtraItemId_BossKey_Wooded:
-        case ExtraItemId_BossKey_Blizzard:
-        case ExtraItemId_BossKey_Marine:
-        case ExtraItemId_BossKey_Mountain:
-        case ExtraItemId_BossKey_Desert:
-            // nothing to do except setting the flag (which is done later)
-            // (see `CustomMapObject::OpenDoorBossKey`)
             break;
         case ExtraItemId_TowerSection_1:
         case ExtraItemId_TowerSection_2:

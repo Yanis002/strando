@@ -472,6 +472,7 @@ class ItemKind(IntEnum):
     CargoAtDest = 6
     Rabbit = 7
     Tear = 8
+    DungeonKey = 9
 
 
 class ItemWeight(IntEnum):

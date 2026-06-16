@@ -718,18 +718,56 @@ u8 GetMaxKeys(ItemId itemId) {
     return 0;
 }
 
-void GZ::IncrementKeyAmount(ItemId itemId) {
-    RandoSave* pSave = this->GetCurrentSave();
-    u8 index = itemId - ExtraItemId_NormalKey_2;
-    u8 max = GetMaxKeys(itemId);
+ItemId GetKeyFromBossKey(ItemId itemId) {
+    switch (itemId) {
+        case ExtraItemId_BossKey_3:
+            break;
 
-    if (gSettings.GetShuffleDungeonSettings()->keyring && max > 0) {
-        pSave->keyAmounts[index] = max;
-    } else {
-        pSave->keyAmounts[index]++;
+        case ExtraItemId_BossKey_5:
+            return ExtraItemId_NormalKey_5;
+
+        case ExtraItemId_BossKey_Wooded:
+            return ExtraItemId_NormalKey_Wooded;
+
+        case ExtraItemId_BossKey_Blizzard:
+            return ExtraItemId_NormalKey_Blizzard;
+
+        case ExtraItemId_BossKey_Marine:
+            return ExtraItemId_NormalKey_Marine;
+
+        case ExtraItemId_BossKey_Mountain:
+            return ExtraItemId_NormalKey_Mountain;
+
+        case ExtraItemId_BossKey_Desert:
+            return ExtraItemId_NormalKey_Desert;
+
+        default:
+            break;
     }
 
-    if (pSave->keyAmounts[index] > MAX_KEYS) {
-        pSave->keyAmounts[index] = MAX_KEYS;
+    return ItemId_None;
+}
+
+void GZ::IncrementKeyAmount(ItemId itemId) {
+    RandoSave* pSave = this->GetCurrentSave();
+    ShuffleDungeonSettings* pSettings = gSettings.GetShuffleDungeonSettings();
+
+    if (pSettings->bkeyring) {
+        itemId = GetKeyFromBossKey(itemId);
+    }
+
+    if (itemId != ItemId_None) {
+        u8 index = itemId - ExtraItemId_NormalKey_2;
+        u8 max = GetMaxKeys(itemId);
+
+        if ((pSettings->keyring || pSettings->bkeyring) && max > 0) {
+            pSave->keyAmounts[index] = max;
+        } else {
+            pSave->keyAmounts[index]++;
+        }
+
+        if (pSave->keyAmounts[index] > MAX_KEYS) {
+            pSave->keyAmounts[index] = MAX_KEYS;
+        }
     }
 }
