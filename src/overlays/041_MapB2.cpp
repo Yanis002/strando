@@ -1,0 +1,56 @@
+#include "036_MapA5.hpp"
+#include "ItemIdMaps.hpp"
+#include "gz.hpp"
+#include "settings.hpp"
+
+#include <Actor/ActorUnkKEYB.hpp>
+#include <Actor/ActorUnkKEYT.hpp>
+#include <Unknown/UnkStruct_027e09b8.hpp>
+
+bool BossKeyItemGive(ItemId itemId) {
+    switch (gSettings.GetShuffleDungeonSettings()->bksanity) {
+        case BossKeysanityMode_Dungeon:
+        case BossKeysanityMode_Anywhere:
+            if (!GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId])) {
+                // we can't use the give function directly because we're in a blocking interaction
+                gGZ.TryAddItemToQueue(itemId);
+            }
+
+            return false;
+        case BossKeysanityMode_Off:
+        case BossKeysanityMode_Removed:
+        default:
+            break;
+    }
+
+    return true;
+}
+
+class CustomBossKey : public ActorUnkKEYB {
+  public:
+    bool CustomGrab(ActorGrabParams grabParams);
+};
+
+bool CustomBossKey::CustomGrab(ActorGrabParams grabParams) {
+    // prevent grabbing the key when interacting with it if bksanity is enabled
+    // this is done simply by returning false
+
+    if (BossKeyItemGive(this->mUnk_5C.mParams[3])) {
+        return this->ActorUnkKEYB::Grab(grabParams);
+    }
+
+    return false;
+}
+
+class CustomTrapBossKey : public ActorUnkKEYT {
+  public:
+    bool CustomGrab(ActorGrabParams grabParams);
+};
+
+bool CustomTrapBossKey::CustomGrab(ActorGrabParams grabParams) {
+    if (BossKeyItemGive(this->mUnk_5C.mParams[3])) {
+        return this->ActorUnkKEYT::Grab(grabParams);
+    }
+
+    return false;
+}

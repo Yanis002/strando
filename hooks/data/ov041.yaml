@@ -4,3 +4,5 @@ instructions:
 
 constants:
   _ZN15CustomMapObject15OpenDoorBossKeyEv: ['0x0212E068']
+  _ZN13CustomBossKey10CustomGrabE15ActorGrabParams: ['0x0212D8F4']
+  _ZN17CustomTrapBossKey10CustomGrabE15ActorGrabParams: ['0x0212DBB8']

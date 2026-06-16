@@ -666,8 +666,10 @@ void GZ::ProcessItemQueue() {
     for (int i = 0; i < ARRAY_LEN(pSave->itemQueue); i++) {
         ItemId itemId = pSave->itemQueue[i];
 
-        if (itemId != ItemId_None && itemId < ExtraItemId_Max) {
-            RandoTryItemGive(itemId);
+        // remove the item from the queue only on a successful item give
+        // note: RandoTryItemGive can return true when on train without giving the item
+        // but we already made sure we're on land so it's safe
+        if (itemId != ItemId_None && itemId < ExtraItemId_Max && RandoTryItemGive(itemId)) {
             pSave->itemQueue[i] = (u8)ItemId_None;
 
             if (this->mItemQueueIndex > 0) {
