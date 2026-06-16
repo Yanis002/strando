@@ -499,24 +499,36 @@ void GZ::OnScenePostInit() {
     }
 }
 
-int GetTowerSectionFromRoom() {
+int GetTowerSectionFromRoom(int* pIndex) {
     u8 roomIndex = data_027e09a4->mpWarpUnk1->mUnk_78.mRoomIndex;
+    int index = -1;
 
     if ((roomIndex >= 0 && roomIndex <= 2) || roomIndex == 40) {
         // section 1
         return 0;
     } else if ((roomIndex >= 3 && roomIndex <= 6) || roomIndex == 41) {
         // section 2
+        index = 0;
         return 1;
     } else if ((roomIndex >= 7 && roomIndex <= 11) || roomIndex == 21 || roomIndex == 22 || roomIndex == 42) {
         // section 3
         return 2;
     } else if ((roomIndex >= 12 && roomIndex <= 16) || roomIndex == 43) {
         // section 4
+        index = 1;
         return 3;
     } else if ((roomIndex >= 17 && roomIndex <= 20) || roomIndex == 23 || roomIndex == 24 || roomIndex == 46) {
         // section 5
+        index = 2;
         return 4;
+    } else if (roomIndex >= 29 && roomIndex <= 36) {
+        // section 6
+        index = 3;
+        return 5;
+    }
+
+    if (pIndex != NULL && index >= 0) {
+        *pIndex = index;
     }
 
     return -1;
@@ -529,9 +541,9 @@ void GZ::ApplyTearsAmounts() {
         UnkStruct_SceneChange1* pCurrent = &data_027e09a4->mpWarpUnk1->mUnk_78;
         u8 amount = pItemMgr->mTearsAmount;
         RandoSave* pSave = this->GetCurrentSave();
-        int towerSection = GetTowerSectionFromRoom();
+        int towerSection = GetTowerSectionFromRoom(NULL);
 
-        if (pCurrent->mSceneIndex != SceneIndex_d_main || towerSection < 0) {
+        if (pCurrent->mSceneIndex != SceneIndex_d_main || towerSection < 0 || towerSection == 5) {
             return;
         }
 
@@ -546,15 +558,16 @@ void GZ::ApplyKeyAmounts() {
         UnkStruct_SceneChange1* pCurrent = &data_027e09a4->mpWarpUnk1->mUnk_78;
         u8 amount = pItemMgr->mKeyAmount;
         RandoSave* pSave = this->GetCurrentSave();
-        int towerSection = GetTowerSectionFromRoom();
-
-        if (towerSection < 0) {
-            return;
-        }
+        int index = -1;
+        int towerSection = GetTowerSectionFromRoom(&index);
 
         switch (pCurrent->mSceneIndex) {
             case SceneIndex_d_main:
-                amount = pSave->keyAmounts[towerSection];
+                if (index < 0 || towerSection < 0 || towerSection == 0 || towerSection == 1 || towerSection == 3) {
+                    return;
+                }
+
+                amount = pSave->keyAmounts[index];
                 break;
             case SceneIndex_d_tutorial:
                 amount = pSave->keyAmounts[4];
