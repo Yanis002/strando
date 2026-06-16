@@ -682,3 +682,55 @@ void GZ::ProcessItemQueue() {
         }
     }
 }
+
+void GZ::IncrementTearsAmount(u8 index) {
+    RandoSave* pSave = this->GetCurrentSave();
+
+    if (gSettings.GetShuffleDungeonSettings()->tear_ring) {
+        pSave->tearsAmounts[index] = MAX_TEARS_OF_LIGHT;
+    } else {
+        pSave->tearsAmounts[index]++;
+
+        if (pSave->tearsAmounts[index] > MAX_TEARS_OF_LIGHT) {
+            pSave->tearsAmounts[index] = MAX_TEARS_OF_LIGHT;
+        }
+    }
+}
+
+u8 GetMaxKeys(ItemId itemId) {
+    switch (itemId) {
+        case ExtraItemId_NormalKey_2:
+        case ExtraItemId_NormalKey_5:
+        case ExtraItemId_NormalKey_Wooded:
+        case ExtraItemId_NormalKey_Marine:
+        case ExtraItemId_NormalKey_Desert:
+            return 2;
+        case ExtraItemId_NormalKey_4:
+        case ExtraItemId_NormalKey_6:
+        case ExtraItemId_NormalKey_Mountain:
+            return 3;
+        case ExtraItemId_NormalKey_Tunnel:
+        case ExtraItemId_NormalKey_Blizzard:
+            return 1;
+        default:
+            break;
+    }
+
+    return 0;
+}
+
+void GZ::IncrementKeyAmount(ItemId itemId) {
+    RandoSave* pSave = this->GetCurrentSave();
+    u8 index = itemId - ExtraItemId_NormalKey_2;
+    u8 max = GetMaxKeys(itemId);
+
+    if (gSettings.GetShuffleDungeonSettings()->keyring && max > 0) {
+        pSave->keyAmounts[index] = max;
+    } else {
+        pSave->keyAmounts[index]++;
+    }
+
+    if (pSave->keyAmounts[index] > MAX_KEYS) {
+        pSave->keyAmounts[index] = MAX_KEYS;
+    }
+}

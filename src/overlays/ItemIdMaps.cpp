@@ -204,13 +204,13 @@ u32 gGetItemMap[] = {
     GIModel_rbnt, // ExtraItemId_RabbitMountain
     GIModel_rbnt, // ExtraItemId_RabbitSand
 
-    GIModel_dummy, // ExtraItemId_BossKey_3
-    GIModel_dummy, // ExtraItemId_BossKey_5
-    GIModel_dummy, // ExtraItemId_BossKey_Wooded
-    GIModel_dummy, // ExtraItemId_BossKey_Blizzard
-    GIModel_dummy, // ExtraItemId_BossKey_Marine
-    GIModel_dummy, // ExtraItemId_BossKey_Mountain
-    GIModel_dummy, // ExtraItemId_BossKey_Desert
+    GIModel_keyB, // ExtraItemId_BossKey_3
+    GIModel_keyB, // ExtraItemId_BossKey_5
+    GIModel_keyB, // ExtraItemId_BossKey_Wooded
+    GIModel_keyB, // ExtraItemId_BossKey_Blizzard
+    GIModel_keyB, // ExtraItemId_BossKey_Marine
+    GIModel_keyB, // ExtraItemId_BossKey_Mountain
+    GIModel_keyB, // ExtraItemId_BossKey_Desert
 
     GIModel_dummy, // ExtraItemId_TowerSection_1
     GIModel_dummy, // ExtraItemId_TowerSection_2

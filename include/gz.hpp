@@ -239,24 +239,6 @@ class GZ {
 
     void SetSceneLoadState(u8 state) { this->mSceneLoadState = state; }
 
-    void IncrementTearsAmount(u8 index) {
-        RandoSave* pSave = this->GetCurrentSave();
-        pSave->tearsAmounts[index]++;
-
-        if (pSave->tearsAmounts[index] > MAX_TEARS_OF_LIGHT) {
-            pSave->tearsAmounts[index] = MAX_TEARS_OF_LIGHT;
-        }
-    }
-
-    void IncrementKeyAmount(u8 index) {
-        RandoSave* pSave = this->GetCurrentSave();
-        pSave->keyAmounts[index]++;
-
-        if (pSave->keyAmounts[index] > MAX_KEYS) {
-            pSave->keyAmounts[index] = MAX_KEYS;
-        }
-    }
-
     Input* GetInput() { return &this->mButtons; }
 
     void UpdateInputs() {
@@ -314,6 +296,8 @@ class GZ {
     void TryAddItemToQueue(ItemId itemId);
     void TryAddItemIfNotInQueue(ItemId itemId);
     void ProcessItemQueue();
+    void IncrementTearsAmount(u8 index);
+    void IncrementKeyAmount(ItemId itemId);
 };
 
 extern GZ gGZ;

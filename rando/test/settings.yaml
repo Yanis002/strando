@@ -69,9 +69,9 @@ settings:
         tear_sanity: "anywhere" # (vanilla: off)
 
         # true/false
-        key_ring: false # (vanilla: false)
-        bosskey_ring: false # same as `key_ring` but include boss keys (vanilla: false)
-        tear_ring: false # (vanilla: false)
+        key_ring: true # (vanilla: false)
+        bosskey_ring: true # same as `key_ring` but include boss keys (vanilla: false)
+        tear_ring: true # (vanilla: false)
 
         # - open (all sections are available)
         # - open_no_6 (same as above except section 6 requires the bow of light to open it)

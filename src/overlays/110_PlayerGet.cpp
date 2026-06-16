@@ -115,7 +115,7 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
         case ExtraItemId_NormalKey_Marine:
         case ExtraItemId_NormalKey_Mountain:
         case ExtraItemId_NormalKey_Desert:
-            gGZ.IncrementKeyAmount(itemId - ExtraItemId_NormalKey_2);
+            gGZ.IncrementKeyAmount(itemId);
             gGZ.ApplyKeyAmounts();
             break;
         case ExtraItemId_StampTowerOfSpirits:
