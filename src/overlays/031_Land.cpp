@@ -265,7 +265,7 @@ ARM void CustomRupee::Custom_ov031_020e9068() {
         return;
     }
 
-    this->func_ov031_020e9904(5);
+    this->SetState(ActorRupeeState_5);
 
     if (this->mUnk_5C.mUnk_24 >= 0 && this->mUnk_5C.mUnk_1A != 0) {
         this->func_ov000_02098a88(0, 1);

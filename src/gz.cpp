@@ -12,6 +12,7 @@
 #include <TitleScreen/TitleScreen.hpp>
 #pragma GCC diagnostic pop
 
+#include <Actor/ActorManager.hpp>
 #include <MainGame/CargoManager.hpp>
 #include <Unknown/Common.hpp>
 #include <Unknown/UnkStruct_027e09a4.hpp>
@@ -496,6 +497,19 @@ void GZ::OnScenePostInit() {
                 }
             }
         }
+
+        if (data_027e09a4 != NULL && data_027e09a4->mpWarpUnk1 != NULL) {
+            // prevents zelda's text to show in ToS final room (giving the final track item)
+            if (data_027e09a4->mpWarpUnk1->mUnk_78.mSceneIndex == SceneIndex_d_main &&
+                data_027e09a4->mpWarpUnk1->mUnk_78.mRoomIndex == 35) {
+                // for some reasons editing the ctor with a hook crashes
+                Actor* pTLKT = this->FindActor(ActorId_TLKT);
+
+                if (pTLKT != NULL) {
+                    pTLKT->Kill();
+                }
+            }
+        }
     }
 }
 
@@ -770,4 +784,21 @@ void GZ::IncrementKeyAmount(ItemId itemId) {
             pSave->keyAmounts[index] = MAX_KEYS;
         }
     }
+}
+
+Actor* GZ::FindActor(ActorId actorId) {
+    Actor** ppTable = gpActorManager->mActorTable;
+    Actor** ppTableEnd = gpActorManager->mActorTableEnd;
+
+    for (Actor** ppEntry = ppTable; ppEntry < ppTableEnd; ppEntry++) {
+        if (ppEntry != NULL) {
+            Actor* pEntry = *ppEntry;
+
+            if (pEntry != NULL && pEntry->GetActorId() == actorId) {
+                return pEntry;
+            }
+        }
+    }
+
+    return NULL;
 }

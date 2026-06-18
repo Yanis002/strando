@@ -2,6 +2,7 @@
 
 #include "mem.hpp"
 
+#include <Actor/Actor.hpp>
 #include <Item/Item.hpp>
 #include <Player/TouchControl.hpp>
 #include <Save/SaveManager.hpp>
@@ -298,6 +299,7 @@ class GZ {
     void ProcessItemQueue();
     void IncrementTearsAmount(u8 index);
     void IncrementKeyAmount(ItemId itemId);
+    Actor* FindActor(ActorId actorId);
 };
 
 extern GZ gGZ;
