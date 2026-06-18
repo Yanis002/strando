@@ -280,6 +280,10 @@ extern "C" bool StampMonumentInit(MapObject* thisx) {
     // overriding vfunc_00 just to set "give item" mode (based on chests)
     if (gSettings.GetShuffleSettings()->stamps) {
         thisx->mUnk_18[0] = 0x0D;
+
+        if (GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[thisx->mUnk_20.mUnk_00[3]])) {
+            UNSET_FLAG(thisx->mFlags, MapObjFlag_9);
+        }
     }
 
     return result;
