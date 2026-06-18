@@ -86,5 +86,6 @@ settings:
         # open, dungeons, compass, restoration_songs (vanilla: compass)
         unlock_dark_realm: "dungeons"
 
-        # 1-5, only relevant when choosing `dungeons` for `unlock_dark_realm`
+        # 1-6, only relevant when choosing `dungeons` for `unlock_dark_realm`
+        # 6 can only be used if `is_tos_dungeon` is enabled
         dungeon_amount: 5

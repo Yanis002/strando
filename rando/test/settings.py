@@ -365,8 +365,11 @@ class GoalSettings:
         if self.unlock_dark_realm not in self.unlock_dark_realm_mode:
             raise ValueError("unlock_dark_realm is not valid")
 
-        if self.unlock_dark_realm == "dungeons" and (self.dungeon_amount < 1 or self.dungeon_amount > 5):
+        if self.unlock_dark_realm == "dungeons" and (self.dungeon_amount < 1 or self.dungeon_amount > 6):
             raise ValueError(f"dungeon_amount has an invalid value of {self.dungeon_amount}")
+
+        if self.unlock_dark_realm == "dungeons" and not self.is_tos_dungeon and self.dungeon_amount == 6:
+            raise ValueError("dungeon amount can't be 6 if Tower of Spirits isn't considered a dungeon")
 
     @staticmethod
     def from_yaml(data: dict):

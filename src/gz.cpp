@@ -14,6 +14,7 @@
 
 #include <Actor/ActorManager.hpp>
 #include <MainGame/CargoManager.hpp>
+#include <MapObject/MapObjectManager.hpp>
 #include <Unknown/Common.hpp>
 #include <Unknown/UnkStruct_027e09a4.hpp>
 #include <Unknown/UnkStruct_027e09b8.hpp>
@@ -38,6 +39,11 @@ extern CargoInfos sCargoInfos[];
 
 GZ gGZ;
 s32 gCardLockId = -3;
+
+static AdventureFlag_Half sSourceFlags[] = {
+    AdventureFlag_ObtainedForestSource, AdventureFlag_ObtainedSnowSource,   AdventureFlag_ObtainedOceanSource,
+    AdventureFlag_ObtainedFireSource,   AdventureFlag_ObtainedDesertSource,
+};
 
 void GZ::Init() {
     gCardLockId = OS_GetLockID();
@@ -272,10 +278,10 @@ void GZ::TryGiveItemFromPassengerDestInfos(SceneIndex destSceneIndex) {
         if (pEntry->sceneIndex == destSceneIndex && GET_FLAG(data_027e09b8->mAdventureFlags, pEntry->requiredFlag)) {
             ItemId itemId = gSettings.GetPassengerAtDestItemId(i);
 
-            if (itemId != ItemId_None && !GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId])) {
+            if (itemId != ItemId_None && !this->CheckAdvFlag(itemId)) {
                 // only give the item id if the related flag is unset
                 this->TryAddItemIfNotInQueue(itemId);
-                SET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId]);
+                this->SetAdvFlag(itemId, false);
 
                 for (int j = 0; j < ARRAY_LEN(pEntry->destFlags); j++) {
                     if (pEntry->destFlags[j] != AdventureFlag_Nothing) {
@@ -304,6 +310,8 @@ void GZ::OnGameModeUpdate() {
         data_ov000_020b5214.func_ov000_0206db44(0x0B);
         pTitleScreen->func_ov025_020c4ea0(TitleScreenState_ToFileSelect);
     } else if (this->IsAdventureMode()) {
+        RandoSave* pSave = this->GetCurrentSave();
+
         // special handling for alfonzo passenger
         // basically if the board flag is set
         // then give the item and unset said flag
@@ -360,6 +368,79 @@ void GZ::OnGameModeUpdate() {
             if (data_027e0478.train.mUnk_058 != NULL && data_027e0478.train.mUnk_058->mUnk_33C > 0) {
                 // tchou tchouuuuuuuuuuuu !!!
                 data_027e0478.train.mUnk_058->mUnk_338 = 0;
+            }
+        } else {
+            for (int i = 0; i < ARRAY_LEN(sSourceFlags); i++) {
+                if (GET_FLAG(data_027e09b8->mAdventureFlags, sSourceFlags[i])) {
+                    this->GetCurrentSave()->completedDungeons[i] = true;
+                }
+            }
+
+            // set tower as complete if we opened the chest
+            if (this->IsTowerFinal()) {
+                MapObject* pTRLS = this->FindMapObject(MapObjectId_TRLS);
+                if (pTRLS != NULL && pTRLS->mUnk_16 == 8) {
+                    pSave->completedDungeons[5] = true;
+                }
+            }
+
+            // handle dark realm requirements
+            if (!this->CheckAdvFlag(ItemId_FinalTrack)) {
+                GoalSettings* pGoal = gSettings.GetGoalSettings();
+                bool give = false;
+                int value = 0;
+
+                switch (pGoal->unlock_dark_realm) {
+                    case DarkRealmMode_Open:
+                        give = true;
+                        break;
+                    case DarkRealmMode_Dungeons:
+                        value = 0;
+                        for (int i = 0; i < ARRAY_LEN(pSave->completedDungeons); i++) {
+                            if (!pGoal->is_tos_dungeon && i == 5) {
+                                break;
+                            }
+
+                            if (pSave->completedDungeons[i]) {
+                                value++;
+                            }
+                        }
+
+                        if (value == pGoal->dungeon_amount) {
+                            give = true;
+                        }
+                        break;
+                    case DarkRealmMode_Compass:
+                        if (this->CheckAdvFlag(ItemId_LightCompass)) {
+                            give = true;
+                        }
+                    case DarkRealmMode_RestorationSongs: {
+                        static AdventureFlag_Half sRestorationSongFlags[] = {
+                            RandoAdventureFlag_RestoredForestGlyph,      RandoAdventureFlag_RestoredSnowGlyph,
+                            RandoAdventureFlag_RestoredOceanGlyph,       RandoAdventureFlag_RestoredFireGlyph,
+                            RandoAdventureFlag_RestoredDesertOceanGlyph,
+                        };
+
+                        value = 0;
+                        for (int i = 0; i < ARRAY_LEN(sRestorationSongFlags); i++) {
+                            if (GET_FLAG(data_027e09b8->mAdventureFlags, sRestorationSongFlags[i])) {
+                                value++;
+                            }
+                        }
+
+                        if (value == ARRAY_LEN(sRestorationSongFlags)) {
+                            give = true;
+                        }
+                        break;
+                    }
+                    default:
+                        give = false;
+                        break;
+                }
+
+                if (give) {
+                    this->TryAddItemToQueue(ItemId_FinalTrack);
+                }
             }
         }
     }
@@ -449,7 +530,7 @@ void GZ::OnScenePreInit() {
                     SceneIndex nextScene = data_027e09a4->mpWarpUnk1->mUnk_8C.mSceneIndex;
 
                     for (int i = 0; i < CargoDelivery_Max; i++) {
-                        if (GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[ExtraItemId_CargoMegaIce + i]) &&
+                        if (this->CheckAdvFlag(ExtraItemId_CargoMegaIce + i) &&
                             sCargoTypeToSceneIndex[i] == nextScene) {
                             // I wanted to set to 9999 but the cargo counter don't like it :(
                             gpCargoManager->Init(i, 99);
@@ -473,41 +554,31 @@ void GZ::OnScenePostInit() {
             memset(sCargoInfos, 0, sizeof(CargoInfos) * CargoType_Max);
         }
 
+        static AdventureFlag_Half sToSSectionFlags[] = {
+            RandoAdventureFlag_TowerSection_2,
+            RandoAdventureFlag_TowerSection_3,
+            RandoAdventureFlag_TowerSection_4,
+            RandoAdventureFlag_TowerSection_5,
+            AdventureFlag_Nothing,
+        };
+
         // remove the source flag if we don't have the corresponding section flag
         // (except section 1, see `GZ::OnScenePreInit`)
-        if (gSettings.GetShuffleDungeonSettings()->tos_sections) {
-            static AdventureFlag_Half sSourceFlags[] = {
-                AdventureFlag_ObtainedForestSource,
-                AdventureFlag_ObtainedSnowSource,
-                AdventureFlag_ObtainedOceanSource,
-                AdventureFlag_ObtainedFireSource,
-            };
-
-            static AdventureFlag_Half sToSSectionFlags[] = {
-                RandoAdventureFlag_TowerSection_2,
-                RandoAdventureFlag_TowerSection_3,
-                RandoAdventureFlag_TowerSection_4,
-                RandoAdventureFlag_TowerSection_5,
-            };
-
-            for (int i = 0; i < ARRAY_LEN(sSourceFlags); i++) {
-                if (GET_FLAG(data_027e09b8->mAdventureFlags, sSourceFlags[i]) &&
-                    !GET_FLAG(data_027e09b8->mAdventureFlags, sToSSectionFlags[i])) {
-                    UNSET_FLAG(data_027e09b8->mAdventureFlags, sSourceFlags[i]);
-                }
+        for (int i = 0; i < ARRAY_LEN(sSourceFlags); i++) {
+            if (GET_FLAG(data_027e09b8->mAdventureFlags, sSourceFlags[i]) &&
+                gSettings.GetShuffleDungeonSettings()->tos_sections &&
+                !GET_FLAG(data_027e09b8->mAdventureFlags, sToSSectionFlags[i])) {
+                UNSET_FLAG(data_027e09b8->mAdventureFlags, sSourceFlags[i]);
             }
         }
 
-        if (data_027e09a4 != NULL && data_027e09a4->mpWarpUnk1 != NULL) {
-            // prevents zelda's text to show in ToS final room (giving the final track item)
-            if (data_027e09a4->mpWarpUnk1->mUnk_78.mSceneIndex == SceneIndex_d_main &&
-                data_027e09a4->mpWarpUnk1->mUnk_78.mRoomIndex == 35) {
-                // for some reasons editing the ctor with a hook crashes
-                Actor* pTLKT = this->FindActor(ActorId_TLKT);
+        // prevents zelda's text to show in ToS final room (giving the final track item)
+        if (this->IsTowerFinal()) {
+            // for some reasons editing the ctor with a hook crashes
+            Actor* pTLKT = this->FindActor(ActorId_TLKT);
 
-                if (pTLKT != NULL) {
-                    pTLKT->Kill();
-                }
+            if (pTLKT != NULL) {
+                pTLKT->Kill();
             }
         }
     }
@@ -801,4 +872,42 @@ Actor* GZ::FindActor(ActorId actorId) {
     }
 
     return NULL;
+}
+
+MapObject* GZ::FindMapObject(MapObjectId mapObjId) {
+    MapObject** ppTable = gpMapObjManager->mMapObjTable;
+    MapObject** ppTableEnd = gpMapObjManager->mMapObjTableEnd;
+
+    for (MapObject** ppEntry = ppTable; ppEntry < ppTableEnd; ppEntry++) {
+        if (ppEntry != NULL) {
+            MapObject* pEntry = *ppEntry;
+
+            if (pEntry != NULL && pEntry->GetMapObjectId() == mapObjId) {
+                return pEntry;
+            }
+        }
+    }
+
+    return NULL;
+}
+
+bool GZ::IsTowerFinal() {
+    if (data_027e09a4 != NULL && data_027e09a4->mpWarpUnk1 != NULL) {
+        if (data_027e09a4->mpWarpUnk1->mUnk_78.mSceneIndex == SceneIndex_d_main &&
+            data_027e09a4->mpWarpUnk1->mUnk_78.mRoomIndex == 35) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool GZ::CheckAdvFlag(ItemId itemId) { return GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId]); }
+
+void GZ::SetAdvFlag(ItemId itemId, bool unset) {
+    if (unset) {
+        UNSET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId]);
+    } else {
+        SET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId]);
+    }
 }

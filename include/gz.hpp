@@ -4,6 +4,7 @@
 
 #include <Actor/Actor.hpp>
 #include <Item/Item.hpp>
+#include <MapObject/MapObject.hpp>
 #include <Player/TouchControl.hpp>
 #include <Save/SaveManager.hpp>
 #include <System/OverlayManager.hpp>
@@ -212,6 +213,7 @@ struct RandoSave {
     u8 keyAmounts[10]; // dungeon small keys amounts
     u32 rabbitFlags[2];
     u8 rabbitIndices[5]; // 5 types of rabbits, used as a way to set the flags in the save manager
+    bool completedDungeons[6]; // 5 dungeons + tower
 
     RandoSave();
     void Init();
@@ -300,6 +302,10 @@ class GZ {
     void IncrementTearsAmount(u8 index);
     void IncrementKeyAmount(ItemId itemId);
     Actor* FindActor(ActorId actorId);
+    MapObject* FindMapObject(MapObjectId mapObjId);
+    bool IsTowerFinal();
+    bool CheckAdvFlag(ItemId itemId);
+    void SetAdvFlag(ItemId itemId, bool unset);
 };
 
 extern GZ gGZ;

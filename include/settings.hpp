@@ -101,7 +101,7 @@ enum DarkRealmMode_ {
     DarkRealmMode_Open,
     DarkRealmMode_Dungeons,
     DarkRealmMode_Compass,
-    DarkRealmMode_Restoration_songs,
+    DarkRealmMode_RestorationSongs,
 };
 
 struct GoalSettings {
