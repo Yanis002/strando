@@ -33,8 +33,8 @@ void StartUpMain::Run() {
             data_0204999c.func_02013014();
 
             {
-                UnkDataStruct2 local_28(0x1300);
-                this->mpSaveSlot = (SaveSlot*)local_28.unk_00;
+                UnkDataStruct2 local_28(sizeof(GameSaveSlot));
+                this->mpSaveSlot = (GameSaveSlot*)local_28.unk_00;
 
                 this->mpCurrentGameMode = this->createCallback();
                 this->createCallback = NULL;

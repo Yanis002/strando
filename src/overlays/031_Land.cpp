@@ -130,13 +130,13 @@ ItemId GetProgressiveItemId(ItemId requestedItemId) {
                 break;
         }
     } else if (data_027e0ce0 != NULL && data_027e0ce0->mUnk_2C != NULL) {
-        ItemFlag* pFlags = data_027e0ce0->mUnk_2C->mFlags;
+        Inventory* pInv = data_027e0ce0->mUnk_2C->GetInventory();
 
         switch (requestedItemId) {
             // progressive shield
             case ItemId_NormalShield:
             case ItemId_AncientShield:
-                if (GET_FLAG(pFlags, ItemFlag_Shield)) {
+                if (pInv->HasItem(ItemFlag_Shield)) {
                     itemId = ItemId_AncientShield;
                 } else {
                     itemId = ItemId_NormalShield;
@@ -146,7 +146,7 @@ ItemId GetProgressiveItemId(ItemId requestedItemId) {
             // progressive sword
             case ItemId_NormalSword:
             case ItemId_LokomoSword:
-                if (GET_FLAG(pFlags, ItemFlag_Sword)) {
+                if (pInv->HasItem(ItemFlag_Sword)) {
                     itemId = ItemId_LokomoSword;
                 } else {
                     itemId = ItemId_NormalSword;
@@ -157,14 +157,14 @@ ItemId GetProgressiveItemId(ItemId requestedItemId) {
             case ItemId_BombBag:
             case ItemId_BombBagMedium:
             case ItemId_BombBagLarge:
-                if (!GET_FLAG(pFlags, ItemFlag_Bombs)) {
+                if (!pInv->HasItem(ItemFlag_Bombs)) {
                     itemId = ItemId_BombBag;
                     break;
                 }
 
-                if (data_027e0ce0->mUnk_2C->mBombBagCapacity == UpgradeCapacity_Tier2) {
+                if (data_027e0ce0->mUnk_2C->GetBombsCap() == UpgradeCapacity_Tier2) {
                     itemId = ItemId_BombBagLarge;
-                } else if (data_027e0ce0->mUnk_2C->mBombBagCapacity == UpgradeCapacity_Tier1) {
+                } else if (data_027e0ce0->mUnk_2C->GetBombsCap() == UpgradeCapacity_Tier1) {
                     itemId = ItemId_BombBagMedium;
                 } else {
                     itemId = ItemId_BombBag;
@@ -175,14 +175,14 @@ ItemId GetProgressiveItemId(ItemId requestedItemId) {
             case ItemId_NormalBow:
             case ItemId_QuiverMedium:
             case ItemId_QuiverLarge:
-                if (!GET_FLAG(pFlags, ItemFlag_Bow)) {
+                if (!pInv->HasItem(ItemFlag_Bow)) {
                     itemId = ItemId_NormalBow;
                     break;
                 }
 
-                if (data_027e0ce0->mUnk_2C->mQuiverCapacity == UpgradeCapacity_Tier2) {
+                if (data_027e0ce0->mUnk_2C->GetQuiverCap() == UpgradeCapacity_Tier2) {
                     itemId = ItemId_QuiverLarge;
-                } else if (data_027e0ce0->mUnk_2C->mQuiverCapacity == UpgradeCapacity_Tier1) {
+                } else if (data_027e0ce0->mUnk_2C->GetQuiverCap() == UpgradeCapacity_Tier1) {
                     itemId = ItemId_QuiverMedium;
                 } else {
                     itemId = ItemId_NormalBow;
@@ -190,7 +190,7 @@ ItemId GetProgressiveItemId(ItemId requestedItemId) {
                 break;
 
             case ItemId_LightBow:
-                if (!GET_FLAG(pFlags, ItemFlag_Bow)) {
+                if (!pInv->HasItem(ItemFlag_Bow)) {
                     itemId = ItemId_NormalBow;
                 }
                 break;
@@ -258,7 +258,7 @@ void CustomRupee::ItemGive() {
     this->func_ov000_020984d0();
 }
 
-ARM void CustomRupee::Custom_ov031_020e9068() {
+void CustomRupee::Custom_ov031_020e9068() {
     // if rupeesanity is disabled or this is a spawned rupee, simply run the original function
     if (!gSettings.GetShuffleSettings()->rupeesanity || this->mUnk_5C.mParams[1] == 0) {
         this->func_ov031_020e9068();
@@ -267,7 +267,7 @@ ARM void CustomRupee::Custom_ov031_020e9068() {
 
     this->SetState(ActorRupeeState_5);
 
-    if (this->mUnk_5C.mUnk_24 >= 0 && this->mUnk_5C.mUnk_1A != 0) {
+    if (this->mUnk_5C.mUnk_24 >= 0 && this->mUnk_5C.mUnk_1A[0] != 0) {
         this->func_ov000_02098a88(0, 1);
     }
 
@@ -281,7 +281,7 @@ extern "C" bool StampMonumentInit(MapObject* thisx) {
     if (gSettings.GetShuffleSettings()->stamps) {
         thisx->mUnk_18[0] = 0x0D;
 
-        if (GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[thisx->mUnk_20.mUnk_00[3]])) {
+        if (data_027e09b8->HasAdventureFlag(gAdvFlagMap[thisx->mUnk_20.mParams[3]])) {
             UNSET_FLAG(thisx->mFlags, MapObjFlag_9);
         }
     }
@@ -297,5 +297,5 @@ extern "C" unk32 StampMonumentItemGive(MapObject* thisx) {
 
     // since "give item" mode is enabled we just have to return the item it here
     UNSET_FLAG(thisx->mFlags, MapObjFlag_9);
-    return thisx->mUnk_20.mUnk_00[3];
+    return thisx->mUnk_20.mParams[3];
 }

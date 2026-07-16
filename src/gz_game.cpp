@@ -11,7 +11,7 @@
 #include <Unknown/UnkStruct_0204e64c.hpp>
 #include <Unknown/UnkStruct_027e0208.hpp>
 #include <Unknown/UnkStruct_027e09a4.hpp>
-#include <Unknown/UnkStruct_ov000_02067bc4.hpp>
+#include <Unknown/UnkStruct_ov000_020b504c.hpp>
 #include <nitro/card.h>
 #include <nitro/os.h>
 #include <nitro/reg.h>
@@ -57,8 +57,8 @@ void CustomGame::Run() {
             data_0204999c.func_02013014();
 
             {
-                UnkDataStruct2 local_28(0x1300);
-                this->mpSaveSlot = (SaveSlot*)local_28.unk_00;
+                UnkDataStruct2 local_28(sizeof(GameSaveSlot));
+                this->mpSaveSlot = (GameSaveSlot*)local_28.unk_00;
 
                 if (this->mpCurrentGameMode != NULL) {
                     delete this->mpCurrentGameMode;
@@ -86,10 +86,10 @@ void CustomGame::Run() {
             if (gGZ.IsAdventureMode()) {
                 if (gGZ.GetSceneLoadState() == SceneLoadState_Wait) {
                     if (data_027e09a4 != NULL && data_027e09a4->mpWarpUnk1 != NULL) {
-                        UnkStruct_SceneChange1* pCurrent = &data_027e09a4->mpWarpUnk1->mUnk_78;
-                        UnkStruct_SceneChange1* pNext = &data_027e09a4->mpWarpUnk1->mUnk_8C;
+                        EntranceInfo* pCurrent = &data_027e09a4->mpWarpUnk1->mCurEntrance;
+                        EntranceInfo* pNext = &data_027e09a4->mpWarpUnk1->mNextEntrance;
 
-                        if (pCurrent->mSceneIndex != pNext->mSceneIndex || pCurrent->mRoomIndex != pNext->mRoomIndex) {
+                        if (pCurrent->sceneIndex != pNext->sceneIndex || pCurrent->roomIndex != pNext->roomIndex) {
                             gGZ.SetSceneLoadState(SceneLoadState_Init);
                         }
                     }

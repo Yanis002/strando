@@ -460,7 +460,7 @@ static SceneIndex_Half sCargoTypeToSceneIndex[CargoDelivery_Max] = {
 
 void GZ::OnScenePreInit() {
     if (this->IsAdventureMode()) {
-        UnkStruct_SceneChange1* pNext = &data_027e09a4->mpWarpUnk1->mUnk_8C;
+        EntranceInfo* pNext = &data_027e09a4->mpWarpUnk1->mNextEntrance;
 
         // prevent reaching all forest realm stations (except castle town, outset and the tower)
         // if the forest glyph is shuffled and we don't have it yet
@@ -469,7 +469,7 @@ void GZ::OnScenePreInit() {
             !GET_FLAG(data_027e09b8->mAdventureFlags, RandoAdventureFlag_ForestGlyph)) {
             int spawn = -1;
 
-            switch (pNext->mSceneIndex) {
+            switch (pNext->sceneIndex) {
                 case SceneIndex_t_forest:
                     spawn = 5;
                     break;
@@ -493,8 +493,8 @@ void GZ::OnScenePreInit() {
             }
 
             if (spawn != -1) {
-                pNext->mSceneIndex = SceneIndex_t_area0;
-                pNext->mSpawnIndex = spawn;
+                pNext->sceneIndex = SceneIndex_t_area0;
+                pNext->spawnIndex = spawn;
             }
         }
 
@@ -503,9 +503,9 @@ void GZ::OnScenePreInit() {
         // otherwise we are blocked by default by the game, assuming the flag is unset
         if (this->IsOnLand() && gSettings.GetShuffleDungeonSettings()->tos_sections &&
             !GET_FLAG(data_027e09b8->mAdventureFlags, RandoAdventureFlag_TowerSection_1)) {
-            if (pNext->mSceneIndex == SceneIndex_d_main_w) {
-                pNext->mSceneIndex = SceneIndex_d_main_f;
-                pNext->mSpawnIndex = 1;
+            if (pNext->sceneIndex == SceneIndex_d_main_w) {
+                pNext->sceneIndex = SceneIndex_d_main_f;
+                pNext->spawnIndex = 1;
             }
         }
 
@@ -527,7 +527,7 @@ void GZ::OnScenePreInit() {
                     gpCargoManager->Reset();
                 } else if (data_027e09a4->mpWarpUnk1 != NULL) {
                     // set the cargo if we have the cargo item and the destination scene is about to load
-                    SceneIndex nextScene = data_027e09a4->mpWarpUnk1->mUnk_8C.mSceneIndex;
+                    SceneIndex nextScene = data_027e09a4->mpWarpUnk1->mNextEntrance.sceneIndex;
 
                     for (int i = 0; i < CargoDelivery_Max; i++) {
                         if (this->CheckAdvFlag(ExtraItemId_CargoMegaIce + i) &&
@@ -585,7 +585,7 @@ void GZ::OnScenePostInit() {
 }
 
 int GetTowerSectionFromRoom(int* pIndex) {
-    u8 roomIndex = data_027e09a4->mpWarpUnk1->mUnk_78.mRoomIndex;
+    u8 roomIndex = data_027e09a4->mpWarpUnk1->mCurEntrance.roomIndex;
     int index = -1;
 
     if ((roomIndex >= 0 && roomIndex <= 2) || roomIndex == 40) {
@@ -623,16 +623,16 @@ void GZ::ApplyTearsAmounts() {
     if (data_027e0ce0 != NULL && data_027e0ce0->mUnk_2C != NULL && data_027e09a4 != NULL &&
         data_027e09a4->mpWarpUnk1 != NULL) {
         ItemManager* pItemMgr = data_027e0ce0->mUnk_2C;
-        UnkStruct_SceneChange1* pCurrent = &data_027e09a4->mpWarpUnk1->mUnk_78;
-        u8 amount = pItemMgr->mTearsAmount;
+        EntranceInfo* pCurrent = &data_027e09a4->mpWarpUnk1->mCurEntrance;
+        u8 amount = pItemMgr->GetTearsAmount();
         RandoSave* pSave = this->GetCurrentSave();
         int towerSection = GetTowerSectionFromRoom(NULL);
 
-        if (pCurrent->mSceneIndex != SceneIndex_d_main || towerSection < 0 || towerSection == 5) {
+        if (pCurrent->sceneIndex != SceneIndex_d_main || towerSection < 0 || towerSection == 5) {
             return;
         }
 
-        pItemMgr->mTearsAmount = pSave->tearsAmounts[towerSection];
+        pItemMgr->SetTearsAmount(pSave->tearsAmounts[towerSection]);
     }
 }
 
@@ -640,13 +640,13 @@ void GZ::ApplyKeyAmounts() {
     if (data_027e0ce0 != NULL && data_027e0ce0->mUnk_2C != NULL && data_027e09a4 != NULL &&
         data_027e09a4->mpWarpUnk1 != NULL) {
         ItemManager* pItemMgr = data_027e0ce0->mUnk_2C;
-        UnkStruct_SceneChange1* pCurrent = &data_027e09a4->mpWarpUnk1->mUnk_78;
-        u8 amount = pItemMgr->mKeyAmount;
+        EntranceInfo* pCurrent = &data_027e09a4->mpWarpUnk1->mCurEntrance;
+        u8 amount = pItemMgr->GetKeyAmount();
         RandoSave* pSave = this->GetCurrentSave();
         int index = -1;
         int towerSection = GetTowerSectionFromRoom(&index);
 
-        switch (pCurrent->mSceneIndex) {
+        switch (pCurrent->sceneIndex) {
             case SceneIndex_d_main:
                 if (index < 0 || towerSection < 0 || towerSection == 0 || towerSection == 1 || towerSection == 3) {
                     return;
@@ -676,7 +676,7 @@ void GZ::ApplyKeyAmounts() {
                 return;
         }
 
-        pItemMgr->mKeyAmount = amount;
+        pItemMgr->SetKeyAmount(amount);
     }
 }
 
@@ -893,8 +893,8 @@ MapObject* GZ::FindMapObject(MapObjectId mapObjId) {
 
 bool GZ::IsTowerFinal() {
     if (data_027e09a4 != NULL && data_027e09a4->mpWarpUnk1 != NULL) {
-        if (data_027e09a4->mpWarpUnk1->mUnk_78.mSceneIndex == SceneIndex_d_main &&
-            data_027e09a4->mpWarpUnk1->mUnk_78.mRoomIndex == 35) {
+        if (data_027e09a4->mpWarpUnk1->mCurEntrance.sceneIndex == SceneIndex_d_main &&
+            data_027e09a4->mpWarpUnk1->mCurEntrance.roomIndex == 35) {
             return true;
         }
     }

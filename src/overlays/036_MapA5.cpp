@@ -356,7 +356,7 @@ unk32 CustomShopItem::Custom_ov036_0211d0a8(void) {
     return 0x06;
 }
 
-ARM bool CustomShopItem::CanBuy(void) {
+bool CustomShopItem::CanBuy(void) {
     AdventureFlag flag = gAdvFlagMap[this->mItemId];
 
     if (flag != AdventureFlag_Nothing && GET_FLAG(data_027e09b8->mAdventureFlags, flag)) {
@@ -366,7 +366,7 @@ ARM bool CustomShopItem::CanBuy(void) {
     return this->func_ov036_0211d2dc();
 }
 
-ARM void CustomShopItem::Buy(unk32 param1) {
+void CustomShopItem::Buy(unk32 param1) {
     AdventureFlag flag = gAdvFlagMap[this->mItemId];
 
     if (flag != AdventureFlag_Nothing) {

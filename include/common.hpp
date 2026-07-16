@@ -23,4 +23,4 @@ extern "C" void func_0201b180(bool, bool);
 extern "C" void DC_func_0004(void*, int);
 extern "C" void GXS_LoadBG0Scr(void*, int, int);
 extern "C" void func_ov000_02070af8(UnkStruct_027e09a4*);
-extern "C" void func_ov000_02071000(UnkStruct_WarpUnk1*, UnkStruct_SceneChange1*, unk32);
+extern "C" void func_ov000_02071000(UnkStruct_WarpUnk1*, EntranceInfo*, unk32);

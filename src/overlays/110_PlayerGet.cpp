@@ -91,7 +91,7 @@ void SetAdventureFlagsAtPickUp(u8 passenger) {
 }
 
 // overriding func_ov110_02184a40 to handle our custom items
-extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
+extern "C" bool ItemGiveImpl(Inventory* thisx, ItemId itemId) {
     RandoSave* pRandoSave = gGZ.GetCurrentSave();
     bool setAdvFlag = true;
     int rabbitType = -1;
@@ -161,7 +161,7 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
                 gpMiscAdvManager->mObtainedStamps[stampType] = stampType;
                 gpMiscAdvManager->mStampDates[stampType] =
                     (9 << 9) | (12 << 5) | 7; // 7/12/2009 aka the release date of the game Okayge
-                gpMiscAdvManager->mStampPositions[stampType] = Vec2b(70, 72);
+                gpMiscAdvManager->mStampPositions[stampType] = Vec2bCpp(70, 72);
                 gpMiscAdvManager->mStampsFlag |= (1 << stampType);
             }
             break;
@@ -255,19 +255,11 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
             break;
         case ItemId_QuiverMedium:
         case ItemId_QuiverLarge:
-            if (thisx->mQuiverCapacity < UpgradeCapacity_Tier3) {
-                thisx->mQuiverCapacity++;
-            }
-
-            thisx->mArrowAmount = thisx->GetQuiverCapacity();
+            thisx->SetNextQuiverCapacity();
             break;
         case ItemId_BombBagMedium:
         case ItemId_BombBagLarge:
-            if (thisx->mBombBagCapacity < UpgradeCapacity_Tier3) {
-                thisx->mBombBagCapacity++;
-            }
-
-            thisx->mBombAmount = thisx->GetBombBagCapacity();
+            thisx->SetNextBombBagCapacity();
             break;
         case ItemId_RedPotion:
             thisx->GivePotion(PotionType_Red);
@@ -285,10 +277,10 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
             thisx->GiveBombs(10);
             break;
         case ItemId_TearLight:
-            if (thisx->mTearsAmount >= 3) {
-                thisx->mTearsAmount = 3;
+            if (thisx->GetTearsAmount() >= 3) {
+                thisx->SetTearsAmount(3);
             } else {
-                thisx->mTearsAmount++;
+                thisx->SetTearsAmount(thisx->GetTearsAmount() + 1);
             }
             break;
         default:
@@ -299,20 +291,20 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
 
                 switch (itemFlag) {
                     case ItemFlag_Bombs:
-                        thisx->mBombBagCapacity = UpgradeCapacity_Tier1;
-                        thisx->mBombAmount = gBombBagCapacities[UpgradeCapacity_Tier1];
+                        thisx->SetBombsCap(UpgradeCapacity_Tier1);
+                        thisx->SetBombAmount(gBombBagCapacities[UpgradeCapacity_Tier1]);
                         break;
                     case ItemFlag_Bow:
-                        thisx->mQuiverCapacity = UpgradeCapacity_Tier1;
-                        thisx->mArrowAmount = gQuiverCapacities[UpgradeCapacity_Tier1];
+                        thisx->SetQuiverCap(UpgradeCapacity_Tier1);
+                        thisx->SetArrowAmount(gQuiverCapacities[UpgradeCapacity_Tier1]);
                         break;
                     default:
                         break;
                 }
 
-                if (thisx->mEquippedItem == (ItemFlag)ItemFlag_None) {
-                    thisx->mEquippedItem = itemFlag;
-                    gpUICounterManager->func_ov024_020cd458(thisx->mEquippedItem, false);
+                if (thisx->GetCurrentItem() == (ItemFlag)ItemFlag_None) {
+                    thisx->SetCurrentItem(itemFlag);
+                    gpUICounterManager->func_ov024_020cd458(thisx->GetCurrentItem(), false);
                 }
             } else {
                 itemFlag = GetItemFlag(itemId);
@@ -341,13 +333,13 @@ extern "C" bool ItemGiveImpl(ItemManager* thisx, ItemId itemId) {
     gpTreasureManager->func_ov000_020aa0ac(itemId);
     gpMiscAdvManager->GiveLetterOrPriceCard(itemId);
 
-    if (!GET_FLAG(thisx->mFlags, ItemFlag_LokomoSword)) {
+    if (!thisx->HasItem(ItemFlag_LokomoSword)) {
         u8 nAmount = 0;
 
         if (itemId >= ExtraItemId_TearLight_1 && itemId <= ExtraItemId_TearLight_5) {
             nAmount = gGZ.GetTearsAmount(itemId - ExtraItemId_TearLight_1);
         } else if (itemId == ItemId_TearLight) {
-            nAmount = thisx->mTearsAmount;
+            nAmount = thisx->GetTearsAmount();
         }
 
         if (nAmount == MAX_TEARS_OF_LIGHT && gOverlayManager.mLoadedOverlays[OverlaySlot_8] == OverlayIndex_Tower) {
