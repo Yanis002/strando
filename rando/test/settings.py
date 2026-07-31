@@ -411,7 +411,7 @@ class Settings:
         self.cargo_pick_ids: list[int] = []
 
     @staticmethod
-    def from_yaml(yaml_path_or_data: Path | dict):
+    def from_yaml(yaml_path_or_data: Path | dict) -> "Settings":
         if isinstance(yaml_path_or_data, Path):
             with yaml_path_or_data.open("r") as file:
                 yaml_file = yaml.safe_load(file)["settings"]

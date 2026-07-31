@@ -798,7 +798,7 @@ class SeedLog:
         self.path.parent.mkdir(exist_ok=True)
 
     @staticmethod
-    def from_yaml(yaml_path: Path):
+    def from_yaml(yaml_path: Path) -> tuple["SeedLog", Settings]:
         with yaml_path.open("r") as file:
             yaml_file: dict[str, dict] = yaml.safe_load(file)
 

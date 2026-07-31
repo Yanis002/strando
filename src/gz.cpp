@@ -376,10 +376,35 @@ void GZ::OnGameModeUpdate() {
                 }
             }
 
-            // set tower as complete if we opened the chest
+            // set tower as complete if we opened the chest and we have access to the other sections
             if (this->IsTowerFinal()) {
+                bool canReachToSSections = false;
+
+                if (gSettings.GetShuffleDungeonSettings()->tos_sections) {
+                    int i;
+
+                    static u8 sSectionIds[] = {
+                        ExtraItemId_TowerSection_1, ExtraItemId_TowerSection_2, ExtraItemId_TowerSection_3,
+                        ExtraItemId_TowerSection_4, ExtraItemId_TowerSection_5,
+                    };
+
+                    // consider sections reachable unless we have unset section flags
+                    canReachToSSections = true;
+
+                    for (i = 0; i < ARRAY_LEN(sSectionIds); i++) {
+                        if (!this->CheckAdvFlag(sSectionIds[i])) {
+                            canReachToSSections = false;
+                            break;
+                        }
+                    }
+                } else {
+                    // consider sections reachable if section shuffle is disabled
+                    // we can do that since we also look for the final chest to be opened
+                    canReachToSSections = true;
+                }
+
                 MapObject* pTRLS = this->FindMapObject(MapObjectId_TRLS);
-                if (pTRLS != NULL && pTRLS->mUnk_16 == 8) {
+                if (pTRLS != NULL && pTRLS->mUnk_16 == 8 && canReachToSSections) {
                     pSave->completedDungeons[5] = true;
                 }
             }
