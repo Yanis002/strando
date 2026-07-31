@@ -1508,10 +1508,12 @@ class Randomizer:
                             entry.params[0] = (middle.id.value << 8) | top_left.id.value
                             entry.params[1] = (bottom_left.id.value << 8) | top_right.id.value
                             entry.params[2] = bottom_right.id.value
-                        elif (self.settings.shuffle.rupeesanity and entry.id == "RUPE") or (
-                            self.settings.shuffle_dgn.is_bksanity_enabled() and entry.id in ["KEYB", "KEYT"]
+                        elif (
+                            (self.settings.shuffle.rupeesanity and entry.id == "RUPE")
+                            or (self.settings.shuffle_dgn.is_bksanity_enabled() and entry.id in ["KEYB", "KEYT"])
+                            or (self.settings.shuffle_dgn.is_keysanity_enabled() and entry.id == "MKUR")
                         ):
-                            # for rupees, param 0 and 1 are used so we use 3 since it seems unused
+                            # for rupees, boss keys and spinnit, param 0 and 1 are used so we use 3 since it seems unused
                             entry.params[3] = location.items[0].id.value
                         else:
                             entry.params[0] = location.items[0].id.value

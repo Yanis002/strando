@@ -24,7 +24,7 @@ extern "C" void func_02013354();
 extern "C" void func_0201328c();
 extern Mat3p gGeomMatrix;
 
-static u8 sBMGRandoBuf[0x7000] __attribute__((aligned(32))); //! TODO: dynamic array size
+static u8 sBMGRandoBuf[0x8000] __attribute__((aligned(32))); //! TODO: dynamic array size
 
 // gcc wants size_t to be unsigned int not unsigned long :)
 extern "C" void _ZN29UnkStruct_ov000_020b504c_Sub319func_ov000_02067804EPKcPvm(UnkStruct_ov000_020b504c_Sub3*,

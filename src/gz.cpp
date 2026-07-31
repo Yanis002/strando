@@ -439,6 +439,7 @@ void GZ::OnGameModeUpdate() {
                         if (this->CheckAdvFlag(ItemId_LightCompass)) {
                             give = true;
                         }
+                        break;
                     case DarkRealmMode_RestorationSongs: {
                         static AdventureFlag_Half sRestorationSongFlags[] = {
                             RandoAdventureFlag_RestoredForestGlyph,      RandoAdventureFlag_RestoredSnowGlyph,
@@ -464,7 +465,7 @@ void GZ::OnGameModeUpdate() {
                 }
 
                 if (give) {
-                    this->TryAddItemToQueue(ItemId_FinalTrack);
+                    this->TryAddItemIfNotInQueue(ItemId_FinalTrack);
                 }
             }
         }
