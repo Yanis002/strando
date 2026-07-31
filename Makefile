@@ -195,7 +195,7 @@ init: venv
 ifeq ($(COMPARE),1)
 	$(V)sha1sum -c $(EXTRACT_DIR)/baserom_st_$(REGION).sha1
 endif
-	$(V)$(DL_TOOL) -p tools/ dsrom v0.7.0
+	$(V)$(DL_TOOL) -p tools/ dsrom v0.8.0
 	$(V)$(DL_TOOL) -p tools/ binutils arm-2.42-0
 ifeq ("$(wildcard $(ARMIPS_DIR))", "")
 	$(error armips not found!)

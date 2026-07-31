@@ -9,7 +9,7 @@ extern void _ZN4Game19func_ov018_020c48f8Ev(void* ptr);
 extern void FS_LoadOverlay(int param1, int overlayID);
 extern void GZ_Init();
 
-#ifndef __INTELLISENSE__
+#if !(__INTELLISENSE__ || __clangd__)
 #ifndef GZ_OVL_ID
 #error "overlay id is not defined!"
 #endif

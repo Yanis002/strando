@@ -16,7 +16,7 @@ INDENT = " " * 4
 
 # dummy item based on force gems, we basically are copy pasting the thing and just changing the palette
 # TODO: make a proper implementation?
-DUMMY = f""".open "../../../extract/VERSION/files/Player/get/frcY.nsbmd", "../../../extract/VERSION/files/Player/get/dumy.nsbmd", 0x0
+DUMMY = """.open "../../../extract/VERSION/files/Player/get/frcY.nsbmd", "../../../extract/VERSION/files/Player/get/dumy.nsbmd", 0x0
 .close
 
 .open "../../../extract/VERSION/files/Player/get/frcY.nsbtx", "../../../extract/VERSION/files/Player/get/dumy.nsbtx", 0x0
