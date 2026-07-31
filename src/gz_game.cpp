@@ -24,15 +24,18 @@ extern "C" void func_02013354();
 extern "C" void func_0201328c();
 extern Mat3p gGeomMatrix;
 
+static u8 sBMGRandoBuf[0x7000] __attribute__((aligned(32))); //! TODO: dynamic array size
+
+// gcc wants size_t to be unsigned int not unsigned long :)
+extern "C" void _ZN29UnkStruct_ov000_020b504c_Sub319func_ov000_02067804EPKcPvm(UnkStruct_ov000_020b504c_Sub3*,
+                                                                               const char*, void*, unsigned long);
+
 void LoadRandoBMG() {
     UnkStruct_ov000_020b504c_Sub3* pTemp = data_ov000_020b504c.mUnk_000;
 
     if (pTemp != NULL) {
-        BMGEntry* pEntry = (BMGEntry*)((u8*)pTemp->mpBMGTable + 0x1F * sizeof(BMGEntry));
-
-        if (pEntry != NULL && pEntry->mpINF1 == NULL) {
-            pTemp->func_ov000_020676f8("rando", 1);
-        }
+        _ZN29UnkStruct_ov000_020b504c_Sub319func_ov000_02067804EPKcPvm(pTemp, "rando", sBMGRandoBuf,
+                                                                       sizeof(sBMGRandoBuf));
     }
 }
 
@@ -48,9 +51,10 @@ extern "C" void Custom_02014995(OverlayManager* thisx, OverlayIndex nextOvlSlot1
 }
 
 void CustomGame::Run() {
+    LoadRandoBMG();
+
     do {
         gGZ.Update();
-        LoadRandoBMG();
 
         // initialization of the next game mode
         if (this->createCallback != NULL) {

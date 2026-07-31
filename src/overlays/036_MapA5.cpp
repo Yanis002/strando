@@ -12,7 +12,7 @@
 extern ItemId GetProgressiveItemId(ItemId requestedItemId);
 extern u32 data_ov036_02122760;
 
-#define MSG(idx) ((0x1F << 16) | (idx))
+#define MSG(idx) ((0x40 << 16) | (idx))
 #define ItemId_Max (ItemId_EngineerUniform + 1)
 
 typedef unk32 ShopItemPosition;

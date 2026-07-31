@@ -1643,7 +1643,7 @@ class Randomizer:
         msg = bmg.Message(INFO, [text_map[lang] if len(text_map[lang]) > 0 else text_map["English"]])
         msg_list.append(msg)
 
-        bmg_file = bmg.BMG.fromMessages(msg_list, id=0x1F)
+        bmg_file = bmg.BMG.fromMessages(msg_list, id=0x40)
         bmg_file.saveToFile(self.extracted_dir / "files" / lang / "Message" / "rando.bmg")
 
     def export_settings(self):
