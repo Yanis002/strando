@@ -1,0 +1,1057 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TabWidget</class>
+ <widget class="QTabWidget" name="TabWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>517</width>
+    <height>576</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Spirit Tracks Randomizer v0.0.1</string>
+  </property>
+  <property name="tabPosition">
+   <enum>QTabWidget::TabPosition::North</enum>
+  </property>
+  <property name="tabShape">
+   <enum>QTabWidget::TabShape::Rounded</enum>
+  </property>
+  <property name="currentIndex">
+   <number>0</number>
+  </property>
+  <widget class="QWidget" name="tab_general">
+   <attribute name="title">
+    <string>General</string>
+   </attribute>
+   <widget class="QGroupBox" name="rom_group">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>491</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>ROM Selection</string>
+    </property>
+    <widget class="QWidget" name="horizontalLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>471</width>
+       <height>40</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="rom_layout">
+      <item>
+       <widget class="QLineEdit" name="rom_path">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="rom_btn">
+        <property name="text">
+         <string>Select ROM</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="rom_lbl">
+        <property name="minimumSize">
+         <size>
+          <width>75</width>
+          <height>39</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>75</width>
+          <height>39</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Invalid ROM</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="gen_group">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>100</y>
+      <width>491</width>
+      <height>221</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Generator Settings</string>
+    </property>
+    <widget class="QWidget" name="gridLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>29</y>
+       <width>471</width>
+       <height>151</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gen_layout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="gen_lbl_preset">
+        <property name="text">
+         <string>Settings Preset</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="gen_combo_preset">
+        <property name="placeholderText">
+         <string>Select Preset</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="gen_lbl_string">
+        <property name="text">
+         <string>Settings String</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="gen_string"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="gen_lbl_seed">
+        <property name="text">
+         <string>Seed</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="gen_seed"/>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="horizontalLayoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>183</y>
+       <width>471</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="gen_radio_layout">
+      <item>
+       <widget class="QRadioButton" name="gen_radio_custom">
+        <property name="text">
+         <string>Custom Settings</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="gen_radio_random">
+        <property name="text">
+         <string>Random Settings</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="out_group">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>340</y>
+      <width>491</width>
+      <height>191</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Output Settings</string>
+    </property>
+    <widget class="QWidget" name="gridLayoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>471</width>
+       <height>111</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="out_layout">
+      <item row="1" column="0" colspan="3">
+       <widget class="QPushButton" name="out_btn_generate">
+        <property name="text">
+         <string>Generate</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="out_lbl">
+        <property name="text">
+         <string>Output Folder</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QPushButton" name="out_btn_select">
+        <property name="text">
+         <string>Select Folder</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="out_path">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" colspan="3">
+       <widget class="QProgressBar" name="out_progress_bar">
+        <property name="value">
+         <number>0</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="horizontalLayoutWidget_3">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>471</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="out_layout_misc">
+      <item>
+       <widget class="QCheckBox" name="out_enable_spoilerlog">
+        <property name="text">
+         <string>Create Spoiler Log</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QWidget" name="tab_settings">
+   <attribute name="title">
+    <string>Settings</string>
+   </attribute>
+   <widget class="QTabWidget" name="subtab_settings">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>491</width>
+      <height>521</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="subtab_shuffle_land">
+     <attribute name="title">
+      <string>Shuffle Land</string>
+     </attribute>
+     <widget class="QGroupBox" name="shop_group">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>190</y>
+        <width>131</width>
+        <height>111</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Shop Sanity</string>
+      </property>
+      <widget class="QWidget" name="verticalLayoutWidget_5">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>111</width>
+         <height>71</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="shop_layout">
+        <item>
+         <widget class="QLabel" name="shop_lbl">
+          <property name="text">
+           <string>Number of Items:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="shop_amount">
+          <property name="maximum">
+           <number>5</number>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QWidget" name="gridLayoutWidget_5">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>320</y>
+        <width>131</width>
+        <height>111</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="misc_layout">
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="duets">
+         <property name="text">
+          <string>Duets</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="rupeesanity">
+         <property name="text">
+          <string>Rupee Sanity</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="stamps">
+         <property name="text">
+          <string>Stamps</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QCheckBox" name="stamp_book">
+         <property name="text">
+          <string>Stamp Book</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QGroupBox" name="minigame_group">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>311</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Minigames</string>
+      </property>
+      <widget class="QWidget" name="gridLayoutWidget_3">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>291</width>
+         <height>86</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="minigame_grid">
+        <item row="1" column="0">
+         <widget class="QLabel" name="minigame_lbl_whip">
+          <property name="text">
+           <string>Whip Race</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="minigame_lbl_takeem">
+          <property name="text">
+           <string>Take 'Em All On!</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <layout class="QHBoxLayout" name="minigame_pirate_layout">
+          <item>
+           <widget class="QCheckBox" name="minigame_pirate_easy">
+            <property name="text">
+             <string>Easy</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="minigame_pirate_hard">
+            <property name="text">
+             <string>Hard</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="minigame_pirate_expert">
+            <property name="text">
+             <string>Expert</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="minigame_lbl_pirate">
+          <property name="text">
+           <string>Pirate Hideout</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <layout class="QHBoxLayout" name="minigame_takeem_layout">
+          <item>
+           <widget class="QCheckBox" name="minigame_takeem_easy">
+            <property name="text">
+             <string>Easy</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="minigame_takeem_hard">
+            <property name="text">
+             <string>Hard</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="minigame_takeem_expert">
+            <property name="text">
+             <string>Expert</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="1">
+         <layout class="QHBoxLayout" name="minigame_whip_layout">
+          <item>
+           <widget class="QCheckBox" name="minigame_whip_easy">
+            <property name="text">
+             <string>Easy</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="minigame_whip_hard">
+            <property name="text">
+             <string>Hard</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="minigame_whip_expert">
+            <property name="text">
+             <string>Expert</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="horizontalLayoutWidget_7">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>126</y>
+         <width>291</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="minigame_misc_layout">
+        <item>
+         <widget class="QCheckBox" name="minigame_goron">
+          <property name="text">
+           <string>Goron Range</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="minigame_sword">
+          <property name="text">
+           <string>Sword Training</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="subtab_shuffle_train">
+     <attribute name="title">
+      <string>Shuffle Train</string>
+     </attribute>
+     <widget class="QGroupBox" name="cargo_group">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>360</y>
+        <width>131</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Cargo</string>
+      </property>
+      <widget class="QComboBox" name="cargo_combo_box">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>111</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <item>
+        <property name="text">
+         <string>Remove</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Vanilla</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Abstract</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Anywhere</string>
+        </property>
+       </item>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="glyphsrc_group">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>311</width>
+        <height>111</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Glyphs and Sources</string>
+      </property>
+      <widget class="QComboBox" name="glyphsrc_combo_box">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>291</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>Vanilla</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Anywhere</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Progressive (Realm)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Progressive (World)</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QCheckBox" name="glyphsrc_forest_start_box">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>72</y>
+         <width>291</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="toolTip">
+        <string>The Forest Realm Glyph will be shuffled anywhere if it's not a starting item.</string>
+       </property>
+       <property name="text">
+        <string>Start with Forest Glyph</string>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="passenger_group">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>270</y>
+        <width>131</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Passengers</string>
+      </property>
+      <widget class="QComboBox" name="passenger_combo_box">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>111</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="currentIndex">
+        <number>3</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>Remove</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Vanilla</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Abstract</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Anywhere</string>
+        </property>
+       </item>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="rabbits_group">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>140</y>
+        <width>311</width>
+        <height>111</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Rabbits</string>
+      </property>
+      <widget class="QWidget" name="gridLayoutWidget_6">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>24</y>
+         <width>291</width>
+         <height>80</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="rabbit_layout">
+        <item row="0" column="2">
+         <widget class="QCheckBox" name="rabbit_snow">
+          <property name="text">
+           <string>Snow</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="rabbit_grass">
+          <property name="text">
+           <string>Grass</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="rabbit_water">
+          <property name="text">
+           <string>Water</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="rabbit_all">
+          <property name="text">
+           <string>All</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="2">
+         <widget class="QCheckBox" name="rabbit_sand">
+          <property name="text">
+           <string>Sand</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QCheckBox" name="rabbit_fire">
+          <property name="text">
+           <string>Fire</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="3">
+         <widget class="QCheckBox" name="rabbit_pack">
+          <property name="text">
+           <string>Rabbit Packs</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="subtab_shuffle_dgn">
+     <attribute name="title">
+      <string>Dungeon Shuffle</string>
+     </attribute>
+     <widget class="QGroupBox" name="dgnshuffle_bkey_group">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>130</y>
+        <width>161</width>
+        <height>102</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Boss Key Sanity</string>
+      </property>
+      <widget class="QWidget" name="verticalLayoutWidget_3">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>30</y>
+         <width>141</width>
+         <height>62</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="dgnshuffle_bkey_layout">
+        <item>
+         <widget class="QComboBox" name="dgnshuffle_bkey_combo">
+          <item>
+           <property name="text">
+            <string>Off</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Dungeon</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Anywhere</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Removed</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="dgnshuffle_bkeyrings">
+          <property name="text">
+           <string>Boss Keyrings</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="dgnshuffle_sections_group">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>250</y>
+        <width>161</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Tower Sections</string>
+      </property>
+      <widget class="QComboBox" name="dgnshuffle_sections_combo">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>40</y>
+         <width>141</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <item>
+        <property name="text">
+         <string>Open</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Open (Exclude Section 6)</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Progressive</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Dungeon Sources</string>
+        </property>
+       </item>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="dgnshuffle_tear_group">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>370</y>
+        <width>161</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Tear Sanity</string>
+      </property>
+      <widget class="QWidget" name="verticalLayoutWidget_4">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>30</y>
+         <width>141</width>
+         <height>62</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="dgnshuffle_tear_layout">
+        <item>
+         <widget class="QComboBox" name="dgnshuffle_tear_combo">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <item>
+           <property name="text">
+            <string>Off</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Tower Section</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Dungeon</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Anywhere</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Removed</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="dgnshuffle_tear_packs">
+          <property name="text">
+           <string>Tear Packs</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="dgnshuffle_key_group">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>161</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Key Sanity</string>
+      </property>
+      <widget class="QWidget" name="verticalLayoutWidget_2">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>30</y>
+         <width>141</width>
+         <height>62</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="dgnshuffle_key_layout">
+        <item>
+         <widget class="QComboBox" name="dgnshuffle_key_combo">
+          <item>
+           <property name="text">
+            <string>Off</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Dungeon</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Anywhere</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Removed</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="dgnshuffle_keyrings">
+          <property name="text">
+           <string>Keyrings</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="subtab_goal">
+     <attribute name="title">
+      <string>Goal</string>
+     </attribute>
+     <widget class="QGroupBox" name="goal_dgn_group">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>181</width>
+        <height>111</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Dungeons</string>
+      </property>
+      <widget class="QCheckBox" name="goal_dgn_tower_toggle">
+       <property name="geometry">
+        <rect>
+         <x>9</x>
+         <y>30</y>
+         <width>171</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Tower is a dungeon</string>
+       </property>
+      </widget>
+      <widget class="QWidget" name="horizontalLayoutWidget_8">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>60</y>
+         <width>161</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="goal_dgn_layout">
+        <item>
+         <widget class="QLabel" name="goal_dgn_lbl">
+          <property name="text">
+           <string>Dgn. Amount</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="goal_dgn_amount"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="goal_dark_group">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>140</y>
+        <width>181</width>
+        <height>71</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Dark Realm</string>
+      </property>
+      <widget class="QComboBox" name="goal_dark_combo">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>161</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="currentIndex">
+        <number>3</number>
+       </property>
+       <item>
+        <property name="text">
+         <string>Open</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Dungeons</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Compass</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Restoration Songs</string>
+        </property>
+       </item>
+      </widget>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
