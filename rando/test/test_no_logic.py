@@ -779,9 +779,10 @@ class SeedLogEntry:
 
 
 class SeedLog:
-    def __init__(self, path: Path, seed: str, yaml_file: dict | None = None):
+    def __init__(self, path: Path, seed: str, settings_string: str, yaml_file: dict | None = None):
         self.path = path
         self.seed = seed
+        self.settings_string = settings_string
         self.yaml_file = yaml_file
         self.entries: list[SeedLogEntry] = []
         self.path.parent.mkdir(exist_ok=True)
@@ -794,7 +795,9 @@ class SeedLog:
         settings = Settings.from_yaml(yaml_file["settings"])
         yaml_file.pop("settings")
 
-        new_log = SeedLog(yaml_path.with_stem(f"spoiler_{settings.seed}_parsed"), settings.seed, yaml_file)
+        settings_string = settings.to_str()
+        assert yaml_file["settings"]["string"] == settings_string
+        new_log = SeedLog(yaml_path.with_stem(f"spoiler_{settings.seed}_parsed"), settings.seed, settings_string, yaml_file)
         return new_log, settings
 
     def export(self, settings: Settings):
@@ -802,6 +805,7 @@ class SeedLog:
         entries = [entry.export(settings) for entry in self.entries]
 
         yaml_file = settings.to_yaml()
+        yaml_file["settings"]["string"] = settings.to_str()
 
         for entry in entries:
             yaml_file.update(entry)
@@ -1536,7 +1540,7 @@ class Randomizer:
         print("Created rando.bmg!")
 
     def create_log(self):
-        spoiler_log = SeedLog(Path(f"output/spoiler_{self.settings.seed}.yaml"), self.settings.seed)
+        spoiler_log = SeedLog(Path(f"output/spoiler_{self.settings.seed}.yaml"), self.settings.to_str(), self.settings.seed)
 
         for node in self.nodes:
             spoiler_log.entries.append(SeedLogEntry(node))

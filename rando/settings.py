@@ -1,5 +1,8 @@
+import base64
+import msgpack
 import struct
 import yaml
+import zlib
 
 from pathlib import Path
 
@@ -429,7 +432,10 @@ class Settings:
             with yaml_path_or_data.open("r") as file:
                 yaml_file = yaml.safe_load(file)["settings"]
         elif isinstance(yaml_path_or_data, dict):
-            yaml_file = yaml_path_or_data
+            if "settings" in yaml_path_or_data:
+                yaml_file = yaml_path_or_data["settings"]
+            else:
+                yaml_file = yaml_path_or_data
         else:
             raise NotImplementedError("ERROR: unrecognized type.")
 
@@ -439,6 +445,15 @@ class Settings:
             ShuffleDungeonSettings.from_yaml(yaml_file["shuffle_dungeon"]),
             GoalSettings.from_yaml(yaml_file["goal"]),
         )
+
+    @staticmethod
+    def from_str(data: str) -> "Settings":
+        """decodes the settings from a zlib-compressed base85 string"""
+        return Settings.from_yaml(msgpack.unpackb(zlib.decompress(base64.a85decode(data.encode()))))
+
+    def to_str(self) -> str:
+        """encodes the settings to a zlib-compressed base85 string"""
+        return base64.a85encode(zlib.compress(msgpack.packb(self.to_yaml()), zlib.Z_BEST_COMPRESSION)).decode()
 
     def to_bin(self):
         passenger_pick_ids = b""

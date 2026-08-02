@@ -1,9 +1,9 @@
-from typing import Any
 import traceback
 import sys
 import hashlib
 import yaml
 
+from typing import Any
 from pathlib import Path
 from PyQt6.QtWidgets import (
     QApplication,
@@ -108,6 +108,7 @@ class MainWindow(QTabWidget):
 
         self.presets: dict[str, Settings] = {}
         self.live_preset = Settings.empty()  # tracks the settings changed in real time
+        self.disable_live_preset_update = False
 
         try:
             self.setup_connections()
@@ -129,6 +130,7 @@ class MainWindow(QTabWidget):
         self.ui.out_btn_generate.pressed.connect(self.do_generate)
         self.ui.gen_combo_preset.currentIndexChanged.connect(self.do_change_preset)
         self.ui.gen_btn_preset.pressed.connect(self.do_save_preset)
+        self.ui.gen_string.textEdited.connect(self.do_settings_string_update)
 
         ### Settings
 
@@ -192,11 +194,17 @@ class MainWindow(QTabWidget):
         if preset == str():
             return
 
+        self.disable_live_preset_update = True
+
         if preset is not None and preset != "Custom":
             assert preset in self.presets, f"missing preset {repr(preset)}"
             settings = self.presets[preset]
+            self.ui.gen_combo_preset.setCurrentIndex(list(self.presets.keys()).index(preset) + 1)
         else:
             settings = self.live_preset
+            self.ui.gen_combo_preset.setCurrentIndex(0)
+
+        self.ui.gen_string.setText(settings.to_str())
 
         ### General (TODO: add setting string)
 
@@ -305,6 +313,8 @@ class MainWindow(QTabWidget):
         # Dark Realm
         self.ui.goal_dark_combo.setCurrentIndex(settings.goal.unlock_dark_realm_mode_map[settings.goal.unlock_dark_realm])
 
+        self.disable_live_preset_update = False
+
     def save_preset(self, preset: str | None):
         """Updates the settings the preset's data following the current UI's state"""
 
@@ -411,6 +421,8 @@ class MainWindow(QTabWidget):
         # Dark Realm
         settings.goal.unlock_dark_realm = settings.goal.unlock_dark_realm_mode_invmap[self.ui.goal_dark_combo.currentIndex()]
 
+        self.ui.gen_string.setText(settings.to_str())
+
     # connection callbacks
 
     def do_select_rom(self):
@@ -447,14 +459,28 @@ class MainWindow(QTabWidget):
             show_error(self, f"An error occurred\n\n{traceback.format_exc()}")
 
     def do_change_preset(self, index: int):
-        self.apply_preset(self.ui.gen_combo_preset.currentText())
+        if index != 0:
+            self.apply_preset(self.ui.gen_combo_preset.currentText())
 
     def do_save_preset(self):
         dialog = PresetSaveDialog(self)
         dialog.show()
 
     def do_live_preset_update(self, arg: Any):
+        if self.disable_live_preset_update:
+            return
+
+        if self.ui.gen_combo_preset.currentText() != "Custom":
+            self.ui.gen_combo_preset.setCurrentIndex(0)
+
         self.save_preset(None)
+
+    def do_settings_string_update(self, text: str):
+        try:
+            self.live_preset = Settings.from_str(text)
+            self.apply_preset(None)
+        except Exception:
+            show_error(self, f"An error occurred\n\n{traceback.format_exc()}")
 
 
 if __name__ == "__main__":
