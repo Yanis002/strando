@@ -250,7 +250,7 @@ venv:
 # Create the virtual environment if it doesn't exist.
 # Delete the virtual environment directory if creation fails.
 	$(call print_no_args,Creating python virtual environment...)
-	$(V)test -d $(VENV) || python3 -m venv $(VENV) || { rm -rf $(VENV); false; }
+	$(V)test -d $(VENV) || python3 -m venv --system-site-packages $(VENV) || { rm -rf $(VENV); false; }
 	$(V)$(PYTHON) -m pip install -U pip
 	$(V)$(PYTHON) -m pip install -U -r tools/requirements.txt
 	$(call print_no_args,Success!)

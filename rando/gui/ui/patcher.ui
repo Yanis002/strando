@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>TabWidget</class>
  <widget class="QTabWidget" name="TabWidget">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -9,6 +12,12 @@
     <width>517</width>
     <height>576</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>517</width>
+    <height>576</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Spirit Tracks Randomizer v0.0.1</string>
@@ -44,7 +53,7 @@
        <x>10</x>
        <y>30</y>
        <width>471</width>
-       <height>40</height>
+       <height>41</height>
       </rect>
      </property>
      <layout class="QHBoxLayout" name="rom_layout">
@@ -106,6 +115,28 @@
       </rect>
      </property>
      <layout class="QGridLayout" name="gen_layout">
+      <property name="horizontalSpacing">
+       <number>6</number>
+      </property>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="gen_combo_preset">
+        <property name="minimumSize">
+         <size>
+          <width>260</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="placeholderText">
+         <string>Select Preset</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="gen_lbl_preset">
         <property name="text">
@@ -113,10 +144,10 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QComboBox" name="gen_combo_preset">
-        <property name="placeholderText">
-         <string>Select Preset</string>
+      <item row="2" column="0">
+       <widget class="QLabel" name="gen_lbl_seed">
+        <property name="text">
+         <string>Seed</string>
         </property>
        </widget>
       </item>
@@ -127,17 +158,29 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QLineEdit" name="gen_string"/>
-      </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="gen_lbl_seed">
+      <item row="0" column="2">
+       <widget class="QPushButton" name="gen_btn_preset">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>60</width>
+          <height>16777215</height>
+         </size>
+        </property>
         <property name="text">
-         <string>Seed</string>
+         <string>Save</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
+      <item row="1" column="1" colspan="2">
+       <widget class="QLineEdit" name="gen_string"/>
+      </item>
+      <item row="2" column="1" colspan="2">
        <widget class="QLineEdit" name="gen_seed"/>
       </item>
      </layout>
@@ -156,6 +199,9 @@
        <widget class="QRadioButton" name="gen_radio_custom">
         <property name="text">
          <string>Custom Settings</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -242,6 +288,9 @@
        <widget class="QCheckBox" name="out_enable_spoilerlog">
         <property name="text">
          <string>Create Spoiler Log</string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -627,7 +676,7 @@
         </rect>
        </property>
        <property name="currentIndex">
-        <number>3</number>
+        <number>0</number>
        </property>
        <item>
         <property name="text">
@@ -791,7 +840,7 @@
        <rect>
         <x>10</x>
         <y>250</y>
-        <width>161</width>
+        <width>201</width>
         <height>101</height>
        </rect>
       </property>
@@ -803,9 +852,12 @@
         <rect>
          <x>10</x>
          <y>40</y>
-         <width>141</width>
+         <width>181</width>
          <height>31</height>
         </rect>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
        </property>
        <item>
         <property name="text">
@@ -997,7 +1049,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="goal_dgn_amount"/>
+         <widget class="QSpinBox" name="goal_dgn_amount">
+          <property name="maximum">
+           <number>5</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -1024,7 +1080,7 @@
         </rect>
        </property>
        <property name="currentIndex">
-        <number>3</number>
+        <number>0</number>
        </property>
        <item>
         <property name="text">

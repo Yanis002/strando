@@ -79,20 +79,25 @@ class ShuffleSettings:
         self.stamps_rewards: list[int] = []
         self.stamp_book = False
 
+        self.rabbitsanity_mode = ["grass", "snow", "water", "fire", "sand", "all"]
         self.rabbitsanity: list[str] = []
         self.rabbitpack = False
 
         self.passengers_mode = ["remove", "vanilla", "abstract", "anywhere"]
         self.passengers_mode_map = {mode: i for i, mode in enumerate(self.passengers_mode)}
+        self.passengers_mode_invmap = {i: mode for mode, i in self.passengers_mode_map.items()}
 
         self.cargo_mode = ["remove", "vanilla", "abstract", "anywhere"]
         self.cargo_mode_map = {mode: i for i, mode in enumerate(self.cargo_mode)}
+        self.cargo_mode_invmap = {i: mode for mode, i in self.cargo_mode_map.items()}
 
         self.glyphs_and_sources_mode = ["vanilla", "anywhere", "prog_realm", "prog_world"]
         self.glyphs_and_sources_mode_map = {mode: i for i, mode in enumerate(self.glyphs_and_sources_mode)}
+        self.glyphs_and_sources_mode_invmap = {i: mode for mode, i in self.glyphs_and_sources_mode_map.items()}
 
         self.forest_glyph_mode = ["startwith", "anywhere"]
         self.forest_glyph_mode_map = {mode: i for i, mode in enumerate(self.forest_glyph_mode)}
+        self.forest_glyph_mode_invmap = {i: mode for mode, i in self.forest_glyph_mode_map.items()}
 
     def is_rabbitsanity_enabled(self):
         return len(self.rabbitsanity) > 0 and "none" not in self.rabbitsanity
@@ -132,7 +137,7 @@ class ShuffleSettings:
             raise ValueError("stamp_book must be true or false")
 
         for value in self.rabbitsanity:
-            if value not in ["grass", "snow", "water", "fire", "sand", "all"]:
+            if value not in self.rabbitsanity_mode:
                 raise ValueError("rabbit_sanity is not valid")
 
         if not isinstance(self.rabbitpack, bool):
@@ -258,12 +263,15 @@ class ShuffleDungeonSettings:
 
         self.keysanity_mode = ["off", "dungeon", "anywhere", "removed"]
         self.keysanity_mode_map = {mode: i for i, mode in enumerate(self.keysanity_mode)}
+        self.keysanity_mode_invmap = {i: mode for mode, i in self.keysanity_mode_map.items()}
 
         self.bksanity_mode = ["off", "dungeon", "anywhere", "removed"]
         self.bksanity_mode_map = {mode: i for i, mode in enumerate(self.bksanity_mode)}
+        self.bksanity_mode_invmap = {i: mode for mode, i in self.bksanity_mode_map.items()}
 
         self.tear_sanity_mode = ["off", "section", "dungeon", "anywhere", "removed"]
         self.tear_sanity_mode_map = {mode: i for i, mode in enumerate(self.tear_sanity_mode)}
+        self.tear_sanity_mode_invmap = {i: mode for mode, i in self.tear_sanity_mode_map.items()}
 
     def validate(self):
         if self.keysanity not in self.keysanity_mode:
@@ -357,6 +365,7 @@ class GoalSettings:
 
         self.unlock_dark_realm_mode = ["open", "dungeons", "compass", "restoration_songs"]
         self.unlock_dark_realm_mode_map = {mode: i for i, mode in enumerate(self.unlock_dark_realm_mode)}
+        self.unlock_dark_realm_mode_invmap = {i: mode for mode, i in self.unlock_dark_realm_mode_map.items()}
 
     def validate(self):
         if not isinstance(self.is_tos_dungeon, bool):
@@ -409,6 +418,10 @@ class Settings:
         self.passenger_pick_ids: list[int] = []
         self.passenger_dest_ids: list[int] = []
         self.cargo_pick_ids: list[int] = []
+
+    @staticmethod
+    def empty() -> "Settings":
+        return Settings("Unknown", ShuffleSettings(), ShuffleDungeonSettings(), GoalSettings())
 
     @staticmethod
     def from_yaml(yaml_path_or_data: Path | dict) -> "Settings":

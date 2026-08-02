@@ -1,3 +1,5 @@
+import yaml
+
 from enum import IntEnum
 
 shop_actor_ids = [
@@ -1660,3 +1662,14 @@ shop_item_positions = [
     "Bottom Left",
     "Bottom Right",
 ]
+
+
+# from https://github.com/yaml/pyyaml/issues/127#issuecomment-525800484
+class CustomSafeYAMLDumper(yaml.SafeDumper):
+    # HACK: insert blank lines between top-level objects
+    # inspired by https://stackoverflow.com/a/44284819/3786245
+    def write_line_break(self, data=None):
+        super().write_line_break(data)
+
+        if len(self.indents) == 1:
+            super().write_line_break()

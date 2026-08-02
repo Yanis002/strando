@@ -15,13 +15,14 @@ from rando.constants import (
     ItemId,
     ItemKind,
     ItemWeight,
+    CustomSafeYAMLDumper,
     item_id_to_name,
     item_name_to_id,
     shop_actor_ids,
     shop_item_positions,
     tos_room_map,
 )
-from rando.test.settings import Settings, LocationSettings
+from rando.settings import Settings, LocationSettings
 
 TOS_SECTION_1_INDEX = 0
 TOS_SECTION_2_INDEX = 1
@@ -29,17 +30,6 @@ TOS_SECTION_3_INDEX = 2
 TOS_SECTION_4_INDEX = 3
 TOS_SECTION_5_INDEX = 4
 TOS_SECTION_6_INDEX = 5
-
-
-# from https://github.com/yaml/pyyaml/issues/127#issuecomment-525800484
-class MyDumper(yaml.SafeDumper):
-    # HACK: insert blank lines between top-level objects
-    # inspired by https://stackoverflow.com/a/44284819/3786245
-    def write_line_break(self, data=None):
-        super().write_line_break(data)
-
-        if len(self.indents) == 1:
-            super().write_line_break()
 
 
 @dataclass
@@ -817,7 +807,7 @@ class SeedLog:
             yaml_file.update(entry)
 
         with open(self.path, "w", encoding="utf-8") as file:
-            yaml.dump(yaml_file, file, sort_keys=False, Dumper=MyDumper)
+            yaml.dump(yaml_file, file, sort_keys=False, Dumper=CustomSafeYAMLDumper)
 
 
 class DungeonDef:

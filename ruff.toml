@@ -8,6 +8,7 @@ ignore = []
 
 exclude = [
     "rando/gui/src/patcher_ui.py", # this is generated
+    "rando/gui/src/preset_save_ui.py", # this is generated
 ]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
@@ -19,3 +20,8 @@ quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
+
+exclude = [
+    "rando/gui/src/patcher_ui.py", # this is generated
+    "rando/gui/src/preset_save_ui.py", # this is generated
+]
