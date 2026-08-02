@@ -108,7 +108,7 @@
   # locations:
   #   "Tower of Spirits - 6F Main Section Arena Pot Left": "true"
   #   "Tower of Spirits - 6F Main Section Arena Pot Right": "true"
-  
+
 "Tower of Spirits - 6F Main After Arena":
   scene: "d_main"
   room_index: 5

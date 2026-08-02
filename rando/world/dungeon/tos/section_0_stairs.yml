@@ -2,7 +2,7 @@
   scene: "d_main_f"
   room_index: 0
   entrances:
-    "Tower of Spirits - Stairs Section 1": "true" 
+    "Tower of Spirits - Stairs Section 1": "true"
     "Forest Land - Source Tracks": "true"
     "Snow Land - Source Tracks": "got_source('Snow')"
     "Ocean Land - Source Tracks": "got_source('Ocean')"

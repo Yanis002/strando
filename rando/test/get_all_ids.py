@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
 
-import random
 import struct
-import time
 import yaml
 
 from dataclasses import dataclass
 from ndspy import lz10 as LZSS
 from ndspy import narc
 from pathlib import Path
-from rando.constants import ItemId, ItemKind, ItemWeight, item_id_to_name, shop_actor_ids, actor_ids, mapobj_ids
+from rando.constants import item_id_to_name, shop_actor_ids
 
 
 # from https://github.com/yaml/pyyaml/issues/127#issuecomment-525800484
@@ -96,14 +94,14 @@ class ActorEntry:
     def get_params(self):
         if self.is_shop:
             return [
-                {"Top Left": item_id_to_name[f"0x{self.params[0] & 0xFF:02X}"]},
-                {"Middle": item_id_to_name[f"0x{(self.params[0] >> 8) & 0xFF:02X}"]},
-                {"Top Right": item_id_to_name[f"0x{self.params[1] & 0xFF:02X}"]},
-                {"Bottom Left": item_id_to_name[f"0x{(self.params[1] >> 8) & 0xFF:02X}"]},
-                {"Bottom Right": item_id_to_name[f"0x{self.params[2] & 0xFF:02X}"]},
+                {"Top Left": item_id_to_name[self.params[0] & 0xFF]},
+                {"Middle": item_id_to_name[(self.params[0] >> 8) & 0xFF]},
+                {"Top Right": item_id_to_name[self.params[1] & 0xFF]},
+                {"Bottom Left": item_id_to_name[(self.params[1] >> 8) & 0xFF]},
+                {"Bottom Right": item_id_to_name[self.params[2] & 0xFF]},
             ]
 
-        return item_id_to_name[f"0x{self.params[0]:02X}"]
+        return item_id_to_name[self.params[0]]
 
 
 @dataclass
@@ -177,7 +175,7 @@ class MapObjectEntry:
         )
 
     def get_params(self):
-        return item_id_to_name[f"0x{self.params[0]:02X}"]
+        return item_id_to_name[self.params[0]]
 
 
 @dataclass

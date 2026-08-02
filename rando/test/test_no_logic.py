@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import copy
 import hashlib
 import random
 import re
@@ -189,7 +188,7 @@ def get_tos_section_from_room(room_index: int):
     return None
 
 
-def get_item_name_suffix(settings: Settings, kind: ItemKind | None):
+def get_item_name_suffix(settings: Settings, kind: ItemKind | None) -> str:
     if kind is None:
         return ""
 
@@ -1579,7 +1578,7 @@ class Randomizer:
         use_lang = lang
 
         # lang: [default, nothing, rabbits]
-        prefix_map = {
+        prefix_map: dict[str, list[str]] = {
             "English": ["You got the ", "You got ", "You got a "],
             "French": [],  # TODO
             "German": [],  # TODO
@@ -1594,7 +1593,7 @@ class Randomizer:
 
         RED = bmg.Message.Escape(255, b"\x00\x00\x01\x00")
         WHITE = bmg.Message.Escape(255, b"\x00\x00\x00\x00")
-        INFO = b"\xCE\x00\x00\x01"
+        INFO = b"\xce\x00\x00\x01"
         ITEM_MAX = max(list(item_id_to_name.keys())) + 1
 
         def get_kind(index: int):
@@ -1622,15 +1621,15 @@ class Randomizer:
             fake_str = prefix + item_id_to_name[i] + suffix + "!"
 
             if len(fake_str) > 26:
-                msg_parts = [prefix + "\n", RED, item_id_to_name[i], suffix, WHITE, "!"]
+                msg_parts = [prefix + "\n", str(RED), item_id_to_name[i], suffix, str(WHITE), "!"]
             else:
-                msg_parts = [prefix, RED, item_id_to_name[i], suffix, WHITE, "!"]
+                msg_parts = [prefix, str(RED), item_id_to_name[i], suffix, str(WHITE), "!"]
 
             msg = bmg.Message(INFO, msg_parts)
             msg_list.append(msg)
 
         for i in range(0, ITEM_MAX):
-            msg_parts = [RED, item_id_to_name[i], WHITE]
+            msg_parts = [str(RED), item_id_to_name[i], str(WHITE)]
             msg = bmg.Message(INFO, msg_parts)
             msg_list.append(msg)
 

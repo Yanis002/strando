@@ -36,7 +36,7 @@ if __name__ == "__main__":
     map_dir = base_dir / "Map"
     assert map_dir.exists()
 
-    l = []
+    path_list = []
     for lzss_path in map_dir.rglob("map*.bin"):
         # filter out unreachable maps
         if "e3_" in lzss_path.parent.stem:
@@ -58,9 +58,9 @@ if __name__ == "__main__":
             if struct.pack("<4s", id[::-1].encode()) in zmb_data:
                 if "d_main/map01.bin" in str(lzss_path):
                     pass
-                l.append(lzss_path)
+                path_list.append(lzss_path)
                 break
 
-    for lzss_path in l:
+    for lzss_path in path_list:
         print(lzss_path)
-    print(len(l))
+    print(len(path_list))
