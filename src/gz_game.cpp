@@ -1,5 +1,6 @@
 #include "gz_game.hpp"
 #include "gz.hpp"
+#include "settings.hpp"
 
 #include <Game/Game.hpp>
 #include <System/OverlayManager.hpp>
@@ -25,6 +26,9 @@ extern "C" void func_0201328c();
 extern Mat3p gGeomMatrix;
 
 static u8 sBMGRandoBuf[0x8000] __attribute__((aligned(32))); //! TODO: dynamic array size
+static u8 sSettingsBuf[0x80] __attribute__((aligned(32)));
+
+Settings* gpSettings = (Settings*)sSettingsBuf;
 
 // gcc wants size_t to be unsigned int not unsigned long :)
 extern "C" void _ZN29UnkStruct_ov000_020b504c_Sub319func_ov000_02067804EPKcPvm(UnkStruct_ov000_020b504c_Sub3*,
@@ -39,6 +43,9 @@ void LoadRandoBMG() {
     }
 }
 
+extern "C" void func_02012ee4(const char* path, void* buffer, size_t size, unk32, unk32);
+void LoadSettings() { func_02012ee4("settings.bin", sSettingsBuf, sizeof(sSettingsBuf), 0, 0); }
+
 extern "C" void Custom_02014995(OverlayManager* thisx, OverlayIndex nextOvlSlot1) {
     if (gGZ.IsAdventureMode() && nextOvlSlot1 == OverlayIndex_SceneInit) {
         if (gGZ.GetSceneLoadState() == SceneLoadState_Init) {
@@ -52,6 +59,7 @@ extern "C" void Custom_02014995(OverlayManager* thisx, OverlayIndex nextOvlSlot1
 
 void CustomGame::Run() {
     LoadRandoBMG();
+    LoadSettings();
 
     do {
         gGZ.Update();
