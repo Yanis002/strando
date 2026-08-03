@@ -322,8 +322,8 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>190</y>
-        <width>131</width>
+        <y>300</y>
+        <width>141</width>
         <height>111</height>
        </rect>
       </property>
@@ -335,7 +335,7 @@
         <rect>
          <x>10</x>
          <y>30</y>
-         <width>111</width>
+         <width>121</width>
          <height>71</height>
         </rect>
        </property>
@@ -356,46 +356,6 @@
         </item>
        </layout>
       </widget>
-     </widget>
-     <widget class="QWidget" name="gridLayoutWidget_5">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>320</y>
-        <width>131</width>
-        <height>111</height>
-       </rect>
-      </property>
-      <layout class="QGridLayout" name="misc_layout">
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="duets">
-         <property name="text">
-          <string>Duets</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QCheckBox" name="rupeesanity">
-         <property name="text">
-          <string>Rupee Sanity</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="stamps">
-         <property name="text">
-          <string>Stamps</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QCheckBox" name="stamp_book">
-         <property name="text">
-          <string>Stamp Book</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
      </widget>
      <widget class="QGroupBox" name="minigame_group">
       <property name="geometry">
@@ -538,6 +498,141 @@
          <widget class="QCheckBox" name="minigame_sword">
           <property name="text">
            <string>Sword Training</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="stamp_group">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>190</y>
+        <width>311</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Stamps</string>
+      </property>
+      <widget class="QWidget" name="horizontalLayoutWidget_4">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>291</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="stamp_item_layout">
+        <item>
+         <widget class="QCheckBox" name="stamps">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Monuments</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="stamp_book">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Stamp Book</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="horizontalLayoutWidget_5">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>60</y>
+         <width>290</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <layout class="QHBoxLayout" name="stamp_reward_layout">
+        <item>
+         <widget class="QCheckBox" name="stamp_reward_10">
+          <property name="minimumSize">
+           <size>
+            <width>100</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Reward 10</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="stamp_reward_15">
+          <property name="text">
+           <string>Reward 15</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="stamp_reward_20">
+          <property name="text">
+           <string>Reward 20</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>300</y>
+        <width>151</width>
+        <height>111</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>Misc</string>
+      </property>
+      <widget class="QWidget" name="gridLayoutWidget_5">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>36</y>
+         <width>131</width>
+         <height>52</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="misc_layout">
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="duets">
+          <property name="text">
+           <string>Duets</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="rupeesanity">
+          <property name="text">
+           <string>Rupee Sanity</string>
           </property>
          </widget>
         </item>

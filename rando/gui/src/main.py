@@ -234,11 +234,16 @@ class MainWindow(QTabWidget):
         # Shop Sanity
         self.ui.shop_amount.setValue(settings.shuffle.shopsanity)
 
+        # Stamps
+        self.ui.stamps.setChecked(settings.shuffle.stamps)
+        self.ui.stamp_book.setChecked(settings.shuffle.stamp_book)
+        self.ui.stamp_reward_10.setChecked(10 in settings.shuffle.stamps_rewards)
+        self.ui.stamp_reward_15.setChecked(15 in settings.shuffle.stamps_rewards)
+        self.ui.stamp_reward_20.setChecked(20 in settings.shuffle.stamps_rewards)
+
         # Misc
         self.ui.rupeesanity.setChecked(settings.shuffle.rupeesanity)
         self.ui.duets.setChecked(settings.shuffle.duets)
-        self.ui.stamps.setChecked(settings.shuffle.stamps)
-        self.ui.stamp_book.setChecked(settings.shuffle.stamp_book)
 
         ### Settings - Shuffle Train
 
@@ -356,11 +361,23 @@ class MainWindow(QTabWidget):
         # Shop Sanity
         settings.shuffle.shopsanity = self.ui.shop_amount.value()
 
+        # Stamps
+        settings.shuffle.stamps = self.ui.stamps.isChecked()
+        settings.shuffle.stamp_book = self.ui.stamp_book.isChecked()
+
+        settings.shuffle.stamps_rewards.clear()
+        if self.ui.stamp_reward_10.isChecked():
+            settings.shuffle.stamps_rewards.append(10)
+
+        if self.ui.stamp_reward_15.isChecked():
+            settings.shuffle.stamps_rewards.append(15)
+
+        if self.ui.stamp_reward_20.isChecked():
+            settings.shuffle.stamps_rewards.append(20)
+
         # Misc
         settings.shuffle.rupeesanity = self.ui.rupeesanity.isChecked()
         settings.shuffle.duets = self.ui.duets.isChecked()
-        settings.shuffle.stamps = self.ui.stamps.isChecked()
-        settings.shuffle.stamp_book = self.ui.stamp_book.isChecked()
 
         ### Settings - Shuffle Train
 
@@ -371,6 +388,7 @@ class MainWindow(QTabWidget):
         settings.shuffle.forest_glyph = "startwith" if self.ui.glyphsrc_forest_start_box.isChecked() else "anywhere"
 
         # Rabbits
+        settings.shuffle.rabbitsanity.clear()
         for rabbit_mode in settings.shuffle.rabbitsanity_mode:
             widget: QCheckBox = getattr(self.ui, f"rabbit_{rabbit_mode}")
 
