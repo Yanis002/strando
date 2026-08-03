@@ -10,7 +10,7 @@
 extern "C" bool func_ov041_02129ec0(Actor* thisx, ActorGrabParams grabParams);
 
 bool BossKeyItemGive(ItemId itemId) {
-    switch (gSettings.GetShuffleDungeonSettings()->bksanity) {
+    switch (gpSettings->GetShuffleDungeonSettings()->bksanity) {
         case BossKeysanityMode_Dungeon:
         case BossKeysanityMode_Anywhere:
             if (!GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId])) {

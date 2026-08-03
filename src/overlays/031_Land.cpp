@@ -156,11 +156,11 @@ ItemId GetProgressiveItemId(ItemId requestedItemId) {
     ItemId itemId = requestedItemId;
 
     if (IsTosSection(requestedItemId)) {
-        if (gSettings.GetShuffleDungeonSettings()->tos_sections == ToSSectionsMode_Progressive) {
+        if (gpSettings->GetShuffleDungeonSettings()->tos_sections == ToSSectionsMode_Progressive) {
             itemId = GetProgressiveToSSection(requestedItemId);
         }
     } else if (IsGlyphOrSource(requestedItemId)) {
-        switch (gSettings.GetShuffleSettings()->glyphs_and_sources) {
+        switch (gpSettings->GetShuffleSettings()->glyphs_and_sources) {
             case GlyphsAndSourceMode_ProgRealm:
                 itemId = GetProgressiveRealmGlyphOrSource(requestedItemId);
                 break;
@@ -281,7 +281,7 @@ class CustomRupee : public ActorRupee {
 
 void CustomRupee::ItemGive() {
     // if rupeesanity is disabled or this is a spawned rupee, simply run the original function
-    if (!gSettings.GetShuffleSettings()->rupeesanity || this->mUnk_5C.mParams[1] == 0) {
+    if (!gpSettings->GetShuffleSettings()->rupeesanity || this->mUnk_5C.mParams[1] == 0) {
         this->func_ov031_020e951c();
         return;
     }
@@ -301,7 +301,7 @@ void CustomRupee::ItemGive() {
 
 void CustomRupee::Custom_ov031_020e9068() {
     // if rupeesanity is disabled or this is a spawned rupee, simply run the original function
-    if (!gSettings.GetShuffleSettings()->rupeesanity || this->mUnk_5C.mParams[1] == 0) {
+    if (!gpSettings->GetShuffleSettings()->rupeesanity || this->mUnk_5C.mParams[1] == 0) {
         this->func_ov031_020e9068();
         return;
     }
@@ -319,7 +319,7 @@ extern "C" bool StampMonumentInit(MapObject* thisx) {
     bool result = _ZN16MapObjectUnkSPTB19func_ov031_0210b51cEv(thisx);
 
     // overriding vfunc_00 just to set "give item" mode (based on chests)
-    if (gSettings.GetShuffleSettings()->stamps) {
+    if (gpSettings->GetShuffleSettings()->stamps) {
         thisx->mUnk_18[0] = 0x0D;
 
         if (data_027e09b8->HasAdventureFlag(gAdvFlagMap[thisx->mUnk_20.mParams[3]])) {
@@ -332,7 +332,7 @@ extern "C" bool StampMonumentInit(MapObject* thisx) {
 
 extern "C" unk32 StampMonumentItemGive(MapObject* thisx) {
     // if stamps aren't shuffled simply run the original function and return
-    if (!gSettings.GetShuffleSettings()->stamps) {
+    if (!gpSettings->GetShuffleSettings()->stamps) {
         return _ZN16MapObjectUnkSPTB19func_ov031_0210b6e4Ev(thisx);
     }
 

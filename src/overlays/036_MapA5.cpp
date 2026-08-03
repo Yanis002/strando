@@ -76,7 +76,7 @@ ItemId CustomShopItem::GetShopItemId(ShopItemPosition itemPos) {
     u8* actorParams = (u8*)this->mUnk_5C.mParams;
     u8 item;
 
-    if (gSettings.GetShuffleSettings()->shopsanity == 0) {
+    if (gpSettings->GetShuffleSettings()->shopsanity == 0) {
         this->GetDefaultShopItemId(itemPos);
     }
 
@@ -86,7 +86,7 @@ ItemId CustomShopItem::GetShopItemId(ShopItemPosition itemPos) {
         case ShopItemPosition_TopRight:
         case ShopItemPosition_BottomLeft:
         case ShopItemPosition_BottomRight:
-            if (itemPos >= gSettings.GetShuffleSettings()->shopsanity) {
+            if (itemPos >= gpSettings->GetShuffleSettings()->shopsanity) {
                 return this->GetDefaultShopItemId(itemPos);
             }
 

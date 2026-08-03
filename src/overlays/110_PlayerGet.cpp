@@ -112,7 +112,7 @@ extern "C" bool ItemGiveImpl(Inventory* thisx, ItemId itemId) {
         case ExtraItemId_BossKey_Marine:
         case ExtraItemId_BossKey_Mountain:
         case ExtraItemId_BossKey_Desert:
-            if (!gSettings.GetShuffleDungeonSettings()->bkeyring) {
+            if (!gpSettings->GetShuffleDungeonSettings()->bkeyring) {
                 // nothing to do except setting the flag (which is done later)
                 // (see `CustomMapObject::OpenDoorBossKey`)
                 break;
@@ -202,7 +202,7 @@ extern "C" bool ItemGiveImpl(Inventory* thisx, ItemId itemId) {
         case ExtraItemId_RabbitSand:
             rabbitType = itemId - ExtraItemId_RabbitGrass;
 
-            if (gSettings.GetShuffleSettings()->rabbitpack) {
+            if (gpSettings->GetShuffleSettings()->rabbitpack) {
                 // all in one
                 int startingFlag = rabbitType * 10; // see RabbitFlag
 

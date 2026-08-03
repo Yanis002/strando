@@ -68,9 +68,9 @@ static u32 sAdventureFlagsToSet[] = {
 };
 
 void CustomFileSelectMain::SetStartingFlags() {
-    ShuffleSettings* pSettings = gSettings.GetShuffleSettings();
+    ShuffleSettings* pSettings = gpSettings->GetShuffleSettings();
 
-    switch (gSettings.GetShuffleDungeonSettings()->tos_sections) {
+    switch (gpSettings->GetShuffleDungeonSettings()->tos_sections) {
         case ToSSectionsMode_Open:
         case ToSSectionsMode_OpenNo6:
             sAdventureFlagsToSet[0] = RandoAdventureFlag_TowerSection_1;

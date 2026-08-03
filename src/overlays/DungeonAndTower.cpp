@@ -57,7 +57,7 @@ extern "C" void CustomSpinnitKEYNSpawn(ActorRef* param1, const VecFx32* pPos, Ac
     Actor* pMKUR = gGZ.FindActor(ActorId_MKUR);
 
     if (pMKUR != NULL) {
-        switch (gSettings.GetShuffleDungeonSettings()->keysanity) {
+        switch (gpSettings->GetShuffleDungeonSettings()->keysanity) {
             case KeysanityMode_Dungeon:
             case KeysanityMode_Anywhere:
                 // copy randomized item id, param3 is set to MKUR's actor ref

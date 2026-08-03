@@ -276,7 +276,7 @@ void GZ::TryGiveItemFromPassengerDestInfos(SceneIndex destSceneIndex) {
 
         // if the flag is set it means we got the item (the flag is set when the item is received)
         if (pEntry->sceneIndex == destSceneIndex && GET_FLAG(data_027e09b8->mAdventureFlags, pEntry->requiredFlag)) {
-            ItemId itemId = gSettings.GetPassengerAtDestItemId(i);
+            ItemId itemId = gpSettings->GetPassengerAtDestItemId(i);
 
             if (itemId != ItemId_None && !this->CheckAdvFlag(itemId)) {
                 // only give the item id if the related flag is unset
@@ -315,7 +315,7 @@ void GZ::OnGameModeUpdate() {
         // special handling for alfonzo passenger
         // basically if the board flag is set
         // then give the item and unset said flag
-        ItemId itemId = gSettings.GetPassengerPickUpItemId(Passenger_CastleTownAlfonzo);
+        ItemId itemId = gpSettings->GetPassengerPickUpItemId(Passenger_CastleTownAlfonzo);
         if (!this->IsItemInQueue(itemId) &&
             GET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_AlfonzoBoardsTrainToOutsetVillage)) {
             // unset previously set flag
@@ -376,7 +376,7 @@ void GZ::OnGameModeUpdate() {
                 }
             }
 
-            u8 tos_sections = gSettings.GetShuffleDungeonSettings()->tos_sections;
+            u8 tos_sections = gpSettings->GetShuffleDungeonSettings()->tos_sections;
 
             // set tower as complete if we opened the chest and we have access to the other sections
             if (this->IsTowerFinal()) {
@@ -425,7 +425,7 @@ void GZ::OnGameModeUpdate() {
 
             // handle dark realm requirements
             if (!this->CheckAdvFlag(ItemId_FinalTrack)) {
-                GoalSettings* pGoal = gSettings.GetGoalSettings();
+                GoalSettings* pGoal = gpSettings->GetGoalSettings();
                 bool give = false;
                 int value = 0;
 
@@ -505,7 +505,7 @@ void GZ::OnScenePreInit() {
         // prevent reaching all forest realm stations (except castle town, outset and the tower)
         // if the forest glyph is shuffled and we don't have it yet
         // this just overrides the next scene and spawn indices
-        if (this->IsOnTrain() && gSettings.GetShuffleSettings()->forest_glyph == ForestGlyphMode_Anywhere &&
+        if (this->IsOnTrain() && gpSettings->GetShuffleSettings()->forest_glyph == ForestGlyphMode_Anywhere &&
             !GET_FLAG(data_027e09b8->mAdventureFlags, RandoAdventureFlag_ForestGlyph)) {
             int spawn = -1;
 
@@ -541,7 +541,7 @@ void GZ::OnScenePreInit() {
         // other sections are handled in `GZ::OnScenePostInit`
         // we only need to prevent loading the scene if we don't have section 1
         // otherwise we are blocked by default by the game, assuming the flag is unset
-        if (this->IsOnLand() && gSettings.GetShuffleDungeonSettings()->tos_sections == ToSSectionsMode_Progressive &&
+        if (this->IsOnLand() && gpSettings->GetShuffleDungeonSettings()->tos_sections == ToSSectionsMode_Progressive &&
             !GET_FLAG(data_027e09b8->mAdventureFlags, RandoAdventureFlag_TowerSection_1)) {
             if (pNext->sceneIndex == SceneIndex_d_main_w) {
                 pNext->sceneIndex = SceneIndex_d_main_f;
@@ -549,11 +549,11 @@ void GZ::OnScenePreInit() {
             }
         }
 
-        if (gSettings.GetShuffleSettings()->passengers == PassengerMode_Remove) {
+        if (gpSettings->GetShuffleSettings()->passengers == PassengerMode_Remove) {
             this->SetAllPassengerFlags();
         }
 
-        switch (gSettings.GetShuffleSettings()->cargo) {
+        switch (gpSettings->GetShuffleSettings()->cargo) {
             case CargoMode_Remove:
                 SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_GiveMegaIceToKagoron);
                 UNSET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_MegaIceToGoronVillageMainQuest);
@@ -602,7 +602,7 @@ void GZ::OnScenePostInit() {
             AdventureFlag_Nothing,
         };
 
-        switch (gSettings.GetShuffleDungeonSettings()->tos_sections) {
+        switch (gpSettings->GetShuffleDungeonSettings()->tos_sections) {
             case ToSSectionsMode_Progressive:
                 // remove the source flag if we don't have the corresponding section flag
                 // (except section 1, see `GZ::OnScenePreInit`)
@@ -815,7 +815,7 @@ void GZ::ProcessItemQueue() {
 void GZ::IncrementTearsAmount(u8 index) {
     RandoSave* pSave = this->GetCurrentSave();
 
-    if (gSettings.GetShuffleDungeonSettings()->tear_ring) {
+    if (gpSettings->GetShuffleDungeonSettings()->tear_ring) {
         pSave->tearsAmounts[index] = MAX_TEARS_OF_LIGHT;
     } else {
         pSave->tearsAmounts[index]++;
@@ -880,7 +880,7 @@ ItemId GetKeyFromBossKey(ItemId itemId) {
 
 void GZ::IncrementKeyAmount(ItemId itemId) {
     RandoSave* pSave = this->GetCurrentSave();
-    ShuffleDungeonSettings* pSettings = gSettings.GetShuffleDungeonSettings();
+    ShuffleDungeonSettings* pSettings = gpSettings->GetShuffleDungeonSettings();
 
     if (pSettings->bkeyring) {
         itemId = GetKeyFromBossKey(itemId);

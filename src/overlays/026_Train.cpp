@@ -14,7 +14,7 @@ class CustomRabbit : public ActorUnkRB1T {
 };
 
 bool IsRabbitValid(RabbitFlag flag) {
-    u8 mode = gSettings.GetShuffleSettings()->rabbitsanity & RabbitMode_All;
+    u8 mode = gpSettings->GetShuffleSettings()->rabbitsanity & RabbitMode_All;
 
     if (mode == RabbitMode_All) {
         return true;

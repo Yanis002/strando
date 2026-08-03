@@ -140,4 +140,4 @@ class Settings {
     u8 GetCargoPickUpItemId(u8 cargo) { return this->mCargoPickUpIds[cargo]; }
 };
 
-extern Settings gSettings;
+extern Settings* gpSettings;

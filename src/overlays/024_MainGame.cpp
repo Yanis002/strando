@@ -55,11 +55,11 @@ int GetPassengerFromPickUpInfos(ActorId actorId, SceneIndex destSceneIndex) {
 
 ItemId GetItemIdFromPassengerPickUpInfos(ActorId actorId, SceneIndex destSceneIndex) {
     int passenger = GetPassengerFromPickUpInfos(actorId, destSceneIndex);
-    return passenger != -1 ? gSettings.GetPassengerPickUpItemId(passenger) : ItemId_None;
+    return passenger != -1 ? gpSettings->GetPassengerPickUpItemId(passenger) : ItemId_None;
 }
 
 bool CustomPassengerManager::CustomTryBoardTrain(ActorId actorId, SceneIndex destSceneIndex, u32 roomIndex) {
-    switch (gSettings.GetShuffleSettings()->passengers) {
+    switch (gpSettings->GetShuffleSettings()->passengers) {
         case PassengerMode_Vanilla:
             return this->TryBoardTrain(actorId, destSceneIndex, roomIndex);
         case PassengerMode_Abstract:
@@ -82,7 +82,7 @@ class CustomCargoManager : public CargoManager {
 void CustomCargoManager::CustomReset() {
     // this executes when an actor tries to clear the cargo
 
-    switch (gSettings.GetShuffleSettings()->cargo) {
+    switch (gpSettings->GetShuffleSettings()->cargo) {
         case CargoMode_Vanilla:
             this->Reset();
             break;
@@ -99,13 +99,13 @@ void CustomCargoManager::CustomInit(unk32 type, unk32 amount) {
     // this executes when an actor tries to initialize the cargo
     // instead of letting things happen normally (except for vanilla), we give a cargo pick up item
 
-    switch (gSettings.GetShuffleSettings()->cargo) {
+    switch (gpSettings->GetShuffleSettings()->cargo) {
         case CargoMode_Vanilla:
             this->Init(type, amount);
             break;
         case CargoMode_Abstract:
         case CargoMode_Anywhere:
-            gGZ.TryAddItemToQueue(gSettings.GetCargoPickUpItemId(type));
+            gGZ.TryAddItemToQueue(gpSettings->GetCargoPickUpItemId(type));
             break;
         default:
             break;
