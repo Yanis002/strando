@@ -452,11 +452,11 @@ class Settings:
 
     @staticmethod
     def from_str(data: str) -> "Settings":
-        """decodes the settings from a zlib-compressed base85 string"""
+        """decodes the settings from a zlib-compressed base64 string"""
         return Settings.from_yaml(msgpack.unpackb(zlib.decompress(base64.b64decode(data.encode()))))
 
     def to_str(self) -> str:
-        """encodes the settings to a zlib-compressed base85 string"""
+        """encodes the settings to a zlib-compressed base64 string"""
         return base64.b64encode(zlib.compress(msgpack.packb(self.to_yaml()), zlib.Z_BEST_COMPRESSION)).decode()
 
     def to_bin(self):
