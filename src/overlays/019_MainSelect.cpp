@@ -11,10 +11,16 @@ class CustomFileSelectMain : public FileSelectMain {
 };
 
 static u32 sAdventureFlagsToSet[] = {
+    // for Tower Sections
+    AdventureFlag_Nothing,
+    AdventureFlag_Nothing,
+    AdventureFlag_Nothing,
+    AdventureFlag_Nothing,
+    AdventureFlag_Nothing,
+
     AdventureFlag_ObtainedSpiritTrain,
     AdventureFlag_CompletedForestRestorationSong, // skips lost woods
-    AdventureFlag_ObtainedForestGlyph, // we give this so we can go to castle town and the tower, see
-                                       // `GZ::OnScenePreInit`
+    AdventureFlag_ObtainedForestGlyph, // allows going to castle town and the tower, see `GZ::OnScenePreInit`
     AdventureFlag_CompletedSwordTutorial,
     AdventureFlag_PlayedHyruleGuardGetLostText,
     AdventureFlag_HyruleGuardMovesAfterCole,
@@ -63,6 +69,19 @@ static u32 sAdventureFlagsToSet[] = {
 
 void CustomFileSelectMain::SetStartingFlags() {
     ShuffleSettings* pSettings = gSettings.GetShuffleSettings();
+
+    switch (gSettings.GetShuffleDungeonSettings()->tos_sections) {
+        case ToSSectionsMode_Open:
+        case ToSSectionsMode_OpenNo6:
+            sAdventureFlagsToSet[0] = RandoAdventureFlag_TowerSection_1;
+            sAdventureFlagsToSet[1] = RandoAdventureFlag_TowerSection_2;
+            sAdventureFlagsToSet[2] = RandoAdventureFlag_TowerSection_3;
+            sAdventureFlagsToSet[3] = RandoAdventureFlag_TowerSection_4;
+            sAdventureFlagsToSet[4] = RandoAdventureFlag_TowerSection_5;
+            break;
+        default:
+            break;
+    }
 
     for (int i = 0; i < MAX_SAVE_SLOTS; i++) {
         u32* pFlags = gSaveManager.GetSaveSlot(i)->mInfoData[0].inventory.adventureFlags;

@@ -376,11 +376,13 @@ void GZ::OnGameModeUpdate() {
                 }
             }
 
+            u8 tos_sections = gSettings.GetShuffleDungeonSettings()->tos_sections;
+
             // set tower as complete if we opened the chest and we have access to the other sections
             if (this->IsTowerFinal()) {
                 bool canReachToSSections = false;
 
-                if (gSettings.GetShuffleDungeonSettings()->tos_sections) {
+                if (tos_sections == ToSSectionsMode_Progressive) {
                     int i;
 
                     static u8 sSectionIds[] = {
@@ -404,8 +406,20 @@ void GZ::OnGameModeUpdate() {
                 }
 
                 MapObject* pTRLS = this->FindMapObject(MapObjectId_TRLS);
-                if (pTRLS != NULL && pTRLS->mUnk_16 == 8 && canReachToSSections) {
+                if (pTRLS != NULL && pTRLS->mState == 8 && canReachToSSections) {
                     pSave->completedDungeons[5] = true;
+                }
+            }
+
+            // make section 6 accessible if it's supposed to be opened
+            if (data_027e09a4->mpWarpUnk1 != NULL &&
+                data_027e09a4->mpWarpUnk1->mCurEntrance.sceneIndex == SceneIndex_d_main_s &&
+                tos_sections == ToSSectionsMode_Open) {
+                MapObject* pAltarStairs = this->FindMapObject(MapObjectId_STAL);
+
+                if (pAltarStairs != NULL) {
+                    // 0x01 will raise the stairs even if the eyes aren't activated
+                    pAltarStairs->mState = 0x01;
                 }
             }
 
@@ -527,7 +541,7 @@ void GZ::OnScenePreInit() {
         // other sections are handled in `GZ::OnScenePostInit`
         // we only need to prevent loading the scene if we don't have section 1
         // otherwise we are blocked by default by the game, assuming the flag is unset
-        if (this->IsOnLand() && gSettings.GetShuffleDungeonSettings()->tos_sections &&
+        if (this->IsOnLand() && gSettings.GetShuffleDungeonSettings()->tos_sections == ToSSectionsMode_Progressive &&
             !GET_FLAG(data_027e09b8->mAdventureFlags, RandoAdventureFlag_TowerSection_1)) {
             if (pNext->sceneIndex == SceneIndex_d_main_w) {
                 pNext->sceneIndex = SceneIndex_d_main_f;
@@ -588,14 +602,19 @@ void GZ::OnScenePostInit() {
             AdventureFlag_Nothing,
         };
 
-        // remove the source flag if we don't have the corresponding section flag
-        // (except section 1, see `GZ::OnScenePreInit`)
-        for (int i = 0; i < ARRAY_LEN(sSourceFlags); i++) {
-            if (GET_FLAG(data_027e09b8->mAdventureFlags, sSourceFlags[i]) &&
-                gSettings.GetShuffleDungeonSettings()->tos_sections &&
-                !GET_FLAG(data_027e09b8->mAdventureFlags, sToSSectionFlags[i])) {
-                UNSET_FLAG(data_027e09b8->mAdventureFlags, sSourceFlags[i]);
-            }
+        switch (gSettings.GetShuffleDungeonSettings()->tos_sections) {
+            case ToSSectionsMode_Progressive:
+                // remove the source flag if we don't have the corresponding section flag
+                // (except section 1, see `GZ::OnScenePreInit`)
+                for (int i = 0; i < ARRAY_LEN(sSourceFlags); i++) {
+                    if (GET_FLAG(data_027e09b8->mAdventureFlags, sSourceFlags[i]) &&
+                        !GET_FLAG(data_027e09b8->mAdventureFlags, sToSSectionFlags[i])) {
+                        UNSET_FLAG(data_027e09b8->mAdventureFlags, sSourceFlags[i]);
+                    }
+                }
+                break;
+            default:
+                break;
         }
 
         // prevents zelda's text to show in ToS final room (giving the final track item)

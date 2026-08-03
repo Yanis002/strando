@@ -77,7 +77,7 @@ settings:
         # - open_no_6 (same as above except section 6 requires the bow of light to open it)
         # - progressive (adds "tower section" items)
         # - sources (vanilla behavior)
-        tos_sections: false
+        tos_sections: "sources"
 
     goal:
         # true/false, do we count ToS as a dungeon (vanilla: false)

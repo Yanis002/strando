@@ -115,10 +115,51 @@ ItemId GetProgressiveWorldGlyphOrSource(ItemId requestedItemId) {
     return itemId;
 }
 
+bool IsTosSection(ItemId itemId) {
+    if (itemId >= ExtraItemId_TowerSection_1 && itemId <= ExtraItemId_TowerSection_5) {
+        return true;
+    }
+
+    return false;
+}
+
+ItemId GetProgressiveToSSection(ItemId requestedItemId) {
+    ItemId itemId = requestedItemId;
+    AdventureFlag* pFlags = data_027e09b8->mAdventureFlags;
+
+    switch (requestedItemId) {
+        case ExtraItemId_TowerSection_1:
+        case ExtraItemId_TowerSection_2:
+        case ExtraItemId_TowerSection_3:
+        case ExtraItemId_TowerSection_4:
+        case ExtraItemId_TowerSection_5:
+            if (!GET_FLAG(pFlags, RandoAdventureFlag_TowerSection_1)) {
+                itemId = ExtraItemId_TowerSection_1;
+            } else if (!GET_FLAG(pFlags, RandoAdventureFlag_TowerSection_2)) {
+                itemId = ExtraItemId_TowerSection_2;
+            } else if (!GET_FLAG(pFlags, RandoAdventureFlag_TowerSection_3)) {
+                itemId = ExtraItemId_TowerSection_3;
+            } else if (!GET_FLAG(pFlags, RandoAdventureFlag_TowerSection_4)) {
+                itemId = ExtraItemId_TowerSection_4;
+            } else if (!GET_FLAG(pFlags, RandoAdventureFlag_TowerSection_5)) {
+                itemId = ExtraItemId_TowerSection_5;
+            }
+            break;
+        default:
+            break;
+    }
+
+    return itemId;
+}
+
 ItemId GetProgressiveItemId(ItemId requestedItemId) {
     ItemId itemId = requestedItemId;
 
-    if (IsGlyphOrSource(requestedItemId)) {
+    if (IsTosSection(requestedItemId)) {
+        if (gSettings.GetShuffleDungeonSettings()->tos_sections == ToSSectionsMode_Progressive) {
+            itemId = GetProgressiveToSSection(requestedItemId);
+        }
+    } else if (IsGlyphOrSource(requestedItemId)) {
         switch (gSettings.GetShuffleSettings()->glyphs_and_sources) {
             case GlyphsAndSourceMode_ProgRealm:
                 itemId = GetProgressiveRealmGlyphOrSource(requestedItemId);

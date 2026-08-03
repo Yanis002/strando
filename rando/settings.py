@@ -262,7 +262,11 @@ class ShuffleDungeonSettings:
         self.keyring = False
         self.bkeyring = False
         self.tear_ring = False
-        self.tos_sections = False
+        self.tos_sections = str()
+
+        self.tos_sections_mode = ["open", "open_no_6", "progressive", "sources"]
+        self.tos_sections_mode_map = {mode: i for i, mode in enumerate(self.tos_sections_mode)}
+        self.tos_sections_mode_invmap = {i: mode for mode, i in self.tos_sections_mode_map.items()}
 
         self.keysanity_mode = ["off", "dungeon", "anywhere", "removed"]
         self.keysanity_mode_map = {mode: i for i, mode in enumerate(self.keysanity_mode)}
@@ -295,8 +299,8 @@ class ShuffleDungeonSettings:
         if not isinstance(self.tear_ring, bool):
             raise ValueError("tear_ring must be true or false")
 
-        if not isinstance(self.tos_sections, bool):
-            raise ValueError("tos_sections must be true or false")
+        if self.tos_sections not in self.tos_sections_mode:
+            raise ValueError("tos_sections is not valid")
 
     @staticmethod
     def from_yaml(data: dict):
@@ -335,7 +339,7 @@ class ShuffleDungeonSettings:
             self.keyring,
             self.bkeyring,
             self.tear_ring,
-            self.tos_sections,
+            self.tos_sections_mode_map[self.tos_sections],
         )
 
     def to_yaml(self):

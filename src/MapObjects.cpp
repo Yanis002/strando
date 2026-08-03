@@ -42,7 +42,7 @@ void CustomMapObject::OpenDoorBossKey() {
         if (pUnkStruct_WarpUnk1 != NULL && pEntry->scene == (u32)pUnkStruct_WarpUnk1->mCurEntrance.sceneIndex &&
             pEntry->room == pUnkStruct_WarpUnk1->mCurEntrance.roomIndex &&
             GET_FLAG(data_027e09b8->mAdventureFlags, pEntry->flag)) {
-            this->mUnk_16 = 4; // note: 3 would also work but with 4 the door opens instantly
+            this->mState = 4; // note: 3 would also work but with 4 the door opens instantly
         }
     }
 

@@ -85,6 +85,13 @@ enum TearSanityMode_ {
     TearSanityMode_Removed,
 };
 
+enum ToSSectionsMode_ {
+    ToSSectionsMode_Open,
+    ToSSectionsMode_OpenNo6,
+    ToSSectionsMode_Progressive,
+    ToSSectionsMode_Sources,
+};
+
 struct ShuffleDungeonSettings {
     u8 keysanity;
     u8 bksanity;
@@ -92,7 +99,7 @@ struct ShuffleDungeonSettings {
     bool keyring;
     bool bkeyring;
     bool tear_ring;
-    bool tos_sections;
+    u8 tos_sections;
 
     ShuffleDungeonSettings() { memset(this, 0, sizeof(ShuffleDungeonSettings)); }
 };

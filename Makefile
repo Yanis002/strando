@@ -123,7 +123,7 @@ WARNINGS := -Wall -Wno-multichar -Wno-unknown-pragmas -Wno-strict-aliasing -Wno-
 INCLUDES := -I include -I $(STGZ_DECOMP_DIR)/include -I $(STGZ_DECOMP_DIR)/libs/c/include -I $(STGZ_DECOMP_DIR)/libs/cpp/include -I $(STGZ_DECOMP_DIR)/libs/nitro/include -I $(STGZ_DECOMP_DIR)/libs/nns/include -I $(STGZ_DECOMP_DIR)/libs/runtime/include
 CPP_DEFINES := -DGZ_OVL_ID=114 -DPACKAGE_VERSION='$(PACKAGE_VERSION)' -DPACKAGE_NAME='$(PACKAGE_NAME)' -DPACKAGE_COMMIT_AUTHOR='$(PACKAGE_COMMIT_AUTHOR)' -DPACKAGE_AUTHOR='$(PACKAGE_AUTHOR)' -DVERSION=$(VERSION)
 CFLAGS := -Os -fno-short-enums -fomit-frame-pointer -ffast-math -fno-builtin -fshort-wchar -MMD -MP $(WARNINGS) $(INCLUDES) $(CPP_DEFINES)
-CPP_FLAGS := $(CFLAGS) -fno-rtti -fno-exceptions -fno-threadsafe-statics -std=c++20 -Wno-volatile
+CPP_FLAGS := $(CFLAGS) -fno-rtti -fno-exceptions -fno-threadsafe-statics -std=c++20 -Wno-volatile -Wno-overloaded-virtual # TODO: remove -Wno-overloaded-virtual once it's fixed in decomp
 
 ELF := $(BUILD_DIR)/ovgz.elf
 BIN := $(ELF:.elf=.bin)

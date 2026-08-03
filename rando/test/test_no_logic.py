@@ -992,7 +992,7 @@ class Randomizer:
             )
 
         # add tower sections
-        if self.settings.shuffle_dgn.tos_sections:
+        if self.settings.shuffle_dgn.tos_sections == "progressive":
             sections = []
             for i in range(1, 6):
                 sections.append(

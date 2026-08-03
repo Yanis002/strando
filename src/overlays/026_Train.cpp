@@ -68,7 +68,7 @@ bool CustomRabbit::CustomSpawnOrKill(unk32 param1) {
         }
 
         this->Actor_Derived1::vfunc_18(param1);
-        this->mUnk_0E4 = (void*)ActorUnkRB1T::func_ov026_021208a0;
+        this->mUnk_0E4 = (void (*)())ActorUnkRB1T::func_ov026_021208a0;
 
         int result = this->func_ov026_0211e6cc();
         func_ov000_02099ddc(&this->mUnk_300, data_ov026_02137edc, 0x1000, result << 12);
