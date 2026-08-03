@@ -178,12 +178,12 @@ class MainWindow(QTabWidget):
         self.ui.gen_combo_preset.clear()
         self.ui.gen_combo_preset.addItem("Custom")
 
-        for preset_path in PRESET_DIR.rglob("*.yaml"):
+        for i, preset_path in enumerate(PRESET_DIR.rglob("*.yaml")):
             with preset_path.open("r") as file:
-                yaml_data = yaml.safe_load(file)
+                yaml_data: dict = yaml.safe_load(file)
 
-            name = yaml_data["name"]
-            self.ui.gen_combo_preset.addItem(yaml_data["name"])
+            name = yaml_data.get("name", f"Unknown Preset {i + 1}")
+            self.ui.gen_combo_preset.addItem(name)
             self.presets[name] = Settings.from_yaml(yaml_data["settings"])
 
         self.ui.gen_combo_preset.setCurrentIndex(1 if len(self.presets) > 0 else 0)
@@ -204,10 +204,9 @@ class MainWindow(QTabWidget):
             settings = self.live_preset
             self.ui.gen_combo_preset.setCurrentIndex(0)
 
+        ### General
+
         self.ui.gen_string.setText(settings.to_str())
-
-        ### General (TODO: add setting string)
-
         self.ui.gen_radio_custom.setChecked(True)
         self.ui.gen_radio_random.setChecked(False)
 
@@ -301,7 +300,9 @@ class MainWindow(QTabWidget):
         self.ui.dgnshuffle_bkeyrings.setChecked(settings.shuffle_dgn.bkeyring)
 
         # Tower Sections
-        self.ui.dgnshuffle_sections_combo.setCurrentIndex(0)  # TODO: update how this works
+        self.ui.dgnshuffle_sections_combo.setCurrentIndex(
+            settings.shuffle_dgn.tos_sections_mode_map[settings.shuffle_dgn.tos_sections]
+        )
 
         # Tear Sanity
         self.ui.dgnshuffle_tear_combo.setCurrentIndex(
@@ -422,7 +423,9 @@ class MainWindow(QTabWidget):
         settings.shuffle_dgn.bkeyring = self.ui.dgnshuffle_bkeyrings.isChecked()
 
         # Tower Sections
-        # TODO: update how this works
+        settings.shuffle_dgn.tos_sections = settings.shuffle_dgn.tos_sections_mode_invmap[
+            self.ui.dgnshuffle_sections_combo.currentIndex()
+        ]
 
         # Tear Sanity
         settings.shuffle_dgn.tear_sanity = settings.shuffle_dgn.tear_sanity_mode_invmap[
