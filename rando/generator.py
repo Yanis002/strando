@@ -24,9 +24,11 @@ from constants import (
     tos_room_map,
 )
 
-# workaround to make the linter happy
 if TYPE_CHECKING:
+    # workaround to make the linter happy
     from .settings import Settings, LocationSettings
+
+    from main import MainWindow
 else:
     from settings import Settings, LocationSettings
 
@@ -843,20 +845,46 @@ class DungeonDef:
                 self.locations.append(loc)
 
 
-class Randomizer:
+class Generator:
     def __init__(
-        self, version: str, settings_path: Path, world_path: Path, loc_tbl_path: Path, seed_log_path: Path | None = None
+        self,
+        version: str,
+        settings_path_or_data: Path | Settings,
+        world_path: Path,
+        loc_tbl_path: Path,
+        extract_dir: Path,
+        out_path: Path,
+        seed_log_path: Path | None = None,
+        do_create_log: bool = True,
     ):
         self.version = version
-        self.extracted_dir = Path("extract").resolve() / self.version
+        self.do_create_log = do_create_log
+
+        self.extracted_dir = extract_dir / self.version
         assert self.extracted_dir.exists()
+
+        self.out_path = out_path.resolve()
+        assert self.out_path.exists()
 
         if seed_log_path is not None:
             self.seed_log, self.settings = SeedLog.from_yaml(seed_log_path)
         else:
             self.seed_log = None
-            self.settings = Settings.from_yaml(settings_path)
-            self.create_seed()
+
+            settings = None
+            is_from_data = False
+            if isinstance(settings_path_or_data, Settings):
+                settings = settings_path_or_data
+                is_from_data = True
+
+            if settings is None and isinstance(settings_path_or_data, Path):
+                settings = Settings.from_yaml(settings_path_or_data)
+
+            assert settings is not None, "unexpected error"
+            self.settings = settings
+
+            if not is_from_data:
+                self.create_seed()
 
         self.dgn_tos_defs = [DungeonDef("d_main", tos_section=i) for i in range(1, 7)]
         self.dgn_tos_map = {section: dgn_def for section, dgn_def in enumerate(self.dgn_tos_defs)}
@@ -891,10 +919,6 @@ class Randomizer:
         # we can't do it earlier since we need the nodes and the item pool
         if self.seed_log is not None and self.seed_log.yaml_file is not None:
             self.assign_items_from_log()
-
-        self.seed_num = 0
-        self.set_seed_num()
-        random.seed(self.seed_num)
 
     def create_item_pool(self):
         ## add additionnal items
@@ -1192,10 +1216,12 @@ class Randomizer:
 
     def create_seed(self):
         self.settings.seed = self.sanitize("".join(random.choices(string.ascii_uppercase + string.digits, k=10)))
+        self.set_seed_num()
 
     def set_seed_num(self):
         final_seed = self.settings.seed
         self.seed_num = int(hashlib.sha256(final_seed.encode("utf-8")).hexdigest(), base=16)
+        random.seed(self.seed_num)
 
     def get_zmb(self, lzss_path: Path):
         assert lzss_path.exists()
@@ -1431,7 +1457,7 @@ class Randomizer:
         except ValueError:
             return None
 
-    def patch_rom(self):
+    def patch_rom(self, patcher: "MainWindow" | None = None):
         languages = [
             "English",
             "French",
@@ -1538,7 +1564,12 @@ class Randomizer:
                 archive.setFileByName(zmb_filename, zmb_data)
                 LZSS.compressToFile(archive.save(), lzss_path)
 
-            print(f"({(i / (len(self.nodes) - 1)) * 100:.2f}%) Processed", node.name)
+            progress = (i / (len(self.nodes) - 1)) * 100
+
+            if patcher is not None:
+                patcher.ui.out_progress_bar.setValue(round(progress))
+
+            print(f"({progress:.2f}%) Processed", node.name)
 
         # create/update rando.bmg
         for lang in languages:
@@ -1546,14 +1577,16 @@ class Randomizer:
         print("Created rando.bmg!")
 
     def create_log(self):
-        spoiler_log = SeedLog(Path(f"output/spoiler_{self.settings.seed}.yaml"), self.settings.to_str(), self.settings.seed)
+        spoiler_log = SeedLog(
+            self.out_path / f"spoiler_{self.settings.seed}.yaml", self.settings.to_str(), self.settings.seed
+        )
 
         for node in self.nodes:
             spoiler_log.entries.append(SeedLogEntry(node))
 
         spoiler_log.export(self.settings)
 
-    def generate_seed(self):
+    def generate_seed(self, patcher: "MainWindow" | None = None):
         initial_time = time.time()
         print(
             f"Randomizing with {len(self.progression_item_pool)} progression items, {len(self.priority_item_pool)} priority items and {len(self.normal_item_pool)} remaining items..."
@@ -1563,12 +1596,12 @@ class Randomizer:
         if self.seed_log is None:
             prev_time = time.time()
             self.assign_items_randomly()
-            print(f"Item assigned successfully in {time.time() - prev_time:.3f}s!")
+            print(f"Items assigned successfully in {time.time() - prev_time:.3f}s!")
 
-        self.patch_rom()
+        self.patch_rom(patcher)
 
         # 3. update the rom files
-        if self.seed_log is None:
+        if self.seed_log is None and self.do_create_log:
             # 4. generate spoiler log
             self.create_log()
 
@@ -1648,16 +1681,26 @@ class Randomizer:
         bmg_file.saveToFile(self.extracted_dir / "files" / lang / "Message" / "rando.bmg")
 
     def export_settings(self):
-        settings_path = Path("src/settings/settings.bin")
+        settings_path = self.extracted_dir / "files" / "settings.bin"
         settings_path.write_bytes(self.settings.to_bin())
+
+        # register settings.bin
+        path_order_txt = self.extracted_dir / "path_order.txt"
+        assert path_order_txt.exists(), f"{path_order_txt}"
+        filedata = path_order_txt.read_text()
+
+        if "/settings.bin" not in filedata:
+            path_order_txt.write_text(filedata + "/settings.bin\n")
 
 
 def main():
-    rando = Randomizer(
+    rando = Generator(
         "eur",
         Path("rando/presets/default.yaml"),
         Path("rando/test/test_world.yaml"),
         Path("rando/data/location_table.yaml"),
+        Path("extract").resolve(),
+        Path("output/").resolve(),
         # plando mode
         # Path("output/seed.yaml"),
     )

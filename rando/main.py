@@ -4,6 +4,8 @@ import traceback
 import sys
 import hashlib
 import yaml
+import subprocess
+import shutil
 
 from typing import Any, TYPE_CHECKING
 from pathlib import Path
@@ -23,6 +25,7 @@ from PyQt6.QtWidgets import (
 from ui.patcher_ui import Ui_TabWidget
 from ui.preset_save_ui import Ui_PresetSave
 from constants import CustomSafeYAMLDumper
+from generator import Generator
 
 # it seems there's a module named the same way (natively?), workaround to make the linter happy
 if TYPE_CHECKING:
@@ -30,15 +33,23 @@ if TYPE_CHECKING:
 else:
     from settings import Settings
 
+EXE = ".exe" if sys.platform == "nt" else ""
+
 # make sure this is set to False for releases
 IS_DEBUG = True
 
-VALID_ROM_HASHES = [
-    "9e99cc803a14ce038eb908db585431f8254f09ee",  # EUR Revision 0
-]
+# version: sha1 hash
+ROM_VERSION_TO_HASH = {
+    "eur0": "9e99cc803a14ce038eb908db585431f8254f09ee",  # EUR Revision 0
+}
+ROM_HASH_TO_VERSION = {sha1: version for version, sha1 in ROM_VERSION_TO_HASH.items()}
+VALID_ROM_HASHES = list(ROM_VERSION_TO_HASH.values())
 
 MODULE_PATH = Path(sys.argv[0]).resolve().parent
 PRESET_DIR = MODULE_PATH / "presets"
+EXTRACT_DIR = MODULE_PATH / "extract"
+RES_DIR = MODULE_PATH / "res"
+BIOS_PATH = RES_DIR / "arm7_bios.bin"
 
 
 def show_message(parent: QWidget, title: str, icon: QMessageBox.Icon, text: str):
@@ -118,6 +129,7 @@ class MainWindow(QTabWidget):
         self.presets: dict[str, Settings] = {}
         self.live_preset = Settings.empty()  # tracks the settings changed in real time
         self.disable_live_preset_update = False
+        self.rom_version: str | None = None
 
         try:
             self.setup_connections()
@@ -125,7 +137,7 @@ class MainWindow(QTabWidget):
             if IS_DEBUG:
                 # convenience settings
                 self.set_rom_path(Path("extract/baserom_st_eur.nds").resolve())
-                self.ui.out_path.setText(str(Path("output/").resolve()))
+                self.ui.out_path.setText(str(MODULE_PATH / "output"))
 
             self.setup_presets()
         except Exception:
@@ -154,16 +166,20 @@ class MainWindow(QTabWidget):
             elif isinstance(widget, QComboBox):
                 widget.currentIndexChanged.connect(self.do_live_preset_update)
 
-    def set_rom_path(self, path: Path):
+    def set_rom_path(self, rom_path: Path):
         """Sets the baserom's path"""
 
         valid_txt = "Invalid ROM"
         is_valid = False
+        self.rom_version = None
 
-        if len(str(path)) > 0:
-            rom_hash = hashlib.sha1(path.read_bytes()).hexdigest().lower()
+        if len(str(rom_path)) > 0:
+            rom_hash = hashlib.sha1(rom_path.read_bytes()).hexdigest().lower()
 
             if rom_hash in VALID_ROM_HASHES:
+                self.rom_version = ROM_HASH_TO_VERSION[rom_hash]
+                self.try_extract_rom(rom_path)
+
                 valid_txt = "Valid ROM"
                 is_valid = True
             else:
@@ -173,9 +189,31 @@ class MainWindow(QTabWidget):
             self.ui.tab_settings.setEnabled(is_valid)
             self.ui.gen_group.setEnabled(is_valid)
             self.ui.out_group.setEnabled(is_valid)
-            self.ui.rom_path.setText(str(path))
+            self.ui.rom_path.setText(str(rom_path))
 
         self.ui.rom_lbl.setText(valid_txt)
+
+    def try_extract_rom(self, rom_path: Path):
+        if self.rom_version is None:
+            return
+
+        EXTRACT_DIR.mkdir(exist_ok=True)
+        assert RES_DIR.exists(), "unexpected error"
+        assert BIOS_PATH.exists(), "arm7 bios is missing"
+
+        command = f"{RES_DIR / f'dsrom{EXE}'} extract --rom {rom_path} --path {EXTRACT_DIR / self.rom_version} --arm7-bios {BIOS_PATH}"
+        subprocess.run(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    def try_pack_rom(self, out_path: Path):
+        if self.rom_version is None:
+            return
+
+        assert EXTRACT_DIR.exists(), "unexpected error"
+        assert RES_DIR.exists(), "unexpected error"
+        assert BIOS_PATH.exists(), "arm7 bios is missing"
+
+        command = f"{RES_DIR / f'dsrom{EXE}'} build --config {EXTRACT_DIR / self.rom_version / 'config.yaml'} --rom {out_path} --arm7-bios {BIOS_PATH}"
+        subprocess.run(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
     def setup_presets(self):
         """Populates the preset list"""
@@ -460,6 +498,7 @@ class MainWindow(QTabWidget):
             path = QFileDialog.getOpenFileName(
                 None, "Open ROM (Supported: EUR Revision 0)", str(Path.cwd()), "(*.nds *.srl)"
             )[0]
+
             self.set_rom_path(Path(path))
         except Exception:
             show_error(self, f"An error occurred\n\n{traceback.format_exc()}")
@@ -474,7 +513,11 @@ class MainWindow(QTabWidget):
             show_error(self, f"An error occurred\n\n{traceback.format_exc()}")
 
     def do_generate(self):
+        if self.rom_version is None:
+            return
+
         try:
+            # create output folder
             out_path = Path(self.ui.out_path.text())
 
             if len(str(out_path)) == 0:
@@ -485,12 +528,65 @@ class MainWindow(QTabWidget):
                 raise ValueError("The output path does not exist.")
 
             out_path.mkdir(exist_ok=True)
+
+            # patch the code
+            # TODO: this is too slow
+            # rom_path = Path(self.ui.rom_path.text()).resolve()
+            # assert rom_path.exists(), "unexpected error"
+            # rom_path.copy(EXTRACT_DIR / rom_path.name)
+
+            # ppf_path = RES_DIR / f"patch-{self.rom_version}.ppf"
+            # assert ppf_path.exists(), "patch is missing"
+
+            # command = f"{RES_DIR / f'patchppf3{EXE}'} a {EXTRACT_DIR / rom_path.name} {ppf_path}"
+            # prev_title = self.windowTitle()
+            # self.setWindowTitle("Patching the baserom...")
+            # subprocess.run(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            # self.setWindowTitle(prev_title)
+
+            # fetch preset
+            preset_name = self.ui.gen_combo_preset.currentText()
+
+            if preset_name != "Custom":
+                preset = self.presets[preset_name]
+            else:
+                preset = self.live_preset
+
+            # create generator instance
+            gen = Generator(
+                self.rom_version,
+                preset,
+                MODULE_PATH / "test" / "test_world.yaml",  # TODO: change that once the logic is done
+                MODULE_PATH / "data" / "location_table.yaml",
+                EXTRACT_DIR,
+                out_path,
+                do_create_log=self.ui.out_enable_spoilerlog.isChecked(),
+            )
+
+            # fetch the seed from the UI, if empty generate a new seed number
+            seed = self.ui.gen_seed.text()
+
+            if seed != str():
+                gen.settings.seed = seed
+            else:
+                gen.create_seed()
+                self.ui.gen_seed.setText(gen.settings.seed)
+
+            # generate the seed
+            self.ui.out_progress_bar.setValue(0)
+            gen.generate_seed(patcher=self)
+            gen.export_settings()
+
+            # finally, repack the rom
+            self.try_pack_rom(out_path / f"strando-{self.rom_version}-{gen.settings.seed}.nds")
         except Exception:
             show_error(self, f"An error occurred\n\n{traceback.format_exc()}")
 
     def do_change_preset(self, index: int):
         if index != 0:
             self.apply_preset(self.ui.gen_combo_preset.currentText())
+        else:
+            self.ui.gen_string.setText(self.live_preset.to_str())
 
     def do_save_preset(self):
         dialog = PresetSaveDialog(self)
@@ -511,6 +607,15 @@ class MainWindow(QTabWidget):
             self.apply_preset(None)
         except Exception:
             show_error(self, f"An error occurred\n\n{traceback.format_exc()}")
+
+    # overrides
+
+    def closeEvent(self, a0):
+        # remove generated files and folders
+        if EXTRACT_DIR.exists():
+            shutil.rmtree(EXTRACT_DIR)
+
+        super().closeEvent(a0)
 
 
 if __name__ == "__main__":
