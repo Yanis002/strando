@@ -7,8 +7,8 @@ select = ["E4", "E7", "E9", "F"]
 ignore = []
 
 exclude = [
-    "rando/gui/src/patcher_ui.py", # this is generated
-    "rando/gui/src/preset_save_ui.py", # this is generated
+    "rando/ui/patcher_ui.py", # this is generated
+    "rando/ui/preset_save_ui.py", # this is generated
 ]
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
@@ -22,6 +22,6 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 
 exclude = [
-    "rando/gui/src/patcher_ui.py", # this is generated
-    "rando/gui/src/preset_save_ui.py", # this is generated
+    "rando/ui/patcher_ui.py", # this is generated
+    "rando/ui/preset_save_ui.py", # this is generated
 ]

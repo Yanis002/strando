@@ -21,7 +21,9 @@ class Ui_PresetSave(object):
         self.gridLayout.setObjectName("gridLayout")
         self.btn_box = QtWidgets.QDialogButtonBox(parent=self.gridLayoutWidget)
         self.btn_box.setOrientation(QtCore.Qt.Orientation.Horizontal)
-        self.btn_box.setStandardButtons(QtWidgets.QDialogButtonBox.StandardButton.Cancel|QtWidgets.QDialogButtonBox.StandardButton.Ok)
+        self.btn_box.setStandardButtons(
+            QtWidgets.QDialogButtonBox.StandardButton.Cancel | QtWidgets.QDialogButtonBox.StandardButton.Ok
+        )
         self.btn_box.setObjectName("btn_box")
         self.gridLayout.addWidget(self.btn_box, 1, 0, 1, 2)
         self.label = QtWidgets.QLabel(parent=self.gridLayoutWidget)

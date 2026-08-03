@@ -8,10 +8,11 @@ import struct
 import time
 import yaml
 
+from typing import TYPE_CHECKING
 from dataclasses import dataclass
 from ndspy import lz10 as LZSS, narc, bmg
 from pathlib import Path
-from rando.constants import (
+from constants import (
     ItemId,
     ItemKind,
     ItemWeight,
@@ -22,7 +23,12 @@ from rando.constants import (
     shop_item_positions,
     tos_room_map,
 )
-from rando.settings import Settings, LocationSettings
+
+# workaround to make the linter happy
+if TYPE_CHECKING:
+    from .settings import Settings, LocationSettings
+else:
+    from settings import Settings, LocationSettings
 
 TOS_SECTION_1_INDEX = 0
 TOS_SECTION_2_INDEX = 1
@@ -1649,7 +1655,7 @@ class Randomizer:
 def main():
     rando = Randomizer(
         "eur",
-        Path("rando/test/settings.yaml"),
+        Path("rando/presets/default.yaml"),
         Path("rando/test/test_world.yaml"),
         Path("rando/data/location_table.yaml"),
         # plando mode

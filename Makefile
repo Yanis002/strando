@@ -243,7 +243,7 @@ setup: extract
 
 test_no_logic:
 	$(call print_no_args,Randomizing items...)
-	$(V)$(PYTHON) -m rando.test.test_no_logic
+	$(V)$(PYTHON) rando/generator.py
 	$(V)$(MAKE) $(OUT_ROM)
 
 venv:

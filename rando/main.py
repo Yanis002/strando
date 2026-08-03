@@ -1,10 +1,13 @@
+#!/usr/bin/env python3
+
 import traceback
 import sys
 import hashlib
 import yaml
 
-from typing import Any
+from typing import Any, TYPE_CHECKING
 from pathlib import Path
+
 from PyQt6.QtWidgets import (
     QApplication,
     QTabWidget,
@@ -16,10 +19,16 @@ from PyQt6.QtWidgets import (
     QSpinBox,
     QComboBox,
 )
-from rando.gui.src.patcher_ui import Ui_TabWidget
-from rando.gui.src.preset_save_ui import Ui_PresetSave
-from rando.settings import Settings
-from rando.constants import CustomSafeYAMLDumper
+
+from ui.patcher_ui import Ui_TabWidget
+from ui.preset_save_ui import Ui_PresetSave
+from constants import CustomSafeYAMLDumper
+
+# it seems there's a module named the same way (natively?), workaround to make the linter happy
+if TYPE_CHECKING:
+    from .settings import Settings
+else:
+    from settings import Settings
 
 # make sure this is set to False for releases
 IS_DEBUG = True
@@ -28,7 +37,7 @@ VALID_ROM_HASHES = [
     "9e99cc803a14ce038eb908db585431f8254f09ee",  # EUR Revision 0
 ]
 
-MODULE_PATH = Path(sys.argv[0]).resolve().parent.parent
+MODULE_PATH = Path(sys.argv[0]).resolve().parent
 PRESET_DIR = MODULE_PATH / "presets"
 
 
