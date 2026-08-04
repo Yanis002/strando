@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: © 2026 strando team
+# SPDX-License-Identifier: GPL-3.0-only
+
 import base64
 import msgpack
 import struct

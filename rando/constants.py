@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: © 2026 strando team
+# SPDX-License-Identifier: GPL-3.0-only
+
 import yaml
 
 from enum import IntEnum

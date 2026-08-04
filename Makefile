@@ -1,5 +1,12 @@
 MAKEFLAGS += --no-builtin-rules
 
+# os-based file extension
+ifeq ($(OS),Windows_NT)
+EXE := .exe
+else
+EXE :=
+endif
+
 # Set PACKAGE_NAME define for printing commit name
 ifeq ($(origin PACKAGE_NAME), undefined)
   PACKAGE_NAME := "$(shell git log -1 --pretty=%s | tr -d '()`"\n' | tr -d "'" | sed 's/\"/\\\"/g')"
@@ -71,14 +78,12 @@ DL_TOOL := $(PYTHON) tools/download_tool.py
 ROM_PATCHER := $(PYTHON) tools/rom_patcher.py
 
 # ds-rom
-DSROM := tools/dsrom
+DSROM := tools/dsrom$(EXE)
+DSROM_VERSION := v0.8.0
 
 # armips setup
 ARMIPS_DIR := tools/armips
 ARMIPS ?= $(ARMIPS_DIR)/out/armips
-
-# PPF
-MAKEPPF3 ?= tools/ppf/makeppf3
 
 # main source/objects
 BUILD_DIR := build/$(REGION)
@@ -125,11 +130,12 @@ CPP_DEFINES := -DGZ_OVL_ID=114 -DPACKAGE_VERSION='$(PACKAGE_VERSION)' -DPACKAGE_
 CFLAGS := -Os -fno-short-enums -fomit-frame-pointer -ffast-math -fno-builtin -fshort-wchar -MMD -MP $(WARNINGS) $(INCLUDES) $(CPP_DEFINES)
 CPP_FLAGS := $(CFLAGS) -fno-rtti -fno-exceptions -fno-threadsafe-statics -std=c++20 -Wno-volatile -Wno-overloaded-virtual # TODO: remove -Wno-overloaded-virtual once it's fixed in decomp
 
-ELF := $(BUILD_DIR)/ovgz.elf
+OVL_NAME := ovgz
+ELF := $(BUILD_DIR)/$(OVL_NAME).elf
 BIN := $(ELF:.elf=.bin)
 MAP := $(ELF:.elf=.map)
 LD := $(CC)
-LDFLAGS := -T libs/ovgz.ld -Llibs -lst-$(REGION) -Wl,-Map,$(MAP) -Wl,--gc-sections -Wl,--defsym=OVLGZ_ADDR=$(OVLGZ_ADDR) -Wl,--defsym=OVLGZ_SIZE=$(OVLGZ_SIZE) -Wl,--defsym=RESERVED_SIZE=$(RESERVED_SIZE)
+LDFLAGS := -T libs/$(OVL_NAME).ld -Llibs -lst-$(REGION) -Wl,-Map,$(MAP) -Wl,--gc-sections -Wl,--defsym=OVLGZ_ADDR=$(OVLGZ_ADDR) -Wl,--defsym=OVLGZ_SIZE=$(OVLGZ_SIZE) -Wl,--defsym=RESERVED_SIZE=$(RESERVED_SIZE)
 OBJCOPY := tools/binutils/arm-none-eabi-objcopy
 
 HOOKS_ELF := $(HOOKS_BUILD_DIR)/hooks.elf
@@ -160,7 +166,6 @@ OUT_ROM := stgz-$(REGION)-$(PACKAGE_VERSION).nds
 else
 OUT_ROM := stgz-$(REGION).nds
 endif
-OUT_PPF := $(OUT_ROM:.nds=.ppf)
 
 ### project targets ###
 
@@ -195,8 +200,9 @@ init: venv
 ifeq ($(COMPARE),1)
 	$(V)sha1sum -c $(EXTRACT_DIR)/baserom_st_$(REGION).sha1
 endif
-	$(V)$(DL_TOOL) -p tools/ dsrom v0.8.0
+	$(V)$(DL_TOOL) -p tools/ dsrom $(DSROM_VERSION)
 	$(V)$(DL_TOOL) -p tools/ binutils arm-2.42-0
+	$(V)$(DL_TOOL) -p tools/ flips v200
 ifeq ("$(wildcard $(ARMIPS_DIR))", "")
 	$(error armips not found!)
 else
@@ -205,14 +211,12 @@ ifeq ("$(wildcard $(ARMIPS_DIR)/out/armips)", "")
 	$(V)$(MKDIR) -p $(ARMIPS_DIR)/out && cd $(ARMIPS_DIR)/out && $(CMAKE) -DCMAKE_BUILD_TYPE=Release .. && $(CMAKE) --build .
 endif
 endif
-	$(call print_no_args,Building PPF3 tools...)
-	$(V)$(MAKE) -C tools/ppf
 
 infos:
 	$(call print_no_args,Success!)
 	@$(PRINT) "==== Build Options ====$(NO_COL)\n"
 	@$(PRINT) "${GREEN}Game Region: $(BLUE)$(REGION)$(NO_COL)\n"
-	@$(PRINT) "${GREEN}Rom Path: $(BLUE)$(OUT_ROM) ($(OUT_PPF))$(NO_COL)\n"
+	@$(PRINT) "${GREEN}Rom Path: $(BLUE)$(OUT_ROM)$(NO_COL)\n"
 	@$(PRINT) "${GREEN}Code Version: $(BLUE)$(PACKAGE_VERSION)$(NO_COL)\n"
 	@$(PRINT) "${GREEN}Build Author: $(BLUE)$(PACKAGE_AUTHOR)$(NO_COL)\n"
 	@$(PRINT) "${GREEN}Commit Author: $(BLUE)$(PACKAGE_COMMIT_AUTHOR)$(NO_COL)\n"
@@ -228,10 +232,20 @@ overlay: $(BIN)
 	$(V)$(PYTHON) tools/gen_libs.py -m libgz -e $(ELF)
 	$(call print_no_args,Success!)
 
-patch: $(OUT_ROM)
-	$(call print_no_args,Creating PPF patch...)
-	$(V)$(MAKEPPF3) c "$(BASEROM)" "$(OUT_ROM)" "$(OUT_PPF)"
+patches: $(OUT_ROM)
+	$(call print_no_args,Creating BPS patches...)
+	$(V)$(PYTHON) tools/create_patches.py $(EXTRACTED_DIR)
 	$(V)$(MAKE) infos
+
+# copies the necessary files for the patcher into `rando/res/`
+release: patches
+	$(call print_no_args,Preparing release files...)
+	$(V)$(CP) $(BIN) rando/res/$(OVL_NAME).bin
+	$(V)$(CP) $(MAP) rando/res/$(OVL_NAME).map
+	$(V)$(CP) -r tools/flips/ rando/res/flips/
+	$(V)$(DL_TOOL) -p rando/res/ dsrom $(DSROM_VERSION) -s linux
+	$(V)$(DL_TOOL) -p rando/res/ dsrom $(DSROM_VERSION) -s windows
+	$(call print_no_args,Success!)
 
 run: all
 ifeq ($(STGZ_EMULATOR),)
@@ -255,7 +269,7 @@ venv:
 	$(V)$(PYTHON) -m pip install -U -r tools/requirements.txt
 	$(call print_no_args,Success!)
 
-.PHONY: all build clean distclean extract hooks init infos libs patch overlay run setup test_no_logic venv
+.PHONY: all build clean distclean extract hooks init infos libs patches overlay release run setup test_no_logic venv
 
 ### misc project recipes ###
 
@@ -298,7 +312,7 @@ $(ELF): $(OBJ)
 $(BIN): $(ELF)
 	$(call print_two_args,Wrapping binary to ELF:,$<,$@)
 	$(V)$(OBJCOPY) -S -O binary $< $@
-	$(V)$(CP) $@ $(EXTRACTED_DIR)/arm9_overlays/ovgz.bin
+	$(V)$(CP) $@ $(EXTRACTED_DIR)/arm9_overlays/$(OVL_NAME).bin
 
 $(HOOKS_ELF): $(HOOKS_OBJ)
 	$(call print_one_arg,Linking hooks:,$@)

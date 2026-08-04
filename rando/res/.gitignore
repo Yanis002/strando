@@ -1,4 +1,7 @@
 *.bin
 *.exe
+*.map
 dsrom
 patchppf3
+patches/
+flips/

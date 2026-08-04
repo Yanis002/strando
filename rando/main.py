@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: © 2026 strando team
+# SPDX-License-Identifier: GPL-3.0-only
 
 import traceback
 import sys
@@ -26,6 +28,8 @@ from ui.patcher_ui import Ui_TabWidget
 from ui.preset_save_ui import Ui_PresetSave
 from constants import CustomSafeYAMLDumper
 from generator import Generator
+from apply_patches import apply_patches
+from rom_patcher import update_yaml
 
 # it seems there's a module named the same way (natively?), workaround to make the linter happy
 if TYPE_CHECKING:
@@ -50,6 +54,7 @@ PRESET_DIR = MODULE_PATH / "presets"
 EXTRACT_DIR = MODULE_PATH / "extract"
 RES_DIR = MODULE_PATH / "res"
 BIOS_PATH = RES_DIR / "arm7_bios.bin"
+RANDO_OVL_NAME = "ovgz"
 
 
 def show_message(parent: QWidget, title: str, icon: QMessageBox.Icon, text: str):
@@ -202,7 +207,7 @@ class MainWindow(QTabWidget):
         assert BIOS_PATH.exists(), "arm7 bios is missing"
 
         command = f"{RES_DIR / f'dsrom{EXE}'} extract --rom {rom_path} --path {EXTRACT_DIR / self.rom_version} --arm7-bios {BIOS_PATH}"
-        subprocess.run(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(command, shell=True)
 
     def try_pack_rom(self, out_path: Path):
         if self.rom_version is None:
@@ -213,7 +218,7 @@ class MainWindow(QTabWidget):
         assert BIOS_PATH.exists(), "arm7 bios is missing"
 
         command = f"{RES_DIR / f'dsrom{EXE}'} build --config {EXTRACT_DIR / self.rom_version / 'config.yaml'} --rom {out_path} --arm7-bios {BIOS_PATH}"
-        subprocess.run(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(command, shell=True)
 
     def setup_presets(self):
         """Populates the preset list"""
@@ -517,6 +522,9 @@ class MainWindow(QTabWidget):
             return
 
         try:
+            extracted_dir = EXTRACT_DIR / self.rom_version
+            assert extracted_dir.exists(), "unexpected error"
+
             # create output folder
             out_path = Path(self.ui.out_path.text())
 
@@ -529,20 +537,11 @@ class MainWindow(QTabWidget):
 
             out_path.mkdir(exist_ok=True)
 
-            # patch the code
-            # TODO: this is too slow
-            # rom_path = Path(self.ui.rom_path.text()).resolve()
-            # assert rom_path.exists(), "unexpected error"
-            # rom_path.copy(EXTRACT_DIR / rom_path.name)
-
-            # ppf_path = RES_DIR / f"patch-{self.rom_version}.ppf"
-            # assert ppf_path.exists(), "patch is missing"
-
-            # command = f"{RES_DIR / f'patchppf3{EXE}'} a {EXTRACT_DIR / rom_path.name} {ppf_path}"
-            # prev_title = self.windowTitle()
-            # self.setWindowTitle("Patching the baserom...")
-            # subprocess.run(command, shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            # self.setWindowTitle(prev_title)
+            # patch the code and update config
+            apply_patches(extracted_dir, bps_dir=RES_DIR / "patches")
+            ovl_list = [int(bps_path.stem.removeprefix("ov")) for bps_path in (RES_DIR / "patches").rglob("ov*.bps")]
+            update_yaml(extracted_dir, RES_DIR / f"{RANDO_OVL_NAME}.map", ovl_list)
+            (RES_DIR / f"{RANDO_OVL_NAME}.bin").copy(extracted_dir / "arm9_overlays" / f"{RANDO_OVL_NAME}.bin")
 
             # fetch preset
             preset_name = self.ui.gen_combo_preset.currentText()
