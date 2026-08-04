@@ -42,30 +42,20 @@ jobs:
           mv /tools/armips/* ./tools/armips
 
       - name: Build
-        # TODO: remove `make test_no_logic` when the logic is implemented
         run: |
           make init
           make setup
-          .venv/bin/python3 -m rando.test.test_no_logic
-          make patch
+          make
 
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v7
-        with:
-          name: stgz-${{ matrix.version }}-${{ github.sha }}
-          path: |
-            stgz-${{ matrix.version }}.ppf
-            build/${{ matrix.version }}/*.map
-            hooks/build/${{ matrix.version }}/*.map
-
-      - name: Upload rolling release
-        uses: softprops/action-gh-release@v2
-        if: github.ref == 'refs/heads/main'
-        with:
-          name: 'Rolling release'
-          body: Release built from latest commit on `main` branch. Check the commit history for more details.
-          target_commitish: main
-          tag_name: 'rolling-release'
-          prerelease: false
-          files: stgz-${{ matrix.version }}.ppf
-        continue-on-error: true
+      # disabled temporarily
+      # - name: Upload rolling release
+      #   uses: softprops/action-gh-release@v2
+      #   if: github.ref == 'refs/heads/main'
+      #   with:
+      #     name: 'Rolling release'
+      #     body: Release built from latest commit on `main` branch. Check the commit history for more details.
+      #     target_commitish: main
+      #     tag_name: 'rolling-release'
+      #     prerelease: false
+      #     files: stgz-${{ matrix.version }}.ppf
+      #   continue-on-error: true
