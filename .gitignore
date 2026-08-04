@@ -8,7 +8,7 @@ extract/eu
 extract/jp
 extract/us
 build/
-libs/libgz.a
+libs/librando.a
 output/
 rando/temp/
 rando/extract/

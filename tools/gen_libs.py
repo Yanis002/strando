@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# SPDX-FileCopyrightText: © 2026 stgz team
+# SPDX-FileCopyrightText: © 2026 strando team
 # SPDX-License-Identifier: GPL-3.0-only
 
 import argparse
@@ -117,10 +117,10 @@ def main():
 
     if args.mode == "libst":
         gen_libst(libs_dir)
-    elif args.mode == "libgz":
-        libgz_path = libs_dir / "libgz.a"
-        libgz_path.write_text(Symbols().to_txt())
-        print("libgz.a is OK!")
+    elif args.mode == "librando":
+        librando_path = libs_dir / "librando.a"
+        librando_path.write_text(Symbols().to_txt())
+        print("librando.a is OK!")
     else:
         raise ValueError(f"ERROR: unknown mode '{args.mode}'")
 

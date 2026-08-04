@@ -54,7 +54,7 @@ PRESET_DIR = MODULE_PATH / "presets"
 EXTRACT_DIR = MODULE_PATH / "extract"
 RES_DIR = MODULE_PATH / "res"
 BIOS_PATH = RES_DIR / "arm7_bios.bin"
-RANDO_OVL_NAME = "ovgz"
+RANDO_OVL_NAME = "ovrando"
 
 
 def show_message(parent: QWidget, title: str, icon: QMessageBox.Icon, text: str):

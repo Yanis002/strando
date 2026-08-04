@@ -57,5 +57,5 @@ jobs:
       #     target_commitish: main
       #     tag_name: 'rolling-release'
       #     prerelease: false
-      #     files: stgz-${{ matrix.version }}.ppf
+      #     files: strando-${{ matrix.version }}.ppf
       #   continue-on-error: true

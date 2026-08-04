@@ -10,7 +10,7 @@ extern void FS_LoadOverlay(int param1, int overlayID);
 extern void GZ_Init();
 
 #if !(__INTELLISENSE__ || __clangd__)
-#ifndef GZ_OVL_ID
+#ifndef RANDO_OVL_ID
 #error "overlay id is not defined!"
 #endif
 
@@ -18,7 +18,7 @@ extern void GZ_Init();
 #error "address of overlay 0 is not defined!"
 #endif
 #else
-#define GZ_OVL_ID 0
+#define RANDO_OVL_ID 0
 #define OVERLAY_0_SLOT_ADDR 0
 #endif
 
@@ -33,7 +33,7 @@ void GZ_InitHook(void* ptr) {
     while (nOverlay0 != 0) {}
 
     // load our overlay
-    FS_LoadOverlay(0, GZ_OVL_ID);
+    FS_LoadOverlay(0, RANDO_OVL_ID);
 
     // call the init function
     GZ_Init();

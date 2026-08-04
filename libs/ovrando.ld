@@ -3,10 +3,10 @@ OUTPUT_ARCH(arm)
 
 SECTIONS
 {
-    . = OVLGZ_ADDR;
+    . = OVLRANDO_ADDR;
 
     _overlay_start = .;
-    _overlay_end = _overlay_start + OVLGZ_SIZE - RESERVED_SIZE;
+    _overlay_end = _overlay_start + OVLRANDO_SIZE - RESERVED_SIZE;
 
     __text_start = .;
     .text : {

@@ -49,12 +49,22 @@ SHELL = /usr/bin/env bash
 .SHELLFLAGS = -o pipefail -c
 
 # path to decomp, defaults to the submodule's path
-STGZ_DECOMP_DIR ?= resources/decomp
-STGZ_EMULATOR ?=
+STRANDO_DECOMP_DIR ?= resources/decomp
+STRANDO_EMULATOR ?=
 
 # game region, only eur is supported atm
-REGION := eur
-VERSION := $(shell echo $(REGION) | tr '[:lower:]' '[:upper:]')
+VERSION := eur
+
+# region and region addresses
+ifeq ($(VERSION),eur)
+OVLRANDO_ADDR := 0x0218A380
+HOOKS_ADDR := 0x01FFFE20
+HOOKS_GAME_ADDR := 0x02013394
+
+OVERLAY_0_SLOT_ADDR := 0x02043E50 # in reality this is the address of gOverlayManager
+else
+$(error Unsupported version $(VERSION))
+endif
 
 COMPARE ?= 1
 OUT_HASH ?= 0
@@ -86,16 +96,16 @@ ARMIPS_DIR := tools/armips
 ARMIPS ?= $(ARMIPS_DIR)/out/armips
 
 # main source/objects
-BUILD_DIR := build/$(REGION)
+BUILD_DIR := build/$(VERSION)
 ALL_FILES := $(sort $(shell find src/ -path "src/thumb" -prune -o -print))
 ASM_FILES := $(filter %.s, $(ALL_FILES))
 C_FILES := $(filter %.c, $(ALL_FILES))
 CPP_FILES := $(filter %.cpp, $(ALL_FILES))
-OBJ := $(foreach f,$(ASM_FILES),$(BUILD_DIR)/$(f:.s=.o)) $(foreach f,$(C_FILES),$(BUILD_DIR)/$(f:.c=.o)) $(foreach f,$(CPP_FILES),$(BUILD_DIR)/$(f:.cpp=.o)) $(BUILD_DIR)/src/thumb/thumb-$(REGION).o
+OBJ := $(foreach f,$(ASM_FILES),$(BUILD_DIR)/$(f:.s=.o)) $(foreach f,$(C_FILES),$(BUILD_DIR)/$(f:.c=.o)) $(foreach f,$(CPP_FILES),$(BUILD_DIR)/$(f:.cpp=.o)) $(BUILD_DIR)/src/thumb/thumb-$(VERSION).o
 DEPS := $(foreach f,$(ASM_FILES),$(BUILD_DIR)/$(f:.s=.d)) $(foreach f,$(C_FILES),$(BUILD_DIR)/$(f:.c=.d)) $(foreach f,$(CPP_FILES),$(BUILD_DIR)/$(f:.cpp=.d))
 
 # hooks source/objects
-HOOKS_BUILD_DIR := hooks/build/$(REGION)
+HOOKS_BUILD_DIR := hooks/build/$(VERSION)
 HOOKS_SRC := $(wildcard hooks/src/*.c)
 HOOKS_OBJ := $(foreach f,$(HOOKS_SRC:hooks/%=%),$(HOOKS_BUILD_DIR)/$(f:.c=.o))
 HOOKS_DEPS := $(foreach f,$(HOOKS_SRC:hooks/%=%),$(HOOKS_BUILD_DIR)/$(f:.c=.d))
@@ -105,18 +115,7 @@ HOOKS_GAME_DEPS := $(foreach f,$(HOOKS_GAME_SRC:hooks/%=%),$(HOOKS_BUILD_DIR)/$(
 
 ALL_DEPS := $(sort $(DEPS) $(HOOKS_DEPS) $(HOOKS_GAME_DEPS))
 
-# region addresses
-ifeq ($(REGION),eur)
-OVLGZ_ADDR := 0x0218A380
-HOOKS_ADDR := 0x01FFFE20
-HOOKS_GAME_ADDR := 0x02013394
-
-OVERLAY_0_SLOT_ADDR := 0x02043E50 # in reality this is the address of gOverlayManager
-else
-$(error "Region not supported: $(REGION)")
-endif
-
-OVLGZ_SIZE := 0x10000
+OVLRANDO_SIZE := 0x10000
 HOOKS_SIZE := 0x1E0
 RESERVED_SIZE := 0x10
 
@@ -125,24 +124,24 @@ CFLAGS_BASE := -marm -mthumb-interwork -march=armv5te -mtune=arm946e-s -nostdlib
 CC := arm-none-eabi-gcc $(CFLAGS_BASE)
 CXX := arm-none-eabi-g++ $(CFLAGS_BASE)
 WARNINGS := -Wall -Wno-multichar -Wno-unknown-pragmas -Wno-strict-aliasing -Wno-unused-variable -Wno-unused-but-set-variable -Wno-return-local-addr
-INCLUDES := -I include -I $(STGZ_DECOMP_DIR)/include -I $(STGZ_DECOMP_DIR)/libs/c/include -I $(STGZ_DECOMP_DIR)/libs/cpp/include -I $(STGZ_DECOMP_DIR)/libs/nitro/include -I $(STGZ_DECOMP_DIR)/libs/nns/include -I $(STGZ_DECOMP_DIR)/libs/runtime/include
-CPP_DEFINES := -DGZ_OVL_ID=114 -DPACKAGE_VERSION='$(PACKAGE_VERSION)' -DPACKAGE_NAME='$(PACKAGE_NAME)' -DPACKAGE_COMMIT_AUTHOR='$(PACKAGE_COMMIT_AUTHOR)' -DPACKAGE_AUTHOR='$(PACKAGE_AUTHOR)' -DVERSION=$(VERSION)
+INCLUDES := -I include -I $(STRANDO_DECOMP_DIR)/include -I $(STRANDO_DECOMP_DIR)/libs/c/include -I $(STRANDO_DECOMP_DIR)/libs/cpp/include -I $(STRANDO_DECOMP_DIR)/libs/nitro/include -I $(STRANDO_DECOMP_DIR)/libs/nns/include -I $(STRANDO_DECOMP_DIR)/libs/runtime/include
+CPP_DEFINES := -DRANDO_OVL_ID=114 -DPACKAGE_VERSION='$(PACKAGE_VERSION)' -DPACKAGE_NAME='$(PACKAGE_NAME)' -DPACKAGE_COMMIT_AUTHOR='$(PACKAGE_COMMIT_AUTHOR)' -DPACKAGE_AUTHOR='$(PACKAGE_AUTHOR)' -DVERSION=$(VERSION)
 CFLAGS := -Os -fno-short-enums -fomit-frame-pointer -ffast-math -fno-builtin -fshort-wchar -MMD -MP $(WARNINGS) $(INCLUDES) $(CPP_DEFINES)
 CPP_FLAGS := $(CFLAGS) -fno-rtti -fno-exceptions -fno-threadsafe-statics -std=c++20 -Wno-volatile -Wno-overloaded-virtual # TODO: remove -Wno-overloaded-virtual once it's fixed in decomp
 
-OVL_NAME := ovgz
+OVL_NAME := ovrando
 ELF := $(BUILD_DIR)/$(OVL_NAME).elf
 BIN := $(ELF:.elf=.bin)
 MAP := $(ELF:.elf=.map)
 LD := $(CC)
-LDFLAGS := -T libs/$(OVL_NAME).ld -Llibs -lst-$(REGION) -Wl,-Map,$(MAP) -Wl,--gc-sections -Wl,--defsym=OVLGZ_ADDR=$(OVLGZ_ADDR) -Wl,--defsym=OVLGZ_SIZE=$(OVLGZ_SIZE) -Wl,--defsym=RESERVED_SIZE=$(RESERVED_SIZE)
+LDFLAGS := -T libs/$(OVL_NAME).ld -Llibs -lst-$(VERSION) -Wl,-Map,$(MAP) -Wl,--gc-sections -Wl,--defsym=OVLRANDO_ADDR=$(OVLRANDO_ADDR) -Wl,--defsym=OVLRANDO_SIZE=$(OVLRANDO_SIZE) -Wl,--defsym=RESERVED_SIZE=$(RESERVED_SIZE)
 OBJCOPY := tools/binutils/arm-none-eabi-objcopy
 
 HOOKS_ELF := $(HOOKS_BUILD_DIR)/hooks.elf
 HOOKS_BIN := $(HOOKS_ELF:.elf=.bin)
 HOOKS_MAP := $(HOOKS_ELF:.elf=.map)
 HOOKS_LD := $(CC)
-HOOKS_LDFLAGS := -T hooks/hooks.ld -Llibs -lst-$(REGION) -lgz -Wl,--gc-sections
+HOOKS_LDFLAGS := -T hooks/hooks.ld -Llibs -lst-$(VERSION) -lrando -Wl,--gc-sections
 
 HOOKS_GAME_ELF := $(HOOKS_BUILD_DIR)/game.elf
 HOOKS_GAME_BIN := $(HOOKS_GAME_ELF:.elf=.bin)
@@ -157,14 +156,14 @@ $(shell $(MKDIR) -p $(HOOKS_BUILD_DIR)/src)
 ### project settings ###
 
 EXTRACT_DIR := extract
-EXTRACTED_DIR := $(EXTRACT_DIR)/$(REGION)
-BASEROM := $(EXTRACT_DIR)/baserom_st_$(REGION).nds
+EXTRACTED_DIR := $(EXTRACT_DIR)/$(VERSION)
+BASEROM := $(EXTRACT_DIR)/baserom_st_$(VERSION).nds
 ARM7_BIOS ?= $(EXTRACT_DIR)/arm7_bios.bin
 
 ifeq ($(OUT_HASH),1)
-OUT_ROM := stgz-$(REGION)-$(PACKAGE_VERSION).nds
+OUT_ROM := strando-$(VERSION)-$(PACKAGE_VERSION).nds
 else
-OUT_ROM := stgz-$(REGION).nds
+OUT_ROM := strando-$(VERSION).nds
 endif
 
 ### project targets ###
@@ -173,7 +172,7 @@ all: $(OUT_ROM) infos
 
 build: hooks
 	$(call print_no_args,Patching the game...)
-	$(V)$(ROM_PATCHER) --version $(REGION) --address $(OVLGZ_ADDR) --size $(OVLGZ_SIZE) --elf $(ELF) --hooks_elf $(HOOKS_ELF) --hooks_game_bin $(HOOKS_GAME_BIN) --hooks_size $(HOOKS_SIZE) --hooks_addr $(HOOKS_ADDR) --hooks_game_addr $(HOOKS_GAME_ADDR)
+	$(V)$(ROM_PATCHER) --version $(VERSION) --address $(OVLRANDO_ADDR) --size $(OVLRANDO_SIZE) --elf $(ELF) --hooks_elf $(HOOKS_ELF) --hooks_game_bin $(HOOKS_GAME_BIN) --hooks_size $(HOOKS_SIZE) --hooks_addr $(HOOKS_ADDR) --hooks_game_addr $(HOOKS_GAME_ADDR)
 	$(call print_no_args,Applying hooks and adding new code...)
 	$(V)$(ARMIPS) $(HOOKS_BUILD_DIR)/setup.asm
 	$(call print_no_args,Success!)
@@ -198,7 +197,7 @@ hooks: overlay $(HOOKS_BIN) $(HOOKS_GAME_BIN)
 init: venv
 	$(call print_no_args,Verifying baserom checksum...)
 ifeq ($(COMPARE),1)
-	$(V)sha1sum -c $(EXTRACT_DIR)/baserom_st_$(REGION).sha1
+	$(V)sha1sum -c $(EXTRACT_DIR)/baserom_st_$(VERSION).sha1
 endif
 	$(V)$(DL_TOOL) -p tools/ dsrom $(DSROM_VERSION)
 	$(V)$(DL_TOOL) -p tools/ binutils arm-2.42-0
@@ -215,7 +214,7 @@ endif
 infos:
 	$(call print_no_args,Success!)
 	@$(PRINT) "==== Build Options ====$(NO_COL)\n"
-	@$(PRINT) "${GREEN}Game Region: $(BLUE)$(REGION)$(NO_COL)\n"
+	@$(PRINT) "${GREEN}Game Version: $(BLUE)$(VERSION)$(NO_COL)\n"
 	@$(PRINT) "${GREEN}Rom Path: $(BLUE)$(OUT_ROM)$(NO_COL)\n"
 	@$(PRINT) "${GREEN}Code Version: $(BLUE)$(PACKAGE_VERSION)$(NO_COL)\n"
 	@$(PRINT) "${GREEN}Build Author: $(BLUE)$(PACKAGE_AUTHOR)$(NO_COL)\n"
@@ -224,12 +223,12 @@ infos:
 
 libs:
 	$(call print_no_args,Generating game symbol library...)
-	$(V)$(PYTHON) tools/gen_libs.py -m libst -d $(STGZ_DECOMP_DIR)
+	$(V)$(PYTHON) tools/gen_libs.py -m libst -d $(STRANDO_DECOMP_DIR)
 	$(call print_no_args,Success!)
 
 overlay: $(BIN)
-	$(call print_no_args,Generating stgz symbol library...)
-	$(V)$(PYTHON) tools/gen_libs.py -m libgz -e $(ELF)
+	$(call print_no_args,Generating strando symbol library...)
+	$(V)$(PYTHON) tools/gen_libs.py -m librando -e $(ELF)
 	$(call print_no_args,Success!)
 
 patches: $(OUT_ROM)
@@ -248,10 +247,10 @@ release: patches
 	$(call print_no_args,Success!)
 
 run: all
-ifeq ($(STGZ_EMULATOR),)
+ifeq ($(STRANDO_EMULATOR),)
 	$(error "Emulator path not set.")
 endif
-	$(STGZ_EMULATOR) $(OUT_ROM)
+	$(STRANDO_EMULATOR) $(OUT_ROM)
 
 setup: extract
 
@@ -278,7 +277,7 @@ venv:
 
 ## process auto-generated thumb definitions (necessary to avoid crashes when calling thumb functions) ##
 
-$(BUILD_DIR)/src/thumb/thumb-$(REGION).o: src/thumb/thumb-$(REGION).s
+$(BUILD_DIR)/src/thumb/thumb-$(VERSION).o: src/thumb/thumb-$(VERSION).s
 	$(V)$(CC) $(CFLAGS) -fverbose-asm -Os -x assembler-with-cpp -fomit-frame-pointer -c "$<" -o "$@"
 
 ## process source files ##
