@@ -782,7 +782,7 @@ class SeedLogEntry:
         data = {}
 
         for location in self.node.locations:
-            is_shop = len(location.items) > 1 and "Shop Keeper" in location.name
+            is_shop = len(location.items) != 1 and "Shop Keeper" in location.name
             data[location.name] = self.get_params(location.items, is_shop, settings)
 
         return {self.node.name: {"locations": data}}
@@ -861,6 +861,7 @@ class Generator:
     ):
         self.version = version
         self.do_create_log = do_create_log
+        self.item_defs = item_defs[:]
 
         self.extracted_dir = extract_dir / self.version
         assert self.extracted_dir.exists()
@@ -926,7 +927,7 @@ class Generator:
         ## add additionnal items
         # 5 from dungeons, 8 from side quests
         heart_containers = [ItemDef(ItemId.HeartContainer, ItemKind.Default, ItemWeight.Normal)] * 13
-        item_defs.extend(heart_containers)
+        self.item_defs.extend(heart_containers)
 
         # add extra tears
         if self.settings.shuffle_dgn.is_tearsanity_enabled():
@@ -936,7 +937,7 @@ class Generator:
                 self.dgn_tos_defs[i].tears = [
                     ItemDef(getattr(ItemId, f"ExtraItemId_TearLight_{i + 1}"), ItemKind.Tear, ItemWeight.Progression)
                 ] * 3
-                item_defs.extend(self.dgn_tos_defs[i].tears)
+                self.item_defs.extend(self.dgn_tos_defs[i].tears)
 
         add_keys = True
         if self.settings.shuffle_dgn.is_bksanity_enabled() and self.settings.shuffle_dgn.bkeyring:
@@ -976,7 +977,7 @@ class Generator:
                 ItemDef(ItemId.ExtraItemId_NormalKey_Desert, ItemKind.DungeonKey, ItemWeight.Progression)
             ] * 2
 
-            item_defs.extend(
+            self.item_defs.extend(
                 self.dgn_tos_map[TOS_SECTION_2_INDEX].keys
                 + self.dgn_tos_map[TOS_SECTION_4_INDEX].keys
                 + self.dgn_tos_map[TOS_SECTION_5_INDEX].keys
@@ -1013,7 +1014,7 @@ class Generator:
                 ItemDef(ItemId.ExtraItemId_BossKey_Desert, ItemKind.DungeonKey, ItemWeight.Progression)
             ]
 
-            item_defs.extend(
+            self.item_defs.extend(
                 self.dgn_tos_map[TOS_SECTION_3_INDEX].boss_keys
                 + self.dgn_tos_map[TOS_SECTION_5_INDEX].boss_keys
                 + self.dgn_forest_def.boss_keys
@@ -1034,14 +1035,14 @@ class Generator:
         ## apply settings
         for _, shop_items in shop_item_map.items():
             for i in range(self.settings.shuffle.shopsanity):
-                item_defs.append(shop_items[i])
+                self.item_defs.append(shop_items[i])
 
         if self.settings.shuffle.rupeesanity:
             # rupeesanity adds 20 red rupees, 14 blue rupees and 4 big green rupees
             red_rupees = [ItemDef(ItemId.RedRupee, ItemKind.Default, ItemWeight.Normal)] * 20
             blue_rupees = [ItemDef(ItemId.BlueRupee, ItemKind.Default, ItemWeight.Normal)] * 14
             big_rupees = [ItemDef(ItemId.BigGreenRupee, ItemKind.Default, ItemWeight.Normal)] * 4
-            item_defs.extend(red_rupees + blue_rupees + big_rupees)
+            self.item_defs.extend(red_rupees + blue_rupees + big_rupees)
 
         # only add glyphs/sources if we want them shuffled
         if self.settings.shuffle.glyphs_and_sources != "vanilla":
@@ -1063,7 +1064,7 @@ class Generator:
                 ItemDef(ItemId.ExtraItemId_SandSource, ItemKind.Default, ItemWeight.Progression),
             ]
 
-            item_defs.extend(glyphs + sources)
+            self.item_defs.extend(glyphs + sources)
 
         # only add restoration songs if we want them shuffled
         if self.settings.shuffle.duets:
@@ -1074,7 +1075,7 @@ class Generator:
                 ItemDef(ItemId.Unk_28, ItemKind.Default, ItemWeight.Progression),
                 ItemDef(ItemId.Unk_29, ItemKind.Default, ItemWeight.Progression),
             ]
-            item_defs.extend(songs)
+            self.item_defs.extend(songs)
 
         # only add stamp stations if we want them shuffled
         if self.settings.shuffle.stamps:
@@ -1100,10 +1101,10 @@ class Generator:
                 ItemDef(ItemId.ExtraItemId_StampTradingPost, ItemKind.Default, ItemWeight.Priority),
                 ItemDef(ItemId.ExtraItemId_StampIcySpring, ItemKind.Default, ItemWeight.Priority),
             ]
-            item_defs.extend(stamps)
+            self.item_defs.extend(stamps)
 
         if self.settings.shuffle.stamp_book:
-            item_defs.append(ItemDef(ItemId.StampBook, ItemKind.Default, ItemWeight.Priority))
+            self.item_defs.append(ItemDef(ItemId.StampBook, ItemKind.Default, ItemWeight.Priority))
 
         self.passenger_pick_pool = [
             ItemDef(ItemId.ExtraItemId_PassengerAnoukiNoko, ItemKind.PassengerPickUp, ItemWeight.Priority),
@@ -1148,11 +1149,11 @@ class Generator:
         ]
 
         if self.settings.shuffle.passengers == "anywhere":
-            item_defs.extend(self.passenger_pick_pool)
+            self.item_defs.extend(self.passenger_pick_pool)
 
         if self.settings.shuffle.passengers != "remove":
             passenger_dest_pool = [item for item in self.passenger_dest_pool if item is not None]
-            item_defs.extend(passenger_dest_pool)
+            self.item_defs.extend(passenger_dest_pool)
 
         self.cargo_pick_pool = [
             ItemDef(ItemId.ExtraItemId_CargoMegaIce, ItemKind.CargoPickUp, ItemWeight.Progression),
@@ -1177,10 +1178,10 @@ class Generator:
         ]
 
         if self.settings.shuffle.cargo == "anywhere":
-            item_defs.extend(self.cargo_pick_pool)
+            self.item_defs.extend(self.cargo_pick_pool)
 
         if self.settings.shuffle.cargo != "remove":
-            item_defs.extend(self.cargo_dest_pool)
+            self.item_defs.extend(self.cargo_dest_pool)
 
         if self.settings.shuffle.is_rabbitsanity_enabled():
             rabbit_pool: list[ItemDef] = []
@@ -1204,13 +1205,13 @@ class Generator:
             if is_all or "sand" in self.settings.shuffle.rabbitsanity:
                 rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitSand, ItemKind.Rabbit, ItemWeight.Priority)] * factor)
 
-            item_defs.extend(rabbit_pool)
+            self.item_defs.extend(rabbit_pool)
 
         ## create the pools
-        self.progression_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Progression]
-        self.priority_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Priority]
-        self.normal_item_pool = [item_def for item_def in item_defs if item_def.weight == ItemWeight.Normal]
-        self.all_item_pool = item_defs[:]
+        self.progression_item_pool = [item_def for item_def in self.item_defs if item_def.weight == ItemWeight.Progression]
+        self.priority_item_pool = [item_def for item_def in self.item_defs if item_def.weight == ItemWeight.Priority]
+        self.normal_item_pool = [item_def for item_def in self.item_defs if item_def.weight == ItemWeight.Normal]
+        self.all_item_pool = self.item_defs[:]
 
     # seed methods from https://github.com/OoTRandomizer/OoT-Randomizer/blob/2900fedb4a5ccd6937db85ec4f15721556656815/Settings.py#L253-L270
     def sanitize(self, s):
@@ -1276,18 +1277,35 @@ class Generator:
     def add_elem_to_id_lists(self, location: LocationDef, item: ItemDef):
         """Tries to add the item's id to the lists that will be exported in the settings binary"""
 
-        if self.settings.shuffle.passengers == "anywhere":
+        if self.settings.shuffle.passengers == "anywhere" and (
+            location.infos.is_passenger_pick_up or location.infos.is_passenger_at_dest
+        ):
             if location.infos.is_passenger_pick_up:
                 self.passenger_pick_ids.append(item.id.value)
             elif location.infos.is_passenger_at_dest:
                 self.passenger_dest_ids.append(item.id.value)
+            else:
+                raise ValueError("unexpected error")
 
-        if self.settings.shuffle.cargo == "anywhere":
-            if location.infos.is_cargo_pick_up:
-                self.cargo_pick_ids.append(item.id.value)
+        if self.settings.shuffle.cargo == "anywhere" and location.infos.is_cargo_pick_up:
+            self.cargo_pick_ids.append(item.id.value)
 
     def copy_id_lists_to_settings(self):
         """Copies the item id lists to the settings"""
+
+        if self.settings.shuffle.passengers == "anywhere":
+            # see `self.passenger_dest_pool``
+            assert len(self.passenger_dest_ids) == 12, f"len is {len(self.passenger_dest_ids)}"
+            self.passenger_dest_ids.insert(9, 0xFF)  # Passenger_MayscoreMash
+            self.passenger_dest_ids.insert(10, 0xFF)  # Passenger_MayscoreMorris
+            self.passenger_dest_ids.insert(11, 0xFF)  # Passenger_MayscoreYamahiko
+            self.passenger_dest_ids.insert(12, 0xFF)  # Passenger_MayscoreWood
+            self.passenger_dest_ids.insert(15, 0xFF)  # Passenger_BridgeWorkersHomeKenzo
+            self.passenger_dest_ids.insert(16, 0xFF)  # Passenger_TradingPostKenzo
+
+        assert len(self.passenger_pick_ids) == 18, f"len is {len(self.passenger_pick_ids)}"
+        assert len(self.passenger_dest_ids) == 18, f"len is {len(self.passenger_dest_ids)}"
+        assert len(self.cargo_pick_ids) == 7, f"len is {len(self.cargo_pick_ids)}"
 
         self.settings.passenger_pick_ids = self.passenger_pick_ids[:]
         self.settings.passenger_dest_ids = self.passenger_dest_ids[:]
@@ -1526,15 +1544,16 @@ class Generator:
 
                         if entry.is_shop:
                             assert entry.is_shop == node.is_shop
-                            top_left = location.items[0]
-                            middle = location.items[1]
-                            top_right = location.items[2]
-                            bottom_left = location.items[3]
-                            bottom_right = location.items[4]
+                            shopsanity = self.settings.shuffle.shopsanity
+                            top_left = location.items[0].id.value if shopsanity == 1 else 0
+                            middle = location.items[1].id.value if shopsanity == 2 else 0
+                            top_right = location.items[2].id.value if shopsanity == 3 else 0
+                            bottom_left = location.items[3].id.value if shopsanity == 4 else 0
+                            bottom_right = location.items[4].id.value if shopsanity == 5 else 0
 
-                            entry.params[0] = (middle.id.value << 8) | top_left.id.value
-                            entry.params[1] = (bottom_left.id.value << 8) | top_right.id.value
-                            entry.params[2] = bottom_right.id.value
+                            entry.params[0] = (middle << 8) | top_left
+                            entry.params[1] = (bottom_left << 8) | top_right
+                            entry.params[2] = bottom_right
                         elif (
                             (self.settings.shuffle.rupeesanity and entry.id == "RUPE")
                             or (self.settings.shuffle_dgn.is_bksanity_enabled() and entry.id in ["KEYB", "KEYT"])
@@ -1571,7 +1590,7 @@ class Generator:
             if patcher is not None:
                 patcher.ui.out_progress_bar.setValue(round(progress))
 
-            print(f"({progress:.2f}%) Processed", node.name)
+            print(f"({progress:.2f}%) Processed", node.name, flush=True)
 
         # create/update rando.bmg
         for lang in languages:
@@ -1695,8 +1714,118 @@ class Generator:
             path_order_txt.write_text(filedata + "/settings.bin\n")
 
     def shuffle_settings(self):
-        # TODO
-        pass
+        # reset current settings
+        self.settings = Settings.empty(self.settings.seed)
+
+        def get_bool():
+            return True if random.randint(0, 1) == 1 else False
+
+        ### Settings - Shuffle Land
+
+        # Minigames
+        def get_minigame_levels() -> list[str]:
+            levels = []
+            choices = ["easy", "hard", "expert"]
+            random.shuffle(choices)
+            random_max = random.randint(0, len(choices) - 1)
+
+            for i in range(random_max):
+                levels.append(random.choice(choices))
+                choices.remove(levels[i])
+
+            return levels
+
+        self.settings.shuffle.minigames.whip_race = get_minigame_levels()
+        self.settings.shuffle.minigames.pirate_hideout = get_minigame_levels()
+        self.settings.shuffle.minigames.take_em_all_on = get_minigame_levels()
+        self.settings.shuffle.minigames.sword_training = get_bool()
+        self.settings.shuffle.minigames.goron_range = get_bool()
+
+        # Shop Sanity
+        self.settings.shuffle.shopsanity = random.randint(0, 5)
+
+        # Stamps
+        self.settings.shuffle.stamps = get_bool()
+        self.settings.shuffle.stamp_book = get_bool()
+
+        self.settings.shuffle.stamps_rewards.clear()
+        if get_bool():
+            self.settings.shuffle.stamps_rewards.append(10)
+
+        if get_bool():
+            self.settings.shuffle.stamps_rewards.append(15)
+
+        if get_bool():
+            self.settings.shuffle.stamps_rewards.append(20)
+
+        # Misc
+        self.settings.shuffle.rupeesanity = get_bool()
+        self.settings.shuffle.duets = get_bool()
+
+        ### Settings - Shuffle Train
+
+        # Glyphs and Sources
+        modes = self.settings.shuffle.glyphs_and_sources_mode[:]
+        random.shuffle(modes)
+        self.settings.shuffle.glyphs_and_sources = random.choice(modes)
+        self.settings.shuffle.forest_glyph = "startwith" if get_bool() else "anywhere"
+
+        # Rabbits
+        self.settings.shuffle.rabbitsanity.clear()
+        modes = self.settings.shuffle.rabbitsanity_mode[:]
+        random.shuffle(modes)
+        random_max = random.randint(0, len(modes) - 1)
+        for i in range(random_max):
+            self.settings.shuffle.rabbitsanity.append(random.choice(modes))
+            modes.remove(self.settings.shuffle.rabbitsanity[i])
+
+        self.settings.shuffle.rabbitpack = get_bool()
+
+        # Passengers
+        modes = self.settings.shuffle.passengers_mode[:]
+        random.shuffle(modes)
+        self.settings.shuffle.passengers = random.choice(modes)
+
+        # Cargo
+        modes = self.settings.shuffle.cargo_mode[:]
+        random.shuffle(modes)
+        self.settings.shuffle.cargo = random.choice(modes)
+
+        ### Settings - Dungeon Shuffle
+
+        # Key Sanity
+        modes = self.settings.shuffle_dgn.keysanity_mode[:]
+        random.shuffle(modes)
+        self.settings.shuffle_dgn.keysanity = random.choice(modes)
+        self.settings.shuffle_dgn.keyring = get_bool()
+
+        # Boss Key Sanity
+        modes = self.settings.shuffle_dgn.bksanity_mode[:]
+        random.shuffle(modes)
+        self.settings.shuffle_dgn.bksanity = random.choice(modes)
+        self.settings.shuffle_dgn.bkeyring = get_bool()
+
+        # Tower Sections
+        modes = self.settings.shuffle_dgn.tos_sections_mode[:]
+        random.shuffle(modes)
+        self.settings.shuffle_dgn.tos_sections = random.choice(modes)
+
+        # Tear Sanity
+        modes = self.settings.shuffle_dgn.tear_sanity_mode[:]
+        random.shuffle(modes)
+        self.settings.shuffle_dgn.tear_sanity = random.choice(modes)
+        self.settings.shuffle_dgn.tear_ring = get_bool()
+
+        ### Settings - Goal
+
+        # Dungeons
+        self.settings.goal.is_tos_dungeon = get_bool()
+        self.settings.goal.dungeon_amount = random.randint(0, 6 if self.settings.goal.is_tos_dungeon else 5)
+
+        # Dark Realm
+        modes = self.settings.goal.unlock_dark_realm_mode[:]
+        random.shuffle(modes)
+        self.settings.goal.unlock_dark_realm = random.choice(modes)
 
 
 def main():

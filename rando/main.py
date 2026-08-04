@@ -242,7 +242,7 @@ class MainWindow(QTabWidget):
 
         self.ui.gen_combo_preset.setCurrentIndex(1 if len(self.presets) > 0 else 0)
 
-    def apply_preset(self, preset: str | None):
+    def apply_preset(self, preset: str | None, force_custom: bool = True):
         """Updates the settings on the UI following the preset's data"""
 
         if preset == str():
@@ -261,8 +261,10 @@ class MainWindow(QTabWidget):
         ### General
 
         self.ui.gen_string.setText(settings.to_str())
-        self.ui.gen_radio_custom.setChecked(True)
-        self.ui.gen_radio_random.setChecked(False)
+
+        if force_custom:
+            self.ui.gen_radio_custom.setChecked(True)
+            self.ui.gen_radio_random.setChecked(False)
 
         ### Settings - Shuffle Land
 
@@ -576,6 +578,8 @@ class MainWindow(QTabWidget):
             # randomize the settings
             if self.ui.gen_radio_random.isChecked():
                 gen.shuffle_settings()
+                self.live_preset = gen.settings
+                self.apply_preset(None, force_custom=False)
 
             # generate the seed
             self.ui.out_progress_bar.setValue(0)
@@ -607,6 +611,9 @@ class MainWindow(QTabWidget):
         self.save_preset(None)
 
     def do_settings_string_update(self, text: str):
+        if text == str():
+            return
+
         try:
             self.live_preset = Settings.from_str(text)
             self.apply_preset(None)
@@ -617,7 +624,7 @@ class MainWindow(QTabWidget):
         is_custom = self.ui.gen_radio_custom.isChecked()
         self.ui.gen_combo_preset.setEnabled(is_custom)
         self.ui.gen_btn_preset.setEnabled(is_custom)
-        self.ui.gen_string.setEnabled(is_custom)
+        self.ui.gen_string.setReadOnly(not is_custom)
 
         self.ui.minigame_group.setEnabled(is_custom)
         self.ui.stamp_group.setEnabled(is_custom)

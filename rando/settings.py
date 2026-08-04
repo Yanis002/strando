@@ -217,7 +217,7 @@ class ShuffleSettings:
             "grass": 1 << 0,
             "snow": 1 << 1,
             "water": 1 << 2,
-            "mountain": 1 << 3,
+            "fire": 1 << 3,
             "sand": 1 << 4,
             "all": 0x1F,
         }
@@ -430,8 +430,8 @@ class Settings:
         self.cargo_pick_ids: list[int] = []
 
     @staticmethod
-    def empty() -> "Settings":
-        return Settings("Unknown", ShuffleSettings(), ShuffleDungeonSettings(), GoalSettings())
+    def empty(seed: str = "Unknown") -> "Settings":
+        return Settings(seed, ShuffleSettings(), ShuffleDungeonSettings(), GoalSettings())
 
     @staticmethod
     def from_yaml(yaml_path_or_data: Path | dict) -> "Settings":
