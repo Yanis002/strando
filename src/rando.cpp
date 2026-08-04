@@ -1,4 +1,4 @@
-#include "gz.hpp"
+#include "rando.hpp"
 #include "036_MapA5.hpp"
 #include "ItemIdMaps.hpp"
 #include "settings.hpp"
@@ -37,7 +37,7 @@ struct CargoInfos {
 };
 extern CargoInfos sCargoInfos[];
 
-GZ gGZ;
+Rando gRando;
 s32 gCardLockId = -3;
 
 static AdventureFlag_Half sSourceFlags[] = {
@@ -45,7 +45,7 @@ static AdventureFlag_Half sSourceFlags[] = {
     AdventureFlag_ObtainedFireSource,   AdventureFlag_ObtainedDesertSource,
 };
 
-void GZ::Init() {
+void Rando::Init() {
     gCardLockId = OS_GetLockID();
 
     {
@@ -61,9 +61,9 @@ void GZ::Init() {
     }
 }
 
-void GZ::Update() { this->UpdateInputs(); }
+void Rando::Update() { this->UpdateInputs(); }
 
-void GZ::OnGameModeInit() {}
+void Rando::OnGameModeInit() {}
 
 static inline TitleScreenManager* GetTitleScreenManager() { return (TitleScreenManager*)gpCurrentGameModeMgr; }
 
@@ -256,7 +256,7 @@ static PassengerAtDestInfos sPassengerAtDestInfos[Passenger_Max] = {
     },
 };
 
-void GZ::SetAllPassengerFlags() {
+void Rando::SetAllPassengerFlags() {
     for (int i = 0; i < Passenger_Max; i++) {
         PassengerAtDestInfos* pEntry = &sPassengerAtDestInfos[i];
 
@@ -270,7 +270,7 @@ void GZ::SetAllPassengerFlags() {
     }
 }
 
-void GZ::TryGiveItemFromPassengerDestInfos(SceneIndex destSceneIndex) {
+void Rando::TryGiveItemFromPassengerDestInfos(SceneIndex destSceneIndex) {
     for (int i = 0; i < Passenger_Max; i++) {
         PassengerAtDestInfos* pEntry = &sPassengerAtDestInfos[i];
 
@@ -293,7 +293,7 @@ void GZ::TryGiveItemFromPassengerDestInfos(SceneIndex destSceneIndex) {
     }
 }
 
-void GZ::OnGameModeUpdate() {
+void Rando::OnGameModeUpdate() {
     if (this->IsTitleScreen()) {
         // faster title screen
         if (gpCurrentGameModeMgr == NULL) {
@@ -498,7 +498,7 @@ static SceneIndex_Half sCargoTypeToSceneIndex[CargoDelivery_Max] = {
     SceneIndex_f_bridge2, // CargoDelivery_TradingPostDarkOre
 };
 
-void GZ::OnScenePreInit() {
+void Rando::OnScenePreInit() {
     if (this->IsAdventureMode()) {
         EntranceInfo* pNext = &data_027e09a4->mpWarpUnk1->mNextEntrance;
 
@@ -538,7 +538,7 @@ void GZ::OnScenePreInit() {
             }
         }
 
-        // other sections are handled in `GZ::OnScenePostInit`
+        // other sections are handled in `Rando::OnScenePostInit`
         // we only need to prevent loading the scene if we don't have section 1
         // otherwise we are blocked by default by the game, assuming the flag is unset
         if (this->IsOnLand() && gpSettings->GetShuffleDungeonSettings()->tos_sections == ToSSectionsMode_Progressive &&
@@ -584,7 +584,7 @@ void GZ::OnScenePreInit() {
     }
 }
 
-void GZ::OnScenePostInit() {
+void Rando::OnScenePostInit() {
     if (this->IsAdventureMode()) {
         this->ApplyTearsAmounts();
         this->ApplyKeyAmounts();
@@ -605,7 +605,7 @@ void GZ::OnScenePostInit() {
         switch (gpSettings->GetShuffleDungeonSettings()->tos_sections) {
             case ToSSectionsMode_Progressive:
                 // remove the source flag if we don't have the corresponding section flag
-                // (except section 1, see `GZ::OnScenePreInit`)
+                // (except section 1, see `Rando::OnScenePreInit`)
                 for (int i = 0; i < ARRAY_LEN(sSourceFlags); i++) {
                     if (GET_FLAG(data_027e09b8->mAdventureFlags, sSourceFlags[i]) &&
                         !GET_FLAG(data_027e09b8->mAdventureFlags, sToSSectionFlags[i])) {
@@ -664,7 +664,7 @@ int GetTowerSectionFromRoom(int* pIndex) {
     return -1;
 }
 
-void GZ::ApplyTearsAmounts() {
+void Rando::ApplyTearsAmounts() {
     if (data_027e0ce0 != NULL && data_027e0ce0->mUnk_2C != NULL && data_027e09a4 != NULL &&
         data_027e09a4->mpWarpUnk1 != NULL) {
         ItemManager* pItemMgr = data_027e0ce0->mUnk_2C;
@@ -681,7 +681,7 @@ void GZ::ApplyTearsAmounts() {
     }
 }
 
-void GZ::ApplyKeyAmounts() {
+void Rando::ApplyKeyAmounts() {
     if (data_027e0ce0 != NULL && data_027e0ce0->mUnk_2C != NULL && data_027e09a4 != NULL &&
         data_027e09a4->mpWarpUnk1 != NULL) {
         ItemManager* pItemMgr = data_027e0ce0->mUnk_2C;
@@ -738,16 +738,16 @@ void RandoSave::ClearItemQueue() {
     }
 }
 
-RandoSave* GZ::GetCurrentSave() { return &this->mRandoSave[gSaveManager.mUnk_206]; }
+RandoSave* Rando::GetCurrentSave() { return &this->mRandoSave[gSaveManager.mUnk_206]; }
 
-void GZ::Save() {
+void Rando::Save() {
     CardLock lock;
 
     // 0xF5000 is the offset inside the save data, it's unused space we can use
     lock.WriteSave(0xF5000, this->mRandoSave, sizeof(this->mRandoSave));
 }
 
-bool GZ::IsItemInQueue(ItemId itemId) {
+bool Rando::IsItemInQueue(ItemId itemId) {
     RandoSave* pSave = this->GetCurrentSave();
 
     for (int i = 0; i < ARRAY_LEN(pSave->itemQueue); i++) {
@@ -759,7 +759,7 @@ bool GZ::IsItemInQueue(ItemId itemId) {
     return false;
 }
 
-void GZ::TryAddItemToQueue(ItemId itemId) {
+void Rando::TryAddItemToQueue(ItemId itemId) {
     // ignore if the item id is none
     if (itemId == ItemId_None) {
         return;
@@ -772,14 +772,14 @@ void GZ::TryAddItemToQueue(ItemId itemId) {
     }
 }
 
-void GZ::TryAddItemIfNotInQueue(ItemId itemId) {
+void Rando::TryAddItemIfNotInQueue(ItemId itemId) {
     // ignore if the item is already present in the queue
     if (!this->IsItemInQueue(itemId)) {
         this->TryAddItemToQueue(itemId);
     }
 }
 
-void GZ::ProcessItemQueue() {
+void Rando::ProcessItemQueue() {
     // give item if:
     // - not during scene init process
     // - not in a cutscene
@@ -812,7 +812,7 @@ void GZ::ProcessItemQueue() {
     }
 }
 
-void GZ::IncrementTearsAmount(u8 index) {
+void Rando::IncrementTearsAmount(u8 index) {
     RandoSave* pSave = this->GetCurrentSave();
 
     if (gpSettings->GetShuffleDungeonSettings()->tear_ring) {
@@ -878,7 +878,7 @@ ItemId GetKeyFromBossKey(ItemId itemId) {
     return ItemId_None;
 }
 
-void GZ::IncrementKeyAmount(ItemId itemId) {
+void Rando::IncrementKeyAmount(ItemId itemId) {
     RandoSave* pSave = this->GetCurrentSave();
     ShuffleDungeonSettings* pSettings = gpSettings->GetShuffleDungeonSettings();
 
@@ -902,7 +902,7 @@ void GZ::IncrementKeyAmount(ItemId itemId) {
     }
 }
 
-Actor* GZ::FindActor(ActorId actorId) {
+Actor* Rando::FindActor(ActorId actorId) {
     Actor** ppTable = gpActorManager->mActorTable;
     Actor** ppTableEnd = gpActorManager->mActorTableEnd;
 
@@ -919,7 +919,7 @@ Actor* GZ::FindActor(ActorId actorId) {
     return NULL;
 }
 
-MapObject* GZ::FindMapObject(MapObjectId mapObjId) {
+MapObject* Rando::FindMapObject(MapObjectId mapObjId) {
     MapObject** ppTable = gpMapObjManager->mMapObjTable;
     MapObject** ppTableEnd = gpMapObjManager->mMapObjTableEnd;
 
@@ -936,7 +936,7 @@ MapObject* GZ::FindMapObject(MapObjectId mapObjId) {
     return NULL;
 }
 
-bool GZ::IsTowerFinal() {
+bool Rando::IsTowerFinal() {
     if (data_027e09a4 != NULL && data_027e09a4->mpWarpUnk1 != NULL) {
         if (data_027e09a4->mpWarpUnk1->mCurEntrance.sceneIndex == SceneIndex_d_main &&
             data_027e09a4->mpWarpUnk1->mCurEntrance.roomIndex == 35) {
@@ -947,9 +947,9 @@ bool GZ::IsTowerFinal() {
     return false;
 }
 
-bool GZ::CheckAdvFlag(ItemId itemId) { return GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId]); }
+bool Rando::CheckAdvFlag(ItemId itemId) { return GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId]); }
 
-void GZ::SetAdvFlag(ItemId itemId, bool unset) {
+void Rando::SetAdvFlag(ItemId itemId, bool unset) {
     if (unset) {
         UNSET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId]);
     } else {

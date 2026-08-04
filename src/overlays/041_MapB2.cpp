@@ -1,6 +1,6 @@
 #include "036_MapA5.hpp"
 #include "ItemIdMaps.hpp"
-#include "gz.hpp"
+#include "rando.hpp"
 #include "settings.hpp"
 
 #include <Actor/ActorUnkKEYB.hpp>
@@ -15,7 +15,7 @@ bool BossKeyItemGive(ItemId itemId) {
         case BossKeysanityMode_Anywhere:
             if (!GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId])) {
                 // we can't use the give function directly because we're in a blocking interaction
-                gGZ.TryAddItemToQueue(itemId);
+                gRando.TryAddItemToQueue(itemId);
             }
 
             return false;

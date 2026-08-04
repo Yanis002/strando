@@ -9,7 +9,7 @@
 #include <nitro/os.h>
 #include <nitro/reg.h>
 
-extern "C" void GZ_Main();
+extern "C" void Rando_Main();
 
 class StartUpMain : public Game {
     void Run();
@@ -66,5 +66,5 @@ void StartUpMain::Run() {
         func_020132c8();
     } while (gOverlayManager.mLoadedOverlays[OverlaySlot_4] == OverlayIndex_StartUp);
 
-    GZ_Main();
+    Rando_Main();
 }

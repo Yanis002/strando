@@ -1,6 +1,6 @@
 #include "ItemIdMaps.hpp"
 #include "036_MapA5.hpp"
-#include "gz.hpp"
+#include "rando.hpp"
 
 #include <Item/Item.hpp>
 #include <Player/PlayerGet.hpp>

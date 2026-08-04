@@ -1,3 +1,3 @@
 instructions:
   bl:
-    GZ_InitHook: ['0x020C4DD0']
+    Rando_InitHook: ['0x020C4DD0']

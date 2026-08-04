@@ -7,7 +7,7 @@
 
 extern void _ZN4Game19func_ov018_020c48f8Ev(void* ptr);
 extern void FS_LoadOverlay(int param1, int overlayID);
-extern void GZ_Init();
+extern void Rando_Init();
 
 #if !(__INTELLISENSE__ || __clangd__)
 #ifndef RANDO_OVL_ID
@@ -24,9 +24,9 @@ extern void GZ_Init();
 
 #define nOverlay0 (*(unsigned int*)OVERLAY_0_SLOT_ADDR)
 
-// init hook: replace the `func_ov018_020c48f8` call from `GameModeStartUp::vfunc_0C` so we can load and init the gz
-// overlay
-void GZ_InitHook(void* ptr) {
+// init hook: replace the `func_ov018_020c48f8` call from `GameModeStartUp::vfunc_0C`
+// so we can load and init the custom overlay
+void Rando_InitHook(void* ptr) {
     _ZN4Game19func_ov018_020c48f8Ev(ptr);
 
     // make sure overlay 0 has completed loading
@@ -36,5 +36,5 @@ void GZ_InitHook(void* ptr) {
     FS_LoadOverlay(0, RANDO_OVL_ID);
 
     // call the init function
-    GZ_Init();
+    Rando_Init();
 }

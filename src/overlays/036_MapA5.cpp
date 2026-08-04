@@ -1,6 +1,6 @@
 #include "036_MapA5.hpp"
 #include "ItemIdMaps.hpp"
-#include "gz.hpp"
+#include "rando.hpp"
 #include "settings.hpp"
 
 #include <Actor/ActorUnkSHIT.hpp>

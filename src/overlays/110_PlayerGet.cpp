@@ -1,6 +1,6 @@
 #include "036_MapA5.hpp"
 #include "ItemIdMaps.hpp"
-#include "gz.hpp"
+#include "rando.hpp"
 #include "settings.hpp"
 
 #include <MainGame/MiscAdvManager.hpp>
@@ -37,7 +37,7 @@ void SetAdventureFlagsAtPickUp(u8 passenger) {
             SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_GotMonaToRabbitHaven);
             break;
         case Passenger_CastleTownAlfonzo:
-            // has special handling in GZ::OnGameModeUpdate
+            // has special handling in Rando::OnGameModeUpdate
             break;
         case Passenger_SnowRealmFerrus:
             SET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_GotFerrusToOutsetVillage);
@@ -92,7 +92,7 @@ void SetAdventureFlagsAtPickUp(u8 passenger) {
 
 // overriding func_ov110_02184a40 to handle our custom items
 extern "C" bool ItemGiveImpl(Inventory* thisx, ItemId itemId) {
-    RandoSave* pRandoSave = gGZ.GetCurrentSave();
+    RandoSave* pRandoSave = gRando.GetCurrentSave();
     bool setAdvFlag = true;
     int rabbitType = -1;
 
@@ -102,8 +102,8 @@ extern "C" bool ItemGiveImpl(Inventory* thisx, ItemId itemId) {
         case ExtraItemId_TearLight_3:
         case ExtraItemId_TearLight_4:
         case ExtraItemId_TearLight_5:
-            gGZ.IncrementTearsAmount(itemId - ExtraItemId_TearLight_1);
-            gGZ.ApplyTearsAmounts();
+            gRando.IncrementTearsAmount(itemId - ExtraItemId_TearLight_1);
+            gRando.ApplyTearsAmounts();
             break;
         case ExtraItemId_BossKey_3:
         case ExtraItemId_BossKey_5:
@@ -130,8 +130,8 @@ extern "C" bool ItemGiveImpl(Inventory* thisx, ItemId itemId) {
         case ExtraItemId_NormalKey_Marine:
         case ExtraItemId_NormalKey_Mountain:
         case ExtraItemId_NormalKey_Desert:
-            gGZ.IncrementKeyAmount(itemId);
-            gGZ.ApplyKeyAmounts();
+            gRando.IncrementKeyAmount(itemId);
+            gRando.ApplyKeyAmounts();
             break;
         case ExtraItemId_StampTowerOfSpirits:
         case ExtraItemId_StampCastleTown:
@@ -227,7 +227,7 @@ extern "C" bool ItemGiveImpl(Inventory* thisx, ItemId itemId) {
         case ExtraItemId_TowerSection_4:
         case ExtraItemId_TowerSection_5:
             // nothing to do except setting the flag (which is done later)
-            // (see `GZ::OnScenePreInit` and `GZ::OnScenePostInit`)
+            // (see `Rando::OnScenePreInit` and `Rando::OnScenePostInit`)
             break;
         case ItemId_NormalKey:
             thisx->GiveSmallKeys(1);
@@ -337,7 +337,7 @@ extern "C" bool ItemGiveImpl(Inventory* thisx, ItemId itemId) {
         u8 nAmount = 0;
 
         if (itemId >= ExtraItemId_TearLight_1 && itemId <= ExtraItemId_TearLight_5) {
-            nAmount = gGZ.GetTearsAmount(itemId - ExtraItemId_TearLight_1);
+            nAmount = gRando.GetTearsAmount(itemId - ExtraItemId_TearLight_1);
         } else if (itemId == ItemId_TearLight) {
             nAmount = thisx->GetTearsAmount();
         }

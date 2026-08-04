@@ -3,9 +3,6 @@
 #include <Unknown/UnkStruct_027e09a4.hpp>
 #include <types.h>
 
-typedef void (*GZAction)(u32 params);
-typedef bool (*GZCheckCallback)(int itemIndex);
-
 struct RoomIndicesInfos {
     const u8* ptr;
     u8 count;

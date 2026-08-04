@@ -1,4 +1,4 @@
-#include "gz.hpp"
+#include "rando.hpp"
 #include "settings.hpp"
 
 #include <Actor/ActorUnkRB1T.hpp>
@@ -48,7 +48,7 @@ void CustomRabbit::CustomSetFlag() {
     // so we execute the vanilla behavior instead of giving the item
     if (IsRabbitValid(this->mUnk_5C.mParams[1])) {
         RandoTryItemGive(this->mUnk_5C.mParams[0]);
-        SET_FLAG(gGZ.GetCurrentSave()->rabbitFlags, this->mUnk_5C.mParams[1]);
+        SET_FLAG(gRando.GetCurrentSave()->rabbitFlags, this->mUnk_5C.mParams[1]);
     } else {
         SET_FLAG(gSaveManager.GetUnk000()->unk_B78.rabbitFlags, this->mUnk_5C.mParams[1]);
     }
@@ -61,7 +61,7 @@ bool CustomRabbit::CustomSpawnOrKill(unk32 param1) {
     // if the rabbit is not valid it means it's not meant to be shuffled
     // so we execute the vanilla behavior instead of checking if we got the item
     if (IsRabbitValid(this->mUnk_5C.mParams[1])) {
-        if (GET_FLAG(gGZ.GetCurrentSave()->rabbitFlags, this->mUnk_5C.mParams[1])) {
+        if (GET_FLAG(gRando.GetCurrentSave()->rabbitFlags, this->mUnk_5C.mParams[1])) {
             // kill the actor if we already got the item
             this->Kill();
             return true;

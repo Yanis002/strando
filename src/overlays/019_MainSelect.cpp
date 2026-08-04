@@ -20,7 +20,7 @@ static u32 sAdventureFlagsToSet[] = {
 
     AdventureFlag_ObtainedSpiritTrain,
     AdventureFlag_CompletedForestRestorationSong, // skips lost woods
-    AdventureFlag_ObtainedForestGlyph, // allows going to castle town and the tower, see `GZ::OnScenePreInit`
+    AdventureFlag_ObtainedForestGlyph, // allows going to castle town and the tower, see `Rando::OnScenePreInit`
     AdventureFlag_CompletedSwordTutorial,
     AdventureFlag_PlayedHyruleGuardGetLostText,
     AdventureFlag_HyruleGuardMovesAfterCole,

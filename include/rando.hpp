@@ -20,7 +20,7 @@
 
 #define data_027fffa8 (*(u16*)0x027FFFA8)
 
-class GameGZ;
+class GameRando;
 
 typedef ItemId ExtraItemId;
 enum ExtraItemId_ {
@@ -220,7 +220,7 @@ struct RandoSave {
     void ClearItemQueue();
 } __attribute__((aligned(4)));
 
-class GZ {
+class Rando {
   private:
     Input mButtons;
     TouchControl* mpTouchControl;
@@ -229,10 +229,10 @@ class GZ {
     RandoSave mRandoSave[MAX_SAVE_SLOTS];
 
   public:
-    GZ()
+    Rando()
         : mpTouchControl(&data_02049b18.mUnk_06.mTouchControl), mItemQueueIndex(0),
           mSceneLoadState(SceneLoadState_Wait) {}
-    ~GZ() {}
+    ~Rando() {}
 
     u8 GetTearsAmount(u8 index) { return this->GetCurrentSave()->tearsAmounts[index]; }
 
@@ -308,6 +308,6 @@ class GZ {
     void SetAdvFlag(ItemId itemId, bool unset);
 };
 
-extern GZ gGZ;
+extern Rando gRando;
 extern void SetAdventureFlagsAtPickUp(u8 passenger);
 extern bool RandoTryItemGive(ItemId requestedItemId);

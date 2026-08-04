@@ -54,7 +54,7 @@ extern "C" void CustomSpinnitKEYNSpawn(ActorRef* param1, const VecFx32* pPos, Ac
     params.mUnk_1A[0] = param6;
 
     // should always find the right actor since there's only one of them
-    Actor* pMKUR = gGZ.FindActor(ActorId_MKUR);
+    Actor* pMKUR = gRando.FindActor(ActorId_MKUR);
 
     if (pMKUR != NULL) {
         switch (gpSettings->GetShuffleDungeonSettings()->keysanity) {

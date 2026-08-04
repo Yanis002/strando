@@ -1,5 +1,5 @@
-#include "gz_game.hpp"
-#include "gz.hpp"
+#include "game.hpp"
+#include "rando.hpp"
 #include "settings.hpp"
 
 #include <Game/Game.hpp>
@@ -47,10 +47,10 @@ extern "C" void func_02012ee4(const char* path, void* buffer, size_t size, unk32
 void LoadSettings() { func_02012ee4("settings.bin", sSettingsBuf, sizeof(sSettingsBuf), 0, 0); }
 
 extern "C" void Custom_02014995(OverlayManager* thisx, OverlayIndex nextOvlSlot1) {
-    if (gGZ.IsAdventureMode() && nextOvlSlot1 == OverlayIndex_SceneInit) {
-        if (gGZ.GetSceneLoadState() == SceneLoadState_Init) {
-            gGZ.OnScenePreInit();
-            gGZ.SetSceneLoadState(SceneLoadState_Post);
+    if (gRando.IsAdventureMode() && nextOvlSlot1 == OverlayIndex_SceneInit) {
+        if (gRando.GetSceneLoadState() == SceneLoadState_Init) {
+            gRando.OnScenePreInit();
+            gRando.SetSceneLoadState(SceneLoadState_Post);
         }
     }
 
@@ -62,7 +62,7 @@ void CustomGame::Run() {
     LoadSettings();
 
     do {
-        gGZ.Update();
+        gRando.Update();
 
         // initialization of the next game mode
         if (this->createCallback != NULL) {
@@ -88,26 +88,26 @@ void CustomGame::Run() {
 
             data_0204999c.func_02013070();
 
-            gGZ.OnGameModeInit();
+            gRando.OnGameModeInit();
         }
 
         // update of the current game mode
         if (this->mpCurrentGameMode != NULL) {
-            gGZ.OnGameModeUpdate();
+            gRando.OnGameModeUpdate();
 
-            if (gGZ.IsAdventureMode()) {
-                if (gGZ.GetSceneLoadState() == SceneLoadState_Wait) {
+            if (gRando.IsAdventureMode()) {
+                if (gRando.GetSceneLoadState() == SceneLoadState_Wait) {
                     if (data_027e09a4 != NULL && data_027e09a4->mpWarpUnk1 != NULL) {
                         EntranceInfo* pCurrent = &data_027e09a4->mpWarpUnk1->mCurEntrance;
                         EntranceInfo* pNext = &data_027e09a4->mpWarpUnk1->mNextEntrance;
 
                         if (pCurrent->sceneIndex != pNext->sceneIndex || pCurrent->roomIndex != pNext->roomIndex) {
-                            gGZ.SetSceneLoadState(SceneLoadState_Init);
+                            gRando.SetSceneLoadState(SceneLoadState_Init);
                         }
                     }
-                } else if (gGZ.GetSceneLoadState() == SceneLoadState_Post) {
-                    gGZ.OnScenePostInit();
-                    gGZ.SetSceneLoadState(SceneLoadState_Wait);
+                } else if (gRando.GetSceneLoadState() == SceneLoadState_Post) {
+                    gRando.OnScenePostInit();
+                    gRando.SetSceneLoadState(SceneLoadState_Wait);
                 }
             }
 

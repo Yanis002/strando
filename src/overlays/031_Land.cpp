@@ -1,6 +1,6 @@
 #include "036_MapA5.hpp"
 #include "ItemIdMaps.hpp"
-#include "gz.hpp"
+#include "rando.hpp"
 #include "settings.hpp"
 
 #include <Actor/ActorRupee.hpp>
@@ -256,9 +256,9 @@ bool RandoTryItemGive(ItemId requestedItemId) {
     // handle progressive items
     itemId = GetProgressiveItemId(requestedItemId);
 
-    if (!gGZ.IsOnLand()) {
+    if (!gRando.IsOnLand()) {
         // if on not on land just add to the item queue
-        gGZ.TryAddItemToQueue(itemId);
+        gRando.TryAddItemToQueue(itemId);
 
         // show text
         Vec2s local(135, 100);

@@ -1,4 +1,4 @@
-#include "gz.hpp"
+#include "rando.hpp"
 #include "settings.hpp"
 
 #include "Save/AdventureFlags.hpp"
@@ -64,7 +64,7 @@ bool CustomPassengerManager::CustomTryBoardTrain(ActorId actorId, SceneIndex des
             return this->TryBoardTrain(actorId, destSceneIndex, roomIndex);
         case PassengerMode_Abstract:
         case PassengerMode_Anywhere:
-            gGZ.TryAddItemToQueue(GetItemIdFromPassengerPickUpInfos(actorId, destSceneIndex));
+            gRando.TryAddItemToQueue(GetItemIdFromPassengerPickUpInfos(actorId, destSceneIndex));
             break;
         default:
             break;
@@ -105,7 +105,7 @@ void CustomCargoManager::CustomInit(unk32 type, unk32 amount) {
             break;
         case CargoMode_Abstract:
         case CargoMode_Anywhere:
-            gGZ.TryAddItemToQueue(gpSettings->GetCargoPickUpItemId(type));
+            gRando.TryAddItemToQueue(gpSettings->GetCargoPickUpItemId(type));
             break;
         default:
             break;

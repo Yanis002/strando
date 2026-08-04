@@ -1,4 +1,4 @@
-#include "gz.hpp"
+#include "rando.hpp"
 
 #include <Actor/ActorManager.hpp>
 #include <Item/ItemManager.hpp>
@@ -35,9 +35,9 @@ extern "C" void GiveItemDuringCS(ItemManager* thisx, ItemFlag itemFlag) {
     if (actorId != ActorId_None) {
         Actor* pActor = GetActor(actorId); // get anjean actor
 
-        // hacky? idk (see GZ::OnGameModeUpdate)
+        // hacky? idk (see Rando::OnGameModeUpdate)
         if (pActor != NULL) {
-            gGZ.TryAddItemToQueue(pActor->mUnk_5C.mParams[0]);
+            gRando.TryAddItemToQueue(pActor->mUnk_5C.mParams[0]);
         }
     }
 }
