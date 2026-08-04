@@ -600,7 +600,7 @@
        </layout>
       </widget>
      </widget>
-     <widget class="QGroupBox" name="groupBox_2">
+     <widget class="QGroupBox" name="misc_group">
       <property name="geometry">
        <rect>
         <x>170</x>

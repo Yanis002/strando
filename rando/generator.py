@@ -1694,6 +1694,10 @@ class Generator:
         if "/settings.bin" not in filedata:
             path_order_txt.write_text(filedata + "/settings.bin\n")
 
+    def shuffle_settings(self):
+        # TODO
+        pass
+
 
 def main():
     rando = Generator(

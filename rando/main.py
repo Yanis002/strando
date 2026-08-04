@@ -157,6 +157,8 @@ class MainWindow(QTabWidget):
         self.ui.gen_combo_preset.currentIndexChanged.connect(self.do_change_preset)
         self.ui.gen_btn_preset.pressed.connect(self.do_save_preset)
         self.ui.gen_string.textEdited.connect(self.do_settings_string_update)
+        self.ui.gen_radio_custom.clicked.connect(self.do_gen_radio_update)
+        self.ui.gen_radio_random.clicked.connect(self.do_gen_radio_update)
 
         ### Settings
 
@@ -571,6 +573,10 @@ class MainWindow(QTabWidget):
                 gen.create_seed()
                 self.ui.gen_seed.setText(gen.settings.seed)
 
+            # randomize the settings
+            if self.ui.gen_radio_random.isChecked():
+                gen.shuffle_settings()
+
             # generate the seed
             self.ui.out_progress_bar.setValue(0)
             gen.generate_seed(patcher=self)
@@ -606,6 +612,30 @@ class MainWindow(QTabWidget):
             self.apply_preset(None)
         except Exception:
             show_error(self, f"An error occurred\n\n{traceback.format_exc()}")
+
+    def do_gen_radio_update(self):
+        is_custom = self.ui.gen_radio_custom.isChecked()
+        self.ui.gen_combo_preset.setEnabled(is_custom)
+        self.ui.gen_btn_preset.setEnabled(is_custom)
+        self.ui.gen_string.setEnabled(is_custom)
+
+        self.ui.minigame_group.setEnabled(is_custom)
+        self.ui.stamp_group.setEnabled(is_custom)
+        self.ui.shop_group.setEnabled(is_custom)
+        self.ui.misc_group.setEnabled(is_custom)
+
+        self.ui.glyphsrc_group.setEnabled(is_custom)
+        self.ui.rabbits_group.setEnabled(is_custom)
+        self.ui.passenger_group.setEnabled(is_custom)
+        self.ui.cargo_group.setEnabled(is_custom)
+
+        self.ui.dgnshuffle_key_group.setEnabled(is_custom)
+        self.ui.dgnshuffle_bkey_group.setEnabled(is_custom)
+        self.ui.dgnshuffle_sections_group.setEnabled(is_custom)
+        self.ui.dgnshuffle_tear_group.setEnabled(is_custom)
+
+        self.ui.goal_dgn_group.setEnabled(is_custom)
+        self.ui.goal_dark_group.setEnabled(is_custom)
 
     # overrides
 
