@@ -4,6 +4,8 @@
   entrances:
     "Castle Town - Plaza": "True"
     "Hyrule Castle - Main Hall": "True"
+  locations:
+    "Hyrule Castle - Exterior NW Chest": "True"
 
 "Hyrule Castle - Main Hall":
   scene: "f_hyral"
@@ -15,8 +17,6 @@
     "Hyrule Castle - Nursery": "True"
     "Hyrule Castle - 2F Exterior Left Side": "True"
     "Hyrule Castle - 2F Exterior Right Side": "True"
-  locations:
-    "Hyrule Castle - Main Hall Left Chest": "True"
 
 "Hyrule Castle - Ceremony Room":
   scene: "f_hyral"

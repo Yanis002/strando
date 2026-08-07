@@ -95,7 +95,7 @@ class ActorEntry:
         if self.is_shop:
             return [
                 {"Top Left": item_id_to_name[self.params[0] & 0xFF]},
-                {"Middle": item_id_to_name[(self.params[0] >> 8) & 0xFF]},
+                {"Top Middle": item_id_to_name[(self.params[0] >> 8) & 0xFF]},
                 {"Top Right": item_id_to_name[self.params[1] & 0xFF]},
                 {"Bottom Left": item_id_to_name[(self.params[1] >> 8) & 0xFF]},
                 {"Bottom Right": item_id_to_name[self.params[2] & 0xFF]},

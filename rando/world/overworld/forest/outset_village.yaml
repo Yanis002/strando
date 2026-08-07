@@ -15,7 +15,7 @@
   locations:
     "Outset Village - Clear Rocks": "True"
     "Outset Village - Bee Tree": "True"
-    "Outset Village - Stamp Monument": "got_item('Stamp Monument')"
+    "Outset Village - Stamp Monument": "got_item('StampBook')"
     "Outset Village - Buried Chest by Beach Tree": "can_play_song('Discovery')"
     "Outset Village - Buried Chest by Niko's House": "can_play_song('Discovery')"
     "Outset Village - Pick up Joe": "shuffle_passengers && got_source('Ocean')"
@@ -31,8 +31,8 @@
   entrances:
     "Outset Village - Exterior": "True"
   locations:
-    "Outset Village - Ferrus' Force Gem": "got_adv_flag('AlfonzoBoardsTrainToOutset\
-      Village') && got_adv_flag('CompletedFireRestorationSong')"
+    "Outset Village - Ferrus' Force Gem": "got_adv_flag('AlfonzoBoardsTrainToOutsetVillage')\
+     && got_adv_flag('CompletedFireRestorationSong')"
 
 # future proofing for ER
 "Outset Village - Mary's House":

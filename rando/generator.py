@@ -9,6 +9,7 @@ import string
 import struct
 import time
 import yaml
+import ast
 
 from typing import TYPE_CHECKING
 from dataclasses import dataclass
@@ -324,7 +325,7 @@ item_defs: list[ItemDef] = [
     ItemDef(ItemId.FinalTrack, ItemKind.Default, ItemWeight.Progression),
     ItemDef(ItemId.Unk_31, ItemKind.Default, ItemWeight.Progression),
     ItemDef(ItemId.Unk_33, ItemKind.Default, ItemWeight.Progression),
-    ItemDef(ItemId.Unk_34, ItemKind.Default, ItemWeight.Progression),
+    ItemDef(ItemId.TrainWagon, ItemKind.Default, ItemWeight.Progression),
     ItemDef(ItemId.RecruitUniform, ItemKind.Default, ItemWeight.Priority),
     ItemDef(ItemId.PostmasterLetter, ItemKind.Default, ItemWeight.Normal),
     ItemDef(ItemId.QuiverMedium, ItemKind.Default, ItemWeight.Priority),
@@ -640,6 +641,113 @@ class LocationInfo:
         return True
 
 
+# TODO: unfinished
+class RandoNodeVisitor(ast.NodeVisitor):
+    def __init__(self, settings: Settings, items: list[ItemDef], picked_item: ItemDef):
+        self.settings = settings
+        self.items = items
+        self.picked_item = picked_item
+
+    def is_item_in_pool(self, item_id: ItemId):
+        for item in self.items:
+            if item.id == item_id:
+                return True
+
+        return False
+
+    def has_item_count(self, kind: ItemKind, target: int):
+        count = 0
+        for item in self.items:
+            if item.kind == kind:
+                count += 1
+
+        if self.picked_item.kind == kind:
+            count -= 1
+
+        return count >= target
+
+    def eval(self, expr: str) -> bool:
+        if expr.strip().lower() == "true":
+            return True
+
+        expr = expr.replace("&&", "and").replace("||", "or")
+        tree = ast.parse(expr, mode="eval")
+        return self.visit(tree.body)
+
+    def visit_BoolOp(self, node: ast.BoolOp):
+        if isinstance(node.op, ast.And):
+            return all(self.visit(val) for val in node.values)
+        elif isinstance(node.op, ast.Or):
+            return any(self.visit(val) for val in node.values)
+
+    def visit_Call(self, node: ast.Call):
+        if isinstance(node.func, ast.Name):
+            func_name = node.func.id
+        elif isinstance(node.func, ast.Attribute):
+            func_name = node.func.attr
+        else:
+            raise ValueError(f"unexpected func type '{type(node.func)}'")
+
+        args = []
+        for arg in node.args:
+            if isinstance(arg, ast.Constant):
+                args.append(arg.value)
+            elif isinstance(arg, ast.Name):
+                args.append(arg.id)
+            else:
+                args.append(self.visit(arg))
+
+        match func_name:
+            case "got_item":
+                # since the filler assumes we have all items we only have to make sure
+                # the item we wanna place is not the item that is required by the location/entrance
+                return args[0] != self.picked_item.id.name
+            case "got_adv_flag":
+                print("TODO: got_adv_flag")
+                return True
+            case "got_source":
+                return args[0] != self.picked_item.id.name
+            case "is_merch_available":
+                return (
+                    self.is_item_in_pool(ItemId.TrainWagon)
+                    and getattr(ItemId, f"ExtraItemId_Cargo{args[0]}") != self.picked_item.id
+                )
+            case "can_play_song":
+                # we can play a song if we have the pan flute and the picked item isn't the flute or the arg item
+                return self.is_item_in_pool(ItemId.PanFlute) and self.picked_item.id.name not in [
+                    ItemId.PanFlute.name,
+                    args[0],
+                ]
+            case "can_reach_stamps":
+                # picked item can't be the stamp book
+                if self.picked_item.id == ItemId.StampBook:
+                    return False
+
+                if not self.settings.shuffle.stamps:
+                    # TODO: look for reachable entrances
+                    return True
+
+                return self.has_item_count(ItemKind.Stamp, int(str(args[0])))
+
+        return ValueError(f"Unsupported function {repr(func_name)}.")
+
+    def visit_Constant(self, node: ast.Constant):
+        return bool(node.value)
+
+    def visit_UnaryOp(self, node: ast.UnaryOp):
+        if isinstance(node.op, ast.Not):
+            return not self.visit(node.operand)
+
+        raise RuntimeError("not implemented yet")
+
+    def visit_Name(self, node: ast.Name):
+        match node.id:
+            case "shuffle_passengers":
+                return self.settings.shuffle.passengers in ["abstract", "anywhere"]
+
+        raise RuntimeError("not implemented yet")
+
+
 @dataclass
 class EntranceDef:
     name: str
@@ -666,28 +774,46 @@ class LocationDef:
         # need 1-5 for shops
         self.items: list[ItemDef] = []
 
-    def allow_assign(self, settings: Settings, item: ItemDef):
-        # don't process the picked item if the location is a rabbit and the picked item is the rabbit net
-        if item.is_rabbit_net() and self.infos.settings.rabbitsanity is not None:
+    def is_filled(self, size: int = 1):
+        return len(self.items) >= size
+
+    def allow_assign(self, settings: Settings, items: list[ItemDef], picked_item: ItemDef, no_logic: bool = False):
+        # deny if the location is a rabbit and the picked item is the rabbit net
+        if picked_item.is_rabbit_net() and self.infos.settings.rabbitsanity is not None:
             return False
 
-        if item.is_small_key() and settings.shuffle_dgn.keysanity == "dungeon" and not self.is_dungeon:
+        # deny if the item is a small key, keysanity is set to dungeon and the location is not a dungeon
+        if picked_item.is_small_key() and settings.shuffle_dgn.keysanity == "dungeon" and not self.is_dungeon:
             return False
 
-        if item.is_boss_key() and settings.shuffle_dgn.bksanity == "dungeon" and not self.is_dungeon:
+        # deny if the item is a small key, bkeysanity is set to dungeon and the location is not a dungeon
+        if picked_item.is_boss_key() and settings.shuffle_dgn.bksanity == "dungeon" and not self.is_dungeon:
             return False
 
-        if item.is_light_tear():
+        # if the item is a light tear
+        if picked_item.is_light_tear():
+            # and tear sanity is set to dungeon but the location is not a dungeon, deny
             if settings.shuffle_dgn.tear_sanity == "dungeon" and not self.is_dungeon:
                 return False
 
+            # otherwise if the sanity is set to section
             if settings.shuffle_dgn.tear_sanity == "section":
-                tear_section = item.get_tos_section_from_tear()
+                tear_section = picked_item.get_tos_section_from_tear()
 
+                # deny if the loc isn't a dungeon or the section doesn't match
                 if not self.is_dungeon or self.infos.tos_section is None or self.infos.tos_section != tear_section:
                     return False
 
+        # process the location's conditions
+        if not no_logic and not self.resolve_cond(settings, items, picked_item):
+            return False
+
         return True
+
+    def resolve_cond(self, settings: Settings, items: list[ItemDef], picked_item: ItemDef):
+        """main cond eval function, called by `LocationDef.allow_assign`"""
+
+        return RandoNodeVisitor(settings, items, picked_item).eval(self.cond)
 
 
 class LocationNode:
@@ -732,16 +858,25 @@ class LocationNode:
         return new_node
 
     @staticmethod
-    def from_yaml(yaml_path: Path, yaml_infos: Path, settings: Settings):
+    def from_yaml(world_path: Path, yaml_infos: Path, settings: Settings):
         info_entries = LocationInfo.from_yaml(yaml_infos, settings)
 
         nodes: list["LocationNode"] = []
 
-        with yaml_path.open("r") as file:
-            yaml_file: dict[str, dict] = yaml.safe_load(file)
+        def get_nodes(path: Path):
+            with path.open("r") as file:
+                world_data: dict[str, dict] = yaml.safe_load(file)
 
-        for name, data in yaml_file.items():
-            nodes.append(LocationNode.from_data(name, data, info_entries))
+            if world_data is not None:
+                for name, data in world_data.items():
+                    if "scene" in data and "room_index" in data:
+                        nodes.append(LocationNode.from_data(name, data, info_entries))
+
+        if world_path.is_dir():
+            for yaml_path in world_path.rglob("*.yaml"):
+                get_nodes(yaml_path)
+        else:
+            get_nodes(world_path)
 
         return nodes
 
@@ -847,6 +982,50 @@ class DungeonDef:
                 self.locations.append(loc)
 
 
+# TODO: unfinished
+class Playthrough:
+    def __init__(self, settings: Settings, nodes: list[LocationNode]):
+        self.settings = settings
+        self.nodes = nodes
+
+        # sphere num: location name
+        self.spheres: dict[int, list[str]] = {}
+
+    def find_node(self, name: str) -> LocationNode | None:
+        for node in self.nodes:
+            if node.name == name:
+                return node
+        return None
+
+    def is_location_assignable(self, location: LocationDef, items: list[ItemDef], picked_item: ItemDef, size: int):
+        # if the location was already filled
+        if location.is_filled(size):
+            return False
+
+        # if the item can be assigned to this location
+        if location.allow_assign(self.settings, items, picked_item):
+            return True
+
+        return False
+
+    def get_available_locations(self, items: list[ItemDef], picked_item: ItemDef):
+        # get a list of all the possible locations where `picked_item` can be placed
+        # `items` is the list of all items but `picked_item`, it assumes we got all items but this one
+
+        locs: list[LocationDef] = []
+
+        for node in self.nodes:
+            size = self.settings.shuffle.shopsanity if node.is_shop else 1
+
+            for location in node.locations:
+                if self.is_location_assignable(location, items, picked_item, size):
+                    locs.append(location)
+
+        return locs
+
+    # def is_beatable(self):
+
+
 class Generator:
     def __init__(
         self,
@@ -909,7 +1088,7 @@ class Generator:
         ]
         self.dgn_def_map = {i: dgn_def for i, dgn_def in enumerate(self.dgn_defs)}
 
-        self.nodes = LocationNode.from_yaml(world_path, loc_tbl_path, self.settings)
+        self.nodes: list[LocationNode] = LocationNode.from_yaml(world_path, loc_tbl_path, self.settings)
         self.create_item_pool()
 
         # list of item ids that will be exported in the settings binary
@@ -1080,26 +1259,26 @@ class Generator:
         # only add stamp stations if we want them shuffled
         if self.settings.shuffle.stamps:
             stamps = [
-                ItemDef(ItemId.ExtraItemId_StampTowerOfSpirits, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampCastleTown, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampOutsetVillage, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampMayscore, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampWoodlandSanctuary, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampAnoukiVillage, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampSnowfallSanctuary, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampPapuziaVillage, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampIslandSanctuary, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampGoronVillage, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampValleySanctuary, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampDuneSanctuary, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampWoodedTemple, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampBlizzardTemple, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampMarineTemple, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampMountainTemple, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampDesertTemple, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampPirateHideout, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampTradingPost, ItemKind.Default, ItemWeight.Priority),
-                ItemDef(ItemId.ExtraItemId_StampIcySpring, ItemKind.Default, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampTowerOfSpirits, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampCastleTown, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampOutsetVillage, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampMayscore, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampWoodlandSanctuary, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampAnoukiVillage, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampSnowfallSanctuary, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampPapuziaVillage, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampIslandSanctuary, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampGoronVillage, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampValleySanctuary, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampDuneSanctuary, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampWoodedTemple, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampBlizzardTemple, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampMarineTemple, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampMountainTemple, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampDesertTemple, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampPirateHideout, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampTradingPost, ItemKind.Stamp, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_StampIcySpring, ItemKind.Stamp, ItemWeight.Priority),
             ]
             self.item_defs.extend(stamps)
 
@@ -1350,7 +1529,7 @@ class Generator:
 
         self.copy_id_lists_to_settings()
 
-    def assign_items_randomly(self):
+    def assign_items_randomly_no_logic(self):
         all_locations: list[LocationDef] = []
 
         # shuffle nodes, fetch locations and shuffle that list
@@ -1377,15 +1556,12 @@ class Generator:
 
         self.init_id_lists()
 
-        def do_assign(loc: LocationDef, size: int = 1, is_pre_assign: bool = False):
+        def do_assign(loc: LocationDef, size: int = 1):
             while len(loc.items) < size:
                 if len(item_pool) > 0:
                     picked_item = random.choice(item_pool)
 
-                    if is_pre_assign and picked_item.kind != ItemKind.Tear:
-                        continue
-
-                    if not loc.allow_assign(self.settings, picked_item):
+                    if not loc.allow_assign(self.settings, list(), picked_item):
                         continue
 
                     item_pool.remove(picked_item)
@@ -1470,6 +1646,85 @@ class Generator:
 
         assert len(item_pool) == 0
         self.nodes.sort(key=lambda entry: entry.name)
+
+    # TODO: unfinished
+    def fill_restrictive(self, playthrough: Playthrough, item_pool: list[ItemDef], locations: list[LocationDef]):
+        # this assumes we have all items in the pool
+
+        while len(locations) > 0:
+            loc = random.choice(locations)
+            locations.remove(loc)
+            size = self.settings.shuffle.shopsanity if "Shop Keeper" in loc.name else 1
+            print(loc.name, len(loc.items))
+
+            while len(loc.items) < size:
+                picked_item = random.choice(item_pool)
+
+                if playthrough.is_location_assignable(loc, item_pool, picked_item, size):
+                    loc.items.append(picked_item)
+                    item_pool.remove(picked_item)
+                    self.add_elem_to_id_lists(loc, picked_item)
+
+                    if len(item_pool) <= 0:
+                        assert size == 1
+                        break
+
+    # TODO: unfinished
+    def assign_items_randomly(self):
+        all_locations: list[LocationDef] = []
+        shop_locs: list[LocationDef] = []
+        stampreward_locs: list[LocationDef] = []
+
+        # shuffle nodes, fetch locations and shuffle that list
+        random.shuffle(self.nodes)
+        for node in self.nodes:
+            if node.is_shop:
+                shop_locs.extend(node.locations)
+            elif "Niko's House" in node.name:
+                stampreward_locs.extend(node.locations)
+            else:
+                all_locations.extend(node.locations)
+
+        assert len(all_locations) > 0
+        random.shuffle(all_locations)
+        random.shuffle(shop_locs)
+
+        # shuffle prog pool
+        prog_pool = self.progression_item_pool[:]
+        random.shuffle(prog_pool)
+
+        # shuffle prio pool
+        prio_pool = self.priority_item_pool[:]
+        random.shuffle(prio_pool)
+
+        # shuffle normal pool
+        misc_pool = self.normal_item_pool[:]
+        random.shuffle(misc_pool)
+
+        item_pool = prog_pool + prio_pool + misc_pool
+        random.shuffle(item_pool)
+
+        self.init_id_lists()
+
+        playthrough = Playthrough(self.settings, self.nodes)
+
+        # starting with stamps to make sure we have all stamps when setting the 20 stamp reward item
+        if len(stampreward_locs) > 0:
+            stampreward_locs.sort(key=lambda loc: loc.name)
+            stampreward_locs.reverse()
+
+            if "Book" in stampreward_locs[0].name:
+                loc = stampreward_locs.pop(0)
+                stampreward_locs.append(loc)
+
+            self.fill_restrictive(playthrough, item_pool, stampreward_locs)
+
+        # then we handle shops
+        if len(shop_locs) > 0:
+            self.fill_restrictive(playthrough, item_pool, shop_locs)
+
+        # finally the other locations (wip)
+        self.fill_restrictive(playthrough, item_pool, all_locations)
 
     def get_offset(self, data: bytes, magic: bytes):
         try:
@@ -1607,7 +1862,7 @@ class Generator:
 
         spoiler_log.export(self.settings)
 
-    def generate_seed(self, patcher: "MainWindow" | None = None):
+    def generate_seed(self, patcher: "MainWindow" | None = None, no_logic: bool = False):
         initial_time = time.time()
         print(
             f"Randomizing with {len(self.progression_item_pool)} progression items, {len(self.priority_item_pool)} priority items and {len(self.normal_item_pool)} remaining items..."
@@ -1616,7 +1871,11 @@ class Generator:
         # 2. assign the items
         if self.seed_log is None:
             prev_time = time.time()
-            self.assign_items_randomly()
+
+            if no_logic:
+                self.assign_items_randomly_no_logic()
+            else:
+                self.assign_items_randomly()
             print(f"Items assigned successfully in {time.time() - prev_time:.3f}s!")
 
         self.patch_rom(patcher)
@@ -1832,10 +2091,10 @@ def main():
     rando = Generator(
         "eur",
         Path("rando/presets/default.yaml"),
-        Path("rando/test/test_world.yaml"),
+        Path("rando/world/"),
         Path("rando/data/location_table.yaml"),
         Path("extract").resolve(),
-        Path("output/").resolve(),
+        Path("rando/output/").resolve(),
         # plando mode
         # Path("output/seed.yaml"),
     )

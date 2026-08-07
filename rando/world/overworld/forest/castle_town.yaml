@@ -53,14 +53,11 @@
 "Castle Town - Shop":
   scene: "f_htown"
   room_index: 10
+  is_shop: true
   entrances:
     "Castle Town - Plaza": "True"
   locations:
-    "Castle Town - Shop Top Left": "True"
-    "Castle Town - Shop Top Middle": "True"
-    "Castle Town - Shop Top Right": "True"
-    "Castle Town - Shop Bottom Left": "True"
-    "Castle Town - Shop Bottom Right": "True"
+    "Castle Town - Shop Keeper": "True"
 
 "Castle Town - Mona's House":
   scene: "f_htown"

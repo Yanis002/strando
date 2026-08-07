@@ -68,7 +68,7 @@ class ItemId(IntEnum):
     Unk_31 = 31  # 0x1F
     TrainCannon = 32  # 0x20
     Unk_33 = 33  # 0x21
-    Unk_34 = 34  # 0x22
+    TrainWagon = 34  # 0x22
     ForceGem_35 = 35  # 0x23
     ForceGem_36 = 36  # 0x24
     ForceGem_37 = 37  # 0x25
@@ -298,7 +298,7 @@ item_id_to_name = {
     ItemId.Unk_31.value: "Spirit Train",
     ItemId.TrainCannon.value: "Train's Cannon",
     ItemId.Unk_33.value: "Spirit Train's Car",
-    ItemId.Unk_34.value: "Train's Wagon",
+    ItemId.TrainWagon.value: "Train's Wagon",
     ItemId.ForceGem_35.value: "Force Gem 35",
     ItemId.ForceGem_36.value: "Force Gem 36",
     ItemId.ForceGem_37.value: "Force Gem 37",
@@ -478,6 +478,7 @@ class ItemKind(IntEnum):
     Rabbit = 7
     Tear = 8
     DungeonKey = 9
+    Stamp = 10
 
 
 class ItemWeight(IntEnum):
@@ -1660,7 +1661,7 @@ class DungeonKey(IntEnum):
 
 shop_item_positions = [
     "Top Left",
-    "Middle",
+    "Top Middle",
     "Top Right",
     "Bottom Left",
     "Bottom Right",
