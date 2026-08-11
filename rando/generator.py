@@ -42,6 +42,8 @@ TOS_SECTION_4_INDEX = 3
 TOS_SECTION_5_INDEX = 4
 TOS_SECTION_6_INDEX = 5
 
+IS_DEBUG = True
+
 
 @dataclass
 class ActorEntry:
@@ -657,6 +659,9 @@ class LocationInfo:
 
         return True
 
+    def get_letter_type(self):
+        return self.letter_type - 3 if self.letter_type >= 14 else self.letter_type
+
 
 # TODO: unfinished
 class RandoNodeVisitor(ast.NodeVisitor):
@@ -1030,7 +1035,7 @@ class Playthrough:
             return False
 
         # if the item can be assigned to this location
-        if location.allow_assign(self.settings, items, picked_item):
+        if location.allow_assign(self.settings, items, picked_item, no_logic=IS_DEBUG):
             return True
 
         return False
@@ -1123,7 +1128,7 @@ class Generator:
         self.passenger_pick_ids: list[int] = []
         self.passenger_dest_ids: list[int] = []
         self.cargo_pick_ids: list[int] = []
-        self.letter_ids: list[int] = [-1] * 17
+        self.letter_ids: list[int] = [0xFF] * 17
 
         # will assign items from the seed log if it's set
         # we can't do it earlier since we need the nodes and the item pool
@@ -1510,9 +1515,6 @@ class Generator:
         if self.settings.shuffle.cargo != "anywhere":
             self.cargo_pick_ids = [item.id.value for item in self.cargo_pick_pool]
 
-        if self.settings.shuffle.letters != "off":
-            self.letter_ids.clear()
-
     def add_elem_to_id_lists(self, location: LocationDef, item: ItemDef):
         """Tries to add the item's id to the lists that will be exported in the settings binary"""
 
@@ -1530,8 +1532,8 @@ class Generator:
             self.cargo_pick_ids.append(item.id.value)
 
         if self.settings.shuffle.letters != "off" and location.infos.is_letter:
-            assert location.infos.letter_type > -1, "unexpected error"
-            self.letter_ids[location.infos.letter_type] = item.id.value
+            assert location.infos.get_letter_type() > -1, "unexpected error"
+            self.letter_ids[location.infos.get_letter_type()] = item.id.value
 
     def copy_id_lists_to_settings(self):
         """Copies the item id lists to the settings"""
@@ -1549,7 +1551,7 @@ class Generator:
         assert len(self.passenger_pick_ids) == 18, f"len is {len(self.passenger_pick_ids)}"
         assert len(self.passenger_dest_ids) == 18, f"len is {len(self.passenger_dest_ids)}"
         assert len(self.cargo_pick_ids) == 7, f"len is {len(self.cargo_pick_ids)}"
-        assert len(self.letter_ids) == 7, f"len is {len(self.letter_ids)}"
+        assert len(self.letter_ids) == 17, f"len is {len(self.letter_ids)}"
 
         self.settings.passenger_pick_ids = self.passenger_pick_ids[:]
         self.settings.passenger_dest_ids = self.passenger_dest_ids[:]
@@ -1627,7 +1629,7 @@ class Generator:
                 if len(item_pool) > 0:
                     picked_item = random.choice(item_pool)
 
-                    if not loc.allow_assign(self.settings, list(), picked_item):
+                    if not loc.allow_assign(self.settings, list(), picked_item, no_logic=IS_DEBUG):
                         continue
 
                     item_pool.remove(picked_item)
@@ -2004,16 +2006,16 @@ class Generator:
             fake_str = prefix + item_id_to_name[i] + suffix + "!"
 
             if len(fake_str) > 26:
-                msg_parts = [prefix + "\n", str(RED), item_id_to_name[i], suffix, str(WHITE), "!"]
+                msg_parts = [prefix + "\n", RED, item_id_to_name[i], suffix, WHITE, "!"]
             else:
-                msg_parts = [prefix, str(RED), item_id_to_name[i], suffix, str(WHITE), "!"]
+                msg_parts = [prefix, RED, item_id_to_name[i], suffix, WHITE, "!"]
 
-            msg = bmg.Message(INFO, msg_parts)
+            msg = bmg.Message(INFO, msg_parts)  # ty: ignore[invalid-argument-type]
             msg_list.append(msg)
 
         for i in range(0, ITEM_MAX):
-            msg_parts = [str(RED), item_id_to_name[i], str(WHITE)]
-            msg = bmg.Message(INFO, msg_parts)
+            msg_parts = [RED, item_id_to_name[i], WHITE]
+            msg = bmg.Message(INFO, msg_parts)  # ty: ignore[invalid-argument-type]
             msg_list.append(msg)
 
         # print("Train item message at index", len(msg_list), "for", lang)
@@ -2161,7 +2163,7 @@ def main():
     rando = Generator(
         "eur",
         Path("rando/presets/default.yaml"),
-        Path("rando/world/"),
+        Path("rando/test/test_world.yaml" if IS_DEBUG else "rando/world/"),
         Path("rando/data/location_table.yaml"),
         Path("extract").resolve(),
         Path("rando/output/").resolve(),
@@ -2169,7 +2171,7 @@ def main():
         # Path("output/seed.yaml"),
     )
 
-    rando.generate_seed()
+    rando.generate_seed(no_logic=IS_DEBUG)
     rando.export_settings()
 
 

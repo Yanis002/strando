@@ -289,7 +289,7 @@ class Rando {
 
     bool IsCourseExec() { return gOverlayManager.mLoadedOverlays[OverlaySlot_2] == OverlayIndex_CourseExec; }
 
-    bool IsMapC3() { return gOverlayManager.mLoadedOverlays[OverlaySlot_13] == OverlayIndex_MapC3; }
+    bool IsMapC3() { return gOverlayManager.mLoadedOverlays[OverlaySlot_15] == OverlayIndex_MapC3; }
 
     // global init
     void Init();
