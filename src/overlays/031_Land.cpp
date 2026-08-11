@@ -279,7 +279,8 @@ bool RandoTryItemGive(ItemId requestedItemId) {
                 doDefault = false;
             }
         } else if (requestedItemId == ItemId_CarbenLetter) {
-            itemId = gpSettings->GetLetterItemId(LetterType_ReceivedCarbens);
+            // -3 because of the battle mode letters
+            itemId = gpSettings->GetLetterItemId(LetterType_ReceivedCarbens - 3);
             doDefault = false;
         } else if (requestedItemId == ItemId_LinebeckLetter) {
             itemId = gpSettings->GetLetterItemId(LetterType_ObtainedLinebecks);
