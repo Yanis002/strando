@@ -970,10 +970,10 @@ class SeedLog:
             yaml_file: dict[str, dict] = yaml.safe_load(file)
 
         settings = Settings.from_yaml(yaml_file["settings"])
-        yaml_file.pop("settings")
-
         settings_string = settings.to_str()
         assert yaml_file["settings"]["string"] == settings_string
+        yaml_file.pop("settings")
+
         new_log = SeedLog(yaml_path.with_stem(f"spoiler_{settings.seed}_parsed"), settings.seed, settings_string, yaml_file)
         return new_log, settings
 
@@ -1571,6 +1571,13 @@ class Generator:
         def strip_name(name: str):
             if name.endswith(" Rabbit Pack"):
                 return name.removesuffix(" Pack")
+
+            if name.endswith(" Key Ring"):
+                return name.removesuffix(" Ring")
+
+            if name.endswith(" Light Pack"):
+                return name.removesuffix(" Pack")
+
             return name
 
         self.init_id_lists()
@@ -1872,10 +1879,10 @@ class Generator:
                         if entry.is_shop:
                             assert entry.is_shop == node.is_shop
                             shopsanity = self.settings.shuffle.shopsanity
-                            top_left = location.items[0].id.value if shopsanity == 1 else 0
-                            middle = location.items[1].id.value if shopsanity == 2 else 0
-                            top_right = location.items[2].id.value if shopsanity == 3 else 0
-                            bottom_left = location.items[3].id.value if shopsanity == 4 else 0
+                            top_left = location.items[0].id.value if shopsanity >= 1 else 0
+                            middle = location.items[1].id.value if shopsanity >= 2 else 0
+                            top_right = location.items[2].id.value if shopsanity >= 3 else 0
+                            bottom_left = location.items[3].id.value if shopsanity >= 4 else 0
                             bottom_right = location.items[4].id.value if shopsanity == 5 else 0
 
                             entry.params[0] = (middle << 8) | top_left
@@ -2168,7 +2175,7 @@ def main():
         Path("extract").resolve(),
         Path("rando/output/").resolve(),
         # plando mode
-        # Path("output/seed.yaml"),
+        # Path("rando/output/spoiler_P49WCEPQFD.yaml"),
     )
 
     rando.generate_seed(no_logic=IS_DEBUG)
