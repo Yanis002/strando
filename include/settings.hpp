@@ -3,6 +3,7 @@
 #include "rando.hpp"
 
 #include <MainGame/CargoManager.hpp>
+#include <MainGame/MiscAdvManager.hpp>
 #include <mem.h>
 #include <types.h>
 
@@ -47,6 +48,12 @@ enum RabbitMode_ {
     RabbitMode_All = RabbitMode_Grass | RabbitMode_Snow | RabbitMode_Water | RabbitMode_Mountain | RabbitMode_Sand,
 };
 
+enum LetterMode_ {
+    LetterMode_Off,
+    LetterMode_On,
+    LetterMode_Beedle,
+};
+
 struct ShuffleSettings {
     u8 shopsanity;
     bool rupeesanity;
@@ -59,6 +66,7 @@ struct ShuffleSettings {
     bool stamps;
     u8 rabbitsanity;
     bool rabbitpack;
+    u8 letters;
 
     ShuffleSettings() { memset(this, 0, sizeof(ShuffleSettings)); }
 };
@@ -128,6 +136,7 @@ class Settings {
     u8 mPassengerPickUpIds[Passenger_Max]; // passenger pick up item ids
     u8 mPassengerAtDestIds[Passenger_Max]; // passenger destination item ids
     u8 mCargoPickUpIds[CargoType_Max]; // cargo pick up item ids
+    u8 mLetterIds[LetterType_Max - 3]; // letter item ids (excluding 3 letters from battle mode)
 
   public:
     Settings();
@@ -138,6 +147,7 @@ class Settings {
     u8 GetPassengerPickUpItemId(u8 passenger) { return this->mPassengerPickUpIds[passenger]; }
     u8 GetPassengerAtDestItemId(u8 passenger) { return this->mPassengerAtDestIds[passenger]; }
     u8 GetCargoPickUpItemId(u8 cargo) { return this->mCargoPickUpIds[cargo]; }
+    u8 GetLetterItemId(u8 letterType) { return this->mLetterIds[letterType]; }
 };
 
 extern Settings* gpSettings;

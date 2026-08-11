@@ -217,210 +217,245 @@ u32 gGetItemMap[] = {
     GIModel_dummy, // ExtraItemId_TowerSection_3
     GIModel_dummy, // ExtraItemId_TowerSection_4
     GIModel_dummy, // ExtraItemId_TowerSection_5
+
+    GIModel_ptmL, // ExtraItemId_LetterMetPostmanFirst
+    GIModel_ptmL, // ExtraItemId_LetterZeldas
+    GIModel_ptmL, // ExtraItemId_LetterAlfonzos
+    GIModel_ptmL, // ExtraItemId_LetterRussells
+    GIModel_ptmL, // ExtraItemId_LetterLinebecks
+    GIModel_ptmL, // ExtraItemId_LetterBeedlesFirst
+    GIModel_ptmL, // ExtraItemId_LetterBeedleClubCardLetter
+    GIModel_ptmL, // ExtraItemId_LetterBeedleSilverCardLetter
+    GIModel_ptmL, // ExtraItemId_LetterBeedleGoldCardLetter
+    GIModel_ptmL, // ExtraItemId_LetterBeedlePlatinumCardLetter
+    GIModel_ptmL, // ExtraItemId_LetterBeedleDiamondCardLetter
+    GIModel_ptmL, // ExtraItemId_LetterCarbens
+    GIModel_ptmL, // ExtraItemId_LetterNikos
+    GIModel_ptmL, // ExtraItemId_LetterFerrus1
+    GIModel_ptmL, // ExtraItemId_LetterFerrus2
+    GIModel_ptmL, // ExtraItemId_LetterFerrus3
+    GIModel_ptmL, // ExtraItemId_LetterKagorons
 };
 
 // BMG IDs
 u32 gBMGMap[] = {
-    MSG(ItemId_Nothing), // ItemId_Nothing
-    MSG(ItemId_NormalShield), // ItemId_NormalShield
-    MSG(ItemId_NormalSword), // ItemId_NormalSword
-    MSG(ItemId_Whirlwind), // ItemId_Whirlwind
-    MSG(ItemId_BombBag), // ItemId_BombBag
-    MSG(ItemId_NormalBow), // ItemId_NormalBow
-    MSG(ItemId_Boomerang), // ItemId_Boomerang
-    MSG(ItemId_Whip), // ItemId_Whip
-    MSG(ItemId_SandRod), // ItemId_SandRod
-    MSG(ItemId_9), // ItemId_9
-    MSG(ItemId_NormalKey), // ItemId_NormalKey
-    MSG(ItemId_BossKey), // ItemId_BossKey
-    MSG(ItemId_GreenRupee), // ItemId_GreenRupee
-    MSG(ItemId_BlueRupee), // ItemId_BlueRupee
-    MSG(ItemId_RedRupee), // ItemId_RedRupee
-    MSG(ItemId_BigGreenRupee), // ItemId_BigGreenRupee
-    MSG(ItemId_BigRedRupee), // ItemId_BigRedRupee
-    MSG(ItemId_BigGoldRupee), // ItemId_BigGoldRupee
-    MSG(ItemId_ForceGem_18), // ItemId_ForceGem_18
-    MSG(ItemId_ForceGem_19), // ItemId_ForceGem_19
-    MSG(ItemId_ForceGem_20), // ItemId_ForceGem_20
-    MSG(ItemId_ForestGlyph), // ItemId_ForestGlyph
-    MSG(ItemId_SnowGlyph), // ItemId_SnowGlyph
-    MSG(ItemId_OceanGlyph), // ItemId_OceanGlyph
-    MSG(ItemId_FireGlyph), // ItemId_FireGlyph
-    MSG(ItemId_RestoredForestGlyph), // ItemId_RestoredForestGlyph
-    MSG(ItemId_RestoredSnowGlyph), // ItemId_RestoredSnowGlyph
-    MSG(ItemId_RestoredOceanGlyph), // ItemId_RestoredOceanGlyph
-    MSG(ItemId_RestoredFireGlyph), // ItemId_RestoredFireGlyph
-    MSG(ItemId_RestoredDesertOceanGlyph), // ItemId_RestoredDesertOceanGlyph
-    MSG(ItemId_FinalTrack), // ItemId_FinalTrack
-    MSG(ItemId_SpiritTrain), // ItemId_SpiritTrain
-    MSG(ItemId_TrainCannon), // ItemId_TrainCannon
-    MSG(ItemId_SpiritTrainCar), // ItemId_SpiritTrainCar
-    MSG(ItemId_TrainWagon), // ItemId_TrainWagon
-    MSG(ItemId_ForceGem_35), // ItemId_ForceGem_35
-    MSG(ItemId_ForceGem_36), // ItemId_ForceGem_36
-    MSG(ItemId_ForceGem_37), // ItemId_ForceGem_37
-    MSG(ItemId_RecruitUniform), // ItemId_RecruitUniform
-    MSG(ItemId_PostmasterLetter), // ItemId_PostmasterLetter
-    MSG(ItemId_HeartContainer), // ItemId_HeartContainer
-    MSG(ItemId_QuiverMedium), // ItemId_QuiverMedium
-    MSG(ItemId_BombBagMedium), // ItemId_BombBagMedium
-    MSG(ItemId_ForceGem_43), // ItemId_ForceGem_43
-    MSG(ItemId_ForceGem_44), // ItemId_ForceGem_44
-    MSG(ItemId_ForceGem_45), // ItemId_ForceGem_45
-    MSG(ItemId_ForceGem_46), // ItemId_ForceGem_46
-    MSG(ItemId_ForceGem_47), // ItemId_ForceGem_47
-    MSG(ItemId_ForceGem_48), // ItemId_ForceGem_48
-    MSG(ItemId_ForceGem_49), // ItemId_ForceGem_49
-    MSG(ItemId_ForceGem_50), // ItemId_ForceGem_50
-    MSG(ItemId_ForceGem_51), // ItemId_ForceGem_51
-    MSG(ItemId_ForceGem_52), // ItemId_ForceGem_52
-    MSG(ItemId_ForceGem_53), // ItemId_ForceGem_53
-    MSG(ItemId_ForceGem_54), // ItemId_ForceGem_54
-    MSG(ItemId_ForceGem_55), // ItemId_ForceGem_55
-    MSG(ItemId_ForceGem_56), // ItemId_ForceGem_56
-    MSG(ItemId_ForceGem_57), // ItemId_ForceGem_57
-    MSG(ItemId_ForceGem_58), // ItemId_ForceGem_58
-    MSG(ItemId_ForceGem_59), // ItemId_ForceGem_59
-    MSG(ItemId_ForceGem_60), // ItemId_ForceGem_60
-    MSG(ItemId_ForceGem_61), // ItemId_ForceGem_61
-    MSG(ItemId_PanFlute), // ItemId_PanFlute
-    MSG(ItemId_StampBook), // ItemId_StampBook
-    MSG(ItemId_LightBow), // ItemId_LightBow
-    MSG(ItemId_LokomoSword), // ItemId_LokomoSword
-    MSG(ItemId_TenPriceCard), // ItemId_TenPriceCard
-    MSG(ItemId_RedPotion), // ItemId_RedPotion
-    MSG(ItemId_PurplePotion), // ItemId_PurplePotion
-    MSG(ItemId_YellowPotion), // ItemId_YellowPotion
-    MSG(ItemId_DemonFossil), // ItemId_DemonFossil
-    MSG(ItemId_StalfosSkull), // ItemId_StalfosSkull
-    MSG(ItemId_StarFragment), // ItemId_StarFragment
-    MSG(ItemId_BeeLarvae), // ItemId_BeeLarvae
-    MSG(ItemId_WoodHeart), // ItemId_WoodHeart
-    MSG(ItemId_DarkPearlLoop), // ItemId_DarkPearlLoop
-    MSG(ItemId_WhitePearlLoop), // ItemId_WhitePearlLoop
-    MSG(ItemId_RutoCrown), // ItemId_RutoCrown
-    MSG(ItemId_DragonScale), // ItemId_DragonScale
-    MSG(ItemId_PirateNecklace), // ItemId_PirateNecklace
-    MSG(ItemId_PalaceDish), // ItemId_PalaceDish
-    MSG(ItemId_GoronAmber), // ItemId_GoronAmber
-    MSG(ItemId_MysticJade), // ItemId_MysticJade
-    MSG(ItemId_AncientCoin), // ItemId_AncientCoin
-    MSG(ItemId_PricelessStone), // ItemId_PricelessStone
-    MSG(ItemId_RegalRing), // ItemId_RegalRing
-    MSG(ItemId_ArrowsRefill), // ItemId_ArrowsRefill
-    MSG(ItemId_BombsRefill), // ItemId_BombsRefill
-    MSG(ItemId_SoldOutSign), // ItemId_SoldOutSign
-    MSG(ItemId_AncientShield), // ItemId_AncientShield
-    MSG(ItemId_QuiverLarge), // ItemId_QuiverLarge
-    MSG(ItemId_BombBagLarge), // ItemId_BombBagLarge
-    MSG(ItemId_RandCommonTreasure), // ItemId_RandCommonTreasure
-    MSG(ItemId_RandUncommonTreasure), // ItemId_RandUncommonTreasure
-    MSG(ItemId_RandRareTreasure), // ItemId_RandRareTreasure
-    MSG(ItemId_RandLegendaryTreasure), // ItemId_RandLegendaryTreasure
-    MSG(ItemId_TearLight), // ItemId_TearLight
-    MSG(ItemId_LightCompass), // ItemId_LightCompass
-    MSG(ItemId_ScrollSpinAttack), // ItemId_ScrollSpinAttack
-    MSG(ItemId_ScrollBeam), // ItemId_ScrollBeam
-    MSG(ItemId_LinebeckLetter), // ItemId_LinebeckLetter
-    MSG(ItemId_PanFluteSong_101), // ItemId_PanFluteSong_101
-    MSG(ItemId_PanFluteSong_102), // ItemId_PanFluteSong_102
-    MSG(ItemId_PanFluteSong_103), // ItemId_PanFluteSong_103
-    MSG(ItemId_PanFluteSong_104), // ItemId_PanFluteSong_104
-    MSG(ItemId_PanFluteSong_105), // ItemId_PanFluteSong_105
-    MSG(ItemId_RabbitNet), // ItemId_RabbitNet
-    MSG(ItemId_BeedleCard), // ItemId_BeedleCard
-    MSG(ItemId_SilverCard), // ItemId_SilverCard
-    MSG(ItemId_GoldCard), // ItemId_GoldCard
-    MSG(ItemId_PlatinumCard), // ItemId_PlatinumCard
-    MSG(ItemId_DiamondCard), // ItemId_DiamondCard
-    MSG(ItemId_FreebieCard), // ItemId_FreebieCard
-    MSG(ItemId_QuintupleCard), // ItemId_QuintupleCard
-    MSG(ItemId_CarbenLetter), // ItemId_CarbenLetter
-    MSG(ItemId_RecruitUniform2), // ItemId_RecruitUniform2
-    MSG(ItemId_EngineerUniform), // ItemId_EngineerUniform
+    MSG(ItemId_Nothing),
+    MSG(ItemId_NormalShield),
+    MSG(ItemId_NormalSword),
+    MSG(ItemId_Whirlwind),
+    MSG(ItemId_BombBag),
+    MSG(ItemId_NormalBow),
+    MSG(ItemId_Boomerang),
+    MSG(ItemId_Whip),
+    MSG(ItemId_SandRod),
+    MSG(ItemId_9),
+    MSG(ItemId_NormalKey),
+    MSG(ItemId_BossKey),
+    MSG(ItemId_GreenRupee),
+    MSG(ItemId_BlueRupee),
+    MSG(ItemId_RedRupee),
+    MSG(ItemId_BigGreenRupee),
+    MSG(ItemId_BigRedRupee),
+    MSG(ItemId_BigGoldRupee),
+    MSG(ItemId_ForceGem_18),
+    MSG(ItemId_ForceGem_19),
+    MSG(ItemId_ForceGem_20),
+    MSG(ItemId_ForestGlyph),
+    MSG(ItemId_SnowGlyph),
+    MSG(ItemId_OceanGlyph),
+    MSG(ItemId_FireGlyph),
+    MSG(ItemId_RestoredForestGlyph),
+    MSG(ItemId_RestoredSnowGlyph),
+    MSG(ItemId_RestoredOceanGlyph),
+    MSG(ItemId_RestoredFireGlyph),
+    MSG(ItemId_RestoredDesertOceanGlyph),
+    MSG(ItemId_FinalTrack),
+    MSG(ItemId_SpiritTrain),
+    MSG(ItemId_TrainCannon),
+    MSG(ItemId_SpiritTrainCar),
+    MSG(ItemId_TrainWagon),
+    MSG(ItemId_ForceGem_35),
+    MSG(ItemId_ForceGem_36),
+    MSG(ItemId_ForceGem_37),
+    MSG(ItemId_RecruitUniform),
+    MSG(ItemId_PostmasterLetter),
+    MSG(ItemId_HeartContainer),
+    MSG(ItemId_QuiverMedium),
+    MSG(ItemId_BombBagMedium),
+    MSG(ItemId_ForceGem_43),
+    MSG(ItemId_ForceGem_44),
+    MSG(ItemId_ForceGem_45),
+    MSG(ItemId_ForceGem_46),
+    MSG(ItemId_ForceGem_47),
+    MSG(ItemId_ForceGem_48),
+    MSG(ItemId_ForceGem_49),
+    MSG(ItemId_ForceGem_50),
+    MSG(ItemId_ForceGem_51),
+    MSG(ItemId_ForceGem_52),
+    MSG(ItemId_ForceGem_53),
+    MSG(ItemId_ForceGem_54),
+    MSG(ItemId_ForceGem_55),
+    MSG(ItemId_ForceGem_56),
+    MSG(ItemId_ForceGem_57),
+    MSG(ItemId_ForceGem_58),
+    MSG(ItemId_ForceGem_59),
+    MSG(ItemId_ForceGem_60),
+    MSG(ItemId_ForceGem_61),
+    MSG(ItemId_PanFlute),
+    MSG(ItemId_StampBook),
+    MSG(ItemId_LightBow),
+    MSG(ItemId_LokomoSword),
+    MSG(ItemId_TenPriceCard),
+    MSG(ItemId_RedPotion),
+    MSG(ItemId_PurplePotion),
+    MSG(ItemId_YellowPotion),
+    MSG(ItemId_DemonFossil),
+    MSG(ItemId_StalfosSkull),
+    MSG(ItemId_StarFragment),
+    MSG(ItemId_BeeLarvae),
+    MSG(ItemId_WoodHeart),
+    MSG(ItemId_DarkPearlLoop),
+    MSG(ItemId_WhitePearlLoop),
+    MSG(ItemId_RutoCrown),
+    MSG(ItemId_DragonScale),
+    MSG(ItemId_PirateNecklace),
+    MSG(ItemId_PalaceDish),
+    MSG(ItemId_GoronAmber),
+    MSG(ItemId_MysticJade),
+    MSG(ItemId_AncientCoin),
+    MSG(ItemId_PricelessStone),
+    MSG(ItemId_RegalRing),
+    MSG(ItemId_ArrowsRefill),
+    MSG(ItemId_BombsRefill),
+    MSG(ItemId_SoldOutSign),
+    MSG(ItemId_AncientShield),
+    MSG(ItemId_QuiverLarge),
+    MSG(ItemId_BombBagLarge),
+    MSG(ItemId_RandCommonTreasure),
+    MSG(ItemId_RandUncommonTreasure),
+    MSG(ItemId_RandRareTreasure),
+    MSG(ItemId_RandLegendaryTreasure),
+    MSG(ItemId_TearLight),
+    MSG(ItemId_LightCompass),
+    MSG(ItemId_ScrollSpinAttack),
+    MSG(ItemId_ScrollBeam),
+    MSG(ItemId_LinebeckLetter),
+    MSG(ItemId_PanFluteSong_101),
+    MSG(ItemId_PanFluteSong_102),
+    MSG(ItemId_PanFluteSong_103),
+    MSG(ItemId_PanFluteSong_104),
+    MSG(ItemId_PanFluteSong_105),
+    MSG(ItemId_RabbitNet),
+    MSG(ItemId_BeedleCard),
+    MSG(ItemId_SilverCard),
+    MSG(ItemId_GoldCard),
+    MSG(ItemId_PlatinumCard),
+    MSG(ItemId_DiamondCard),
+    MSG(ItemId_FreebieCard),
+    MSG(ItemId_QuintupleCard),
+    MSG(ItemId_CarbenLetter),
+    MSG(ItemId_RecruitUniform2),
+    MSG(ItemId_EngineerUniform),
 
-    MSG(ExtraItemId_TearLight_1), // ExtraItemId_TearLight_1
-    MSG(ExtraItemId_TearLight_2), // ExtraItemId_TearLight_2
-    MSG(ExtraItemId_TearLight_3), // ExtraItemId_TearLight_3
-    MSG(ExtraItemId_TearLight_4), // ExtraItemId_TearLight_4
-    MSG(ExtraItemId_TearLight_5), // ExtraItemId_TearLight_5
-    MSG(ExtraItemId_NormalKey_2), // ExtraItemId_NormalKey_2
-    MSG(ExtraItemId_NormalKey_4), // ExtraItemId_NormalKey_4
-    MSG(ExtraItemId_NormalKey_5), // ExtraItemId_NormalKey_5
-    MSG(ExtraItemId_NormalKey_6), // ExtraItemId_NormalKey_6
-    MSG(ExtraItemId_NormalKey_Tunnel), // ExtraItemId_NormalKey_Tunnel
-    MSG(ExtraItemId_NormalKey_Wooded), // ExtraItemId_NormalKey_Wooded
-    MSG(ExtraItemId_NormalKey_Blizzard), // ExtraItemId_NormalKey_Blizzard
-    MSG(ExtraItemId_NormalKey_Marine), // ExtraItemId_NormalKey_Marine
-    MSG(ExtraItemId_NormalKey_Mountain), // ExtraItemId_NormalKey_Mountain
-    MSG(ExtraItemId_NormalKey_Desert), // ExtraItemId_NormalKey_Desert
-    MSG(ExtraItemId_ForestSource), // ExtraItemId_ForestSource
-    MSG(ExtraItemId_SnowSource), // ExtraItemId_SnowSource
-    MSG(ExtraItemId_OceanSource), // ExtraItemId_OceanSource
-    MSG(ExtraItemId_FireSource), // ExtraItemId_FireSource
-    MSG(ExtraItemId_SandSource), // ExtraItemId_SandSource
-    MSG(ExtraItemId_StampTowerOfSpirits), // ExtraItemId_StampTowerOfSpirits
-    MSG(ExtraItemId_StampCastleTown), // ExtraItemId_StampCastleTown
-    MSG(ExtraItemId_StampOutsetVillage), // ExtraItemId_StampOutsetVillage
-    MSG(ExtraItemId_StampMayscore), // ExtraItemId_StampMayscore
-    MSG(ExtraItemId_StampWoodlandSanctuary), // ExtraItemId_StampWoodlandSanctuary
-    MSG(ExtraItemId_StampAnoukiVillage), // ExtraItemId_StampAnoukiVillage
-    MSG(ExtraItemId_StampSnowfallSanctuary), // ExtraItemId_StampSnowfallSanctuary
-    MSG(ExtraItemId_StampPapuziaVillage), // ExtraItemId_StampPapuziaVillage
-    MSG(ExtraItemId_StampIslandSanctuary), // ExtraItemId_StampIslandSanctuary
-    MSG(ExtraItemId_StampGoronVillage), // ExtraItemId_StampGoronVillage
-    MSG(ExtraItemId_StampValleySanctuary), // ExtraItemId_StampValleySanctuary
-    MSG(ExtraItemId_StampDuneSanctuary), // ExtraItemId_StampDuneSanctuary
-    MSG(ExtraItemId_StampWoodedTemple), // ExtraItemId_StampWoodedTemple
-    MSG(ExtraItemId_StampBlizzardTemple), // ExtraItemId_StampBlizzardTemple
-    MSG(ExtraItemId_StampMarineTemple), // ExtraItemId_StampMarineTemple
-    MSG(ExtraItemId_StampMountainTemple), // ExtraItemId_StampMountainTemple
-    MSG(ExtraItemId_StampDesertTemple), // ExtraItemId_StampDesertTemple
-    MSG(ExtraItemId_StampPirateHideout), // ExtraItemId_StampPirateHideout
-    MSG(ExtraItemId_StampTradingPost), // ExtraItemId_StampTradingPost
-    MSG(ExtraItemId_StampIcySpring), // ExtraItemId_StampIcySpring
-    MSG(ExtraItemId_PassengerAnoukiNoko), // ExtraItemId_PassengerAnoukiNoko
-    MSG(ExtraItemId_PassengerAnoukiKofu), // ExtraItemId_PassengerAnoukiKofu
-    MSG(ExtraItemId_PassengerCastleTownMona), // ExtraItemId_PassengerCastleTownMona
-    MSG(ExtraItemId_PassengerCastleTownAlfonzo), // ExtraItemId_PassengerCastleTownAlfonzo
-    MSG(ExtraItemId_PassengerSnowRealmFerrus), // ExtraItemId_PassengerSnowRealmFerrus
-    MSG(ExtraItemId_PassengerFireRealmFerrus), // ExtraItemId_PassengerFireRealmFerrus
-    MSG(ExtraItemId_PassengerGoronVillageSnowGoron), // ExtraItemId_PassengerGoronVillageSnowGoron
-    MSG(ExtraItemId_PassengerGoronVillageCityGoron), // ExtraItemId_PassengerGoronVillageCityGoron
-    MSG(ExtraItemId_PassengerMayscoreDovok), // ExtraItemId_PassengerMayscoreDovok
-    MSG(ExtraItemId_PassengerMayscoreMash), // ExtraItemId_PassengerMayscoreMash
-    MSG(ExtraItemId_PassengerMayscoreMorris), // ExtraItemId_PassengerMayscoreMorris
-    MSG(ExtraItemId_PassengerMayscoreYamahiko), // ExtraItemId_PassengerMayscoreYamahiko
-    MSG(ExtraItemId_PassengerMayscoreWood), // ExtraItemId_PassengerMayscoreWood
-    MSG(ExtraItemId_PassengerOutsetJoe), // ExtraItemId_PassengerOutsetJoe
-    MSG(ExtraItemId_PassengerPirateHideoutWadatsumi), // ExtraItemId_PassengerPirateHideoutWadatsumi
-    MSG(ExtraItemId_PassengerBridgeWorkersHomeKenzo), // ExtraItemId_PassengerBridgeWorkersHomeKenzo
-    MSG(ExtraItemId_PassengerTradingPostKenzo), // ExtraItemId_PassengerTradingPostKenzo
-    MSG(ExtraItemId_PassengerPapuziaVillageCarben), // ExtraItemId_PassengerPapuziaVillageCarben
-    MSG(ExtraItemId_CargoMegaIce), // ExtraItemId_CargoMegaIce
-    MSG(ExtraItemId_CargoWood), // ExtraItemId_CargoWood
-    MSG(ExtraItemId_CargoIron), // ExtraItemId_CargoIron
-    MSG(ExtraItemId_CargoFish), // ExtraItemId_CargoFish
-    MSG(ExtraItemId_CargoCuccos), // ExtraItemId_CargoCuccos
-    MSG(ExtraItemId_CargoVessel), // ExtraItemId_CargoVessel
-    MSG(ExtraItemId_CargoDarkOre), // ExtraItemId_CargoDarkOre
-    MSG(ExtraItemId_RabbitGrass), // ExtraItemId_RabbitGrass
-    MSG(ExtraItemId_RabbitSnow), // ExtraItemId_RabbitSnow
-    MSG(ExtraItemId_RabbitWater), // ExtraItemId_RabbitWater
-    MSG(ExtraItemId_RabbitMountain), // ExtraItemId_RabbitMountain
-    MSG(ExtraItemId_RabbitSand), // ExtraItemId_RabbitSand
-    MSG(ExtraItemId_BossKey_3), // ExtraItemId_BossKey_3
-    MSG(ExtraItemId_BossKey_5), // ExtraItemId_BossKey_5
-    MSG(ExtraItemId_BossKey_Wooded), // ExtraItemId_BossKey_Wooded
-    MSG(ExtraItemId_BossKey_Blizzard), // ExtraItemId_BossKey_Blizzard
-    MSG(ExtraItemId_BossKey_Marine), // ExtraItemId_BossKey_Marine
-    MSG(ExtraItemId_BossKey_Mountain), // ExtraItemId_BossKey_Mountain
-    MSG(ExtraItemId_BossKey_Desert), // ExtraItemId_BossKey_Desert
-    MSG(ExtraItemId_TowerSection_1), // ExtraItemId_TowerSection_1
-    MSG(ExtraItemId_TowerSection_2), // ExtraItemId_TowerSection_2
-    MSG(ExtraItemId_TowerSection_3), // ExtraItemId_TowerSection_3
-    MSG(ExtraItemId_TowerSection_4), // ExtraItemId_TowerSection_4
-    MSG(ExtraItemId_TowerSection_5), // ExtraItemId_TowerSection_5
+    MSG(ExtraItemId_TearLight_1),
+    MSG(ExtraItemId_TearLight_2),
+    MSG(ExtraItemId_TearLight_3),
+    MSG(ExtraItemId_TearLight_4),
+    MSG(ExtraItemId_TearLight_5),
+    MSG(ExtraItemId_NormalKey_2),
+    MSG(ExtraItemId_NormalKey_4),
+    MSG(ExtraItemId_NormalKey_5),
+    MSG(ExtraItemId_NormalKey_6),
+    MSG(ExtraItemId_NormalKey_Tunnel),
+    MSG(ExtraItemId_NormalKey_Wooded),
+    MSG(ExtraItemId_NormalKey_Blizzard),
+    MSG(ExtraItemId_NormalKey_Marine),
+    MSG(ExtraItemId_NormalKey_Mountain),
+    MSG(ExtraItemId_NormalKey_Desert),
+    MSG(ExtraItemId_ForestSource),
+    MSG(ExtraItemId_SnowSource),
+    MSG(ExtraItemId_OceanSource),
+    MSG(ExtraItemId_FireSource),
+    MSG(ExtraItemId_SandSource),
+    MSG(ExtraItemId_StampTowerOfSpirits),
+    MSG(ExtraItemId_StampCastleTown),
+    MSG(ExtraItemId_StampOutsetVillage),
+    MSG(ExtraItemId_StampMayscore),
+    MSG(ExtraItemId_StampWoodlandSanctuary),
+    MSG(ExtraItemId_StampAnoukiVillage),
+    MSG(ExtraItemId_StampSnowfallSanctuary),
+    MSG(ExtraItemId_StampPapuziaVillage),
+    MSG(ExtraItemId_StampIslandSanctuary),
+    MSG(ExtraItemId_StampGoronVillage),
+    MSG(ExtraItemId_StampValleySanctuary),
+    MSG(ExtraItemId_StampDuneSanctuary),
+    MSG(ExtraItemId_StampWoodedTemple),
+    MSG(ExtraItemId_StampBlizzardTemple),
+    MSG(ExtraItemId_StampMarineTemple),
+    MSG(ExtraItemId_StampMountainTemple),
+    MSG(ExtraItemId_StampDesertTemple),
+    MSG(ExtraItemId_StampPirateHideout),
+    MSG(ExtraItemId_StampTradingPost),
+    MSG(ExtraItemId_StampIcySpring),
+    MSG(ExtraItemId_PassengerAnoukiNoko),
+    MSG(ExtraItemId_PassengerAnoukiKofu),
+    MSG(ExtraItemId_PassengerCastleTownMona),
+    MSG(ExtraItemId_PassengerCastleTownAlfonzo),
+    MSG(ExtraItemId_PassengerSnowRealmFerrus),
+    MSG(ExtraItemId_PassengerFireRealmFerrus),
+    MSG(ExtraItemId_PassengerGoronVillageSnowGoron),
+    MSG(ExtraItemId_PassengerGoronVillageCityGoron),
+    MSG(ExtraItemId_PassengerMayscoreDovok),
+    MSG(ExtraItemId_PassengerMayscoreMash),
+    MSG(ExtraItemId_PassengerMayscoreMorris),
+    MSG(ExtraItemId_PassengerMayscoreYamahiko),
+    MSG(ExtraItemId_PassengerMayscoreWood),
+    MSG(ExtraItemId_PassengerOutsetJoe),
+    MSG(ExtraItemId_PassengerPirateHideoutWadatsumi),
+    MSG(ExtraItemId_PassengerBridgeWorkersHomeKenzo),
+    MSG(ExtraItemId_PassengerTradingPostKenzo),
+    MSG(ExtraItemId_PassengerPapuziaVillageCarben),
+    MSG(ExtraItemId_CargoMegaIce),
+    MSG(ExtraItemId_CargoWood),
+    MSG(ExtraItemId_CargoIron),
+    MSG(ExtraItemId_CargoFish),
+    MSG(ExtraItemId_CargoCuccos),
+    MSG(ExtraItemId_CargoVessel),
+    MSG(ExtraItemId_CargoDarkOre),
+    MSG(ExtraItemId_RabbitGrass),
+    MSG(ExtraItemId_RabbitSnow),
+    MSG(ExtraItemId_RabbitWater),
+    MSG(ExtraItemId_RabbitMountain),
+    MSG(ExtraItemId_RabbitSand),
+    MSG(ExtraItemId_BossKey_3),
+    MSG(ExtraItemId_BossKey_5),
+    MSG(ExtraItemId_BossKey_Wooded),
+    MSG(ExtraItemId_BossKey_Blizzard),
+    MSG(ExtraItemId_BossKey_Marine),
+    MSG(ExtraItemId_BossKey_Mountain),
+    MSG(ExtraItemId_BossKey_Desert),
+    MSG(ExtraItemId_TowerSection_1),
+    MSG(ExtraItemId_TowerSection_2),
+    MSG(ExtraItemId_TowerSection_3),
+    MSG(ExtraItemId_TowerSection_4),
+    MSG(ExtraItemId_TowerSection_5),
+    MSG(ExtraItemId_LetterMetPostmanFirst),
+    MSG(ExtraItemId_LetterZeldas),
+    MSG(ExtraItemId_LetterAlfonzos),
+    MSG(ExtraItemId_LetterRussells),
+    MSG(ExtraItemId_LetterLinebecks),
+    MSG(ExtraItemId_LetterBeedlesFirst),
+    MSG(ExtraItemId_LetterBeedleClubCardLetter),
+    MSG(ExtraItemId_LetterBeedleSilverCardLetter),
+    MSG(ExtraItemId_LetterBeedleGoldCardLetter),
+    MSG(ExtraItemId_LetterBeedlePlatinumCardLetter),
+    MSG(ExtraItemId_LetterBeedleDiamondCardLetter),
+    MSG(ExtraItemId_LetterCarbens),
+    MSG(ExtraItemId_LetterNikos),
+    MSG(ExtraItemId_LetterFerrus1),
+    MSG(ExtraItemId_LetterFerrus2),
+    MSG(ExtraItemId_LetterFerrus3),
+    MSG(ExtraItemId_LetterKagorons),
 };
 
 u16 gAdvFlagMap[] = {
@@ -624,4 +659,21 @@ u16 gAdvFlagMap[] = {
     RandoAdventureFlag_TowerSection_3, // ExtraItemId_TowerSection_3
     RandoAdventureFlag_TowerSection_4, // ExtraItemId_TowerSection_4
     RandoAdventureFlag_TowerSection_5, // ExtraItemId_TowerSection_5
+    RandoAdventureFlag_LetterMetPostmanFirst, // ExtraItemId_LetterMetPostmanFirst
+    RandoAdventureFlag_LetterZeldas, // ExtraItemId_LetterZeldas
+    RandoAdventureFlag_LetterAlfonzos, // ExtraItemId_LetterAlfonzos
+    RandoAdventureFlag_LetterRussells, // ExtraItemId_LetterRussells
+    RandoAdventureFlag_LetterLinebecks, // ExtraItemId_LetterLinebecks
+    RandoAdventureFlag_LetterBeedlesFirst, // ExtraItemId_LetterBeedlesFirst
+    RandoAdventureFlag_LetterBeedleClubCardLetter, // ExtraItemId_LetterBeedleClubCardLetter
+    RandoAdventureFlag_LetterBeedleSilverCardLetter, // ExtraItemId_LetterBeedleSilverCardLetter
+    RandoAdventureFlag_LetterBeedleGoldCardLetter, // ExtraItemId_LetterBeedleGoldCardLetter
+    RandoAdventureFlag_LetterBeedlePlatinumCardLetter, // ExtraItemId_LetterBeedlePlatinumCardLetter
+    RandoAdventureFlag_LetterBeedleDiamondCardLetter, // ExtraItemId_LetterBeedleDiamondCardLetter
+    RandoAdventureFlag_LetterCarbens, // ExtraItemId_LetterCarbens
+    RandoAdventureFlag_LetterNikos, // ExtraItemId_LetterNikos
+    RandoAdventureFlag_LetterFerrus1, // ExtraItemId_LetterFerrus1
+    RandoAdventureFlag_LetterFerrus2, // ExtraItemId_LetterFerrus2
+    RandoAdventureFlag_LetterFerrus3, // ExtraItemId_LetterFerrus3
+    RandoAdventureFlag_LetterKagorons, // ExtraItemId_LetterKagorons
 };

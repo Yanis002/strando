@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: © 2026 strando team
 # SPDX-License-Identifier: GPL-3.0-only
 
+from dataclasses import dataclass
 import yaml
 
 from enum import IntEnum
@@ -234,6 +235,23 @@ class ItemId(IntEnum):
     ExtraItemId_TowerSection_3 = 196
     ExtraItemId_TowerSection_4 = 197
     ExtraItemId_TowerSection_5 = 198
+    ExtraItemId_LetterMetPostmanFirst = 199
+    ExtraItemId_LetterZeldas = 200
+    ExtraItemId_LetterAlfonzos = 201
+    ExtraItemId_LetterRussells = 202
+    ExtraItemId_LetterLinebecks = 203
+    ExtraItemId_LetterBeedlesFirst = 204
+    ExtraItemId_LetterBeedleClubCardLetter = 205
+    ExtraItemId_LetterBeedleSilverCardLetter = 206
+    ExtraItemId_LetterBeedleGoldCardLetter = 207
+    ExtraItemId_LetterBeedlePlatinumCardLetter = 208
+    ExtraItemId_LetterBeedleDiamondCardLetter = 209
+    ExtraItemId_LetterCarbens = 210
+    ExtraItemId_LetterNikos = 211
+    ExtraItemId_LetterFerrus1 = 212
+    ExtraItemId_LetterFerrus2 = 213
+    ExtraItemId_LetterFerrus3 = 214
+    ExtraItemId_LetterKagorons = 215
 
 
 extra_id_to_scene = {
@@ -463,6 +481,23 @@ item_id_to_name = {
     ItemId.ExtraItemId_TowerSection_3.value: "Tower Section 3",
     ItemId.ExtraItemId_TowerSection_4.value: "Tower Section 4",
     ItemId.ExtraItemId_TowerSection_5.value: "Tower Section 5",
+    ItemId.ExtraItemId_LetterMetPostmanFirst.value: "Letter from Postmaster",
+    ItemId.ExtraItemId_LetterZeldas.value: "Letter from Zelda",
+    ItemId.ExtraItemId_LetterAlfonzos.value: "Letter from Alfonzo",
+    ItemId.ExtraItemId_LetterRussells.value: "Letter from Russell",
+    ItemId.ExtraItemId_LetterLinebecks.value: "Letter from Linebeck",
+    ItemId.ExtraItemId_LetterBeedlesFirst.value: "Letter from Beedle (First)",
+    ItemId.ExtraItemId_LetterBeedleClubCardLetter.value: "Letter from Beedle (Club Card)",
+    ItemId.ExtraItemId_LetterBeedleSilverCardLetter.value: "Letter from Beedle (Silver Card)",
+    ItemId.ExtraItemId_LetterBeedleGoldCardLetter.value: "Letter from Beedle (Gold Card)",
+    ItemId.ExtraItemId_LetterBeedlePlatinumCardLetter.value: "Letter from Beedle (Platinum Card)",
+    ItemId.ExtraItemId_LetterBeedleDiamondCardLetter.value: "Letter from Beedle (Diamond Card)",
+    ItemId.ExtraItemId_LetterCarbens.value: "Letter from Carben",
+    ItemId.ExtraItemId_LetterNikos.value: "Letter from Niko",
+    ItemId.ExtraItemId_LetterFerrus1.value: "Letter from Ferrus 1",
+    ItemId.ExtraItemId_LetterFerrus2.value: "Letter from Ferrus 2",
+    ItemId.ExtraItemId_LetterFerrus3.value: "Letter from Ferrus 3",
+    ItemId.ExtraItemId_LetterKagorons.value: "Letter from Kagoron",
 }
 item_name_to_id = {v: k for k, v in item_id_to_name.items()}
 
@@ -479,6 +514,7 @@ class ItemKind(IntEnum):
     Tear = 8
     DungeonKey = 9
     Stamp = 10
+    Letter = 11
 
 
 class ItemWeight(IntEnum):
@@ -1677,3 +1713,24 @@ class CustomSafeYAMLDumper(yaml.SafeDumper):
 
         if len(self.indents) == 1:
             super().write_line_break()
+
+
+@dataclass
+class PostboxDef:
+    scene: str
+    room_index: int
+    hash: str
+
+
+postbox_list = [
+    PostboxDef("f_bridge", 0, "POST_0x0280_0x0120"),
+    PostboxDef("f_bridge2", 0, "POST_0x00D0_0x01A0"),
+    PostboxDef("f_first", 0, "POST_0x0240_0x00F0"),
+    PostboxDef("f_flame", 3, "POST_0x0370_0x0230"),
+    PostboxDef("f_forest1", 0, "POST_0x01B0_0x01E0"),
+    PostboxDef("f_htown", 0, "POST_0x01D0_0x0090"),
+    PostboxDef("f_snow", 0, "POST_0x01F0_0x01E0"),
+    PostboxDef("f_tetsuo", 0, "POST_0x0280_0x0170"),
+    PostboxDef("f_water", 0, "POST_0x00B0_0x00E0"),
+    PostboxDef("f_water2", 0, "POST_0x01C0_0x0190"),
+]

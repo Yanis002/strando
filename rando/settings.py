@@ -29,6 +29,7 @@ class LocationSettings:
         self.keysanity = False
         self.tearsanity = False
         self.bkeysanity = False
+        self.letters = False
 
 
 class MinigamesSettings:
@@ -80,6 +81,7 @@ class ShuffleSettings:
         self.forest_glyph = str()
         self.duets = False
         self.minigames = MinigamesSettings()
+        self.letters = str()
 
         self.stamps = False
         self.stamps_rewards: list[int] = []
@@ -104,6 +106,10 @@ class ShuffleSettings:
         self.forest_glyph_mode = ["startwith", "anywhere"]
         self.forest_glyph_mode_map = {mode: i for i, mode in enumerate(self.forest_glyph_mode)}
         self.forest_glyph_mode_invmap = {i: mode for mode, i in self.forest_glyph_mode_map.items()}
+
+        self.letters_mode = ["off", "on", "beedle"]
+        self.letters_mode_map = {mode: i for i, mode in enumerate(self.letters_mode)}
+        self.letters_mode_invmap = {i: mode for mode, i in self.letters_mode_map.items()}
 
     def is_rabbitsanity_enabled(self):
         return len(self.rabbitsanity) > 0 and "none" not in self.rabbitsanity
@@ -148,6 +154,9 @@ class ShuffleSettings:
 
         if not isinstance(self.rabbitpack, bool):
             raise ValueError("rabbit_pack must be true or false")
+
+        if self.letters not in self.letters_mode:
+            raise ValueError("letters is not valid")
 
     @staticmethod
     def from_yaml(data: dict):
@@ -208,6 +217,9 @@ class ShuffleSettings:
         if "rabbit_pack" in data:
             settings.rabbitpack = data["rabbit_pack"]
 
+        if "letters" in data:
+            settings.letters = data["letters"]
+
         settings.validate()
         return settings
 
@@ -225,7 +237,7 @@ class ShuffleSettings:
             rabbitsanity |= rabbit_map[value]
 
         return struct.pack(
-            "<BBBBBBBBBBB",
+            "<BBBBBBBBBBBB",
             self.shopsanity,
             self.rupeesanity,
             self.passengers_mode_map[self.passengers],
@@ -237,6 +249,7 @@ class ShuffleSettings:
             self.stamps,
             rabbitsanity,
             self.rabbitpack,
+            self.letters_mode_map[self.letters],
         )
 
     def to_yaml(self):
@@ -254,6 +267,7 @@ class ShuffleSettings:
             "stamp_book": self.stamp_book,
             "rabbit_sanity": self.rabbitsanity,
             "rabbit_pack": self.rabbitpack,
+            "letters": self.letters,
         }
 
 
@@ -428,6 +442,7 @@ class Settings:
         self.passenger_pick_ids: list[int] = []
         self.passenger_dest_ids: list[int] = []
         self.cargo_pick_ids: list[int] = []
+        self.letter_ids: list[int] = []
 
     @staticmethod
     def empty(seed: str = "Unknown") -> "Settings":
@@ -478,7 +493,12 @@ class Settings:
         for i in self.cargo_pick_ids:
             cargo_pick_ids += i.to_bytes(1, byteorder="little")
 
-        extras = passenger_pick_ids + passenger_dest_ids + cargo_pick_ids
+        letter_ids = b""
+        assert len(self.letter_ids) == 17, f"len is {len(self.letter_ids)}"  # letter max
+        for i in self.letter_ids:
+            letter_ids += i.to_bytes(1, byteorder="little")
+
+        extras = passenger_pick_ids + passenger_dest_ids + cargo_pick_ids + letter_ids
         return struct.pack("<4s", b"RANDO") + self.shuffle.to_bin() + self.shuffle_dgn.to_bin() + self.goal.to_bin() + extras
 
     def to_yaml(self):

@@ -115,6 +115,24 @@ enum ExtraItemId_ {
     ExtraItemId_TowerSection_4,
     ExtraItemId_TowerSection_5,
 
+    ExtraItemId_LetterMetPostmanFirst,
+    ExtraItemId_LetterZeldas,
+    ExtraItemId_LetterAlfonzos,
+    ExtraItemId_LetterRussells,
+    ExtraItemId_LetterLinebecks,
+    ExtraItemId_LetterBeedlesFirst,
+    ExtraItemId_LetterBeedleClubCardLetter,
+    ExtraItemId_LetterBeedleSilverCardLetter,
+    ExtraItemId_LetterBeedleGoldCardLetter,
+    ExtraItemId_LetterBeedlePlatinumCardLetter,
+    ExtraItemId_LetterBeedleDiamondCardLetter,
+    ExtraItemId_LetterCarbens,
+    ExtraItemId_LetterNikos,
+    ExtraItemId_LetterFerrus1,
+    ExtraItemId_LetterFerrus2,
+    ExtraItemId_LetterFerrus3,
+    ExtraItemId_LetterKagorons,
+
     ExtraItemId_Max,
 };
 
@@ -270,6 +288,8 @@ class Rando {
     bool IsStb() { return gOverlayManager.mLoadedOverlays[OverlaySlot_9] == OverlayIndex_Stb; }
 
     bool IsCourseExec() { return gOverlayManager.mLoadedOverlays[OverlaySlot_2] == OverlayIndex_CourseExec; }
+
+    bool IsMapC3() { return gOverlayManager.mLoadedOverlays[OverlaySlot_13] == OverlayIndex_MapC3; }
 
     // global init
     void Init();

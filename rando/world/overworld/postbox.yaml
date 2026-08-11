@@ -1,0 +1,20 @@
+"Postbox":
+  is_letter: true
+  locations:
+    "Letter - Postmaster": "True"
+    "Letter - Zelda": "True"
+    "Letter - Alfonzo": "True"
+    "Letter - Russell": "True"
+    "Letter - Linebeck": "True"
+    "Letter - Beedle First": "True"
+    "Letter - Beedle Club Card": "True"
+    "Letter - Beedle Silver Card": "True"
+    "Letter - Beedle Gold Card": "True"
+    "Letter - Beedle Platinum Card": "True"
+    "Letter - Beedle Diamond Card": "True"
+    "Letter - Carben": "True"
+    "Letter - Niko": "True"
+    "Letter - Ferrus 1": "True"
+    "Letter - Ferrus 2": "True"
+    "Letter - Ferrus 3": "True"
+    "Letter - Kagoron": "True"

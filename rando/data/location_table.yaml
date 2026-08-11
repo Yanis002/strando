@@ -2583,70 +2583,70 @@ Rabbit Mountain 01:
   is_actor: true
   room_index: 0
   scene: t_area3
-  settings: ["rabbit-all", "rabbit-mountain"]
+  settings: ["rabbit-all", "rabbit-fire"]
 
 Rabbit Mountain 02:
   id_hash: RB1T_0x0350_0x0920
   is_actor: true
   room_index: 0
   scene: t_area3
-  settings: ["rabbit-all", "rabbit-mountain"]
+  settings: ["rabbit-all", "rabbit-fire"]
 
 Rabbit Mountain 03:
   id_hash: RB1T_0x0410_0x01C0
   is_actor: true
   room_index: 0
   scene: t_area3
-  settings: ["rabbit-all", "rabbit-mountain"]
+  settings: ["rabbit-all", "rabbit-fire"]
 
 Rabbit Mountain 04:
   id_hash: RB1T_0x0520_0x0330
   is_actor: true
   room_index: 0
   scene: t_area3
-  settings: ["rabbit-all", "rabbit-mountain"]
+  settings: ["rabbit-all", "rabbit-fire"]
 
 Rabbit Mountain 05:
   id_hash: RB1T_0x0720_0x0360
   is_actor: true
   room_index: 0
   scene: t_area3
-  settings: ["rabbit-all", "rabbit-mountain"]
+  settings: ["rabbit-all", "rabbit-fire"]
 
 Rabbit Mountain 06:
   id_hash: RB1T_0x08C0_0x0590
   is_actor: true
   room_index: 0
   scene: t_area3
-  settings: ["rabbit-all", "rabbit-mountain"]
+  settings: ["rabbit-all", "rabbit-fire"]
 
 Rabbit Mountain 07:
   id_hash: RB1T_0x09D0_0x0340
   is_actor: true
   room_index: 0
   scene: t_area3
-  settings: ["rabbit-all", "rabbit-mountain"]
+  settings: ["rabbit-all", "rabbit-fire"]
 
 Rabbit Mountain 08:
   id_hash: RB1T_0x0A10_0x0130
   is_actor: true
   room_index: 0
   scene: t_area3
-  settings: ["rabbit-all", "rabbit-mountain"]
+  settings: ["rabbit-all", "rabbit-fire"]
 
 Rabbit Mountain 09:
   id_hash: RB1T_0x0BD0_0x0280
   is_actor: true
   room_index: 0
   scene: t_area3
-  settings: ["rabbit-all", "rabbit-mountain"]
+  settings: ["rabbit-all", "rabbit-fire"]
 
 Rabbit Mountain 10:
   id_hash: RB1T_0x0C50_0x06E0
   is_actor: true
   room_index: 0
   scene: t_area3
-  settings: ["rabbit-all", "rabbit-mountain"]
+  settings: ["rabbit-all", "rabbit-fire"]
 
 Rabbit Sand 01:
   id_hash: RB1T_0x0330_0x0340
@@ -2717,3 +2717,88 @@ Rabbit Sand 10:
   room_index: 0
   scene: t_area3
   settings: ["rabbit-all", "rabbit-sand"]
+
+Letter - Postmaster:
+  is_letter: true
+  letter_type: 0
+  settings: ["letters-on"]
+
+Letter - Zelda:
+  is_letter: true
+  letter_type: 1
+  settings: ["letters-on"]
+
+Letter - Alfonzo:
+  is_letter: true
+  letter_type: 2
+  settings: ["letters-on"]
+
+Letter - Russell:
+  is_letter: true
+  letter_type: 3
+  settings: ["letters-on"]
+
+Letter - Linebeck:
+  is_letter: true
+  letter_type: 4
+  settings: ["letters-on"]
+
+Letter - Beedle First:
+  is_letter: true
+  letter_type: 5
+  settings: ["letters-on", "letters-beedle"]
+
+Letter - Beedle Club Card:
+  is_letter: true
+  letter_type: 6
+  settings: ["letters-on", "letters-beedle"]
+
+Letter - Beedle Silver Card:
+  is_letter: true
+  letter_type: 7
+  settings: ["letters-on", "letters-beedle"]
+
+Letter - Beedle Gold Card:
+  is_letter: true
+  letter_type: 8
+  settings: ["letters-on", "letters-beedle"]
+
+Letter - Beedle Platinum Card:
+  is_letter: true
+  letter_type: 9
+  settings: ["letters-on", "letters-beedle"]
+
+Letter - Beedle Diamond Card:
+  is_letter: true
+  letter_type: 10
+  settings: ["letters-on", "letters-beedle"]
+
+Letter - Carben:
+  is_letter: true
+  letter_type: 14
+  settings: ["letters-on"]
+
+Letter - Niko:
+  is_letter: true
+  letter_type: 15
+  settings: ["letters-on"]
+
+Letter - Ferrus 1:
+  is_letter: true
+  letter_type: 16
+  settings: ["letters-on"]
+
+Letter - Ferrus 2:
+  is_letter: true
+  letter_type: 17
+  settings: ["letters-on"]
+
+Letter - Ferrus 3:
+  is_letter: true
+  letter_type: 18
+  settings: ["letters-on"]
+
+Letter - Kagoron:
+  is_letter: true
+  letter_type: 19
+  settings: ["letters-on"]

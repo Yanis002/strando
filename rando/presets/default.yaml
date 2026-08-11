@@ -65,6 +65,11 @@ settings:
         # true/false (will give all 10 rabbits of the realm when enabled)
         rabbit_pack: true
 
+        # - "off", disables letter shuffle
+        # - "on", enables letter shuffle
+        # - "beedle", enables letter shuffle but only for beedle's letters
+        letters: "on"
+
     shuffle_dungeon:
         # off, section (tears only), dungeon, anywhere, removed
         key_sanity: "anywhere" # (vanilla: off)

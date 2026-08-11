@@ -2,7 +2,6 @@
 
 #include <Actor/ActorManager.hpp>
 #include <Actor/ActorUnkKEYN.hpp>
-#include <Actor/ActorUnkSZKU.hpp>
 #include <Unknown/UnkStruct_027e09b8.hpp>
 #include <Unknown/UnkStruct_027e0d34.hpp>
 

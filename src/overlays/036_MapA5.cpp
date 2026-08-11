@@ -359,7 +359,7 @@ unk32 CustomShopItem::Custom_ov036_0211d0a8(void) {
 bool CustomShopItem::CanBuy(void) {
     AdventureFlag flag = gAdvFlagMap[this->mItemId];
 
-    if (flag != AdventureFlag_Nothing && GET_FLAG(data_027e09b8->mAdventureFlags, flag)) {
+    if (flag != AdventureFlag_Nothing && data_027e09b8->HasAdventureFlag(flag)) {
         return false;
     }
 

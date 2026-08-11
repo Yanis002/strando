@@ -229,6 +229,59 @@ extern "C" bool ItemGiveImpl(Inventory* thisx, ItemId itemId) {
             // nothing to do except setting the flag (which is done later)
             // (see `Rando::OnScenePreInit` and `Rando::OnScenePostInit`)
             break;
+        case ExtraItemId_LetterMetPostmanFirst:
+        case ExtraItemId_LetterZeldas:
+        case ExtraItemId_LetterAlfonzos:
+        case ExtraItemId_LetterRussells:
+        case ExtraItemId_LetterLinebecks:
+        case ExtraItemId_LetterBeedlesFirst:
+        case ExtraItemId_LetterBeedleClubCardLetter:
+        case ExtraItemId_LetterBeedleSilverCardLetter:
+        case ExtraItemId_LetterBeedleGoldCardLetter:
+        case ExtraItemId_LetterBeedlePlatinumCardLetter:
+        case ExtraItemId_LetterBeedleDiamondCardLetter:
+        case ExtraItemId_LetterCarbens:
+        case ExtraItemId_LetterNikos:
+        case ExtraItemId_LetterFerrus1:
+        case ExtraItemId_LetterFerrus2:
+        case ExtraItemId_LetterFerrus3:
+        case ExtraItemId_LetterKagorons: {
+            static AdventureFlag_Half sLetterFlags[] = {
+                AdventureFlag_MetPostmanFirstLetter,
+                AdventureFlag_ReceivedZeldasLetter,
+                AdventureFlag_ReceivedAlfonzosLetter,
+                AdventureFlag_ReceivedRussellsLetter,
+                AdventureFlag_ObtainedLinebecksLetter,
+                AdventureFlag_ReceivedBeedlesFirstLetter,
+                AdventureFlag_ReceivedBeedleClubCardLetter,
+                AdventureFlag_ReceivedBeedleSilverCardLetter,
+                AdventureFlag_ReceivedBeedleGoldCardLetter,
+                AdventureFlag_ReceivedBeedlePlatinumCardLetter,
+                AdventureFlag_ReceivedBeedleDiamondCardLetter,
+                AdventureFlag_Nothing,
+                AdventureFlag_Nothing,
+                AdventureFlag_Nothing,
+                AdventureFlag_ReceivedCarbensLetter,
+                AdventureFlag_ReceivedNikosLetter,
+                AdventureFlag_ReceivedFerrusLetter1,
+                AdventureFlag_ReceivedFerrusLetter2,
+                AdventureFlag_ReceivedFerrusLetter3,
+                AdventureFlag_ReceivedKagoronsLetter,
+            };
+
+            u8 type = itemId - ExtraItemId_LetterMetPostmanFirst;
+
+            // account for unrandomized battle mode letters
+            if (itemId >= ExtraItemId_LetterCarbens && itemId <= ExtraItemId_LetterKagorons) {
+                type += 3;
+            }
+
+            if (sLetterFlags[type] != AdventureFlag_Nothing) {
+                gpMiscAdvManager->GiveLetter(sLetterFlags[type]);
+            }
+
+            break;
+        }
         case ItemId_NormalKey:
             thisx->GiveSmallKeys(1);
             break;

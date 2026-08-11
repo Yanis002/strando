@@ -275,7 +275,7 @@ void Rando::TryGiveItemFromPassengerDestInfos(SceneIndex destSceneIndex) {
         PassengerAtDestInfos* pEntry = &sPassengerAtDestInfos[i];
 
         // if the flag is set it means we got the item (the flag is set when the item is received)
-        if (pEntry->sceneIndex == destSceneIndex && GET_FLAG(data_027e09b8->mAdventureFlags, pEntry->requiredFlag)) {
+        if (pEntry->sceneIndex == destSceneIndex && data_027e09b8->HasAdventureFlag(pEntry->requiredFlag)) {
             ItemId itemId = gpSettings->GetPassengerAtDestItemId(i);
 
             if (itemId != ItemId_None && !this->CheckAdvFlag(itemId)) {
@@ -317,7 +317,7 @@ void Rando::OnGameModeUpdate() {
         // then give the item and unset said flag
         ItemId itemId = gpSettings->GetPassengerPickUpItemId(Passenger_CastleTownAlfonzo);
         if (!this->IsItemInQueue(itemId) &&
-            GET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_AlfonzoBoardsTrainToOutsetVillage)) {
+            data_027e09b8->HasAdventureFlag(AdventureFlag_AlfonzoBoardsTrainToOutsetVillage)) {
             // unset previously set flag
             UNSET_FLAG(data_027e09b8->mAdventureFlags, AdventureFlag_AlfonzoBoardsTrainToOutsetVillage);
 
@@ -371,7 +371,7 @@ void Rando::OnGameModeUpdate() {
             }
         } else {
             for (int i = 0; i < ARRAY_LEN(sSourceFlags); i++) {
-                if (GET_FLAG(data_027e09b8->mAdventureFlags, sSourceFlags[i])) {
+                if (data_027e09b8->HasAdventureFlag(sSourceFlags[i])) {
                     this->GetCurrentSave()->completedDungeons[i] = true;
                 }
             }
@@ -463,7 +463,7 @@ void Rando::OnGameModeUpdate() {
 
                         value = 0;
                         for (int i = 0; i < ARRAY_LEN(sRestorationSongFlags); i++) {
-                            if (GET_FLAG(data_027e09b8->mAdventureFlags, sRestorationSongFlags[i])) {
+                            if (data_027e09b8->HasAdventureFlag(sRestorationSongFlags[i])) {
                                 value++;
                             }
                         }
@@ -506,7 +506,7 @@ void Rando::OnScenePreInit() {
         // if the forest glyph is shuffled and we don't have it yet
         // this just overrides the next scene and spawn indices
         if (this->IsOnTrain() && gpSettings->GetShuffleSettings()->forest_glyph == ForestGlyphMode_Anywhere &&
-            !GET_FLAG(data_027e09b8->mAdventureFlags, RandoAdventureFlag_ForestGlyph)) {
+            !data_027e09b8->HasAdventureFlag(RandoAdventureFlag_ForestGlyph)) {
             int spawn = -1;
 
             switch (pNext->sceneIndex) {
@@ -542,7 +542,7 @@ void Rando::OnScenePreInit() {
         // we only need to prevent loading the scene if we don't have section 1
         // otherwise we are blocked by default by the game, assuming the flag is unset
         if (this->IsOnLand() && gpSettings->GetShuffleDungeonSettings()->tos_sections == ToSSectionsMode_Progressive &&
-            !GET_FLAG(data_027e09b8->mAdventureFlags, RandoAdventureFlag_TowerSection_1)) {
+            !data_027e09b8->HasAdventureFlag(RandoAdventureFlag_TowerSection_1)) {
             if (pNext->sceneIndex == SceneIndex_d_main_w) {
                 pNext->sceneIndex = SceneIndex_d_main_f;
                 pNext->spawnIndex = 1;
@@ -594,27 +594,29 @@ void Rando::OnScenePostInit() {
             memset(sCargoInfos, 0, sizeof(CargoInfos) * CargoType_Max);
         }
 
-        static AdventureFlag_Half sToSSectionFlags[] = {
-            RandoAdventureFlag_TowerSection_2,
-            RandoAdventureFlag_TowerSection_3,
-            RandoAdventureFlag_TowerSection_4,
-            RandoAdventureFlag_TowerSection_5,
-            AdventureFlag_Nothing,
-        };
+        {
+            static AdventureFlag_Half sToSSectionFlags[] = {
+                RandoAdventureFlag_TowerSection_2,
+                RandoAdventureFlag_TowerSection_3,
+                RandoAdventureFlag_TowerSection_4,
+                RandoAdventureFlag_TowerSection_5,
+                AdventureFlag_Nothing,
+            };
 
-        switch (gpSettings->GetShuffleDungeonSettings()->tos_sections) {
-            case ToSSectionsMode_Progressive:
-                // remove the source flag if we don't have the corresponding section flag
-                // (except section 1, see `Rando::OnScenePreInit`)
-                for (int i = 0; i < ARRAY_LEN(sSourceFlags); i++) {
-                    if (GET_FLAG(data_027e09b8->mAdventureFlags, sSourceFlags[i]) &&
-                        !GET_FLAG(data_027e09b8->mAdventureFlags, sToSSectionFlags[i])) {
-                        UNSET_FLAG(data_027e09b8->mAdventureFlags, sSourceFlags[i]);
+            switch (gpSettings->GetShuffleDungeonSettings()->tos_sections) {
+                case ToSSectionsMode_Progressive:
+                    // remove the source flag if we don't have the corresponding section flag
+                    // (except section 1, see `Rando::OnScenePreInit`)
+                    for (int i = 0; i < ARRAY_LEN(sSourceFlags); i++) {
+                        if (data_027e09b8->HasAdventureFlag(sSourceFlags[i]) &&
+                            !data_027e09b8->HasAdventureFlag(sToSSectionFlags[i])) {
+                            UNSET_FLAG(data_027e09b8->mAdventureFlags, sSourceFlags[i]);
+                        }
                     }
-                }
-                break;
-            default:
-                break;
+                    break;
+                default:
+                    break;
+            }
         }
 
         // prevents zelda's text to show in ToS final room (giving the final track item)
@@ -947,7 +949,7 @@ bool Rando::IsTowerFinal() {
     return false;
 }
 
-bool Rando::CheckAdvFlag(ItemId itemId) { return GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId]); }
+bool Rando::CheckAdvFlag(ItemId itemId) { return data_027e09b8->HasAdventureFlag(gAdvFlagMap[itemId]); }
 
 void Rando::SetAdvFlag(ItemId itemId, bool unset) {
     if (unset) {

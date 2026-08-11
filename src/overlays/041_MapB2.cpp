@@ -13,7 +13,7 @@ bool BossKeyItemGive(ItemId itemId) {
     switch (gpSettings->GetShuffleDungeonSettings()->bksanity) {
         case BossKeysanityMode_Dungeon:
         case BossKeysanityMode_Anywhere:
-            if (!GET_FLAG(data_027e09b8->mAdventureFlags, gAdvFlagMap[itemId])) {
+            if (!data_027e09b8->HasAdventureFlag(gAdvFlagMap[itemId])) {
                 // we can't use the give function directly because we're in a blocking interaction
                 gRando.TryAddItemToQueue(itemId);
             }

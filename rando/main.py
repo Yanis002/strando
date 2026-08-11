@@ -300,6 +300,9 @@ class MainWindow(QTabWidget):
         self.ui.rupeesanity.setChecked(settings.shuffle.rupeesanity)
         self.ui.duets.setChecked(settings.shuffle.duets)
 
+        # Letters
+        self.ui.letters_combo.setCurrentIndex(settings.shuffle.letters_mode_map[settings.shuffle.letters])
+
         ### Settings - Shuffle Train
 
         # Glyphs and Sources
@@ -435,6 +438,9 @@ class MainWindow(QTabWidget):
         # Misc
         settings.shuffle.rupeesanity = self.ui.rupeesanity.isChecked()
         settings.shuffle.duets = self.ui.duets.isChecked()
+
+        # Letters
+        settings.shuffle.letters = settings.shuffle.letters_mode_invmap[self.ui.letters_combo.currentIndex()]
 
         ### Settings - Shuffle Train
 

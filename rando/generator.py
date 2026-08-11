@@ -445,9 +445,18 @@ class LocationInfo:
 
         self.tos_section: int | None = None
 
+        self.is_letter = False
+        self.letter_type = -1
+
     @staticmethod
     def from_data(name: str, data: dict, rando_settings: Settings):
-        new_info = LocationInfo(name, data["scene"], data["room_index"], rando_settings)
+        is_letter: bool = data.get("is_letter", False)
+
+        if not is_letter:
+            assert "scene" in data and "room_index" in data, "unexpected error"
+
+        new_info = LocationInfo(name, data.get("scene", "N/A"), data.get("room_index", -1), rando_settings)
+        new_info.is_letter = is_letter
 
         if "is_passenger_pick_up" in data:
             new_info.is_passenger_pick_up = data["is_passenger_pick_up"]
@@ -479,6 +488,8 @@ class LocationInfo:
                 getattr(new_info.bmg_offsets, lang).extend(offsets)
 
             new_info.bmg_offsets.set_from_english(new_info.bmg)
+        elif new_info.is_letter:
+            new_info.letter_type = data["letter_type"]
 
         if "tos_section" in data:
             new_info.tos_section = data["tos_section"]
@@ -539,6 +550,8 @@ class LocationInfo:
                         set_value_cond(split[1], ["dungeon", "anywhere"], ["removed", "vanilla"], "bkeysanity")
                     case "tearsanity":
                         set_value_cond(split[1], ["section", "dungeon", "anywhere"], ["removed", "vanilla"], "tearsanity")
+                    case "letters":
+                        set_value_cond(split[1], ["on", "beedle"], ["off"], "letters")
                     case _:
                         print(f"WARNING: ignoring unknown setting {repr(elem)}!")
 
@@ -636,6 +649,10 @@ class LocationInfo:
 
         # ignore tearsanity if we don't want it
         if self.settings.tearsanity and self.rando_settings.shuffle_dgn == "vanilla":
+            return False
+
+        # ignore letters if we don't want it
+        if self.settings.letters and self.rando_settings.shuffle.letters == "off":
             return False
 
         return True
@@ -822,6 +839,7 @@ class LocationNode:
         self.scene_name = scene_name
         self.room_index = room_index
         self.is_shop = False
+        self.is_letter = False
         self.entrances: list[EntranceDef] = []
         self.locations: list[LocationDef] = []
 
@@ -830,11 +848,20 @@ class LocationNode:
             "d_water27": "d_water",
         }
 
-        self.lzss = Path(f"files/Map/{fix_map.get(self.scene_name, self.scene_name)}/map{self.room_index:02}.bin")
+        if self.scene_name != "N/A" and self.room_index != -1:
+            self.lzss = Path(f"files/Map/{fix_map.get(self.scene_name, self.scene_name)}/map{self.room_index:02}.bin")
+        else:
+            self.lzss = None
 
     @staticmethod
     def from_data(name: str, data: dict, info_entries: list[LocationInfo]):
-        new_node = LocationNode(name, data["scene"], data["room_index"])
+        is_letter: bool = data.get("is_letter", False)
+
+        if not is_letter:
+            assert "scene" in data and "room_index" in data, "unexpected error"
+
+        new_node = LocationNode(name, data.get("scene", "N/A"), data.get("room_index", -1))
+        new_node.is_letter = is_letter
 
         if "is_shop" in data:
             new_node.is_shop = data["is_shop"]
@@ -858,8 +885,8 @@ class LocationNode:
         return new_node
 
     @staticmethod
-    def from_yaml(world_path: Path, yaml_infos: Path, settings: Settings):
-        info_entries = LocationInfo.from_yaml(yaml_infos, settings)
+    def from_yaml(world_path: Path, loc_table: Path, settings: Settings):
+        info_entries = LocationInfo.from_yaml(loc_table, settings)
 
         nodes: list["LocationNode"] = []
 
@@ -869,7 +896,7 @@ class LocationNode:
 
             if world_data is not None:
                 for name, data in world_data.items():
-                    if "scene" in data and "room_index" in data:
+                    if "is_letter" in data or ("scene" in data and "room_index" in data):
                         nodes.append(LocationNode.from_data(name, data, info_entries))
 
         if world_path.is_dir():
@@ -1096,6 +1123,7 @@ class Generator:
         self.passenger_pick_ids: list[int] = []
         self.passenger_dest_ids: list[int] = []
         self.cargo_pick_ids: list[int] = []
+        self.letter_ids: list[int] = [-1] * 17
 
         # will assign items from the seed log if it's set
         # we can't do it earlier since we need the nodes and the item pool
@@ -1376,7 +1404,7 @@ class Generator:
             if is_all or "water" in self.settings.shuffle.rabbitsanity:
                 rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitWater, ItemKind.Rabbit, ItemWeight.Priority)] * factor)
 
-            if is_all or "mountain" in self.settings.shuffle.rabbitsanity:
+            if is_all or "fire" in self.settings.shuffle.rabbitsanity:
                 rabbit_pool.extend(
                     [ItemDef(ItemId.ExtraItemId_RabbitMountain, ItemKind.Rabbit, ItemWeight.Priority)] * factor
                 )
@@ -1385,6 +1413,35 @@ class Generator:
                 rabbit_pool.extend([ItemDef(ItemId.ExtraItemId_RabbitSand, ItemKind.Rabbit, ItemWeight.Priority)] * factor)
 
             self.item_defs.extend(rabbit_pool)
+
+        if self.settings.shuffle.letters != "off":
+            letter_pool: list[ItemDef] = [
+                ItemDef(ItemId.ExtraItemId_LetterBeedlesFirst, ItemKind.Letter, ItemWeight.Normal),
+                ItemDef(ItemId.ExtraItemId_LetterBeedleClubCardLetter, ItemKind.Letter, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_LetterBeedleSilverCardLetter, ItemKind.Letter, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_LetterBeedleGoldCardLetter, ItemKind.Letter, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_LetterBeedlePlatinumCardLetter, ItemKind.Letter, ItemWeight.Priority),
+                ItemDef(ItemId.ExtraItemId_LetterBeedleDiamondCardLetter, ItemKind.Letter, ItemWeight.Priority),
+            ]
+
+            if self.settings.shuffle.letters == "on":
+                letter_pool.extend(
+                    [
+                        ItemDef(ItemId.ExtraItemId_LetterMetPostmanFirst, ItemKind.Letter, ItemWeight.Normal),
+                        ItemDef(ItemId.ExtraItemId_LetterZeldas, ItemKind.Letter, ItemWeight.Normal),
+                        ItemDef(ItemId.ExtraItemId_LetterAlfonzos, ItemKind.Letter, ItemWeight.Normal),
+                        ItemDef(ItemId.ExtraItemId_LetterRussells, ItemKind.Letter, ItemWeight.Normal),
+                        ItemDef(ItemId.ExtraItemId_LetterLinebecks, ItemKind.Letter, ItemWeight.Normal),
+                        ItemDef(ItemId.ExtraItemId_LetterCarbens, ItemKind.Letter, ItemWeight.Priority),
+                        ItemDef(ItemId.ExtraItemId_LetterNikos, ItemKind.Letter, ItemWeight.Normal),
+                        ItemDef(ItemId.ExtraItemId_LetterFerrus1, ItemKind.Letter, ItemWeight.Priority),
+                        ItemDef(ItemId.ExtraItemId_LetterFerrus2, ItemKind.Letter, ItemWeight.Priority),
+                        ItemDef(ItemId.ExtraItemId_LetterFerrus3, ItemKind.Letter, ItemWeight.Priority),
+                        ItemDef(ItemId.ExtraItemId_LetterKagorons, ItemKind.Letter, ItemWeight.Normal),
+                    ]
+                )
+
+            self.item_defs.extend(letter_pool)
 
         ## create the pools
         self.progression_item_pool = [item_def for item_def in self.item_defs if item_def.weight == ItemWeight.Progression]
@@ -1453,6 +1510,9 @@ class Generator:
         if self.settings.shuffle.cargo != "anywhere":
             self.cargo_pick_ids = [item.id.value for item in self.cargo_pick_pool]
 
+        if self.settings.shuffle.letters != "off":
+            self.letter_ids.clear()
+
     def add_elem_to_id_lists(self, location: LocationDef, item: ItemDef):
         """Tries to add the item's id to the lists that will be exported in the settings binary"""
 
@@ -1468,6 +1528,10 @@ class Generator:
 
         if self.settings.shuffle.cargo == "anywhere" and location.infos.is_cargo_pick_up:
             self.cargo_pick_ids.append(item.id.value)
+
+        if self.settings.shuffle.letters != "off" and location.infos.is_letter:
+            assert location.infos.letter_type > -1, "unexpected error"
+            self.letter_ids[location.infos.letter_type] = item.id.value
 
     def copy_id_lists_to_settings(self):
         """Copies the item id lists to the settings"""
@@ -1485,10 +1549,12 @@ class Generator:
         assert len(self.passenger_pick_ids) == 18, f"len is {len(self.passenger_pick_ids)}"
         assert len(self.passenger_dest_ids) == 18, f"len is {len(self.passenger_dest_ids)}"
         assert len(self.cargo_pick_ids) == 7, f"len is {len(self.cargo_pick_ids)}"
+        assert len(self.letter_ids) == 7, f"len is {len(self.letter_ids)}"
 
         self.settings.passenger_pick_ids = self.passenger_pick_ids[:]
         self.settings.passenger_dest_ids = self.passenger_dest_ids[:]
         self.settings.cargo_pick_ids = self.cargo_pick_ids[:]
+        self.settings.letter_ids = self.letter_ids[:]
 
     def assign_items_from_log(self):
         assert self.seed_log is not None and self.seed_log.yaml_file is not None
@@ -1743,6 +1809,10 @@ class Generator:
 
         # patch the files
         for i, node in enumerate(self.nodes):
+            if node.lzss is None:
+                assert node.is_letter, "unexpected error"
+                continue
+
             lzss_path = self.extracted_dir / node.lzss
             _, archive, zmb_data, zmb_filename = self.get_zmb(lzss_path)
 

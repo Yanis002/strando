@@ -15,6 +15,15 @@ extern "C" unk32 _ZN16MapObjectUnkSPTB19func_ov031_0210b6e4Ev(void*);
 extern "C" bool _ZN16MapObjectUnkSPTB19func_ov031_0210b51cEv(void*);
 extern "C" void func_ov000_02068194(UnkStruct_ov000_020b504c*, u32, int, Vec2s*);
 
+struct UnkStruct_ov049_02137ef4 {
+    /* 00 */ AdventureFlag flag;
+    /* 04 */ unk32 unk_04;
+    /* 08 */ bool unk_08;
+    /* 09 */ u8 unk_09[3];
+    /* 0C */ void* unk_0C;
+};
+extern UnkStruct_ov049_02137ef4 data_ov049_02137ef4[];
+
 bool IsGlyphOrSource(ItemId itemId) {
     if (itemId >= ItemId_ForestGlyph && itemId <= ItemId_FireGlyph) {
         return true;
@@ -252,9 +261,36 @@ extern "C" bool CustomTryItemGive(UnkStruct_027e0d34_04* thisx, ItemId requested
 
 bool RandoTryItemGive(ItemId requestedItemId) {
     ItemId itemId;
+    bool doDefault = true;
 
-    // handle progressive items
-    itemId = GetProgressiveItemId(requestedItemId);
+    // if we're trying to give a letter and the shuffle is enabled, give the randomized item
+    if (gpSettings->GetShuffleSettings()->letters != LetterMode_Off) {
+        if (requestedItemId == ItemId_PostmasterLetter && gRando.IsMapC3()) {
+            struct Postman {
+                STRUCT_PAD(0x00, 0x2AC);
+                unk32 mUnk_2AC;
+            };
+
+            Postman* pPostman = (Postman*)gRando.FindActor(ActorId_PTMN);
+
+            if (pPostman != NULL) {
+                itemId = gpSettings->GetLetterItemId((data_ov049_02137ef4[pPostman->mUnk_2AC].flag & 0xFFFF) -
+                                                     AdventureFlag_MetPostmanFirstLetter);
+                doDefault = false;
+            }
+        } else if (requestedItemId == ItemId_CarbenLetter) {
+            itemId = gpSettings->GetLetterItemId(LetterType_ReceivedCarbens);
+            doDefault = false;
+        } else if (requestedItemId == ItemId_LinebeckLetter) {
+            itemId = gpSettings->GetLetterItemId(LetterType_ObtainedLinebecks);
+            doDefault = false;
+        }
+    }
+
+    if (doDefault) {
+        // handle progressive items
+        itemId = GetProgressiveItemId(requestedItemId);
+    }
 
     if (!gRando.IsOnLand()) {
         // if on not on land just add to the item queue
